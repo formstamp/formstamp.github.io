@@ -1,5 +1,9 @@
 #!/bin/bash
 
+# formstamp.github.io deploy script
+# run it from repository root
+
+set +e # break script on first error
 source ~/.nvm/nvm.sh
 
 # install dependencies
