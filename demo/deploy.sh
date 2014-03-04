@@ -21,5 +21,5 @@ cp README.md ../formstamp.github.io/
 
 cd ../formstamp.github.io
 git add .
-git commit -a -m "deploy at `date` by `whoami`"
+git commit -a -m "deploy at `date` by `git config --get user.name`"
 git push origin master
