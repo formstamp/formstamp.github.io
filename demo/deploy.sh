@@ -16,4 +16,5 @@ cp index.html ../formstamp.github.io/
 cp README.md ../formstamp.github.io/
 
 cd ../formstamp.github.io
-git commit -a -m "demo deploy at `date` by `whoami`"
+git commit -a -m "deploy at `date` by `whoami`"
+git push origin master
