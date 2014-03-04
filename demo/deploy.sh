@@ -13,3 +13,7 @@ cp -r bower_components ../formstamp.github.io/
 cp -r build ../formstamp.github.io/
 cp -r demo ../formstamp.github.io/
 cp index.html ../formstamp.github.io/
+cp README.md ../formstamp.github.io/
+
+cd ../formstamp.github.io
+git commit -a -m "demo deploy at `date` by `whoami`"
