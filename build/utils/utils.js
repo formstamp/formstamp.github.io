@@ -1,4 +1,4 @@
-var addValidations, comp, filter, getComputedStyleFor, indexOf, innerHeightOf, parseDate, scrollToTarget, updateDate;
+var addValidations, comp, filter, getComputedStyleFor, indexOf, innerHeightOf, nextUid, parseDate, scrollToTarget, uid, updateDate, updateTime;
 
 comp = function(a, b) {
   return ("" + a).toLowerCase().indexOf(b.toString().toLowerCase()) > -1;
@@ -106,22 +106,25 @@ addValidations = function(attrs, ctrl) {
   }
 };
 
-updateDate = function(newDate, oldDate) {
-  var _ref, _ref1;
+updateTime = function(date, time) {
+  if (date != null) {
+    date.setHours(time.getHours());
+    date.setMinutes(time.getMinutes());
+  }
+  return date;
+};
+
+updateDate = function(date, newDate) {
   switch (false) {
-    case !((oldDate == null) && (newDate != null)):
+    case !(date == null):
       return newDate;
     case !(newDate == null):
-      return null;
-    case !((newDate != null) && (oldDate != null)):
-      if (((_ref = parseDate(oldDate)) != null ? _ref.getTime() : void 0) !== ((_ref1 = parseDate(newDate)) != null ? _ref1.getTime() : void 0)) {
-        newDate.setHours(oldDate.getHours());
-        newDate.setMinutes(oldDate.getMinutes());
-        newDate.setSeconds(oldDate.getSeconds());
-        return newDate;
-      } else {
-        return oldDate;
-      }
+      return date;
+    default:
+      date.setHours(newDate.getHours());
+      date.setMinutes(newDate.getMinutes());
+      date.setSeconds(newDate.getSeconds());
+      return date;
   }
 };
 
@@ -132,4 +135,28 @@ parseDate = function(dateString) {
     parsedDate = new Date(time);
     return new Date(parsedDate.getFullYear(), parsedDate.getMonth(), parsedDate.getDate());
   }
+};
+
+uid = ['0', '0', '0'];
+
+nextUid = function() {
+  var digit, index;
+  index = uid.length;
+  digit;
+  while (index) {
+    index -= 1;
+    digit = uid[index].charCodeAt(0);
+    if (digit === 57) {
+      uid[index] = 'A';
+      return uid.join('');
+    }
+    if (digit === 90) {
+      uid[index] = '0';
+    } else {
+      uid[index] = String.fromCharCode(digit + 1);
+      return uid.join('');
+    }
+  }
+  uid.unshift('0');
+  return uid.join('');
 };

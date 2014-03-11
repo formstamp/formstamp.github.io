@@ -60,6 +60,12 @@
     return _results;
   });
 
+  if (window.testMode) {
+    app.run(function($animate) {
+      return $animate.enabled(false);
+    });
+  }
+
   app.filter('prettify', function() {
     return function(code) {
       if (code) {

@@ -1,4 +1,4 @@
-var addValidations, comp, filter, getComputedStyleFor, indexOf, innerHeightOf, parseDate, scrollToTarget, updateDate;
+var addValidations, comp, filter, getComputedStyleFor, indexOf, innerHeightOf, nextUid, parseDate, scrollToTarget, uid, updateDate, updateTime;
 
 comp = function(a, b) {
   return ("" + a).toLowerCase().indexOf(b.toString().toLowerCase()) > -1;
@@ -106,22 +106,25 @@ addValidations = function(attrs, ctrl) {
   }
 };
 
-updateDate = function(newDate, oldDate) {
-  var _ref, _ref1;
+updateTime = function(date, time) {
+  if (date != null) {
+    date.setHours(time.getHours());
+    date.setMinutes(time.getMinutes());
+  }
+  return date;
+};
+
+updateDate = function(date, newDate) {
   switch (false) {
-    case !((oldDate == null) && (newDate != null)):
+    case !(date == null):
       return newDate;
     case !(newDate == null):
-      return null;
-    case !((newDate != null) && (oldDate != null)):
-      if (((_ref = parseDate(oldDate)) != null ? _ref.getTime() : void 0) !== ((_ref1 = parseDate(newDate)) != null ? _ref1.getTime() : void 0)) {
-        newDate.setHours(oldDate.getHours());
-        newDate.setMinutes(oldDate.getMinutes());
-        newDate.setSeconds(oldDate.getSeconds());
-        return newDate;
-      } else {
-        return oldDate;
-      }
+      return date;
+    default:
+      date.setHours(newDate.getHours());
+      date.setMinutes(newDate.getMinutes());
+      date.setSeconds(newDate.getSeconds());
+      return date;
   }
 };
 
@@ -132,6 +135,30 @@ parseDate = function(dateString) {
     parsedDate = new Date(time);
     return new Date(parsedDate.getFullYear(), parsedDate.getMonth(), parsedDate.getDate());
   }
+};
+
+uid = ['0', '0', '0'];
+
+nextUid = function() {
+  var digit, index;
+  index = uid.length;
+  digit;
+  while (index) {
+    index -= 1;
+    digit = uid[index].charCodeAt(0);
+    if (digit === 57) {
+      uid[index] = 'A';
+      return uid.join('');
+    }
+    if (digit === 90) {
+      uid[index] = '0';
+    } else {
+      uid[index] = String.fromCharCode(digit + 1);
+      return uid.join('');
+    }
+  }
+  uid.unshift('0');
+  return uid.join('');
 };
 
 angular.module('formstamp', []).run(['$templateCache', function($templateCache) {
@@ -222,14 +249,15 @@ angular.module('formstamp', []).run(['$templateCache', function($templateCache) 
     "     type=\"text\"\n" +
     "     ng-disabled=\"disabled\"\n" +
     "     class=\"form-control\"\n" +
-    "     ng-model=\"formattedDate\"\n" +
+    "     ng-model=\"selectedDate.date\"\n" +
+    "     fs-date-format\n" +
     "     placeholder=\"{{placeholder}}\"\n" +
     "     fs-null-form />\n" +
-    "  <span class=\"glyphicon glyphicon-calendar\"></span>\n" +
+    "  <span class=\"glyphicon glyphicon-calendar\" ng-click='active = true'></span>\n" +
     "\n" +
     "  <div ng-if=\"active\" class=\"open fs-calendar-wrapper\">\n" +
     "    <div class=\"dropdown-menu\">\n" +
-    "      <fs-calendar ng-model=\"selectedDate.date\" />\n" +
+    "      <fs-calendar ng-model=\"selectedDate.date\" on-select='close()'/>\n" +
     "    </div>\n" +
     "  </div>\n" +
     "</div>\n"
@@ -295,11 +323,13 @@ angular.module('formstamp', []).run(['$templateCache', function($templateCache) 
   angular.module('formstamp').directive('fsCalendar', [
     '$locale', function($locale) {
       return {
-        restrict: 'E',
+        restrict: 'EA',
         templateUrl: '/templates/calendar.html',
         replace: true,
         require: '?ngModel',
-        scope: {},
+        scope: {
+          onSelect: '&'
+        },
         controller: [
           '$scope', '$attrs', function($scope, $attrs) {
             var addDays, currentTime, i, updateSelectionRanges;
@@ -443,19 +473,13 @@ angular.module('formstamp', []).run(['$templateCache', function($templateCache) 
             return ((_ref = parseDate(ngModel.$modelValue)) != null ? _ref.getFullYear() : void 0) === scope.selectedYear;
           };
           scope.selectDay = function(day) {
-            return scope.selectedDate = day;
+            scope.selectedDate = day;
+            ngModel.$setViewValue(day);
+            return scope.onSelect();
           };
           ngModel.$render = function() {
             return scope.selectedDate = parseDate(ngModel.$modelValue);
           };
-          scope.$watch('selectedDate', function(newDate) {
-            var oldDate, updatedDate;
-            oldDate = ngModel.$modelValue;
-            updatedDate = updateDate(newDate, oldDate);
-            if ((newDate != null ? newDate.getTime() : void 0) !== (oldDate != null ? oldDate.getTime() : void 0)) {
-              return ngModel.$setViewValue(newDate);
-            }
-          });
           scope.selectMonth = function(monthName) {
             scope.selectionMode = 'day';
             scope.selectedDate = void 0;
@@ -534,28 +558,6 @@ angular.module('formstamp', []).run(['$templateCache', function($templateCache) 
 }).call(this);
 
 (function() {
-  angular.module('formstamp').directive('dateFormat', [
-    'dateFilter', function(dateFilter) {
-      return {
-        restrict: 'A',
-        require: 'ngModel',
-        link: function(scope, element, attrs, ngModel) {
-          ngModel.$formatters.push(function(value) {
-            var date, milis;
-            date = angular.isString(value) ? (milis = Date.parse(value), !isNaN(milis) ? new Date(milis) : void 0) : value;
-            return dateFilter(date, attrs.dateFormat);
-          });
-          return ngModel.$parsers.push(function(value) {
-            return new Date(value);
-          });
-        }
-      };
-    }
-  ]);
-
-}).call(this);
-
-(function() {
   angular.module('formstamp').directive('fsDate', function() {
     return {
       restrict: 'EA',
@@ -567,34 +569,21 @@ angular.module('formstamp', []).run(['$templateCache', function($templateCache) 
       },
       templateUrl: '/templates/date.html',
       replace: true,
-      controller: function($scope, $filter) {
-        return $scope.$watch('selectedDate.date', function(newDate) {
-          $scope.active = false;
-          return $scope.formattedDate = $filter('date')(newDate, 'shortDate');
-        });
-      },
       link: function($scope, element, attrs, ngModel) {
-        var parseDate;
-        parseDate = function(dateString) {
-          var parsedDate, time;
-          time = Date.parse(dateString);
-          if (!isNaN(time)) {
-            parsedDate = new Date(time);
-            return new Date(parsedDate.getFullYear(), parsedDate.getMonth(), parsedDate.getDate());
-          }
-        };
         $scope.selectedDate = {};
         ngModel.$render = function() {
           return $scope.selectedDate.date = ngModel.$modelValue;
         };
-        return $scope.$watch('selectedDate.date', function(newDate) {
-          var oldDate, updatedDate;
-          oldDate = ngModel.$modelValue;
+        $scope.$watch('selectedDate.date', function(newDate, oldDate) {
+          var updatedDate;
           updatedDate = updateDate(newDate, oldDate);
-          if ((newDate != null ? newDate.getTime() : void 0) !== (oldDate != null ? oldDate.getTime() : void 0)) {
-            return ngModel.$setViewValue(newDate);
+          if ((updatedDate != null ? updatedDate.getTime() : void 0) !== (oldDate != null ? oldDate.getTime() : void 0)) {
+            return ngModel.$setViewValue(updatedDate);
           }
         });
+        return $scope.close = function() {
+          return $scope.active = false;
+        };
       }
     };
   });
@@ -612,23 +601,71 @@ angular.module('formstamp', []).run(['$templateCache', function($templateCache) 
         },
         require: '?ngModel',
         replace: true,
-        template: "<div class=\"fs-datetime fs-widget-root\" ng-class='{\"fs-with-value\": value}'>\n  <div fs-date ng-model=\"value\" ng-disabled=\"disabled\" fs-null-form></div>\n  <div fs-time ng-model=\"value\" ng-disabled=\"disabled\" fs-null-form with-date></div>\n  <button type=\"button\"\n          class=\"btn btn-default fs-datetime-clear-btn\"\n          ng-show='value'\n          ng-disabled=\"disabled\"\n          ng-click='clearDate()'>&times;</button>\n</div>",
+        template: "<div class=\"fs-datetime fs-widget-root\">\n  <div fs-date ng-model=\"date\" ng-disabled=\"disabled\" fs-null-form></div>\n  <div fs-time ng-model=\"time\" ng-disabled=\"disabled\" fs-null-form with-date></div>\n  <button type=\"button\"\n          class=\"btn btn-default fs-datetime-clear-btn\"\n          ng-show='value'\n          ng-disabled=\"disabled\"\n          ng-click='clearDate()'>&times;</button>\n</div>",
         controller: function($scope) {
           return $scope.clearDate = function() {
+            $scope.time = null;
+            $scope.date = null;
             return $scope.value = null;
           };
         },
         link: function(scope, element, attrs, ngModelCtrl, transcludeFn) {
           if (ngModelCtrl) {
+            scope.value = null;
+            scope.$watch('time', function(newValue, oldValue) {
+              if (!angular.equals(newValue, oldValue)) {
+                if (newValue) {
+                  scope.value || (scope.value = new Date());
+                  scope.value.setHours(newValue.hours);
+                  scope.value.setMinutes(newValue.minutes);
+                  scope.value.setSeconds(0);
+                  return scope.value.setMilliseconds(0);
+                }
+              }
+            });
+            scope.$watch('date', function(newValue, oldValue) {
+              if (!angular.equals(newValue, oldValue)) {
+                if (newValue) {
+                  scope.value || (scope.value = new Date());
+                  scope.value.setDate(newValue.getDate());
+                  scope.value.setMonth(newValue.getMonth());
+                  return scope.value.setFullYear(newValue.getFullYear());
+                }
+              }
+            });
             scope.$watch('value', function(newValue, oldValue) {
-              if (newValue !== oldValue) {
-                return ngModelCtrl.$setViewValue(newValue);
+              if (!angular.equals(newValue, oldValue)) {
+                return ngModelCtrl.$setViewValue(scope.value);
               }
             });
             return ngModelCtrl.$render = function() {
-              return scope.value = ngModelCtrl.$viewValue;
+              scope.date = scope.value = ngModelCtrl.$viewValue;
+              return scope.time = ngModelCtrl.$viewValue ? {
+                hours: ngModelCtrl.$viewValue.getHours(),
+                minutes: ngModelCtrl.$viewValue.getMinutes()
+              } : null;
             };
           }
+        }
+      };
+    }
+  ]);
+
+}).call(this);
+
+(function() {
+  angular.module('formstamp').directive('fsDateFormat', [
+    '$filter', function($filter) {
+      return {
+        restrict: 'A',
+        require: 'ngModel',
+        link: function(scope, element, attrs, ngModel) {
+          ngModel.$formatters.push(function(value) {
+            return $filter('date')(value, 'shortDate');
+          });
+          return ngModel.$parsers.unshift(function(value) {
+            return new Date(value);
+          });
         }
       };
     }
@@ -880,7 +917,8 @@ angular.module('formstamp', []).run(['$templateCache', function($templateCache) 
       restrict: "A",
       scope: {
         items: '=',
-        "class": '@'
+        "class": '@',
+        listInterface: '='
       },
       transclude: true,
       replace: true,
@@ -971,11 +1009,7 @@ angular.module('formstamp', []).run(['$templateCache', function($templateCache) 
         replace: true,
         template: function(el, attributes) {
           var defaultItemTpl, itemTpl;
-          if (attributes.freetext != null) {
-            defaultItemTpl = "{{ item }}";
-          } else {
-            defaultItemTpl = "{{ item | json }}";
-          }
+          defaultItemTpl = "{{ item }}";
           itemTpl = el.html() || defaultItemTpl;
           return "<div class='fs-multiselect fs-widget-root' ng-class='{ \"fs-with-selected-items\": selectedItems.length > 0 }'>\n  <div class='fs-multiselect-wrapper'>\n    <div class=\"fs-multiselect-selected-items\" ng-if=\"selectedItems.length > 0\">\n      <a ng-repeat='item in selectedItems' class=\"btn\" ng-click=\"unselectItem(item)\" ng-disabled=\"disabled\">\n        " + itemTpl + "\n        <span class=\"glyphicon glyphicon-remove\" ></span>\n      </a>\n    </div>\n\n    <input ng-keydown=\"onkeys($event)\"\n           fs-null-form\n           ng-disabled=\"disabled\"\n           fs-input\n           fs-hold-focus\n           fs-on-focus=\"active = true\"\n           fs-on-blur=\"active = false\"\n           fs-blur-when=\"!active\"\n           fs-down='listInterface.move(1)'\n           fs-up='listInterface.move(-1)'\n           fs-pgup='listInterface.move(-11)'\n           fs-pgdown='listInterface.move(11)'\n           fs-enter='selectItem(listInterface.selectedItem)'\n           fs-esc='active = false'\n           class=\"form-control\"\n           type=\"text\"\n           placeholder='Select something'\n           ng-model=\"search\" />\n\n    <div ng-if=\"active && dropdownItems.length > 0\" class=\"open\">\n      <div fs-list items=\"dropdownItems\">\n        " + itemTpl + "\n      </div>\n    </div>\n  </div>\n</div>";
         },
@@ -1076,32 +1110,6 @@ angular.module('formstamp', []).run(['$templateCache', function($templateCache) 
 }).call(this);
 
 (function() {
-  var nextUid, uid;
-
-  uid = ['0', '0', '0'];
-
-  nextUid = function() {
-    var digit, index;
-    index = uid.length;
-    digit;
-    while (index) {
-      index -= 1;
-      digit = uid[index].charCodeAt(0);
-      if (digit === 57) {
-        uid[index] = 'A';
-        return uid.join('');
-      }
-      if (digit === 90) {
-        uid[index] = '0';
-      } else {
-        uid[index] = String.fromCharCode(digit + 1);
-        return uid.join('');
-      }
-    }
-    uid.unshift('0');
-    return uid.join('');
-  };
-
   angular.module("formstamp").directive("fsRadio", [
     '$window', function($window) {
       return {
@@ -1119,7 +1127,7 @@ angular.module('formstamp', []).run(['$templateCache', function($templateCache) 
           var itemTpl, name, template;
           itemTpl = el.html() || '{{item.label}}';
           name = "fsRadio_" + (nextUid());
-          return template = "<div class='fs-racheck' ng-class=\"{disabled: disabled, enabled: !disabled}\">\n  <div class=\"fs-radio-label\"\n     ng-repeat=\"item in items\" >\n    <input\n     fs-null-form\n     type=\"radio\"\n     ng-model=\"$parent.selectedItem\"\n     name=\"" + name + "\"\n     ng-value=\"item\"\n     ng-disabled=\"disabled\"\n     id=\"" + name + "_{{$index}}\"/>\n    <label for=\"" + name + "_{{$index}}\">\n      " + itemTpl + "\n    </label>\n  </div>\n</div>";
+          return template = "<div class='fs-widget-root fs-radio fs-racheck' ng-class=\"{disabled: disabled, enabled: !disabled}\">\n  <div class=\"fs-radio-item\"\n     ng-repeat=\"item in items\" >\n    <input\n     fs-null-form\n     type=\"radio\"\n     ng-model=\"$parent.selectedItem\"\n     name=\"" + name + "\"\n     ng-value=\"item\"\n     ng-disabled=\"disabled\"\n     id=\"" + name + "_{{$index}}\" />\n\n    <label for=\"" + name + "_{{$index}}\">\n      <span class='fs-radio-btn'><span></span></span>\n\n      " + itemTpl + "\n    </label>\n  </div>\n</div>";
         },
         link: function(scope, element, attrs, ngModelCtrl, transcludeFn) {
           if (ngModelCtrl) {
@@ -1281,7 +1289,7 @@ angular.module('formstamp', []).run(['$templateCache', function($templateCache) 
         require: '?ngModel',
         replace: true,
         template: function(el) {
-          var h, hours, m, minutes, num, res, timeoptions, zh, _i, _j, _len, _len1;
+          var datalistId, h, hours, m, minutes, num, res, timeoptions, zh, _i, _j, _len, _len1;
           hours = (function() {
             var _i, _results;
             _results = [];
@@ -1300,74 +1308,78 @@ angular.module('formstamp', []).run(['$templateCache', function($templateCache) 
               res.push("<option value='" + zh + ":" + m + "'/>");
             }
           }
+          datalistId = "fsTimeDatalist_" + (nextUid());
           timeoptions = res.join('');
-          return "<div class=\"fs-time fs-widget-root\">\n  <input\n    fs-null-form\n    ng-model=\"value\"\n    class=\"form-control\"\n    ng-disabled=\"disabled\"\n    list=\"time\"\n    type=\"text\"/>\n  <span class=\"glyphicon glyphicon-time\"></span>\n  <datalist id=\"time\">\n  " + timeoptions + "\n  </datalist>\n</div>";
+          return "<div class=\"fs-time fs-widget-root\">\n  <input\n    fs-null-form\n    ng-model=\"value\"\n    fs-time-format\n    class=\"form-control\"\n    ng-disabled=\"disabled\"\n    list=\"" + datalistId + "\"\n    type=\"text\"/>\n  <span class=\"glyphicon glyphicon-time\"></span>\n  <datalist id=\"" + datalistId + "\">\n  " + timeoptions + "\n  </datalist>\n</div>";
         },
-        controller: function($scope, $element, $attrs, $filter, $timeout) {
-          var patterns;
-          patterns = [/^[012]/, /^([0-1][0-9]|2[0-3]):?/, /^([0-1][0-9]|2[0-3]):?[0-5]/, /^([0-1][0-9]|2[0-3]):?([0-5][0-9])/];
-          return $scope.$watch('value', function(ev) {
-            var p, res, value, _i, _len;
-            if ($scope.value == null) {
-              return;
-            }
-            value = '';
-            for (_i = 0, _len = patterns.length; _i < _len; _i++) {
-              p = patterns[_i];
-              res = $scope.value.match(p);
-              if (res) {
-                value = res[0];
-              }
-            }
-            if (value.length > 2) {
-              value = value.replace(/^(\d\d)([^:]*)$/, "$1:$2");
-            }
-            return $scope.value = value;
-          });
-        },
-        link: function(scope, element, attrs, ngModelCtrl, transcludeFn) {
-          var toTimeStr, updateTime;
-          toTimeStr = function(date) {
-            var h, m;
-            if (date == null) {
-              return '';
-            }
-            h = date.getHours().toString();
-            if (h.length < 2) {
-              h = "0" + h;
-            }
-            m = date.getMinutes().toString();
-            if (m.length < 2) {
-              m = "0" + m;
-            }
-            return "" + h + ":" + m;
-          };
-          updateTime = function(date, timeStr) {
-            var parts;
-            if ((date != null) && date.length > 0) {
-              console.log(date);
-              parts = timeStr.split(':');
-              if (parts[0] != null) {
-                date.setHours(parts[0]);
-              }
-              if (parts[1] != null) {
-                date.setMinutes(parts[1]);
-              }
-            }
-            return date;
-          };
+        link: function(scope, element, attrs, ngModelCtrl) {
           if (ngModelCtrl) {
             scope.$watch('value', function(newValue, oldValue) {
-              var date;
-              if (newValue !== oldValue) {
-                date = ngModelCtrl.$viewValue || (attrs['withDate'] && new Date());
-                return ngModelCtrl.$setViewValue(updateTime(date, newValue));
+              if (!angular.equals(newValue, oldValue)) {
+                return ngModelCtrl.$setViewValue(newValue);
               }
             });
             return ngModelCtrl.$render = function() {
-              return scope.value = toTimeStr(ngModelCtrl.$viewValue);
+              return scope.value = ngModelCtrl.$viewValue;
             };
           }
+        }
+      };
+    }
+  ]);
+
+}).call(this);
+
+(function() {
+  angular.module('formstamp').directive('fsTimeFormat', [
+    '$filter', function($filter) {
+      return {
+        restrict: 'A',
+        require: 'ngModel',
+        link: function(scope, element, attrs, ngModel) {
+          ngModel.$formatters.push(function(time) {
+            var h, m, _ref, _ref1;
+            if (time == null) {
+              return '';
+            }
+            h = (_ref = time.hours) != null ? _ref.toString() : void 0;
+            if ((h != null ? h.length : void 0) < 2) {
+              h = "0" + h;
+            }
+            m = (_ref1 = time.minutes) != null ? _ref1.toString() : void 0;
+            if ((m != null ? m.length : void 0) < 2) {
+              m = "0" + m;
+            }
+            return "" + h + ":" + m;
+          });
+          return ngModel.$parsers.unshift(function(value) {
+            var hours, matched, minutes, p, parts, patterns, res, _i, _len;
+            value || (value = '');
+            patterns = [/^[012]/, /^([0-1][0-9]|2[0-3]):?/, /^([0-1][0-9]|2[0-3]):?[0-5]/, /^([0-1][0-9]|2[0-3]):?([0-5][0-9])/];
+            matched = null;
+            for (_i = 0, _len = patterns.length; _i < _len; _i++) {
+              p = patterns[_i];
+              res = value.match(p);
+              if (res) {
+                matched = res[0];
+              }
+            }
+            value = matched;
+            if (value) {
+              if (value.length > 2 && /^(\d\d)([^:]*)$/.test(value)) {
+                value = value.replace(/^(\d\d)([^:]*)$/, "$1:$2");
+                ngModel.$setViewValue(value);
+                ngModel.$render();
+              }
+              parts = value.split(':');
+              return {
+                hours: isNaN(hours = parseInt(parts[0])) ? null : hours,
+                minutes: isNaN(minutes = parseInt(parts[1])) ? null : minutes
+              };
+            } else {
+              return null;
+            }
+          });
         }
       };
     }

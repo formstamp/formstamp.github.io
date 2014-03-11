@@ -1,6 +1,8 @@
 FormStamp
 ====
 
+[![Build Status](https://travis-ci.org/formstamp/formstamp.png?branch=master)](https://travis-ci.org/formstamp/formstamp)
+
 FormStamp is a pure AngularJS widgets library designed for rich
 front-end web applications. FormStamp core principles are:
 
@@ -29,7 +31,7 @@ There are 3 levels of directives:
   from you.
 * Widget directives - most often used widgets
 * Low-level directives - common concerns for widgets construction, can
-  be used to build you own custom widgets
+  be used to build your own custom widgets
 
 Form Builder
 -----------
@@ -90,9 +92,31 @@ Start grunt watcher and node.js server
 Now, point your browser to http://localhost:17405/ and you'll see
 FormStamp's demo page.
 
-NOTE: This commands add `nvm` command to `.bash_profile`. It may not
+NOTE: These commands add `nvm` command to `.bash_profile`. It may not
 work if you are not using `bash` shell (like `zsh`). In this case you
 have to manually configure profile file.
+
+Running Tests
+-------
+
+To run test suite you should start local web server and
+[PhantomJS](http://phantomjs.org/) server:
+
+    cd formstamp
+    node server.js
+    `npm bin`/phantomjs --webdriver=4444
+
+Next, compile CoffeeScript in test directory with command:
+
+    `npm bin`/grunt coffee:e2e
+
+Then you can run unit tests with following command:
+
+    `npm bin`/karma start test/karma.conf.js --single-run
+
+And E2E tests with:
+
+     `npm bin`/protractor test/build/e2e/conf.js
 
 License
 -----------
