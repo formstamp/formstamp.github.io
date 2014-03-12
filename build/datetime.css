@@ -29,14 +29,22 @@
 }
 .fs-datetime {
   display: -webkit-flex;
+  display: -moz-flex;
+  display: flex;
   -webkit-flex-flow: row nowrap;
+  -moz-flex-flow: row nowrap;
+  flex-flow: row nowrap;
 }
 .fs-datetime button {
   -webkit-flex: auto;
+  -moz-flex: auto;
+  flex: auto;
 }
 .fs-datetime .fs-time {
   width: 8em;
   -webkit-flex: auto;
+  -moz-flex: auto;
+  flex: auto;
 }
 .fs-datetime .fs-time input {
   border-top-left-radius: 0;
@@ -45,6 +53,8 @@
 }
 .fs-datetime .fs-date {
   -webkit-flex: auto;
+  -moz-flex: auto;
+  flex: auto;
 }
 .fs-datetime .fs-date input {
   border-top-right-radius: 0;

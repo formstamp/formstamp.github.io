@@ -88,14 +88,22 @@
 }
 .fs-datetime {
   display: -webkit-flex;
+  display: -moz-flex;
+  display: flex;
   -webkit-flex-flow: row nowrap;
+  -moz-flex-flow: row nowrap;
+  flex-flow: row nowrap;
 }
 .fs-datetime button {
   -webkit-flex: auto;
+  -moz-flex: auto;
+  flex: auto;
 }
 .fs-datetime .fs-time {
   width: 8em;
   -webkit-flex: auto;
+  -moz-flex: auto;
+  flex: auto;
 }
 .fs-datetime .fs-time input {
   border-top-left-radius: 0;
@@ -104,6 +112,8 @@
 }
 .fs-datetime .fs-date {
   -webkit-flex: auto;
+  -moz-flex: auto;
+  flex: auto;
 }
 .fs-datetime .fs-date input {
   border-top-right-radius: 0;
@@ -249,6 +259,7 @@
   left: 0;
   width: 0;
   height: 0;
+  display: block;
 }
 .fs-racheck .fs-radio-item label {
   cursor: pointer;
@@ -275,6 +286,13 @@
   width: 8px;
   height: 8px;
   margin-top: 2px;
+}
+/* hacks for firefox */
+@-moz-document url-prefix() {
+  .fs-radio-item input {
+    /* hide inputs with opacity, cause FF doesn't support resizing of inputs */
+    opacity: 0;
+  }
 }
 
 .fs-select {
