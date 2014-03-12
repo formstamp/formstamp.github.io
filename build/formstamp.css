@@ -212,6 +212,7 @@
   border-radius: 1px;
   overflow: hidden;
   margin-right: 5px;
+  vertical-align: middle;
 }
 .fs-racheck .fs-check-outer .fs-check-inner {
   width: 8px;
