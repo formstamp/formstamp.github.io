@@ -1011,7 +1011,7 @@ angular.module('formstamp', []).run(['$templateCache', function($templateCache) 
           var defaultItemTpl, itemTpl;
           defaultItemTpl = "{{ item }}";
           itemTpl = el.html() || defaultItemTpl;
-          return "<div class='fs-multiselect fs-widget-root' ng-class='{ \"fs-with-selected-items\": selectedItems.length > 0 }'>\n  <div class='fs-multiselect-wrapper'>\n    <div class=\"fs-multiselect-selected-items\" ng-if=\"selectedItems.length > 0\">\n      <a ng-repeat='item in selectedItems' class=\"btn\" ng-click=\"unselectItem(item)\" ng-disabled=\"disabled\">\n        " + itemTpl + "\n        <span class=\"glyphicon glyphicon-remove\" ></span>\n      </a>\n    </div>\n\n    <input ng-keydown=\"onkeys($event)\"\n           fs-null-form\n           ng-disabled=\"disabled\"\n           fs-input\n           fs-hold-focus\n           fs-on-focus=\"active = true\"\n           fs-on-blur=\"active = false; search = ''\"\n           fs-blur-when=\"!active\"\n           fs-down='listInterface.move(1)'\n           fs-up='listInterface.move(-1)'\n           fs-pgup='listInterface.move(-11)'\n           fs-pgdown='listInterface.move(11)'\n           fs-enter='selectItem(listInterface.selectedItem)'\n           fs-esc='active = false'\n           class=\"form-control\"\n           type=\"text\"\n           placeholder='Select something'\n           ng-model=\"search\" />\n\n    <div ng-if=\"active && dropdownItems.length > 0\" class=\"open\">\n      <div fs-list items=\"dropdownItems\">\n        " + itemTpl + "\n      </div>\n    </div>\n  </div>\n</div>";
+          return "<div class='fs-multiselect fs-widget-root' ng-class='{ \"fs-with-selected-items\": selectedItems.length > 0 }'>\n  <div class='fs-multiselect-wrapper'>\n    <div class=\"fs-multiselect-selected-items\" ng-if=\"selectedItems.length > 0\">\n      <a ng-repeat='item in selectedItems' class=\"btn\" ng-click=\"unselectItem(item)\" ng-disabled=\"disabled\">\n        " + itemTpl + "\n        <span class=\"glyphicon glyphicon-remove\" ></span>\n      </a>\n    </div>\n\n    <input ng-keydown=\"onkeys($event)\"\n           fs-null-form\n           ng-disabled=\"disabled\"\n           fs-input\n           fs-hold-focus\n           fs-on-focus=\"active = true\"\n           fs-on-blur=\"onBlur()\"\n           fs-blur-when=\"!active\"\n           fs-down='listInterface.move(1)'\n           fs-up='listInterface.move(-1)'\n           fs-pgup='listInterface.move(-11)'\n           fs-pgdown='listInterface.move(11)'\n           fs-enter='selectItem(listInterface.selectedItem)'\n           fs-esc='active = false'\n           class=\"form-control\"\n           type=\"text\"\n           placeholder='Select something'\n           ng-model=\"search\" />\n\n    <div ng-if=\"active && dropdownItems.length > 0\" class=\"open\">\n      <div fs-list items=\"dropdownItems\">\n        " + itemTpl + "\n      </div>\n    </div>\n  </div>\n</div>";
         },
         controller: function($scope, $element, $attrs, $filter) {
           if ($attrs.freetext != null) {
@@ -1046,6 +1046,10 @@ angular.module('formstamp', []).run(['$templateCache', function($templateCache) 
             if (index > -1) {
               return $scope.selectedItems.splice(index, 1);
             }
+          };
+          $scope.onBlur = function() {
+            $scope.active = false;
+            return $scope.search = '';
           };
           $scope.listInterface = {
             onSelect: function(selectedItem) {
@@ -1163,7 +1167,7 @@ angular.module('formstamp', []).run(['$templateCache', function($templateCache) 
         template: function(el) {
           var itemTpl, template;
           itemTpl = el.html();
-          return template = "<div class='fs-select fs-widget-root'>\n  <div ng-hide=\"active\" class=\"fs-select-sel\" ng-class=\"{'btn-group': item}\">\n      <a class=\"btn btn-default fs-select-active\"\n         ng-class='{\"btn-danger\": invalid}'\n         href=\"javascript:void(0)\"\n         ng-click=\"active = true\"\n         ng-disabled=\"disabled\">\n           <span ng-show='item'>" + itemTpl + "</span>\n           <span ng-hide='item'>none</span>\n      </a>\n      <button type=\"button\"\n              class=\"btn btn-default fs-select-clear-btn\"\n              aria-hidden=\"true\"\n              ng-show='item'\n              ng-disabled=\"disabled\"\n              ng-click='unselectItem()'>&times;</button>\n    </div>\n  <div class=\"open\" ng-show=\"active\">\n    <input class=\"form-control\"\n           fs-input\n           fs-focus-when='active'\n           fs-blur-when='!active'\n           fs-on-focus='active = true'\n           fs-on-blur='active = false'\n           fs-hold-focus\n\n           fs-down='move(1)'\n           fs-up='move(-1)'\n           fs-pgup='move(-11)'\n           fs-pgdown='move(11)'\n           fs-enter='onEnter($event)'\n           fs-esc='active = false'\n           type=\"search\"\n           placeholder='Search'\n           ng-model=\"search\"\n           fs-null-form />\n\n    <div ng-if=\"active && dropdownItems.length > 0\">\n      <div fs-list items=\"dropdownItems\">\n       " + itemTpl + "\n      </div>\n    </div>\n  </div>\n</div>";
+          return template = "<div class='fs-select fs-widget-root'>\n  <div ng-hide=\"active\" class=\"fs-select-sel\" ng-class=\"{'btn-group': item}\">\n      <a class=\"btn btn-default fs-select-active\"\n         ng-class='{\"btn-danger\": invalid}'\n         href=\"javascript:void(0)\"\n         ng-click=\"active = true\"\n         ng-disabled=\"disabled\">\n           <span ng-show='item'>" + itemTpl + "</span>\n           <span ng-hide='item'>none</span>\n      </a>\n      <button type=\"button\"\n              class=\"btn btn-default fs-select-clear-btn\"\n              aria-hidden=\"true\"\n              ng-show='item'\n              ng-disabled=\"disabled\"\n              ng-click='unselectItem()'>&times;</button>\n    </div>\n  <div class=\"open\" ng-show=\"active\">\n    <input class=\"form-control\"\n           fs-input\n           fs-focus-when='active'\n           fs-blur-when='!active'\n           fs-on-focus='active = true'\n           fs-on-blur='onBlur()'\n           fs-hold-focus\n\n           fs-down='move(1)'\n           fs-up='move(-1)'\n           fs-pgup='move(-11)'\n           fs-pgdown='move(11)'\n           fs-enter='onEnter($event)'\n           fs-esc='active = false'\n           type=\"search\"\n           placeholder='Search'\n           ng-model=\"search\"\n           fs-null-form />\n\n    <div ng-if=\"active && dropdownItems.length > 0\">\n      <div fs-list items=\"dropdownItems\">\n       " + itemTpl + "\n      </div>\n    </div>\n  </div>\n</div>";
         },
         controller: function($scope, $element, $attrs, $filter, $timeout) {
           var updateDropdown;
@@ -1199,9 +1203,10 @@ angular.module('formstamp', []).run(['$templateCache', function($templateCache) 
             return $scope.item = null;
           };
           $scope.onBlur = function() {
-            return $timeout((function() {
-              return $scope.active = false;
-            }), 0, true);
+            return $timeout(function() {
+              $scope.active = false;
+              return $scope.search = '';
+            }, 0, true);
           };
           $scope.move = function(d) {
             return $scope.listInterface.move && $scope.listInterface.move(d);
