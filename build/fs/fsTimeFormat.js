@@ -7,7 +7,7 @@
         link: function(scope, element, attrs, ngModel) {
           ngModel.$formatters.push(function(time) {
             var h, m, _ref, _ref1;
-            if (time == null) {
+            if (!((time != null) && (time.hours != null) && (time.minutes != null))) {
               return '';
             }
             h = (_ref = time.hours) != null ? _ref.toString() : void 0;

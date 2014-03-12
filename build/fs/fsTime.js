@@ -34,12 +34,14 @@
           return "<div class=\"fs-time fs-widget-root\">\n  <input\n    fs-null-form\n    ng-model=\"value\"\n    fs-time-format\n    class=\"form-control\"\n    ng-disabled=\"disabled\"\n    list=\"" + datalistId + "\"\n    type=\"text\"/>\n  <span class=\"glyphicon glyphicon-time\"></span>\n  <datalist id=\"" + datalistId + "\">\n  " + timeoptions + "\n  </datalist>\n</div>";
         },
         link: function(scope, element, attrs, ngModelCtrl) {
+          var watchFn;
           if (ngModelCtrl) {
-            scope.$watch('value', function(newValue, oldValue) {
+            watchFn = function(newValue, oldValue) {
               if (!angular.equals(newValue, oldValue)) {
                 return ngModelCtrl.$setViewValue(newValue);
               }
-            });
+            };
+            scope.$watch('value', watchFn, true);
             return ngModelCtrl.$render = function() {
               return scope.value = ngModelCtrl.$viewValue;
             };

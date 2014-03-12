@@ -591,6 +591,26 @@ angular.module('formstamp', []).run(['$templateCache', function($templateCache) 
 }).call(this);
 
 (function() {
+  angular.module('formstamp').directive('fsDateFormat', [
+    '$filter', function($filter) {
+      return {
+        restrict: 'A',
+        require: 'ngModel',
+        link: function(scope, element, attrs, ngModel) {
+          ngModel.$formatters.push(function(value) {
+            return $filter('date')(value, 'shortDate');
+          });
+          return ngModel.$parsers.unshift(function(value) {
+            return new Date(value);
+          });
+        }
+      };
+    }
+  ]);
+
+}).call(this);
+
+(function() {
   angular.module("formstamp").directive("fsDatetime", [
     '$compile', function($compile) {
       return {
@@ -646,26 +666,6 @@ angular.module('formstamp', []).run(['$templateCache', function($templateCache) 
               } : null;
             };
           }
-        }
-      };
-    }
-  ]);
-
-}).call(this);
-
-(function() {
-  angular.module('formstamp').directive('fsDateFormat', [
-    '$filter', function($filter) {
-      return {
-        restrict: 'A',
-        require: 'ngModel',
-        link: function(scope, element, attrs, ngModel) {
-          ngModel.$formatters.push(function(value) {
-            return $filter('date')(value, 'shortDate');
-          });
-          return ngModel.$parsers.unshift(function(value) {
-            return new Date(value);
-          });
         }
       };
     }
@@ -1313,12 +1313,14 @@ angular.module('formstamp', []).run(['$templateCache', function($templateCache) 
           return "<div class=\"fs-time fs-widget-root\">\n  <input\n    fs-null-form\n    ng-model=\"value\"\n    fs-time-format\n    class=\"form-control\"\n    ng-disabled=\"disabled\"\n    list=\"" + datalistId + "\"\n    type=\"text\"/>\n  <span class=\"glyphicon glyphicon-time\"></span>\n  <datalist id=\"" + datalistId + "\">\n  " + timeoptions + "\n  </datalist>\n</div>";
         },
         link: function(scope, element, attrs, ngModelCtrl) {
+          var watchFn;
           if (ngModelCtrl) {
-            scope.$watch('value', function(newValue, oldValue) {
+            watchFn = function(newValue, oldValue) {
               if (!angular.equals(newValue, oldValue)) {
                 return ngModelCtrl.$setViewValue(newValue);
               }
-            });
+            };
+            scope.$watch('value', watchFn, true);
             return ngModelCtrl.$render = function() {
               return scope.value = ngModelCtrl.$viewValue;
             };
@@ -1339,7 +1341,7 @@ angular.module('formstamp', []).run(['$templateCache', function($templateCache) 
         link: function(scope, element, attrs, ngModel) {
           ngModel.$formatters.push(function(time) {
             var h, m, _ref, _ref1;
-            if (time == null) {
+            if (!((time != null) && (time.hours != null) && (time.minutes != null))) {
               return '';
             }
             h = (_ref = time.hours) != null ? _ref.toString() : void 0;
