@@ -9,7 +9,7 @@
         },
         require: '?ngModel',
         replace: true,
-        template: "<div class=\"fs-datetime fs-widget-root\">\n  <div fs-date ng-model=\"date\" ng-disabled=\"disabled\" fs-null-form></div>\n  <div fs-time ng-model=\"time\" ng-disabled=\"disabled\" fs-null-form with-date></div>\n  <button type=\"button\"\n          class=\"btn btn-default fs-datetime-clear-btn\"\n          ng-show='value'\n          ng-disabled=\"disabled\"\n          ng-click='clearDate()'>&times;</button>\n</div>",
+        template: "<div class=\"fs-datetime fs-widget-root\" ng-class='{ \"fs-with-value\": value }'>\n  <div fs-date ng-model=\"date\" ng-disabled=\"disabled\" fs-null-form></div>\n  <div fs-time ng-model=\"time\" ng-disabled=\"disabled\" fs-null-form with-date></div>\n  <button type=\"button\"\n          class=\"btn btn-default fs-datetime-clear-btn\"\n          ng-show='value'\n          ng-disabled=\"disabled\"\n          ng-click='clearDate()'>&times;</button>\n</div>",
         controller: function($scope) {
           return $scope.clearDate = function() {
             $scope.time = null;

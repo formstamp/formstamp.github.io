@@ -571,16 +571,18 @@ angular.module('formstamp', []).run(['$templateCache', function($templateCache) 
       replace: true,
       link: function($scope, element, attrs, ngModel) {
         $scope.selectedDate = {};
-        ngModel.$render = function() {
-          return $scope.selectedDate.date = ngModel.$modelValue;
-        };
-        $scope.$watch('selectedDate.date', function(newDate, oldDate) {
-          var updatedDate;
-          updatedDate = updateDate(newDate, oldDate);
-          if ((updatedDate != null ? updatedDate.getTime() : void 0) !== (oldDate != null ? oldDate.getTime() : void 0)) {
-            return ngModel.$setViewValue(updatedDate);
-          }
-        });
+        if (ngModel) {
+          ngModel.$render = function() {
+            return $scope.selectedDate.date = ngModel.$modelValue;
+          };
+          $scope.$watch('selectedDate.date', function(newDate, oldDate) {
+            var updatedDate;
+            updatedDate = updateDate(newDate, oldDate);
+            if ((updatedDate != null ? updatedDate.getTime() : void 0) !== (oldDate != null ? oldDate.getTime() : void 0)) {
+              return ngModel.$setViewValue(updatedDate);
+            }
+          });
+        }
         return $scope.close = function() {
           return $scope.active = false;
         };
@@ -601,7 +603,13 @@ angular.module('formstamp', []).run(['$templateCache', function($templateCache) 
             return $filter('date')(value, 'shortDate');
           });
           return ngModel.$parsers.unshift(function(value) {
-            return new Date(value);
+            var date;
+            date = new Date(value);
+            if (isNaN(date.getTime())) {
+              return null;
+            } else {
+              return date;
+            }
           });
         }
       };
@@ -621,7 +629,7 @@ angular.module('formstamp', []).run(['$templateCache', function($templateCache) 
         },
         require: '?ngModel',
         replace: true,
-        template: "<div class=\"fs-datetime fs-widget-root\">\n  <div fs-date ng-model=\"date\" ng-disabled=\"disabled\" fs-null-form></div>\n  <div fs-time ng-model=\"time\" ng-disabled=\"disabled\" fs-null-form with-date></div>\n  <button type=\"button\"\n          class=\"btn btn-default fs-datetime-clear-btn\"\n          ng-show='value'\n          ng-disabled=\"disabled\"\n          ng-click='clearDate()'>&times;</button>\n</div>",
+        template: "<div class=\"fs-datetime fs-widget-root\" ng-class='{ \"fs-with-value\": value }'>\n  <div fs-date ng-model=\"date\" ng-disabled=\"disabled\" fs-null-form></div>\n  <div fs-time ng-model=\"time\" ng-disabled=\"disabled\" fs-null-form with-date></div>\n  <button type=\"button\"\n          class=\"btn btn-default fs-datetime-clear-btn\"\n          ng-show='value'\n          ng-disabled=\"disabled\"\n          ng-click='clearDate()'>&times;</button>\n</div>",
         controller: function($scope) {
           return $scope.clearDate = function() {
             $scope.time = null;

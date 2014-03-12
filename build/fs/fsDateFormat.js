@@ -9,7 +9,13 @@
             return $filter('date')(value, 'shortDate');
           });
           return ngModel.$parsers.unshift(function(value) {
-            return new Date(value);
+            var date;
+            date = new Date(value);
+            if (isNaN(date.getTime())) {
+              return null;
+            } else {
+              return date;
+            }
           });
         }
       };
