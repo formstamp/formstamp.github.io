@@ -11,6 +11,7 @@
           prev = null;
           return ngModel.$parsers.unshift(function(value) {
             var ideal, matched, patterns, _, _i, _ref, _ref1;
+            console.log('processing value', value);
             value || (value = '');
             patterns = [/^[012]/, /^([0-1][0-9]|2[0-3]):?/, /^([0-1][0-9]|2[0-3]):?[0-5]/, /^([0-1][0-9]|2[0-3]):?([0-5][0-9])/];
             ideal = /^([0-1][0-9]|2[0-3]):?([0-5][0-9])$/;

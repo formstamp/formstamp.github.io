@@ -10,7 +10,7 @@
         require: '?ngModel',
         replace: true,
         template: function(el) {
-          return "<div class=\"fs-time fs-widget-root\">\n  <input\n    fs-null-form\n    fs-input\n    fs-focus-when='active'\n    fs-blur-when='!active'\n    fs-on-focus='active = true'\n    fs-on-blur='onBlur()'\n    fs-hold-focus\n    fs-time-format\n    fs-down='move(1)'\n    fs-up='move(-1)'\n    fs-pg-up='move(-11)'\n    fs-pg-down='move(11)'\n    fs-enter='select(listInterface.selectedItem)'\n    fs-esc='active = false'\n    ng-model=\"value\"\n    class=\"form-control\"\n    ng-disabled=\"disabled\"\n    type=\"text\"/>\n  <span class=\"glyphicon glyphicon-time\"></span>\n  <div ng-if='active' fs-list items=\"dropdownItems\">\n    {{item}}\n  </div>\n</div>";
+          return "<div class=\"fs-time fs-widget-root\">\n  <input\n    fs-null-form\n    fs-input\n    fs-focus-when='active'\n    fs-blur-when='!active'\n    fs-on-focus='active = true'\n    fs-on-blur='onBlur()'\n    fs-hold-focus\n    fs-time-format\n    fs-down='move(1)'\n    fs-up='move(-1)'\n    fs-pg-up='move(-11)'\n    fs-pg-down='move(11)'\n    fs-enter='onEnter()'\n    fs-esc='active = false'\n    ng-model=\"value\"\n    class=\"form-control\"\n    ng-disabled=\"disabled\"\n    type=\"text\"/>\n\n  <span class=\"glyphicon glyphicon-time\" ng-click=\"active = !disabled\"></span>\n  <div ng-if='!disabled && active' fs-list items=\"dropdownItems\">\n    {{item}}\n  </div>\n</div>";
         },
         link: function(scope, element, attrs, ngModelCtrl) {
           var dynamicItems, h, hours, items, m, minutes, num, updateDropdown, watchFn, zh, _i, _j, _len, _len1;
@@ -49,6 +49,11 @@
             return $timeout(function() {
               return scope.active = false;
             }, 0, true);
+          };
+          scope.onEnter = function() {
+            scope.select(scope.listInterface.selectedItem);
+            scope.active = false;
+            return false;
           };
           scope.move = function(d) {
             return scope.listInterface.move && scope.listInterface.move(d);
