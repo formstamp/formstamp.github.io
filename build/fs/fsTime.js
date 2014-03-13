@@ -1,6 +1,6 @@
 (function() {
   angular.module("formstamp").directive("fsTime", [
-    '$compile', function($compile) {
+    '$compile', '$filter', function($compile, $filter) {
       return {
         restrict: "A",
         scope: {
@@ -10,7 +10,10 @@
         require: '?ngModel',
         replace: true,
         template: function(el) {
-          var datalistId, h, hours, m, minutes, num, res, timeoptions, zh, _i, _j, _len, _len1;
+          return "<div class=\"fs-time fs-widget-root\">\n  <input\n    fs-null-form\n    fs-time-format\n    ng-model=\"value\"\n    class=\"form-control\"\n    ng-disabled=\"disabled\"\n    type=\"text\"/>\n  <span class=\"glyphicon glyphicon-time\"></span>\n  <div fs-list items=\"dropdownItems\">\n    {{item}}\n  </div>\n</div>";
+        },
+        link: function(scope, element, attrs, ngModelCtrl) {
+          var h, hours, items, m, minutes, num, watchFn, zh, _i, _j, _len, _len1;
           hours = (function() {
             var _i, _results;
             _results = [];
@@ -20,28 +23,22 @@
             return _results;
           })();
           minutes = ['00', '15', '30', '45'];
-          res = [];
+          items = [];
           for (_i = 0, _len = hours.length; _i < _len; _i++) {
             h = hours[_i];
             zh = h < 10 ? "0" + h : h;
             for (_j = 0, _len1 = minutes.length; _j < _len1; _j++) {
               m = minutes[_j];
-              res.push("<option value='" + zh + ":" + m + "'/>");
+              items.push("" + zh + ":" + m);
             }
           }
-          datalistId = "fsTimeDatalist_" + (nextUid());
-          timeoptions = res.join('');
-          return "<div class=\"fs-time fs-widget-root\">\n  <input\n    fs-null-form\n    ng-model=\"value\"\n    fs-time-format\n    class=\"form-control\"\n    ng-disabled=\"disabled\"\n    list=\"" + datalistId + "\"\n    type=\"text\"/>\n  <span class=\"glyphicon glyphicon-time\"></span>\n  <datalist id=\"" + datalistId + "\">\n  " + timeoptions + "\n  </datalist>\n</div>";
-        },
-        link: function(scope, element, attrs, ngModelCtrl) {
-          var watchFn;
           if (ngModelCtrl) {
             watchFn = function(newValue, oldValue) {
               if (!angular.equals(newValue, oldValue)) {
                 return ngModelCtrl.$setViewValue(newValue);
               }
             };
-            scope.$watch('value', watchFn, true);
+            scope.$watch('value', watchFn);
             return ngModelCtrl.$render = function() {
               return scope.value = ngModelCtrl.$viewValue;
             };

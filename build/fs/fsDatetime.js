@@ -21,11 +21,15 @@
           if (ngModelCtrl) {
             scope.value = null;
             scope.$watch('time', function(newValue, oldValue) {
+              var hours, minutes, parts;
               if (!angular.equals(newValue, oldValue)) {
                 if (newValue) {
+                  parts = newValue.split(':');
+                  minutes = parseInt(parts[1]);
+                  hours = parseInt(parts[0]);
                   scope.value || (scope.value = new Date());
-                  scope.value.setHours(newValue.hours);
-                  scope.value.setMinutes(newValue.minutes);
+                  scope.value.setHours(hours);
+                  scope.value.setMinutes(minutes);
                   scope.value.setSeconds(0);
                   return scope.value.setMilliseconds(0);
                 }
@@ -48,10 +52,10 @@
             });
             return ngModelCtrl.$render = function() {
               scope.date = scope.value = ngModelCtrl.$viewValue;
-              return scope.time = ngModelCtrl.$viewValue ? {
+              return scope.time = ngModelCtrl.$viewValue ? toTimeStr({
                 hours: ngModelCtrl.$viewValue.getHours(),
                 minutes: ngModelCtrl.$viewValue.getMinutes()
-              } : null;
+              }) : null;
             };
           }
         }

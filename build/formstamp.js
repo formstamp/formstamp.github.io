@@ -1,4 +1,4 @@
-var addValidations, comp, filter, getComputedStyleFor, indexOf, innerHeightOf, nextUid, parseDate, scrollToTarget, uid, updateDate, updateTime;
+var addValidations, comp, filter, getComputedStyleFor, indexOf, innerHeightOf, nextUid, parseDate, scrollToTarget, toTimeStr, uid, updateDate, updateTime;
 
 comp = function(a, b) {
   return ("" + a).toLowerCase().indexOf(b.toString().toLowerCase()) > -1;
@@ -159,6 +159,22 @@ nextUid = function() {
   }
   uid.unshift('0');
   return uid.join('');
+};
+
+toTimeStr = function(time) {
+  var h, m, _ref, _ref1;
+  if (!((time != null) && (time.hours != null) && (time.minutes != null))) {
+    return '';
+  }
+  h = (_ref = time.hours) != null ? _ref.toString() : void 0;
+  if ((h != null ? h.length : void 0) < 2) {
+    h = "0" + h;
+  }
+  m = (_ref1 = time.minutes) != null ? _ref1.toString() : void 0;
+  if ((m != null ? m.length : void 0) < 2) {
+    m = "0" + m;
+  }
+  return "" + h + ":" + m;
 };
 
 angular.module('formstamp', []).run(['$templateCache', function($templateCache) {
@@ -641,11 +657,15 @@ angular.module('formstamp', []).run(['$templateCache', function($templateCache) 
           if (ngModelCtrl) {
             scope.value = null;
             scope.$watch('time', function(newValue, oldValue) {
+              var hours, minutes, parts;
               if (!angular.equals(newValue, oldValue)) {
                 if (newValue) {
+                  parts = newValue.split(':');
+                  minutes = parseInt(parts[1]);
+                  hours = parseInt(parts[0]);
                   scope.value || (scope.value = new Date());
-                  scope.value.setHours(newValue.hours);
-                  scope.value.setMinutes(newValue.minutes);
+                  scope.value.setHours(hours);
+                  scope.value.setMinutes(minutes);
                   scope.value.setSeconds(0);
                   return scope.value.setMilliseconds(0);
                 }
@@ -668,10 +688,10 @@ angular.module('formstamp', []).run(['$templateCache', function($templateCache) 
             });
             return ngModelCtrl.$render = function() {
               scope.date = scope.value = ngModelCtrl.$viewValue;
-              return scope.time = ngModelCtrl.$viewValue ? {
+              return scope.time = ngModelCtrl.$viewValue ? toTimeStr({
                 hours: ngModelCtrl.$viewValue.getHours(),
                 minutes: ngModelCtrl.$viewValue.getMinutes()
-              } : null;
+              }) : null;
             };
           }
         }
@@ -1299,7 +1319,7 @@ angular.module('formstamp', []).run(['$templateCache', function($templateCache) 
 
 (function() {
   angular.module("formstamp").directive("fsTime", [
-    '$compile', function($compile) {
+    '$compile', '$filter', function($compile, $filter) {
       return {
         restrict: "A",
         scope: {
@@ -1309,7 +1329,10 @@ angular.module('formstamp', []).run(['$templateCache', function($templateCache) 
         require: '?ngModel',
         replace: true,
         template: function(el) {
-          var datalistId, h, hours, m, minutes, num, res, timeoptions, zh, _i, _j, _len, _len1;
+          return "<div class=\"fs-time fs-widget-root\">\n  <input\n    fs-null-form\n    fs-time-format\n    ng-model=\"value\"\n    class=\"form-control\"\n    ng-disabled=\"disabled\"\n    type=\"text\"/>\n  <span class=\"glyphicon glyphicon-time\"></span>\n  <div fs-list items=\"dropdownItems\">\n    {{item}}\n  </div>\n</div>";
+        },
+        link: function(scope, element, attrs, ngModelCtrl) {
+          var h, hours, items, m, minutes, num, watchFn, zh, _i, _j, _len, _len1;
           hours = (function() {
             var _i, _results;
             _results = [];
@@ -1319,28 +1342,22 @@ angular.module('formstamp', []).run(['$templateCache', function($templateCache) 
             return _results;
           })();
           minutes = ['00', '15', '30', '45'];
-          res = [];
+          items = [];
           for (_i = 0, _len = hours.length; _i < _len; _i++) {
             h = hours[_i];
             zh = h < 10 ? "0" + h : h;
             for (_j = 0, _len1 = minutes.length; _j < _len1; _j++) {
               m = minutes[_j];
-              res.push("<option value='" + zh + ":" + m + "'/>");
+              items.push("" + zh + ":" + m);
             }
           }
-          datalistId = "fsTimeDatalist_" + (nextUid());
-          timeoptions = res.join('');
-          return "<div class=\"fs-time fs-widget-root\">\n  <input\n    fs-null-form\n    ng-model=\"value\"\n    fs-time-format\n    class=\"form-control\"\n    ng-disabled=\"disabled\"\n    list=\"" + datalistId + "\"\n    type=\"text\"/>\n  <span class=\"glyphicon glyphicon-time\"></span>\n  <datalist id=\"" + datalistId + "\">\n  " + timeoptions + "\n  </datalist>\n</div>";
-        },
-        link: function(scope, element, attrs, ngModelCtrl) {
-          var watchFn;
           if (ngModelCtrl) {
             watchFn = function(newValue, oldValue) {
               if (!angular.equals(newValue, oldValue)) {
                 return ngModelCtrl.$setViewValue(newValue);
               }
             };
-            scope.$watch('value', watchFn, true);
+            scope.$watch('value', watchFn);
             return ngModelCtrl.$render = function() {
               return scope.value = ngModelCtrl.$viewValue;
             };
@@ -1359,45 +1376,18 @@ angular.module('formstamp', []).run(['$templateCache', function($templateCache) 
         restrict: 'A',
         require: 'ngModel',
         link: function(scope, element, attrs, ngModel) {
-          ngModel.$formatters.push(function(time) {
-            var h, m, _ref, _ref1;
-            if (!((time != null) && (time.hours != null) && (time.minutes != null))) {
-              return '';
-            }
-            h = (_ref = time.hours) != null ? _ref.toString() : void 0;
-            if ((h != null ? h.length : void 0) < 2) {
-              h = "0" + h;
-            }
-            m = (_ref1 = time.minutes) != null ? _ref1.toString() : void 0;
-            if ((m != null ? m.length : void 0) < 2) {
-              m = "0" + m;
-            }
-            return "" + h + ":" + m;
-          });
           return ngModel.$parsers.unshift(function(value) {
-            var hours, matched, minutes, p, parts, patterns, res, _i, _len;
+            var pattern, _ref;
             value || (value = '');
-            patterns = [/^[012]/, /^([0-1][0-9]|2[0-3]):?/, /^([0-1][0-9]|2[0-3]):?[0-5]/, /^([0-1][0-9]|2[0-3]):?([0-5][0-9])/];
-            matched = null;
-            for (_i = 0, _len = patterns.length; _i < _len; _i++) {
-              p = patterns[_i];
-              res = value.match(p);
-              if (res) {
-                matched = res[0];
-              }
-            }
-            value = matched;
+            pattern = /^([0-1][0-9]|2[0-3]):?([0-5][0-9])/;
+            value = (_ref = value.match(pattern)) != null ? _ref[0] : void 0;
             if (value) {
               if (value.length > 2 && /^(\d\d)([^:]*)$/.test(value)) {
                 value = value.replace(/^(\d\d)([^:]*)$/, "$1:$2");
                 ngModel.$setViewValue(value);
                 ngModel.$render();
               }
-              parts = value.split(':');
-              return {
-                hours: isNaN(hours = parseInt(parts[0])) ? null : hours,
-                minutes: isNaN(minutes = parseInt(parts[1])) ? null : minutes
-              };
+              return value;
             } else {
               return null;
             }

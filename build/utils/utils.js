@@ -1,4 +1,4 @@
-var addValidations, comp, filter, getComputedStyleFor, indexOf, innerHeightOf, nextUid, parseDate, scrollToTarget, uid, updateDate, updateTime;
+var addValidations, comp, filter, getComputedStyleFor, indexOf, innerHeightOf, nextUid, parseDate, scrollToTarget, toTimeStr, uid, updateDate, updateTime;
 
 comp = function(a, b) {
   return ("" + a).toLowerCase().indexOf(b.toString().toLowerCase()) > -1;
@@ -159,4 +159,20 @@ nextUid = function() {
   }
   uid.unshift('0');
   return uid.join('');
+};
+
+toTimeStr = function(time) {
+  var h, m, _ref, _ref1;
+  if (!((time != null) && (time.hours != null) && (time.minutes != null))) {
+    return '';
+  }
+  h = (_ref = time.hours) != null ? _ref.toString() : void 0;
+  if ((h != null ? h.length : void 0) < 2) {
+    h = "0" + h;
+  }
+  m = (_ref1 = time.minutes) != null ? _ref1.toString() : void 0;
+  if ((m != null ? m.length : void 0) < 2) {
+    m = "0" + m;
+  }
+  return "" + h + ":" + m;
 };
