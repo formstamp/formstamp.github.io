@@ -25,9 +25,10 @@
               if (!angular.equals(newValue, oldValue)) {
                 if (newValue) {
                   parts = newValue.split(':');
-                  minutes = parseInt(parts[1]);
-                  hours = parseInt(parts[0]);
+                  minutes = parseInt(parts[1]) || 0;
+                  hours = parseInt(parts[0]) || 0;
                   scope.value || (scope.value = new Date());
+                  scope.value = angular.copy(scope.value);
                   scope.value.setHours(hours);
                   scope.value.setMinutes(minutes);
                   scope.value.setSeconds(0);
@@ -39,6 +40,7 @@
               if (!angular.equals(newValue, oldValue)) {
                 if (newValue) {
                   scope.value || (scope.value = new Date());
+                  scope.value = angular.copy(scope.value);
                   scope.value.setDate(newValue.getDate());
                   scope.value.setMonth(newValue.getMonth());
                   return scope.value.setFullYear(newValue.getFullYear());

@@ -1,25 +1,32 @@
 (function() {
+  var __slice = [].slice;
+
   angular.module('formstamp').directive('fsTimeFormat', [
     '$filter', function($filter) {
       return {
         restrict: 'A',
         require: 'ngModel',
         link: function(scope, element, attrs, ngModel) {
+          var prev;
+          prev = null;
           return ngModel.$parsers.unshift(function(value) {
-            var pattern, _ref;
+            var ideal, matched, patterns, _, _i, _ref, _ref1;
             value || (value = '');
-            pattern = /^([0-1][0-9]|2[0-3]):?([0-5][0-9])/;
-            value = (_ref = value.match(pattern)) != null ? _ref[0] : void 0;
-            if (value) {
-              if (value.length > 2 && /^(\d\d)([^:]*)$/.test(value)) {
-                value = value.replace(/^(\d\d)([^:]*)$/, "$1:$2");
-                ngModel.$setViewValue(value);
-                ngModel.$render();
-              }
-              return value;
-            } else {
-              return null;
+            patterns = [/^[012]/, /^([0-1][0-9]|2[0-3]):?/, /^([0-1][0-9]|2[0-3]):?[0-5]/, /^([0-1][0-9]|2[0-3]):?([0-5][0-9])/];
+            ideal = /^([0-1][0-9]|2[0-3]):?([0-5][0-9])$/;
+            _ref = patterns.filter(function(p) {
+              return p.test(value);
+            }), _ = 2 <= _ref.length ? __slice.call(_ref, 0, _i = _ref.length - 1) : (_i = 0, []), matched = _ref[_i++];
+            if (value.length > 2) {
+              value = value.replace(/^(\d\d)([^:]*)$/, "$1:$2");
             }
+            if (!ideal.test(prev) && prev !== value) {
+              value = ((_ref1 = value.match(matched)) != null ? _ref1[0] : void 0) || '';
+              prev = value;
+              ngModel.$setViewValue(value);
+              ngModel.$render();
+            }
+            return value;
           });
         }
       };

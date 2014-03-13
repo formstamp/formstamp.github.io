@@ -241,7 +241,7 @@ angular.module('formstamp', []).run(['$templateCache', function($templateCache) 
     "        <td data-ng-repeat=\"day in week\" class=\"day\"\n" +
     "            data-ng-class=\"{'day-in-selected-month': isDayInSelectedMonth(day),\n" +
     "                       'day-current': isCurrentDate(day),\n" +
-    "                       'active': isSelectedDate(day)}\"\n" +
+    "                       'active bg-info': isSelectedDate(day)}\"\n" +
     "            data-ng-click=\"selectDay(day)\">\n" +
     "          {{day.getDate()}}\n" +
     "        </td>\n" +
@@ -262,6 +262,7 @@ angular.module('formstamp', []).run(['$templateCache', function($templateCache) 
     "     fs-on-focus='active = true'\n" +
     "     fs-on-blur='active = false'\n" +
     "     fs-hold-focus\n" +
+    "     fs-esc='active = false'\n" +
     "     type=\"text\"\n" +
     "     ng-disabled=\"disabled\"\n" +
     "     class=\"form-control\"\n" +
@@ -280,26 +281,6 @@ angular.module('formstamp', []).run(['$templateCache', function($templateCache) 
   );
 
 
-  $templateCache.put('/templates/field.html',
-    "<div class='form-group'\n" +
-    "  ng-class='{\"has-error\": validationErrors.length > 0}'>\n" +
-    "  <label for='{{field}}' class='col-sm-2 control-label'>{{label}}</label>\n" +
-    "  <div class='col-sm-10'>\n" +
-    "    <div class='fs-field-input'\n" +
-    "         items='items'\n" +
-    "         invalid='validationErrors.length > 0'\n" +
-    "         ng-model='object[field]'></div>\n" +
-    "    <div>\n" +
-    "    <p class='text-danger' ng-repeat='message in validationErrors'>\n" +
-    "      <span>{{message}}</span>\n" +
-    "    </p>\n" +
-    "    </div>\n" +
-    "  </div>\n" +
-    "</div>\n" +
-    "\n"
-  );
-
-
   $templateCache.put('/templates/list.html',
     "<div class=\"dropdown open fs-list\">\n" +
     "  <ul class=\"dropdown-menu\"\n" +
@@ -313,15 +294,6 @@ angular.module('formstamp', []).run(['$templateCache', function($templateCache) 
     "       </a>\n" +
     "    </li>\n" +
     "  </ul>\n" +
-    "</div>\n"
-  );
-
-
-  $templateCache.put('/templates/submit_field.html',
-    "<div class=\"form-group\">\n" +
-    "  <div class=\"col-sm-offset-2 col-sm-10\">\n" +
-    "    <button type=\"submit\" class=\"btn btn-default\" ng-transclude></button>\n" +
-    "  </div>\n" +
     "</div>\n"
   );
 
@@ -661,9 +633,10 @@ angular.module('formstamp', []).run(['$templateCache', function($templateCache) 
               if (!angular.equals(newValue, oldValue)) {
                 if (newValue) {
                   parts = newValue.split(':');
-                  minutes = parseInt(parts[1]);
-                  hours = parseInt(parts[0]);
+                  minutes = parseInt(parts[1]) || 0;
+                  hours = parseInt(parts[0]) || 0;
                   scope.value || (scope.value = new Date());
+                  scope.value = angular.copy(scope.value);
                   scope.value.setHours(hours);
                   scope.value.setMinutes(minutes);
                   scope.value.setSeconds(0);
@@ -675,6 +648,7 @@ angular.module('formstamp', []).run(['$templateCache', function($templateCache) 
               if (!angular.equals(newValue, oldValue)) {
                 if (newValue) {
                   scope.value || (scope.value = new Date());
+                  scope.value = angular.copy(scope.value);
                   scope.value.setDate(newValue.getDate());
                   scope.value.setMonth(newValue.getMonth());
                   return scope.value.setFullYear(newValue.getFullYear());
@@ -1198,7 +1172,7 @@ angular.module('formstamp', []).run(['$templateCache', function($templateCache) 
         template: function(el) {
           var itemTpl, template;
           itemTpl = el.html();
-          return template = "<div class='fs-select fs-widget-root'>\n  <div ng-hide=\"active\" class=\"fs-select-sel\" ng-class=\"{'btn-group': item}\">\n      <a class=\"btn btn-default fs-select-active\"\n         ng-class='{\"btn-danger\": invalid}'\n         href=\"javascript:void(0)\"\n         ng-click=\"active = true\"\n         ng-disabled=\"disabled\">\n           <span ng-show='item'>" + itemTpl + "</span>\n           <span ng-hide='item'>none</span>\n      </a>\n      <button type=\"button\"\n              class=\"btn btn-default fs-select-clear-btn\"\n              aria-hidden=\"true\"\n              ng-show='item'\n              ng-disabled=\"disabled\"\n              ng-click='unselectItem()'>&times;</button>\n    </div>\n  <div class=\"open\" ng-show=\"active\">\n    <input class=\"form-control\"\n           fs-input\n           fs-focus-when='active'\n           fs-blur-when='!active'\n           fs-on-focus='active = true'\n           fs-on-blur='onBlur()'\n           fs-hold-focus\n\n           fs-down='move(1)'\n           fs-up='move(-1)'\n           fs-pgup='move(-11)'\n           fs-pgdown='move(11)'\n           fs-enter='onEnter($event)'\n           fs-esc='active = false'\n           type=\"text\"\n           placeholder='Search'\n           ng-model=\"search\"\n           fs-null-form />\n\n    <div ng-if=\"active && dropdownItems.length > 0\">\n      <div fs-list items=\"dropdownItems\">\n       " + itemTpl + "\n      </div>\n    </div>\n  </div>\n</div>";
+          return template = "<div class='fs-select fs-widget-root'>\n  <div ng-hide=\"active\" class=\"fs-select-sel\" ng-class=\"{'btn-group': item}\">\n      <a class=\"btn btn-default fs-select-active\"\n         ng-class='{\"btn-danger\": invalid}'\n         href=\"javascript:void(0)\"\n         ng-click=\"active = true\"\n         ng-disabled=\"disabled\">\n           <span ng-show='item'>" + itemTpl + "</span>\n           <span ng-hide='item'>none</span>\n      </a>\n      <button type=\"button\"\n              class=\"btn btn-default fs-select-clear-btn\"\n              aria-hidden=\"true\"\n              ng-show='item'\n              ng-disabled=\"disabled\"\n              ng-click='unselectItem()'>&times;</button>\n    </div>\n  <div class=\"open\" ng-show=\"active\">\n    <input class=\"form-control\"\n           fs-input\n           fs-focus-when='active'\n           fs-blur-when='!active'\n           fs-on-focus='active = true'\n           fs-on-blur='onBlur()'\n           fs-hold-focus\n           fs-down='move(1)'\n           fs-up='move(-1)'\n           fs-pg-up='move(-11)'\n           fs-pg-down='move(11)'\n           fs-enter='onEnter($event)'\n           fs-esc='active = false'\n           type=\"text\"\n           placeholder='Search'\n           ng-model=\"search\"\n           fs-null-form />\n\n    <div ng-if=\"active && dropdownItems.length > 0\">\n      <div fs-list items=\"dropdownItems\">\n       " + itemTpl + "\n      </div>\n    </div>\n  </div>\n</div>";
         },
         controller: function($scope, $element, $attrs, $filter, $timeout) {
           var updateDropdown;
@@ -1277,49 +1251,8 @@ angular.module('formstamp', []).run(['$templateCache', function($templateCache) 
 }).call(this);
 
 (function() {
-  angular.module("formstamp").directive("fsSubmit", [
-    '$parse', function($parse) {
-      return {
-        restrict: "A",
-        require: '?form',
-        link: function(scope, element, attr, controller) {
-          var fn;
-          fn = $parse(attr.fsSubmit);
-          return element.bind('submit', function(event) {
-            return scope.$apply(function() {
-              if (!controller || controller.$valid) {
-                return fn(scope, {
-                  $event: event
-                });
-              } else {
-                return controller.$setDirty();
-              }
-            });
-          });
-        }
-      };
-    }
-  ]);
-
-}).call(this);
-
-(function() {
-  angular.module('formstamp').directive('fsSubmitField', [
-    function() {
-      return {
-        restrict: 'A',
-        replace: true,
-        transclude: true,
-        templateUrl: '/templates/submit_field.html'
-      };
-    }
-  ]);
-
-}).call(this);
-
-(function() {
   angular.module("formstamp").directive("fsTime", [
-    '$compile', '$filter', function($compile, $filter) {
+    '$compile', '$filter', '$timeout', function($compile, $filter, $timeout) {
       return {
         restrict: "A",
         scope: {
@@ -1329,10 +1262,10 @@ angular.module('formstamp', []).run(['$templateCache', function($templateCache) 
         require: '?ngModel',
         replace: true,
         template: function(el) {
-          return "<div class=\"fs-time fs-widget-root\">\n  <input\n    fs-null-form\n    fs-time-format\n    ng-model=\"value\"\n    class=\"form-control\"\n    ng-disabled=\"disabled\"\n    type=\"text\"/>\n  <span class=\"glyphicon glyphicon-time\"></span>\n  <div fs-list items=\"dropdownItems\">\n    {{item}}\n  </div>\n</div>";
+          return "<div class=\"fs-time fs-widget-root\">\n  <input\n    fs-null-form\n    fs-input\n    fs-focus-when='active'\n    fs-blur-when='!active'\n    fs-on-focus='active = true'\n    fs-on-blur='onBlur()'\n    fs-hold-focus\n    fs-time-format\n    fs-down='move(1)'\n    fs-up='move(-1)'\n    fs-pg-up='move(-11)'\n    fs-pg-down='move(11)'\n    fs-enter='select(listInterface.selectedItem)'\n    fs-esc='active = false'\n    ng-model=\"value\"\n    class=\"form-control\"\n    ng-disabled=\"disabled\"\n    type=\"text\"/>\n  <span class=\"glyphicon glyphicon-time\"></span>\n  <div ng-if='active' fs-list items=\"dropdownItems\">\n    {{item}}\n  </div>\n</div>";
         },
         link: function(scope, element, attrs, ngModelCtrl) {
-          var h, hours, items, m, minutes, num, watchFn, zh, _i, _j, _len, _len1;
+          var dynamicItems, h, hours, items, m, minutes, num, updateDropdown, watchFn, zh, _i, _j, _len, _len1;
           hours = (function() {
             var _i, _results;
             _results = [];
@@ -1351,6 +1284,37 @@ angular.module('formstamp', []).run(['$templateCache', function($templateCache) 
               items.push("" + zh + ":" + m);
             }
           }
+          dynamicItems = function() {
+            if (scope.value && scope.value.length === 5 && indexOf(items, scope.value) === -1) {
+              return [scope.value];
+            } else {
+              return [];
+            }
+          };
+          updateDropdown = function() {
+            return scope.dropdownItems = $filter('filter')(items, scope.value).concat(dynamicItems());
+          };
+          scope.$watch('value', function(q) {
+            return updateDropdown();
+          });
+          scope.onBlur = function() {
+            return $timeout(function() {
+              return scope.active = false;
+            }, 0, true);
+          };
+          scope.move = function(d) {
+            return scope.listInterface.move && scope.listInterface.move(d);
+          };
+          scope.select = function(value) {
+            scope.value = value;
+            return scope.active = false;
+          };
+          scope.listInterface = {
+            onSelect: scope.select,
+            move: function() {
+              return console.log("not-implemented listInterface.move() function");
+            }
+          };
           if (ngModelCtrl) {
             watchFn = function(newValue, oldValue) {
               if (!angular.equals(newValue, oldValue)) {
@@ -1370,27 +1334,34 @@ angular.module('formstamp', []).run(['$templateCache', function($templateCache) 
 }).call(this);
 
 (function() {
+  var __slice = [].slice;
+
   angular.module('formstamp').directive('fsTimeFormat', [
     '$filter', function($filter) {
       return {
         restrict: 'A',
         require: 'ngModel',
         link: function(scope, element, attrs, ngModel) {
+          var prev;
+          prev = null;
           return ngModel.$parsers.unshift(function(value) {
-            var pattern, _ref;
+            var ideal, matched, patterns, _, _i, _ref, _ref1;
             value || (value = '');
-            pattern = /^([0-1][0-9]|2[0-3]):?([0-5][0-9])/;
-            value = (_ref = value.match(pattern)) != null ? _ref[0] : void 0;
-            if (value) {
-              if (value.length > 2 && /^(\d\d)([^:]*)$/.test(value)) {
-                value = value.replace(/^(\d\d)([^:]*)$/, "$1:$2");
-                ngModel.$setViewValue(value);
-                ngModel.$render();
-              }
-              return value;
-            } else {
-              return null;
+            patterns = [/^[012]/, /^([0-1][0-9]|2[0-3]):?/, /^([0-1][0-9]|2[0-3]):?[0-5]/, /^([0-1][0-9]|2[0-3]):?([0-5][0-9])/];
+            ideal = /^([0-1][0-9]|2[0-3]):?([0-5][0-9])$/;
+            _ref = patterns.filter(function(p) {
+              return p.test(value);
+            }), _ = 2 <= _ref.length ? __slice.call(_ref, 0, _i = _ref.length - 1) : (_i = 0, []), matched = _ref[_i++];
+            if (value.length > 2) {
+              value = value.replace(/^(\d\d)([^:]*)$/, "$1:$2");
             }
+            if (!ideal.test(prev) && prev !== value) {
+              value = ((_ref1 = value.match(matched)) != null ? _ref1[0] : void 0) || '';
+              prev = value;
+              ngModel.$setViewValue(value);
+              ngModel.$render();
+            }
+            return value;
           });
         }
       };

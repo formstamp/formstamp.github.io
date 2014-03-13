@@ -1,7 +1,7 @@
-.fs-datepicker .fs-calendar-wrapper {
+.fs-date .fs-calendar-wrapper {
   position: relative;
 }
-.fs-datepicker .dropdown-menu {
+.fs-date .fs-calendar-wrapper .dropdown-menu {
   padding: 5px;
 }
 .fs-calendar {
@@ -11,6 +11,7 @@
 .fs-calendar .fs-calendar-header {
   text-align: center;
   vertical-align: middle;
+  white-space: nowrap;
 }
 .fs-calendar .fs-calendar-next,
 .fs-calendar .fs-calendar-prev,
@@ -54,5 +55,5 @@
 .fs-calendar .month.active,
 .fs-calendar .year.active {
   font-weight: bold;
-  background-color: lightgray;
+  /* background-color: lightgray; */
 }

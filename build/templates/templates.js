@@ -62,7 +62,7 @@ angular.module('formstamp', []).run(['$templateCache', function($templateCache) 
     "        <td data-ng-repeat=\"day in week\" class=\"day\"\n" +
     "            data-ng-class=\"{'day-in-selected-month': isDayInSelectedMonth(day),\n" +
     "                       'day-current': isCurrentDate(day),\n" +
-    "                       'active': isSelectedDate(day)}\"\n" +
+    "                       'active bg-info': isSelectedDate(day)}\"\n" +
     "            data-ng-click=\"selectDay(day)\">\n" +
     "          {{day.getDate()}}\n" +
     "        </td>\n" +
@@ -83,6 +83,7 @@ angular.module('formstamp', []).run(['$templateCache', function($templateCache) 
     "     fs-on-focus='active = true'\n" +
     "     fs-on-blur='active = false'\n" +
     "     fs-hold-focus\n" +
+    "     fs-esc='active = false'\n" +
     "     type=\"text\"\n" +
     "     ng-disabled=\"disabled\"\n" +
     "     class=\"form-control\"\n" +
@@ -101,26 +102,6 @@ angular.module('formstamp', []).run(['$templateCache', function($templateCache) 
   );
 
 
-  $templateCache.put('/templates/field.html',
-    "<div class='form-group'\n" +
-    "  ng-class='{\"has-error\": validationErrors.length > 0}'>\n" +
-    "  <label for='{{field}}' class='col-sm-2 control-label'>{{label}}</label>\n" +
-    "  <div class='col-sm-10'>\n" +
-    "    <div class='fs-field-input'\n" +
-    "         items='items'\n" +
-    "         invalid='validationErrors.length > 0'\n" +
-    "         ng-model='object[field]'></div>\n" +
-    "    <div>\n" +
-    "    <p class='text-danger' ng-repeat='message in validationErrors'>\n" +
-    "      <span>{{message}}</span>\n" +
-    "    </p>\n" +
-    "    </div>\n" +
-    "  </div>\n" +
-    "</div>\n" +
-    "\n"
-  );
-
-
   $templateCache.put('/templates/list.html',
     "<div class=\"dropdown open fs-list\">\n" +
     "  <ul class=\"dropdown-menu\"\n" +
@@ -134,15 +115,6 @@ angular.module('formstamp', []).run(['$templateCache', function($templateCache) 
     "       </a>\n" +
     "    </li>\n" +
     "  </ul>\n" +
-    "</div>\n"
-  );
-
-
-  $templateCache.put('/templates/submit_field.html',
-    "<div class=\"form-group\">\n" +
-    "  <div class=\"col-sm-offset-2 col-sm-10\">\n" +
-    "    <button type=\"submit\" class=\"btn btn-default\" ng-transclude></button>\n" +
-    "  </div>\n" +
     "</div>\n"
   );
 
