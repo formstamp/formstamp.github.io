@@ -91,9 +91,9 @@ angular.module('formstamp', []).run(['$templateCache', function($templateCache) 
     "     fs-date-format\n" +
     "     placeholder=\"{{placeholder}}\"\n" +
     "     fs-null-form />\n" +
-    "  <span class=\"glyphicon glyphicon-calendar\" ng-click='active = true'></span>\n" +
+    "  <span class=\"glyphicon glyphicon-calendar\" ng-click='active = !disabled'></span>\n" +
     "\n" +
-    "  <div ng-if=\"active\" class=\"open fs-calendar-wrapper\">\n" +
+    "  <div ng-if=\"!disabled && active\" class=\"open fs-calendar-wrapper\">\n" +
     "    <div class=\"dropdown-menu\">\n" +
     "      <fs-calendar ng-model=\"selectedDate.date\" on-select='close()'/>\n" +
     "    </div>\n" +
