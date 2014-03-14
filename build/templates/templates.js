@@ -102,6 +102,26 @@ angular.module('formstamp', []).run(['$templateCache', function($templateCache) 
   );
 
 
+  $templateCache.put('/templates/field.html',
+    "<div class='form-group'\n" +
+    "     ng-class='{\"has-error\": object.$errors[field].length > 0}'>\n" +
+    "  <label for='{{objectName}}[{{field}}]' class='col-sm-2 control-label'>Name</label>\n" +
+    "  <div class='col-sm-10'>\n" +
+    "    <div w-combo\n" +
+    "         class='w-field-input'\n" +
+    "         items='items'\n" +
+    "         invalid='object.$errors[field]'\n" +
+    "         name='{{objectName}}[{{field}}]' \n" +
+    "         ng-model='object[field]'></div>\n" +
+    "    <div>\n" +
+    "      <p ng-repeat='error in object.$errors[field]' class='text-danger'>{{error}}</p>\n" +
+    "    </div>\n" +
+    "  </div>\n" +
+    "</div>\n" +
+    "\n"
+  );
+
+
   $templateCache.put('/templates/list.html',
     "<div class=\"dropdown open fs-list\">\n" +
     "  <ul class=\"dropdown-menu\"\n" +
