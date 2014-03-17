@@ -6,10 +6,10 @@ FormStamp
 FormStamp is a pure AngularJS widgets library designed for rich
 front-end web applications. FormStamp core principles are:
 
-* all widgets are written from scratch
-* maximum AngularJS compatibility (support ngDisabled, ngModel and
-  other standard directives)
-* styled with Twitter Bootstrap
+* all widgets are written from scratch;
+* maximum AngularJS compatibility (supports ngDisabled, ngModel and
+  other standard directives);
+* styled with Twitter Bootstrap;
 * clean & minimalistic codebase.
 
 [Live Demo](http://formstamp.github.io/)
@@ -29,22 +29,22 @@ There are 3 levels of directives:
 * Form Builder - orchestrates building of complex forms; provides
   simple DSL-like markup for describing forms and hides complex markup
   from you.
-* Widget directives - most often used widgets
+* Widget directives - most often used widgets.
 * Low-level directives - common concerns for widgets construction, can
-  be used to build your own custom widgets
+  be used to build your own custom widgets.
 
 Form Builder
 -----------
 
-* `fsFromFor` - root form builder directive
-* `fsInput` - renders row with input in form builder
-* `fsRow` - renders custom row
+* `fsFormFor` - root form builder directive;
+* `fsInput` - renders a row with input in form builder;
+* `fsRow` - renders a custom row.
 
 Widget Directives
 ---------
 
-* `fsSelect` - select input with freetext support (select/combo)
-* `fsMultiselect` - multiple select input with freetext support
+* `fsSelect` - select input with free text support (select/combo)
+* `fsMultiselect` - multiple select input with free text support
 * `fsTime` - time input
 * `fsDate` - date input with `fsCalendar` inside dropdown
 * `fsDatetime` - widget composed from `fsTime` and `fsDate` to enter
@@ -55,15 +55,15 @@ Widget Directives
 Low-level Directives
 ---------
 
-* `fsList` - renders list of items and allows to move selection up and
-  down (with custom templating for items)
-* `fsNullForm` - hides input with ngModel binding from parent form
-* `fsInput` - simplifies keyboard & focus events handling
-* `fsCalendar` - draws a calendar and allows to mark one day as selected
+* `fsList` - renders a list of items and allows to move selection up and
+  down (with custom templating for items);
+* `fsNullForm` - hides input with ngModel binding from parent form;
+* `fsInput` - simplifies keyboard & focus events handling;
+* `fsCalendar` - draws a calendar and allows to mark one day as selected.
 
 TODO
 ----
-  * I18n support
+  * Support I18n 
 
 Development Environment
 -----------
@@ -106,13 +106,13 @@ To run test suite you should start local web server and
     node server.js
     grunt webdriver-manager update
 
-To run protractor tests you could use:
+To run protractor tests you can use:
 
     grunt test:e2e:phantomjs
     grunt test:e2e:chrome
     grunt test:e2e:firefox
 
-Alse you can provide option to protractor test to run specific test:
+Also you can provide an option to protractor test to run specific test:
 
     grunt test:e2e:chrome --specs=test/build/e2e/fsDateSpec.js
 
