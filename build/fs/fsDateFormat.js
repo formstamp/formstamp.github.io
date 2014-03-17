@@ -6,7 +6,7 @@
         require: 'ngModel',
         link: function(scope, element, attrs, ngModel) {
           ngModel.$formatters.push(function(value) {
-            return $filter('date')(value, 'shortDate');
+            return $filter('date')(value, 'MM/dd/yyyy');
           });
           return ngModel.$parsers.unshift(function(value) {
             var date;

@@ -43,27 +43,27 @@ Form Builder
 Widget Directives
 ---------
 
-* `fsSelect` - select input with free text support (select/combo)
-* `fsMultiselect` - multiple select input with free text support
-* `fsTime` - time input
-* `fsDate` - date input with `fsCalendar` inside dropdown
+* `fsSelect` - select input with free text support (select/combo);
+* `fsMultiselect` - multiple select input with free text support;
+* `fsTime` - time input;
+* `fsDate` - date input with `fsCalendar` inside dropdown;
 * `fsDatetime` - widget composed from `fsTime` and `fsDate` to enter
-  both date and time
-* `fsRadio` - radio buttons group
-* `fsCheck` - checkboxes group
+  both date and time;
+* `fsRadio` - a group of radiobuttons;
+* `fsCheck` - a group of checkboxes.
 
 Low-level Directives
 ---------
 
 * `fsList` - renders a list of items and allows to move selection up and
   down (with custom templating for items);
-* `fsNullForm` - hides input with ngModel binding from parent form;
+* `fsNullForm` - hides input with ngModel binding from a parent form;
 * `fsInput` - simplifies keyboard & focus events handling;
 * `fsCalendar` - draws a calendar and allows to mark one day as selected.
 
 TODO
 ----
-  * Support I18n 
+  * support I18n
 
 Development Environment
 -----------
@@ -86,8 +86,8 @@ Install bower dependencies and node.js packages
 
 Start grunt watcher and node.js server
 
-    `npm bin`/grunt watch # Then start watching changes
-    node server.js 17405 # Run server at port 17405
+    `npm bin`/grunt watch         # Then start watching changes
+    `npm bin`/grunt express:perm  # Run server at port 17405
 
 Now, point your browser to http://localhost:17405/ and you'll see
 FormStamp's demo page.
@@ -99,20 +99,17 @@ have to manually configure profile file.
 Running Tests
 -------
 
-To run test suite you should start local web server and
-[PhantomJS](http://phantomjs.org/) server:
+Before run test suite:
 
-    cd formstamp
-    node server.js
     grunt webdriver-manager update
 
-To run protractor tests you can use:
+To run protractor tests you could use:
 
     grunt test:e2e:phantomjs
     grunt test:e2e:chrome
     grunt test:e2e:firefox
 
-Also you can provide an option to protractor test to run specific test:
+Alse you can provide option to protractor test to run specific test:
 
     grunt test:e2e:chrome --specs=test/build/e2e/fsDateSpec.js
 
