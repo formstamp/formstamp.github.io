@@ -16,7 +16,7 @@
 
   widgets = [
     {
-      name: 'Form Builder sdfsdfds bar',
+      name: 'Form Builder',
       template: 'formbuilder'
     }, {
       name: 'Select',

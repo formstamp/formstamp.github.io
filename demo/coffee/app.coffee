@@ -10,7 +10,7 @@ unindentCode = (str) ->
     str
 
 widgets  = [
-    { name: 'Form Builder sdfsdfds bar', template: 'formbuilder' }
+    { name: 'Form Builder', template: 'formbuilder' }
     { name: 'Select', template: 'select' }
     { name: 'MultiSelect', template: 'multiselect' }
     { name: 'Radio Group', template: 'radio' }
