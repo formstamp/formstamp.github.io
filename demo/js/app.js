@@ -16,25 +16,25 @@
 
   widgets = [
     {
-      name: 'Form Builder',
+      name: 'Form Builder sdfsdfds bar',
       template: 'formbuilder'
     }, {
-      name: 'Select Widget',
+      name: 'Select',
       template: 'select'
     }, {
-      name: 'MultiSelect Widget',
+      name: 'MultiSelect',
       template: 'multiselect'
     }, {
       name: 'Radio Group',
       template: 'radio'
     }, {
-      name: 'Checkboxes',
+      name: 'Checkbox Group',
       template: 'checkbox'
     }, {
-      name: 'Date/Time Widgets',
+      name: 'Date/Time',
       template: 'datetime'
     }, {
-      name: 'fsList',
+      name: 'List',
       template: 'list'
     }
   ];

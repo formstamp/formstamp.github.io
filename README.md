@@ -86,7 +86,7 @@ Install bower dependencies and node.js packages
 
 Start grunt watcher and node.js server
 
-    `npm bin`/grunt watch         # Then start watching changes
+    `npm bin`/grunt build watch   # Then buid and start watching changes
     `npm bin`/grunt express:perm  # Run server at port 17405
 
 Now, point your browser to http://localhost:17405/ and you'll see
@@ -101,7 +101,7 @@ Running Tests
 
 Before run test suite:
 
-    grunt webdriver-manager update
+    `npm bin`/webdriver-manager update
 
 To run protractor tests you could use:
 
@@ -117,12 +117,8 @@ Then you can run unit tests with following command:
 
     `npm bin`/karma start test/karma.conf.js --single-run
 
-And E2E tests with:
-
-    `npm bin`/protractor test/build/e2e/conf.js
-
 License
------------
+-------
 
 FormStamp is released under
 [MIT License](https://raw.github.com/formstamp/formstamp/master/MIT-LICENSE).
