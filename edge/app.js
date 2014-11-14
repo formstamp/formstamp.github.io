@@ -460,7 +460,7 @@
 
 	app = __webpack_require__(7);
 
-	md = __webpack_require__(60);
+	md = __webpack_require__(61);
 
 	app.directive('markdown', function() {
 	  return {
@@ -31807,7 +31807,8 @@
 
 /***/ },
 /* 59 */,
-/* 60 */
+/* 60 */,
+/* 61 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(global) {/**
@@ -33080,7 +33081,6 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
 
 /***/ },
-/* 61 */,
 /* 62 */,
 /* 63 */,
 /* 64 */
