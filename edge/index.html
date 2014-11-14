@@ -11,7 +11,7 @@
 <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.3/styles/github.min.css" />
 <link rel="stylesheet" href="app.css" />
 </head>
-<body>
+<body ng-cloak>
 <!-- Static navbar -->
 <nav class="navbar navbar-default navbar-static-top" role="navigation">
   <div class="container">
@@ -23,14 +23,15 @@
         <span class="icon-bar"></span>
       </button>
       <a class="navbar-brand" href="#/">
+        <span class="icon">H</span>
         {{::brand}}
       </a>
     </div>
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
-        <li ng-repeat="item in ::sitemap.main">
+        <li ng-repeat="item in ::sitemap.main" ng-class="{active: item.active}">
           <a href="{{::item.href}}">
-            <i ng-if="::item.icon" class="fa fa-{{::item.icon}}"></i>
+            <i ng-if="::item.icon" class="fa fa-{{item.icon}}"></i>
             {{::item.label}}
           </a>
         </li>
