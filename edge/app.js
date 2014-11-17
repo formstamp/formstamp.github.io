@@ -133,7 +133,15 @@
 	      name: 'list',
 	      label: 'List'
 	    }
-	  ].map(buildSiteMap)
+	  ].map(buildSiteMap),
+	  user: [
+	    {
+	      name: 'src',
+	      label: 'Source',
+	      icon: 'github',
+	      href: 'https://github.com/formstamp/formstamp'
+	    }
+	  ]
 	};
 
 	app.config(function($routeProvider) {
@@ -525,7 +533,7 @@
 
 	app = __webpack_require__(8);
 
-	md = __webpack_require__(66);
+	md = __webpack_require__(64);
 
 	app.directive('markdown', function() {
 	  return {
@@ -30256,7 +30264,7 @@
 /* 38 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = "<h1 id=\"formstamp\">FormStamp</h1>\n<p><a href=\"https://travis-ci.org/formstamp/formstamp\"><img src=\"https://travis-ci.org/formstamp/formstamp.png?branch=master\" alt=\"Build Status\"></a></p>\n<p><a href=\"https://gitter.im/formstamp/formstamp\"><img src=\"https://badges.gitter.im/formstamp/formstamp.png\" alt=\"Gitter chat\"></a></p>\n<p><strong><em>This project is under development. Some API may be changed.</em></strong></p>\n<p>FormStamp is a pure AngularJS widgets library designed for rich\nfront-end web applications. FormStamp core principles are:</p>\n<ul>\n<li>all widgets are written from scratch;</li>\n<li>maximum AngularJS compatibility (supports ngDisabled, ngModel and\nother standard directives);</li>\n<li>styled with Twitter Bootstrap;</li>\n<li>clean &amp; minimalistic codebase.</li>\n</ul>\n<p><a href=\"http://formstamp.github.io/\">Live Demo</a></p>\n<h2 id=\"installation\">Installation</h2>\n<p>FormStamp can be installed via <a href=\"http://bower.io/\">Bower Package Manager</a>:</p>\n<pre><code>bower install angular-formstamp\n</code></pre><h2 id=\"structure\">Structure</h2>\n<p>There are 3 levels of directives:</p>\n<ul>\n<li>Form Builder - orchestrates building of complex forms; provides\nsimple DSL-like markup for describing forms and hides complex markup\nfrom you.</li>\n<li>Widget directives - most often used widgets.</li>\n<li>Low-level directives - common concerns for widgets construction, can\nbe used to build your own custom widgets.</li>\n</ul>\n<h2 id=\"form-builder\">Form Builder</h2>\n<ul>\n<li><code>fsFormFor</code> - root form builder directive;</li>\n<li><code>fsInput</code> - renders a row with input in form builder;</li>\n<li><code>fsRow</code> - renders a custom row.</li>\n</ul>\n<h2 id=\"widget-directives\">Widget Directives</h2>\n<ul>\n<li><code>fsSelect</code> - select input with free text support (select/combo);</li>\n<li><code>fsMultiselect</code> - multiple select input with free text support;</li>\n<li><code>fsTime</code> - time input;</li>\n<li><code>fsDate</code> - date input with <code>fsCalendar</code> inside dropdown;</li>\n<li><code>fsDatetime</code> - widget composed from <code>fsTime</code> and <code>fsDate</code> to enter\nboth date and time;</li>\n<li><code>fsRadio</code> - a group of radiobuttons;</li>\n<li><code>fsCheck</code> - a group of checkboxes.</li>\n</ul>\n<h2 id=\"low-level-directives\">Low-level Directives</h2>\n<ul>\n<li><code>fsList</code> - renders a list of items and allows to move selection up and\ndown (with custom templating for items);</li>\n<li><code>fsNullForm</code> - hides input with ngModel binding from a parent form;</li>\n<li><code>fsInput</code> - simplifies keyboard &amp; focus events handling;</li>\n<li><code>fsCalendar</code> - draws a calendar and allows to mark one day as selected.</li>\n</ul>\n<h2 id=\"todo\">TODO</h2>\n<ul>\n<li>support I18n</li>\n</ul>\n<h2 id=\"development-environment\">Development Environment</h2>\n<p>Install node.js</p>\n<pre><code>curl https://raw.github.com/creationix/nvm/master/install.sh | sh # install nvm\nnvm install 0.10\n</code></pre><p>Clone FormStamp repository</p>\n<pre><code>git clone git@github.com:formstamp/formstamp.git\n</code></pre><p>Install bower dependencies and node.js packages</p>\n<pre><code>cd formstamp\nnvm use 0.10\nnpm install # server deps\nnpm run-script bower # demo deps\n</code></pre><p>Build, start server and start watching changes using</p>\n<pre><code class=\"lang-sh\">\nnpm start\n\n# open browser @ localhost:8080/index.html\n</code></pre>\n<p>Now, point your browser to <a href=\"http://localhost:17405/\">http://localhost:17405/</a> and you&#39;ll see\nFormStamp&#39;s demo page.</p>\n<p>NOTE: These commands add <code>nvm</code> command to <code>.bash_profile</code>. It may not\nwork if you are not using <code>bash</code> shell (like <code>zsh</code>). In this case you\nhave to manually configure profile file.</p>\n<h2 id=\"running-tests\">Running Tests</h2>\n<p>Run unit tests:</p>\n<pre><code class=\"lang-sh\">npm test\n</code></pre>\n<p>To run protractor tests you could use:</p>\n<pre><code class=\"lang-sh\">./script/run-e2e.sh\n</code></pre>\n<h2 id=\"license\">License</h2>\n<p>FormStamp is released under\n<a href=\"https://raw.github.com/formstamp/formstamp/master/MIT-LICENSE\">MIT License</a>.</p>\n";
+	module.exports = "<h1 id=\"formstamp\">FormStamp</h1>\n<p><a href=\"https://travis-ci.org/formstamp/formstamp\"><img src=\"https://travis-ci.org/formstamp/formstamp.png?branch=master\" alt=\"Build Status\"></a></p>\n<p><a href=\"https://gitter.im/formstamp/formstamp\"><img src=\"https://badges.gitter.im/formstamp/formstamp.png\" alt=\"Gitter chat\"></a></p>\n<p><strong><em>This project is under development. Some API may be changed.</em></strong></p>\n<p>FormStamp is a pure AngularJS widgets library designed for rich\nfront-end web applications. FormStamp core principles are:</p>\n<ul>\n<li>all widgets are written from scratch;</li>\n<li>maximum AngularJS compatibility (supports ngDisabled, ngModel and\nother standard directives);</li>\n<li>styled with Twitter Bootstrap;</li>\n<li>clean &amp; minimalistic codebase.</li>\n</ul>\n<p><a href=\"http://formstamp.github.io/\">Live Demo</a></p>\n<h2 id=\"installation\">Installation</h2>\n<p>FormStamp can be installed via <a href=\"http://bower.io/\">Bower Package Manager</a>:</p>\n<pre><code>bower install angular-formstamp\n</code></pre><h2 id=\"structure\">Structure</h2>\n<p>There are 3 levels of directives:</p>\n<ul>\n<li>Form Builder - orchestrates building of complex forms; provides\nsimple DSL-like markup for describing forms and hides complex markup\nfrom you.</li>\n<li>Widget directives - most often used widgets.</li>\n<li>Low-level directives - common concerns for widgets construction, can\nbe used to build your own custom widgets.</li>\n</ul>\n<h2 id=\"form-builder\">Form Builder</h2>\n<ul>\n<li><code>fsFormFor</code> - root form builder directive;</li>\n<li><code>fsInput</code> - renders a row with input in form builder;</li>\n<li><code>fsRow</code> - renders a custom row.</li>\n</ul>\n<h2 id=\"widget-directives\">Widget Directives</h2>\n<ul>\n<li><code>fsSelect</code> - select input with free text support (select/combo);</li>\n<li><code>fsMultiselect</code> - multiple select input with free text support;</li>\n<li><code>fsTime</code> - time input;</li>\n<li><code>fsDate</code> - date input with <code>fsCalendar</code> inside dropdown;</li>\n<li><code>fsDatetime</code> - widget composed from <code>fsTime</code> and <code>fsDate</code> to enter\nboth date and time;</li>\n<li><code>fsRadio</code> - a group of radiobuttons;</li>\n<li><code>fsCheck</code> - a group of checkboxes.</li>\n</ul>\n<h2 id=\"low-level-directives\">Low-level Directives</h2>\n<ul>\n<li><code>fsList</code> - renders a list of items and allows to move selection up and\ndown (with custom templating for items);</li>\n<li><code>fsNullForm</code> - hides input with ngModel binding from a parent form;</li>\n<li><code>fsInput</code> - simplifies keyboard &amp; focus events handling;</li>\n<li><code>fsCalendar</code> - draws a calendar and allows to mark one day as selected.</li>\n</ul>\n<h2 id=\"development-environment\">Development Environment</h2>\n<p>Install node.js</p>\n<pre><code>curl https://raw.github.com/creationix/nvm/master/install.sh | sh # install nvm\nnvm install 0.10\n</code></pre><p>Clone FormStamp repository</p>\n<pre><code>git clone git@github.com:formstamp/formstamp.git\n</code></pre><p>Install bower dependencies and node.js packages</p>\n<pre><code class=\"lang-sh\">  cd formstamp\n  nvm use 0.10\n  npm install\n</code></pre>\n<p>Build, start demo server and start watching changes using</p>\n<pre><code class=\"lang-sh\">\nnpm start\n\n# open browser @ localhost:8080/index.html\n</code></pre>\n<p>Now, point your browser to <a href=\"http://localhost:8080/\">http://localhost:8080/</a> and you&#39;ll see\nFormStamp&#39;s demo page.</p>\n<p>NOTE: These commands add <code>nvm</code> command to <code>.bash_profile</code>. It may not\nwork if you are not using <code>bash</code> shell (like <code>zsh</code>). In this case you\nhave to manually configure profile file.</p>\n<h2 id=\"running-tests\">Running Tests</h2>\n<p>Run unit tests:</p>\n<pre><code class=\"lang-sh\">\nnpm test\n</code></pre>\n<p>To run protractor tests you could use:</p>\n<pre><code class=\"lang-sh\">\nnpm run-script e2e\n</code></pre>\n<h2 id=\"license\">License</h2>\n<p>FormStamp is released under\n<a href=\"https://raw.github.com/formstamp/formstamp/master/MIT-LICENSE\">MIT License</a>.</p>\n";
 
 /***/ },
 /* 39 */
@@ -31887,9 +31895,7 @@
 /***/ },
 /* 62 */,
 /* 63 */,
-/* 64 */,
-/* 65 */,
-/* 66 */
+/* 64 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(global) {/**
@@ -33162,6 +33168,8 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
 
 /***/ },
+/* 65 */,
+/* 66 */,
 /* 67 */
 /***/ function(module, exports, __webpack_require__) {
 
