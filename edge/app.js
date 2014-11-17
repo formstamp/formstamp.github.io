@@ -525,7 +525,7 @@
 
 	app = __webpack_require__(8);
 
-	md = __webpack_require__(64);
+	md = __webpack_require__(66);
 
 	app.directive('markdown', function() {
 	  return {
@@ -31887,7 +31887,9 @@
 /***/ },
 /* 62 */,
 /* 63 */,
-/* 64 */
+/* 64 */,
+/* 65 */,
+/* 66 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(global) {/**
@@ -33160,8 +33162,6 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
 
 /***/ },
-/* 65 */,
-/* 66 */,
 /* 67 */
 /***/ function(module, exports, __webpack_require__) {
 
