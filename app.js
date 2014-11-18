@@ -46,7 +46,7 @@
 
 	var activate, app, buildSiteMap, capitalize, sitemap;
 
-	__webpack_require__(10);
+	__webpack_require__(15);
 
 	__webpack_require__(11);
 
@@ -54,45 +54,51 @@
 
 	__webpack_require__(13);
 
-	__webpack_require__(14);
-
-	app = __webpack_require__(7);
-
-	__webpack_require__(8);
-
-	__webpack_require__(9);
-
 	__webpack_require__(16);
 
-	__webpack_require__(17);
+	__webpack_require__(14);
 
-	__webpack_require__(1);
-
-	__webpack_require__(18);
+	app = __webpack_require__(1);
 
 	__webpack_require__(2);
 
-	__webpack_require__(19);
-
 	__webpack_require__(3);
 
-	__webpack_require__(20);
+	__webpack_require__(18);
+
+	__webpack_require__(19);
 
 	__webpack_require__(4);
 
-	__webpack_require__(21);
+	__webpack_require__(20);
 
 	__webpack_require__(5);
 
-	__webpack_require__(22);
+	__webpack_require__(21);
 
 	__webpack_require__(6);
 
+	__webpack_require__(22);
+
+	__webpack_require__(7);
+
 	__webpack_require__(23);
+
+	__webpack_require__(8);
+
+	__webpack_require__(24);
+
+	__webpack_require__(9);
+
+	__webpack_require__(25);
+
+	__webpack_require__(10);
 
 	__webpack_require__(26);
 
-	__webpack_require__(24);
+	__webpack_require__(29);
+
+	__webpack_require__(27);
 
 	capitalize = function(s) {
 	  return s && s[0].toUpperCase() + s.slice(1);
@@ -125,8 +131,23 @@
 	    }, {
 	      name: 'datetime',
 	      label: 'Date/Time'
+	    }, {
+	      name: 'list',
+	      label: 'List'
 	    }
-	  ].map(buildSiteMap)
+	  ].map(buildSiteMap),
+	  user: [
+	    {
+	      name: 'src',
+	      label: 'Edge',
+	      href: 'http://formstamp.github.io/edge'
+	    }, {
+	      name: 'src',
+	      label: 'Source',
+	      icon: 'github',
+	      href: 'https://github.com/formstamp/formstamp'
+	    }
+	  ]
 	};
 
 	app.config(function($routeProvider) {
@@ -164,7 +185,7 @@
 
 	app.controller('WelcomeCtrl', function() {});
 
-	app.readme = __webpack_require__(35);
+	app.readme = __webpack_require__(45);
 
 	app.controller('ReadmeCtrl', function($sce, $scope) {
 	  console.log($sce.trustAsHtml(app.readme));
@@ -176,9 +197,84 @@
 /* 1 */
 /***/ function(module, exports, __webpack_require__) {
 
-	app = __webpack_require__(7)
+	module.exports = angular.module('app', ['ngRoute', 'ngAnimate', 'formstamp']);
 
-	src = __webpack_require__(29)
+
+/***/ },
+/* 2 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var app, unindentCode,
+	  __slice = [].slice;
+
+	app = __webpack_require__(1);
+
+	unindentCode = function(str) {
+	  var leadingSpaces, re;
+	  str = str != null ? str : "";
+	  str = str.replace(/^\n/, "");
+	  leadingSpaces = str.match(/^\s+/);
+	  if (leadingSpaces) {
+	    re = new RegExp("^[ ]{" + leadingSpaces[0].length + "}", 'gm');
+	    return str.replace(re, '');
+	  } else {
+	    return str;
+	  }
+	};
+
+	app.directive('sample', function($sce) {
+	  return {
+	    restrict: 'A',
+	    controller: function($scope) {
+	      $scope.current = 'demo';
+	      return $scope.$watch('src', function(v) {
+	        return $scope.js = $sce.trustAsHtml(hljs.highlightAuto(v).value);
+	      });
+	    },
+	    replace: true,
+	    link: function() {
+	      var args, el, scope;
+	      scope = arguments[0], el = arguments[1], args = 3 <= arguments.length ? __slice.call(arguments, 2) : [];
+	    },
+	    template: function($el, attrs) {
+	      var html, orig;
+	      orig = $el.html();
+	      html = orig;
+	      html = hljs.highlightAuto(html).value.replace(/{{([^}]*)}}/g, "<b style='color:green;'>{{$1}}</b>").replace(/(fs-[-a-zA-Z]*)/g, "<b class='important'>$1</b>");
+	      return "<div class=\"fs-sample\">\n  <h4 class=\"pull-left\">" + (attrs.label || 'Example') + "</h4>\n\n  <div class=\"btn-group fstabs pull-right\">\n    <a class=\"btn btn-default\" ng-class=\"{'active': current == 'demo'}\" ng-click=\"current='demo'\">Demo</a>\n    <a class=\"btn btn-default\" ng-class=\"{'active': current == 'html'}\" ng-click=\"current='html'\">HTML</a>\n    <a class=\"btn btn-default\" ng-class=\"{'active': current == 'js'}\" ng-click=\"current='js'\">JavaScript</a>\n  </div>\n\n  <div class='clearfix' style=\"height: 0;\"></div>\n  <div ng-show=\"current=='demo'\">" + orig + "</div>\n  <div ng-show=\"current=='html'\"><pre ng-non-bindable>" + html + "</pre></div>\n  <div ng-show=\"current=='js'\"><pre ng-bind-html=\"js\"></pre></div>\n</div>";
+	    }
+	  };
+	});
+
+
+/***/ },
+/* 3 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var app, md;
+
+	app = __webpack_require__(1);
+
+	md = __webpack_require__(63);
+
+	app.directive('markdown', function() {
+	  return {
+	    restrict: 'A',
+	    replace: true,
+	    template: function(el) {
+	      return "<div>" + (md(el.html())) + "</div>";
+	    }
+	  };
+	});
+
+
+/***/ },
+/* 4 */
+/***/ function(module, exports, __webpack_require__) {
+
+	app = __webpack_require__(1)
+
+	src = __webpack_require__(38)
 
 	app.controller('FormCtrl', function ($scope){
 	  $scope.src = src
@@ -273,14 +369,14 @@
 
 
 /***/ },
-/* 2 */
+/* 5 */
 /***/ function(module, exports, __webpack_require__) {
 
-	app = __webpack_require__(7)
+	app = __webpack_require__(1)
 
-	src = __webpack_require__(30)
+	src = __webpack_require__(39)
 
-	countries = __webpack_require__(15)
+	countries = __webpack_require__(17)
 
 	app.controller('SelectCtrl', function ($scope){
 	  $scope.disabled = false;
@@ -299,14 +395,14 @@
 
 
 /***/ },
-/* 3 */
+/* 6 */
 /***/ function(module, exports, __webpack_require__) {
 
-	app = __webpack_require__(7)
+	app = __webpack_require__(1)
 
-	src = __webpack_require__(31)
+	src = __webpack_require__(40)
 
-	countries = __webpack_require__(15)
+	countries = __webpack_require__(17)
 	app.controller('MultiselectCtrl', function ($scope){
 	    $scope.src = src;
 	    $scope.disabled = false;
@@ -328,20 +424,20 @@
 
 
 /***/ },
-/* 4 */
+/* 7 */
 /***/ function(module, exports, __webpack_require__) {
 
-	app = __webpack_require__(7)
+	app = __webpack_require__(1)
 
-	src = __webpack_require__(32)
+	src = __webpack_require__(41)
 
 	sushi = [
-	  {img: 'CaliforniaRoll', label: 'California Roll', src: __webpack_require__(53)},
-	  {img: 'CucumberRoll', label: 'Cucumber Roll', src: __webpack_require__(54)},
-	  {img: 'FattyTuna', label: 'Fatty Tuna',src: __webpack_require__(55)},
-	  {img: 'Inari', label: 'Inari',src: __webpack_require__(56)},
-	  {img: 'Octopus', label: 'Octopus', src: __webpack_require__(57)},
-	  {img: 'Shrimp', label: 'Shrimp', src: __webpack_require__(58)}
+	  {img: 'CaliforniaRoll', label: 'California Roll', src: __webpack_require__(31)},
+	  {img: 'CucumberRoll', label: 'Cucumber Roll', src: __webpack_require__(32)},
+	  {img: 'FattyTuna', label: 'Fatty Tuna',src: __webpack_require__(33)},
+	  {img: 'Inari', label: 'Inari',src: __webpack_require__(34)},
+	  {img: 'Octopus', label: 'Octopus', src: __webpack_require__(35)},
+	  {img: 'Shrimp', label: 'Shrimp', src: __webpack_require__(36)}
 	]
 
 	app.controller('RadioCtrl', function ($scope){
@@ -356,12 +452,12 @@
 
 
 /***/ },
-/* 5 */
+/* 8 */
 /***/ function(module, exports, __webpack_require__) {
 
-	app = __webpack_require__(7)
+	app = __webpack_require__(1)
 
-	src = __webpack_require__(33)
+	src = __webpack_require__(44)
 
 	app.controller('CheckCtrl', function ($scope){
 	  $scope.src = src
@@ -374,12 +470,12 @@
 
 
 /***/ },
-/* 6 */
+/* 9 */
 /***/ function(module, exports, __webpack_require__) {
 
-	app = __webpack_require__(7)
+	app = __webpack_require__(1)
 
-	src = __webpack_require__(34)
+	src = __webpack_require__(42)
 
 	app.controller('DatetimeCtrl', function ($scope){
 	  $scope.selectedDate = new Date();
@@ -399,82 +495,3885 @@
 
 
 /***/ },
-/* 7 */
-/***/ function(module, exports, __webpack_require__) {
-
-	module.exports = angular.module('app', ['ngRoute', 'ngAnimate', 'formstamp']);
-
-
-/***/ },
-/* 8 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var app, unindentCode,
-	  __slice = [].slice;
-
-	app = __webpack_require__(7);
-
-	unindentCode = function(str) {
-	  var leadingSpaces, re;
-	  str = str != null ? str : "";
-	  str = str.replace(/^\n/, "");
-	  leadingSpaces = str.match(/^\s+/);
-	  if (leadingSpaces) {
-	    re = new RegExp("^[ ]{" + leadingSpaces[0].length + "}", 'gm');
-	    return str.replace(re, '');
-	  } else {
-	    return str;
-	  }
-	};
-
-	app.directive('sample', function($sce) {
-	  return {
-	    restrict: 'A',
-	    controller: function($scope) {
-	      $scope.current = 'demo';
-	      return $scope.$watch('src', function(v) {
-	        return $scope.js = $sce.trustAsHtml(hljs.highlightAuto(v).value);
-	      });
-	    },
-	    replace: true,
-	    link: function() {
-	      var args, el, scope;
-	      scope = arguments[0], el = arguments[1], args = 3 <= arguments.length ? __slice.call(arguments, 2) : [];
-	    },
-	    template: function($el, attrs) {
-	      var html, orig;
-	      orig = $el.html();
-	      html = orig;
-	      html = hljs.highlightAuto(html).value.replace(/{{([^}]*)}}/g, "<b style='color:green;'>{{$1}}</b>").replace(/(fs-[-a-zA-Z]*)/g, "<b class='important'>$1</b>");
-	      return "<div class=\"fs-sample\">\n  <h4 class=\"pull-left\">" + (attrs.label || 'Example') + "</h4>\n\n  <div class=\"btn-group fstabs pull-right\">\n    <a class=\"btn btn-default\" ng-class=\"{'active': current == 'demo'}\" ng-click=\"current='demo'\">Demo</a>\n    <a class=\"btn btn-default\" ng-class=\"{'active': current == 'html'}\" ng-click=\"current='html'\">HTML</a>\n    <a class=\"btn btn-default\" ng-class=\"{'active': current == 'js'}\" ng-click=\"current='js'\">JavaScript</a>\n  </div>\n\n  <div class='clearfix' style=\"height: 0;\"></div>\n  <div ng-show=\"current=='demo'\">" + orig + "</div>\n  <div ng-show=\"current=='html'\"><pre ng-non-bindalbe>" + html + "</pre></div>\n  <div ng-show=\"current=='js'\"><pre ng-bind-html=\"js\"></pre></div>\n</div>";
-	    }
-	  };
-	});
-
-
-/***/ },
-/* 9 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var app, md;
-
-	app = __webpack_require__(7);
-
-	md = __webpack_require__(61);
-
-	app.directive('markdown', function() {
-	  return {
-	    restrict: 'A',
-	    replace: true,
-	    template: function(el) {
-	      return "<div>" + (md(el.html())) + "</div>";
-	    }
-	  };
-	});
-
-
-/***/ },
 /* 10 */
+/***/ function(module, exports, __webpack_require__) {
+
+	app = __webpack_require__(1)
+
+	src = __webpack_require__(43)
+
+	app.controller('ListCtrl', function ($scope){
+	  $scope.src = src
+	  SC.initialize({ client_id: '8399f2e0577e0acb4eee4d65d6c6cce6' });
+
+	  $scope.$watch('search', function () {
+	    SC.get('/tracks',
+	      { q: $scope.search, license: 'cc-by-sa' },
+	      function(tracks) {
+	        $scope.$apply(function() { $scope.tracks = tracks })
+	      })
+	  });
+
+	  $scope.search = 'bach';
+	  $scope.tracks = [];
+
+	  $scope.move = function (d) {
+	    $scope.listInterface.move(d);
+	  };
+
+	  $scope.listInterface = {
+	    onSelect: function (selectedItem) {
+	      $scope.select(selectedItem)
+	    }
+	  };
+
+	  $scope.select = function(selectedItem) {
+	    $scope.selectedTrack = selectedItem || $scope.listInterface.selectedItem;
+	  };
+	})
+
+	app.directive("demoAudio", function() {
+	  return {
+	    restrict: "E",
+	    scope: {
+	      track: '='
+	    },
+	    template: "<audio controls />",
+	    replace: true,
+	    link: function($scope, $element, $attrs) {
+	      return $scope.$watch('track', function(track) {
+	        if (track) {
+	          $element.attr('src', track.stream_url + "?client_id=8399f2e0577e0acb4eee4d65d6c6cce6");
+	          return $element[0].play();
+	        }
+	      });
+	    }
+	  };
+	});
+
+
+/***/ },
+/* 11 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/**
+	 * @license AngularJS v1.3.2
+	 * (c) 2010-2014 Google, Inc. http://angularjs.org
+	 * License: MIT
+	 */
+	(function(window, angular, undefined) {'use strict';
+
+	/**
+	 * @ngdoc module
+	 * @name ngRoute
+	 * @description
+	 *
+	 * # ngRoute
+	 *
+	 * The `ngRoute` module provides routing and deeplinking services and directives for angular apps.
+	 *
+	 * ## Example
+	 * See {@link ngRoute.$route#example $route} for an example of configuring and using `ngRoute`.
+	 *
+	 *
+	 * <div doc-module-components="ngRoute"></div>
+	 */
+	 /* global -ngRouteModule */
+	var ngRouteModule = angular.module('ngRoute', ['ng']).
+	                        provider('$route', $RouteProvider),
+	    $routeMinErr = angular.$$minErr('ngRoute');
+
+	/**
+	 * @ngdoc provider
+	 * @name $routeProvider
+	 *
+	 * @description
+	 *
+	 * Used for configuring routes.
+	 *
+	 * ## Example
+	 * See {@link ngRoute.$route#example $route} for an example of configuring and using `ngRoute`.
+	 *
+	 * ## Dependencies
+	 * Requires the {@link ngRoute `ngRoute`} module to be installed.
+	 */
+	function $RouteProvider() {
+	  function inherit(parent, extra) {
+	    return angular.extend(new (angular.extend(function() {}, {prototype:parent}))(), extra);
+	  }
+
+	  var routes = {};
+
+	  /**
+	   * @ngdoc method
+	   * @name $routeProvider#when
+	   *
+	   * @param {string} path Route path (matched against `$location.path`). If `$location.path`
+	   *    contains redundant trailing slash or is missing one, the route will still match and the
+	   *    `$location.path` will be updated to add or drop the trailing slash to exactly match the
+	   *    route definition.
+	   *
+	   *    * `path` can contain named groups starting with a colon: e.g. `:name`. All characters up
+	   *        to the next slash are matched and stored in `$routeParams` under the given `name`
+	   *        when the route matches.
+	   *    * `path` can contain named groups starting with a colon and ending with a star:
+	   *        e.g.`:name*`. All characters are eagerly stored in `$routeParams` under the given `name`
+	   *        when the route matches.
+	   *    * `path` can contain optional named groups with a question mark: e.g.`:name?`.
+	   *
+	   *    For example, routes like `/color/:color/largecode/:largecode*\/edit` will match
+	   *    `/color/brown/largecode/code/with/slashes/edit` and extract:
+	   *
+	   *    * `color: brown`
+	   *    * `largecode: code/with/slashes`.
+	   *
+	   *
+	   * @param {Object} route Mapping information to be assigned to `$route.current` on route
+	   *    match.
+	   *
+	   *    Object properties:
+	   *
+	   *    - `controller` – `{(string|function()=}` – Controller fn that should be associated with
+	   *      newly created scope or the name of a {@link angular.Module#controller registered
+	   *      controller} if passed as a string.
+	   *    - `controllerAs` – `{string=}` – A controller alias name. If present the controller will be
+	   *      published to scope under the `controllerAs` name.
+	   *    - `template` – `{string=|function()=}` – html template as a string or a function that
+	   *      returns an html template as a string which should be used by {@link
+	   *      ngRoute.directive:ngView ngView} or {@link ng.directive:ngInclude ngInclude} directives.
+	   *      This property takes precedence over `templateUrl`.
+	   *
+	   *      If `template` is a function, it will be called with the following parameters:
+	   *
+	   *      - `{Array.<Object>}` - route parameters extracted from the current
+	   *        `$location.path()` by applying the current route
+	   *
+	   *    - `templateUrl` – `{string=|function()=}` – path or function that returns a path to an html
+	   *      template that should be used by {@link ngRoute.directive:ngView ngView}.
+	   *
+	   *      If `templateUrl` is a function, it will be called with the following parameters:
+	   *
+	   *      - `{Array.<Object>}` - route parameters extracted from the current
+	   *        `$location.path()` by applying the current route
+	   *
+	   *    - `resolve` - `{Object.<string, function>=}` - An optional map of dependencies which should
+	   *      be injected into the controller. If any of these dependencies are promises, the router
+	   *      will wait for them all to be resolved or one to be rejected before the controller is
+	   *      instantiated.
+	   *      If all the promises are resolved successfully, the values of the resolved promises are
+	   *      injected and {@link ngRoute.$route#$routeChangeSuccess $routeChangeSuccess} event is
+	   *      fired. If any of the promises are rejected the
+	   *      {@link ngRoute.$route#$routeChangeError $routeChangeError} event is fired. The map object
+	   *      is:
+	   *
+	   *      - `key` – `{string}`: a name of a dependency to be injected into the controller.
+	   *      - `factory` - `{string|function}`: If `string` then it is an alias for a service.
+	   *        Otherwise if function, then it is {@link auto.$injector#invoke injected}
+	   *        and the return value is treated as the dependency. If the result is a promise, it is
+	   *        resolved before its value is injected into the controller. Be aware that
+	   *        `ngRoute.$routeParams` will still refer to the previous route within these resolve
+	   *        functions.  Use `$route.current.params` to access the new route parameters, instead.
+	   *
+	   *    - `redirectTo` – {(string|function())=} – value to update
+	   *      {@link ng.$location $location} path with and trigger route redirection.
+	   *
+	   *      If `redirectTo` is a function, it will be called with the following parameters:
+	   *
+	   *      - `{Object.<string>}` - route parameters extracted from the current
+	   *        `$location.path()` by applying the current route templateUrl.
+	   *      - `{string}` - current `$location.path()`
+	   *      - `{Object}` - current `$location.search()`
+	   *
+	   *      The custom `redirectTo` function is expected to return a string which will be used
+	   *      to update `$location.path()` and `$location.search()`.
+	   *
+	   *    - `[reloadOnSearch=true]` - {boolean=} - reload route when only `$location.search()`
+	   *      or `$location.hash()` changes.
+	   *
+	   *      If the option is set to `false` and url in the browser changes, then
+	   *      `$routeUpdate` event is broadcasted on the root scope.
+	   *
+	   *    - `[caseInsensitiveMatch=false]` - {boolean=} - match routes without being case sensitive
+	   *
+	   *      If the option is set to `true`, then the particular route can be matched without being
+	   *      case sensitive
+	   *
+	   * @returns {Object} self
+	   *
+	   * @description
+	   * Adds a new route definition to the `$route` service.
+	   */
+	  this.when = function(path, route) {
+	    //copy original route object to preserve params inherited from proto chain
+	    var routeCopy = angular.copy(route);
+	    if (angular.isUndefined(routeCopy.reloadOnSearch)) {
+	      routeCopy.reloadOnSearch = true;
+	    }
+	    routes[path] = angular.extend(
+	      routeCopy,
+	      path && pathRegExp(path, routeCopy)
+	    );
+
+	    // create redirection for trailing slashes
+	    if (path) {
+	      var redirectPath = (path[path.length-1] == '/')
+	            ? path.substr(0, path.length-1)
+	            : path +'/';
+
+	      routes[redirectPath] = angular.extend(
+	        {redirectTo: path},
+	        pathRegExp(redirectPath, routeCopy)
+	      );
+	    }
+
+	    return this;
+	  };
+
+	   /**
+	    * @param path {string} path
+	    * @param opts {Object} options
+	    * @return {?Object}
+	    *
+	    * @description
+	    * Normalizes the given path, returning a regular expression
+	    * and the original path.
+	    *
+	    * Inspired by pathRexp in visionmedia/express/lib/utils.js.
+	    */
+	  function pathRegExp(path, opts) {
+	    var insensitive = opts.caseInsensitiveMatch,
+	        ret = {
+	          originalPath: path,
+	          regexp: path
+	        },
+	        keys = ret.keys = [];
+
+	    path = path
+	      .replace(/([().])/g, '\\$1')
+	      .replace(/(\/)?:(\w+)([\?\*])?/g, function(_, slash, key, option) {
+	        var optional = option === '?' ? option : null;
+	        var star = option === '*' ? option : null;
+	        keys.push({ name: key, optional: !!optional });
+	        slash = slash || '';
+	        return ''
+	          + (optional ? '' : slash)
+	          + '(?:'
+	          + (optional ? slash : '')
+	          + (star && '(.+?)' || '([^/]+)')
+	          + (optional || '')
+	          + ')'
+	          + (optional || '');
+	      })
+	      .replace(/([\/$\*])/g, '\\$1');
+
+	    ret.regexp = new RegExp('^' + path + '$', insensitive ? 'i' : '');
+	    return ret;
+	  }
+
+	  /**
+	   * @ngdoc method
+	   * @name $routeProvider#otherwise
+	   *
+	   * @description
+	   * Sets route definition that will be used on route change when no other route definition
+	   * is matched.
+	   *
+	   * @param {Object|string} params Mapping information to be assigned to `$route.current`.
+	   * If called with a string, the value maps to `redirectTo`.
+	   * @returns {Object} self
+	   */
+	  this.otherwise = function(params) {
+	    if (typeof params === 'string') {
+	      params = {redirectTo: params};
+	    }
+	    this.when(null, params);
+	    return this;
+	  };
+
+
+	  this.$get = ['$rootScope',
+	               '$location',
+	               '$routeParams',
+	               '$q',
+	               '$injector',
+	               '$templateRequest',
+	               '$sce',
+	      function($rootScope, $location, $routeParams, $q, $injector, $templateRequest, $sce) {
+
+	    /**
+	     * @ngdoc service
+	     * @name $route
+	     * @requires $location
+	     * @requires $routeParams
+	     *
+	     * @property {Object} current Reference to the current route definition.
+	     * The route definition contains:
+	     *
+	     *   - `controller`: The controller constructor as define in route definition.
+	     *   - `locals`: A map of locals which is used by {@link ng.$controller $controller} service for
+	     *     controller instantiation. The `locals` contain
+	     *     the resolved values of the `resolve` map. Additionally the `locals` also contain:
+	     *
+	     *     - `$scope` - The current route scope.
+	     *     - `$template` - The current route template HTML.
+	     *
+	     * @property {Object} routes Object with all route configuration Objects as its properties.
+	     *
+	     * @description
+	     * `$route` is used for deep-linking URLs to controllers and views (HTML partials).
+	     * It watches `$location.url()` and tries to map the path to an existing route definition.
+	     *
+	     * Requires the {@link ngRoute `ngRoute`} module to be installed.
+	     *
+	     * You can define routes through {@link ngRoute.$routeProvider $routeProvider}'s API.
+	     *
+	     * The `$route` service is typically used in conjunction with the
+	     * {@link ngRoute.directive:ngView `ngView`} directive and the
+	     * {@link ngRoute.$routeParams `$routeParams`} service.
+	     *
+	     * @example
+	     * This example shows how changing the URL hash causes the `$route` to match a route against the
+	     * URL, and the `ngView` pulls in the partial.
+	     *
+	     * <example name="$route-service" module="ngRouteExample"
+	     *          deps="angular-route.js" fixBase="true">
+	     *   <file name="index.html">
+	     *     <div ng-controller="MainController">
+	     *       Choose:
+	     *       <a href="Book/Moby">Moby</a> |
+	     *       <a href="Book/Moby/ch/1">Moby: Ch1</a> |
+	     *       <a href="Book/Gatsby">Gatsby</a> |
+	     *       <a href="Book/Gatsby/ch/4?key=value">Gatsby: Ch4</a> |
+	     *       <a href="Book/Scarlet">Scarlet Letter</a><br/>
+	     *
+	     *       <div ng-view></div>
+	     *
+	     *       <hr />
+	     *
+	     *       <pre>$location.path() = {{$location.path()}}</pre>
+	     *       <pre>$route.current.templateUrl = {{$route.current.templateUrl}}</pre>
+	     *       <pre>$route.current.params = {{$route.current.params}}</pre>
+	     *       <pre>$route.current.scope.name = {{$route.current.scope.name}}</pre>
+	     *       <pre>$routeParams = {{$routeParams}}</pre>
+	     *     </div>
+	     *   </file>
+	     *
+	     *   <file name="book.html">
+	     *     controller: {{name}}<br />
+	     *     Book Id: {{params.bookId}}<br />
+	     *   </file>
+	     *
+	     *   <file name="chapter.html">
+	     *     controller: {{name}}<br />
+	     *     Book Id: {{params.bookId}}<br />
+	     *     Chapter Id: {{params.chapterId}}
+	     *   </file>
+	     *
+	     *   <file name="script.js">
+	     *     angular.module('ngRouteExample', ['ngRoute'])
+	     *
+	     *      .controller('MainController', function($scope, $route, $routeParams, $location) {
+	     *          $scope.$route = $route;
+	     *          $scope.$location = $location;
+	     *          $scope.$routeParams = $routeParams;
+	     *      })
+	     *
+	     *      .controller('BookController', function($scope, $routeParams) {
+	     *          $scope.name = "BookController";
+	     *          $scope.params = $routeParams;
+	     *      })
+	     *
+	     *      .controller('ChapterController', function($scope, $routeParams) {
+	     *          $scope.name = "ChapterController";
+	     *          $scope.params = $routeParams;
+	     *      })
+	     *
+	     *     .config(function($routeProvider, $locationProvider) {
+	     *       $routeProvider
+	     *        .when('/Book/:bookId', {
+	     *         templateUrl: 'book.html',
+	     *         controller: 'BookController',
+	     *         resolve: {
+	     *           // I will cause a 1 second delay
+	     *           delay: function($q, $timeout) {
+	     *             var delay = $q.defer();
+	     *             $timeout(delay.resolve, 1000);
+	     *             return delay.promise;
+	     *           }
+	     *         }
+	     *       })
+	     *       .when('/Book/:bookId/ch/:chapterId', {
+	     *         templateUrl: 'chapter.html',
+	     *         controller: 'ChapterController'
+	     *       });
+	     *
+	     *       // configure html5 to get links working on jsfiddle
+	     *       $locationProvider.html5Mode(true);
+	     *     });
+	     *
+	     *   </file>
+	     *
+	     *   <file name="protractor.js" type="protractor">
+	     *     it('should load and compile correct template', function() {
+	     *       element(by.linkText('Moby: Ch1')).click();
+	     *       var content = element(by.css('[ng-view]')).getText();
+	     *       expect(content).toMatch(/controller\: ChapterController/);
+	     *       expect(content).toMatch(/Book Id\: Moby/);
+	     *       expect(content).toMatch(/Chapter Id\: 1/);
+	     *
+	     *       element(by.partialLinkText('Scarlet')).click();
+	     *
+	     *       content = element(by.css('[ng-view]')).getText();
+	     *       expect(content).toMatch(/controller\: BookController/);
+	     *       expect(content).toMatch(/Book Id\: Scarlet/);
+	     *     });
+	     *   </file>
+	     * </example>
+	     */
+
+	    /**
+	     * @ngdoc event
+	     * @name $route#$routeChangeStart
+	     * @eventType broadcast on root scope
+	     * @description
+	     * Broadcasted before a route change. At this  point the route services starts
+	     * resolving all of the dependencies needed for the route change to occur.
+	     * Typically this involves fetching the view template as well as any dependencies
+	     * defined in `resolve` route property. Once  all of the dependencies are resolved
+	     * `$routeChangeSuccess` is fired.
+	     *
+	     * The route change (and the `$location` change that triggered it) can be prevented
+	     * by calling `preventDefault` method of the event. See {@link ng.$rootScope.Scope#$on}
+	     * for more details about event object.
+	     *
+	     * @param {Object} angularEvent Synthetic event object.
+	     * @param {Route} next Future route information.
+	     * @param {Route} current Current route information.
+	     */
+
+	    /**
+	     * @ngdoc event
+	     * @name $route#$routeChangeSuccess
+	     * @eventType broadcast on root scope
+	     * @description
+	     * Broadcasted after a route dependencies are resolved.
+	     * {@link ngRoute.directive:ngView ngView} listens for the directive
+	     * to instantiate the controller and render the view.
+	     *
+	     * @param {Object} angularEvent Synthetic event object.
+	     * @param {Route} current Current route information.
+	     * @param {Route|Undefined} previous Previous route information, or undefined if current is
+	     * first route entered.
+	     */
+
+	    /**
+	     * @ngdoc event
+	     * @name $route#$routeChangeError
+	     * @eventType broadcast on root scope
+	     * @description
+	     * Broadcasted if any of the resolve promises are rejected.
+	     *
+	     * @param {Object} angularEvent Synthetic event object
+	     * @param {Route} current Current route information.
+	     * @param {Route} previous Previous route information.
+	     * @param {Route} rejection Rejection of the promise. Usually the error of the failed promise.
+	     */
+
+	    /**
+	     * @ngdoc event
+	     * @name $route#$routeUpdate
+	     * @eventType broadcast on root scope
+	     * @description
+	     *
+	     * The `reloadOnSearch` property has been set to false, and we are reusing the same
+	     * instance of the Controller.
+	     */
+
+	    var forceReload = false,
+	        preparedRoute,
+	        preparedRouteIsUpdateOnly,
+	        $route = {
+	          routes: routes,
+
+	          /**
+	           * @ngdoc method
+	           * @name $route#reload
+	           *
+	           * @description
+	           * Causes `$route` service to reload the current route even if
+	           * {@link ng.$location $location} hasn't changed.
+	           *
+	           * As a result of that, {@link ngRoute.directive:ngView ngView}
+	           * creates new scope and reinstantiates the controller.
+	           */
+	          reload: function() {
+	            forceReload = true;
+	            $rootScope.$evalAsync(function() {
+	              // Don't support cancellation of a reload for now...
+	              prepareRoute();
+	              commitRoute();
+	            });
+	          },
+
+	          /**
+	           * @ngdoc method
+	           * @name $route#updateParams
+	           *
+	           * @description
+	           * Causes `$route` service to update the current URL, replacing
+	           * current route parameters with those specified in `newParams`.
+	           * Provided property names that match the route's path segment
+	           * definitions will be interpolated into the location's path, while
+	           * remaining properties will be treated as query params.
+	           *
+	           * @param {Object} newParams mapping of URL parameter names to values
+	           */
+	          updateParams: function(newParams) {
+	            if (this.current && this.current.$$route) {
+	              var searchParams = {}, self=this;
+
+	              angular.forEach(Object.keys(newParams), function(key) {
+	                if (!self.current.pathParams[key]) searchParams[key] = newParams[key];
+	              });
+
+	              newParams = angular.extend({}, this.current.params, newParams);
+	              $location.path(interpolate(this.current.$$route.originalPath, newParams));
+	              $location.search(angular.extend({}, $location.search(), searchParams));
+	            }
+	            else {
+	              throw $routeMinErr('norout', 'Tried updating route when with no current route');
+	            }
+	          }
+	        };
+
+	    $rootScope.$on('$locationChangeStart', prepareRoute);
+	    $rootScope.$on('$locationChangeSuccess', commitRoute);
+
+	    return $route;
+
+	    /////////////////////////////////////////////////////
+
+	    /**
+	     * @param on {string} current url
+	     * @param route {Object} route regexp to match the url against
+	     * @return {?Object}
+	     *
+	     * @description
+	     * Check if the route matches the current url.
+	     *
+	     * Inspired by match in
+	     * visionmedia/express/lib/router/router.js.
+	     */
+	    function switchRouteMatcher(on, route) {
+	      var keys = route.keys,
+	          params = {};
+
+	      if (!route.regexp) return null;
+
+	      var m = route.regexp.exec(on);
+	      if (!m) return null;
+
+	      for (var i = 1, len = m.length; i < len; ++i) {
+	        var key = keys[i - 1];
+
+	        var val = m[i];
+
+	        if (key && val) {
+	          params[key.name] = val;
+	        }
+	      }
+	      return params;
+	    }
+
+	    function prepareRoute($locationEvent) {
+	      var lastRoute = $route.current;
+
+	      preparedRoute = parseRoute();
+	      preparedRouteIsUpdateOnly = preparedRoute && lastRoute && preparedRoute.$$route === lastRoute.$$route
+	          && angular.equals(preparedRoute.pathParams, lastRoute.pathParams)
+	          && !preparedRoute.reloadOnSearch && !forceReload;
+
+	      if (!preparedRouteIsUpdateOnly && (lastRoute || preparedRoute)) {
+	        if ($rootScope.$broadcast('$routeChangeStart', preparedRoute, lastRoute).defaultPrevented) {
+	          if ($locationEvent) {
+	            $locationEvent.preventDefault();
+	          }
+	        }
+	      }
+	    }
+
+	    function commitRoute() {
+	      var lastRoute = $route.current;
+	      var nextRoute = preparedRoute;
+
+	      if (preparedRouteIsUpdateOnly) {
+	        lastRoute.params = nextRoute.params;
+	        angular.copy(lastRoute.params, $routeParams);
+	        $rootScope.$broadcast('$routeUpdate', lastRoute);
+	      } else if (nextRoute || lastRoute) {
+	        forceReload = false;
+	        $route.current = nextRoute;
+	        if (nextRoute) {
+	          if (nextRoute.redirectTo) {
+	            if (angular.isString(nextRoute.redirectTo)) {
+	              $location.path(interpolate(nextRoute.redirectTo, nextRoute.params)).search(nextRoute.params)
+	                       .replace();
+	            } else {
+	              $location.url(nextRoute.redirectTo(nextRoute.pathParams, $location.path(), $location.search()))
+	                       .replace();
+	            }
+	          }
+	        }
+
+	        $q.when(nextRoute).
+	          then(function() {
+	            if (nextRoute) {
+	              var locals = angular.extend({}, nextRoute.resolve),
+	                  template, templateUrl;
+
+	              angular.forEach(locals, function(value, key) {
+	                locals[key] = angular.isString(value) ?
+	                    $injector.get(value) : $injector.invoke(value, null, null, key);
+	              });
+
+	              if (angular.isDefined(template = nextRoute.template)) {
+	                if (angular.isFunction(template)) {
+	                  template = template(nextRoute.params);
+	                }
+	              } else if (angular.isDefined(templateUrl = nextRoute.templateUrl)) {
+	                if (angular.isFunction(templateUrl)) {
+	                  templateUrl = templateUrl(nextRoute.params);
+	                }
+	                templateUrl = $sce.getTrustedResourceUrl(templateUrl);
+	                if (angular.isDefined(templateUrl)) {
+	                  nextRoute.loadedTemplateUrl = templateUrl;
+	                  template = $templateRequest(templateUrl);
+	                }
+	              }
+	              if (angular.isDefined(template)) {
+	                locals['$template'] = template;
+	              }
+	              return $q.all(locals);
+	            }
+	          }).
+	          // after route change
+	          then(function(locals) {
+	            if (nextRoute == $route.current) {
+	              if (nextRoute) {
+	                nextRoute.locals = locals;
+	                angular.copy(nextRoute.params, $routeParams);
+	              }
+	              $rootScope.$broadcast('$routeChangeSuccess', nextRoute, lastRoute);
+	            }
+	          }, function(error) {
+	            if (nextRoute == $route.current) {
+	              $rootScope.$broadcast('$routeChangeError', nextRoute, lastRoute, error);
+	            }
+	          });
+	      }
+	    }
+
+
+	    /**
+	     * @returns {Object} the current active route, by matching it against the URL
+	     */
+	    function parseRoute() {
+	      // Match a route
+	      var params, match;
+	      angular.forEach(routes, function(route, path) {
+	        if (!match && (params = switchRouteMatcher($location.path(), route))) {
+	          match = inherit(route, {
+	            params: angular.extend({}, $location.search(), params),
+	            pathParams: params});
+	          match.$$route = route;
+	        }
+	      });
+	      // No route matched; fallback to "otherwise" route
+	      return match || routes[null] && inherit(routes[null], {params: {}, pathParams:{}});
+	    }
+
+	    /**
+	     * @returns {string} interpolation of the redirect path with the parameters
+	     */
+	    function interpolate(string, params) {
+	      var result = [];
+	      angular.forEach((string||'').split(':'), function(segment, i) {
+	        if (i === 0) {
+	          result.push(segment);
+	        } else {
+	          var segmentMatch = segment.match(/(\w+)(.*)/);
+	          var key = segmentMatch[1];
+	          result.push(params[key]);
+	          result.push(segmentMatch[2] || '');
+	          delete params[key];
+	        }
+	      });
+	      return result.join('');
+	    }
+	  }];
+	}
+
+	ngRouteModule.provider('$routeParams', $RouteParamsProvider);
+
+
+	/**
+	 * @ngdoc service
+	 * @name $routeParams
+	 * @requires $route
+	 *
+	 * @description
+	 * The `$routeParams` service allows you to retrieve the current set of route parameters.
+	 *
+	 * Requires the {@link ngRoute `ngRoute`} module to be installed.
+	 *
+	 * The route parameters are a combination of {@link ng.$location `$location`}'s
+	 * {@link ng.$location#search `search()`} and {@link ng.$location#path `path()`}.
+	 * The `path` parameters are extracted when the {@link ngRoute.$route `$route`} path is matched.
+	 *
+	 * In case of parameter name collision, `path` params take precedence over `search` params.
+	 *
+	 * The service guarantees that the identity of the `$routeParams` object will remain unchanged
+	 * (but its properties will likely change) even when a route change occurs.
+	 *
+	 * Note that the `$routeParams` are only updated *after* a route change completes successfully.
+	 * This means that you cannot rely on `$routeParams` being correct in route resolve functions.
+	 * Instead you can use `$route.current.params` to access the new route's parameters.
+	 *
+	 * @example
+	 * ```js
+	 *  // Given:
+	 *  // URL: http://server.com/index.html#/Chapter/1/Section/2?search=moby
+	 *  // Route: /Chapter/:chapterId/Section/:sectionId
+	 *  //
+	 *  // Then
+	 *  $routeParams ==> {chapterId:'1', sectionId:'2', search:'moby'}
+	 * ```
+	 */
+	function $RouteParamsProvider() {
+	  this.$get = function() { return {}; };
+	}
+
+	ngRouteModule.directive('ngView', ngViewFactory);
+	ngRouteModule.directive('ngView', ngViewFillContentFactory);
+
+
+	/**
+	 * @ngdoc directive
+	 * @name ngView
+	 * @restrict ECA
+	 *
+	 * @description
+	 * # Overview
+	 * `ngView` is a directive that complements the {@link ngRoute.$route $route} service by
+	 * including the rendered template of the current route into the main layout (`index.html`) file.
+	 * Every time the current route changes, the included view changes with it according to the
+	 * configuration of the `$route` service.
+	 *
+	 * Requires the {@link ngRoute `ngRoute`} module to be installed.
+	 *
+	 * @animations
+	 * enter - animation is used to bring new content into the browser.
+	 * leave - animation is used to animate existing content away.
+	 *
+	 * The enter and leave animation occur concurrently.
+	 *
+	 * @scope
+	 * @priority 400
+	 * @param {string=} onload Expression to evaluate whenever the view updates.
+	 *
+	 * @param {string=} autoscroll Whether `ngView` should call {@link ng.$anchorScroll
+	 *                  $anchorScroll} to scroll the viewport after the view is updated.
+	 *
+	 *                  - If the attribute is not set, disable scrolling.
+	 *                  - If the attribute is set without value, enable scrolling.
+	 *                  - Otherwise enable scrolling only if the `autoscroll` attribute value evaluated
+	 *                    as an expression yields a truthy value.
+	 * @example
+	    <example name="ngView-directive" module="ngViewExample"
+	             deps="angular-route.js;angular-animate.js"
+	             animations="true" fixBase="true">
+	      <file name="index.html">
+	        <div ng-controller="MainCtrl as main">
+	          Choose:
+	          <a href="Book/Moby">Moby</a> |
+	          <a href="Book/Moby/ch/1">Moby: Ch1</a> |
+	          <a href="Book/Gatsby">Gatsby</a> |
+	          <a href="Book/Gatsby/ch/4?key=value">Gatsby: Ch4</a> |
+	          <a href="Book/Scarlet">Scarlet Letter</a><br/>
+
+	          <div class="view-animate-container">
+	            <div ng-view class="view-animate"></div>
+	          </div>
+	          <hr />
+
+	          <pre>$location.path() = {{main.$location.path()}}</pre>
+	          <pre>$route.current.templateUrl = {{main.$route.current.templateUrl}}</pre>
+	          <pre>$route.current.params = {{main.$route.current.params}}</pre>
+	          <pre>$routeParams = {{main.$routeParams}}</pre>
+	        </div>
+	      </file>
+
+	      <file name="book.html">
+	        <div>
+	          controller: {{book.name}}<br />
+	          Book Id: {{book.params.bookId}}<br />
+	        </div>
+	      </file>
+
+	      <file name="chapter.html">
+	        <div>
+	          controller: {{chapter.name}}<br />
+	          Book Id: {{chapter.params.bookId}}<br />
+	          Chapter Id: {{chapter.params.chapterId}}
+	        </div>
+	      </file>
+
+	      <file name="animations.css">
+	        .view-animate-container {
+	          position:relative;
+	          height:100px!important;
+	          position:relative;
+	          background:white;
+	          border:1px solid black;
+	          height:40px;
+	          overflow:hidden;
+	        }
+
+	        .view-animate {
+	          padding:10px;
+	        }
+
+	        .view-animate.ng-enter, .view-animate.ng-leave {
+	          -webkit-transition:all cubic-bezier(0.250, 0.460, 0.450, 0.940) 1.5s;
+	          transition:all cubic-bezier(0.250, 0.460, 0.450, 0.940) 1.5s;
+
+	          display:block;
+	          width:100%;
+	          border-left:1px solid black;
+
+	          position:absolute;
+	          top:0;
+	          left:0;
+	          right:0;
+	          bottom:0;
+	          padding:10px;
+	        }
+
+	        .view-animate.ng-enter {
+	          left:100%;
+	        }
+	        .view-animate.ng-enter.ng-enter-active {
+	          left:0;
+	        }
+	        .view-animate.ng-leave.ng-leave-active {
+	          left:-100%;
+	        }
+	      </file>
+
+	      <file name="script.js">
+	        angular.module('ngViewExample', ['ngRoute', 'ngAnimate'])
+	          .config(['$routeProvider', '$locationProvider',
+	            function($routeProvider, $locationProvider) {
+	              $routeProvider
+	                .when('/Book/:bookId', {
+	                  templateUrl: 'book.html',
+	                  controller: 'BookCtrl',
+	                  controllerAs: 'book'
+	                })
+	                .when('/Book/:bookId/ch/:chapterId', {
+	                  templateUrl: 'chapter.html',
+	                  controller: 'ChapterCtrl',
+	                  controllerAs: 'chapter'
+	                });
+
+	              $locationProvider.html5Mode(true);
+	          }])
+	          .controller('MainCtrl', ['$route', '$routeParams', '$location',
+	            function($route, $routeParams, $location) {
+	              this.$route = $route;
+	              this.$location = $location;
+	              this.$routeParams = $routeParams;
+	          }])
+	          .controller('BookCtrl', ['$routeParams', function($routeParams) {
+	            this.name = "BookCtrl";
+	            this.params = $routeParams;
+	          }])
+	          .controller('ChapterCtrl', ['$routeParams', function($routeParams) {
+	            this.name = "ChapterCtrl";
+	            this.params = $routeParams;
+	          }]);
+
+	      </file>
+
+	      <file name="protractor.js" type="protractor">
+	        it('should load and compile correct template', function() {
+	          element(by.linkText('Moby: Ch1')).click();
+	          var content = element(by.css('[ng-view]')).getText();
+	          expect(content).toMatch(/controller\: ChapterCtrl/);
+	          expect(content).toMatch(/Book Id\: Moby/);
+	          expect(content).toMatch(/Chapter Id\: 1/);
+
+	          element(by.partialLinkText('Scarlet')).click();
+
+	          content = element(by.css('[ng-view]')).getText();
+	          expect(content).toMatch(/controller\: BookCtrl/);
+	          expect(content).toMatch(/Book Id\: Scarlet/);
+	        });
+	      </file>
+	    </example>
+	 */
+
+
+	/**
+	 * @ngdoc event
+	 * @name ngView#$viewContentLoaded
+	 * @eventType emit on the current ngView scope
+	 * @description
+	 * Emitted every time the ngView content is reloaded.
+	 */
+	ngViewFactory.$inject = ['$route', '$anchorScroll', '$animate'];
+	function ngViewFactory($route, $anchorScroll, $animate) {
+	  return {
+	    restrict: 'ECA',
+	    terminal: true,
+	    priority: 400,
+	    transclude: 'element',
+	    link: function(scope, $element, attr, ctrl, $transclude) {
+	        var currentScope,
+	            currentElement,
+	            previousLeaveAnimation,
+	            autoScrollExp = attr.autoscroll,
+	            onloadExp = attr.onload || '';
+
+	        scope.$on('$routeChangeSuccess', update);
+	        update();
+
+	        function cleanupLastView() {
+	          if (previousLeaveAnimation) {
+	            $animate.cancel(previousLeaveAnimation);
+	            previousLeaveAnimation = null;
+	          }
+
+	          if (currentScope) {
+	            currentScope.$destroy();
+	            currentScope = null;
+	          }
+	          if (currentElement) {
+	            previousLeaveAnimation = $animate.leave(currentElement);
+	            previousLeaveAnimation.then(function() {
+	              previousLeaveAnimation = null;
+	            });
+	            currentElement = null;
+	          }
+	        }
+
+	        function update() {
+	          var locals = $route.current && $route.current.locals,
+	              template = locals && locals.$template;
+
+	          if (angular.isDefined(template)) {
+	            var newScope = scope.$new();
+	            var current = $route.current;
+
+	            // Note: This will also link all children of ng-view that were contained in the original
+	            // html. If that content contains controllers, ... they could pollute/change the scope.
+	            // However, using ng-view on an element with additional content does not make sense...
+	            // Note: We can't remove them in the cloneAttchFn of $transclude as that
+	            // function is called before linking the content, which would apply child
+	            // directives to non existing elements.
+	            var clone = $transclude(newScope, function(clone) {
+	              $animate.enter(clone, null, currentElement || $element).then(function onNgViewEnter() {
+	                if (angular.isDefined(autoScrollExp)
+	                  && (!autoScrollExp || scope.$eval(autoScrollExp))) {
+	                  $anchorScroll();
+	                }
+	              });
+	              cleanupLastView();
+	            });
+
+	            currentElement = clone;
+	            currentScope = current.scope = newScope;
+	            currentScope.$emit('$viewContentLoaded');
+	            currentScope.$eval(onloadExp);
+	          } else {
+	            cleanupLastView();
+	          }
+	        }
+	    }
+	  };
+	}
+
+	// This directive is called during the $transclude call of the first `ngView` directive.
+	// It will replace and compile the content of the element with the loaded template.
+	// We need this directive so that the element content is already filled when
+	// the link function of another directive on the same element as ngView
+	// is called.
+	ngViewFillContentFactory.$inject = ['$compile', '$controller', '$route'];
+	function ngViewFillContentFactory($compile, $controller, $route) {
+	  return {
+	    restrict: 'ECA',
+	    priority: -400,
+	    link: function(scope, $element) {
+	      var current = $route.current,
+	          locals = current.locals;
+
+	      $element.html(locals.$template);
+
+	      var link = $compile($element.contents());
+
+	      if (current.controller) {
+	        locals.$scope = scope;
+	        var controller = $controller(current.controller, locals);
+	        if (current.controllerAs) {
+	          scope[current.controllerAs] = controller;
+	        }
+	        $element.data('$ngControllerController', controller);
+	        $element.children().data('$ngControllerController', controller);
+	      }
+
+	      link(scope);
+	    }
+	  };
+	}
+
+
+	})(window, window.angular);
+
+
+/***/ },
+/* 12 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/**
+	 * @license AngularJS v1.3.2
+	 * (c) 2010-2014 Google, Inc. http://angularjs.org
+	 * License: MIT
+	 */
+	(function(window, angular, undefined) {'use strict';
+
+	var $sanitizeMinErr = angular.$$minErr('$sanitize');
+
+	/**
+	 * @ngdoc module
+	 * @name ngSanitize
+	 * @description
+	 *
+	 * # ngSanitize
+	 *
+	 * The `ngSanitize` module provides functionality to sanitize HTML.
+	 *
+	 *
+	 * <div doc-module-components="ngSanitize"></div>
+	 *
+	 * See {@link ngSanitize.$sanitize `$sanitize`} for usage.
+	 */
+
+	/*
+	 * HTML Parser By Misko Hevery (misko@hevery.com)
+	 * based on:  HTML Parser By John Resig (ejohn.org)
+	 * Original code by Erik Arvidsson, Mozilla Public License
+	 * http://erik.eae.net/simplehtmlparser/simplehtmlparser.js
+	 *
+	 * // Use like so:
+	 * htmlParser(htmlString, {
+	 *     start: function(tag, attrs, unary) {},
+	 *     end: function(tag) {},
+	 *     chars: function(text) {},
+	 *     comment: function(text) {}
+	 * });
+	 *
+	 */
+
+
+	/**
+	 * @ngdoc service
+	 * @name $sanitize
+	 * @kind function
+	 *
+	 * @description
+	 *   The input is sanitized by parsing the HTML into tokens. All safe tokens (from a whitelist) are
+	 *   then serialized back to properly escaped html string. This means that no unsafe input can make
+	 *   it into the returned string, however, since our parser is more strict than a typical browser
+	 *   parser, it's possible that some obscure input, which would be recognized as valid HTML by a
+	 *   browser, won't make it through the sanitizer. The input may also contain SVG markup.
+	 *   The whitelist is configured using the functions `aHrefSanitizationWhitelist` and
+	 *   `imgSrcSanitizationWhitelist` of {@link ng.$compileProvider `$compileProvider`}.
+	 *
+	 * @param {string} html HTML input.
+	 * @returns {string} Sanitized HTML.
+	 *
+	 * @example
+	   <example module="sanitizeExample" deps="angular-sanitize.js">
+	   <file name="index.html">
+	     <script>
+	         angular.module('sanitizeExample', ['ngSanitize'])
+	           .controller('ExampleController', ['$scope', '$sce', function($scope, $sce) {
+	             $scope.snippet =
+	               '<p style="color:blue">an html\n' +
+	               '<em onmouseover="this.textContent=\'PWN3D!\'">click here</em>\n' +
+	               'snippet</p>';
+	             $scope.deliberatelyTrustDangerousSnippet = function() {
+	               return $sce.trustAsHtml($scope.snippet);
+	             };
+	           }]);
+	     </script>
+	     <div ng-controller="ExampleController">
+	        Snippet: <textarea ng-model="snippet" cols="60" rows="3"></textarea>
+	       <table>
+	         <tr>
+	           <td>Directive</td>
+	           <td>How</td>
+	           <td>Source</td>
+	           <td>Rendered</td>
+	         </tr>
+	         <tr id="bind-html-with-sanitize">
+	           <td>ng-bind-html</td>
+	           <td>Automatically uses $sanitize</td>
+	           <td><pre>&lt;div ng-bind-html="snippet"&gt;<br/>&lt;/div&gt;</pre></td>
+	           <td><div ng-bind-html="snippet"></div></td>
+	         </tr>
+	         <tr id="bind-html-with-trust">
+	           <td>ng-bind-html</td>
+	           <td>Bypass $sanitize by explicitly trusting the dangerous value</td>
+	           <td>
+	           <pre>&lt;div ng-bind-html="deliberatelyTrustDangerousSnippet()"&gt;
+	&lt;/div&gt;</pre>
+	           </td>
+	           <td><div ng-bind-html="deliberatelyTrustDangerousSnippet()"></div></td>
+	         </tr>
+	         <tr id="bind-default">
+	           <td>ng-bind</td>
+	           <td>Automatically escapes</td>
+	           <td><pre>&lt;div ng-bind="snippet"&gt;<br/>&lt;/div&gt;</pre></td>
+	           <td><div ng-bind="snippet"></div></td>
+	         </tr>
+	       </table>
+	       </div>
+	   </file>
+	   <file name="protractor.js" type="protractor">
+	     it('should sanitize the html snippet by default', function() {
+	       expect(element(by.css('#bind-html-with-sanitize div')).getInnerHtml()).
+	         toBe('<p>an html\n<em>click here</em>\nsnippet</p>');
+	     });
+
+	     it('should inline raw snippet if bound to a trusted value', function() {
+	       expect(element(by.css('#bind-html-with-trust div')).getInnerHtml()).
+	         toBe("<p style=\"color:blue\">an html\n" +
+	              "<em onmouseover=\"this.textContent='PWN3D!'\">click here</em>\n" +
+	              "snippet</p>");
+	     });
+
+	     it('should escape snippet without any filter', function() {
+	       expect(element(by.css('#bind-default div')).getInnerHtml()).
+	         toBe("&lt;p style=\"color:blue\"&gt;an html\n" +
+	              "&lt;em onmouseover=\"this.textContent='PWN3D!'\"&gt;click here&lt;/em&gt;\n" +
+	              "snippet&lt;/p&gt;");
+	     });
+
+	     it('should update', function() {
+	       element(by.model('snippet')).clear();
+	       element(by.model('snippet')).sendKeys('new <b onclick="alert(1)">text</b>');
+	       expect(element(by.css('#bind-html-with-sanitize div')).getInnerHtml()).
+	         toBe('new <b>text</b>');
+	       expect(element(by.css('#bind-html-with-trust div')).getInnerHtml()).toBe(
+	         'new <b onclick="alert(1)">text</b>');
+	       expect(element(by.css('#bind-default div')).getInnerHtml()).toBe(
+	         "new &lt;b onclick=\"alert(1)\"&gt;text&lt;/b&gt;");
+	     });
+	   </file>
+	   </example>
+	 */
+	function $SanitizeProvider() {
+	  this.$get = ['$$sanitizeUri', function($$sanitizeUri) {
+	    return function(html) {
+	      var buf = [];
+	      htmlParser(html, htmlSanitizeWriter(buf, function(uri, isImage) {
+	        return !/^unsafe/.test($$sanitizeUri(uri, isImage));
+	      }));
+	      return buf.join('');
+	    };
+	  }];
+	}
+
+	function sanitizeText(chars) {
+	  var buf = [];
+	  var writer = htmlSanitizeWriter(buf, angular.noop);
+	  writer.chars(chars);
+	  return buf.join('');
+	}
+
+
+	// Regular Expressions for parsing tags and attributes
+	var START_TAG_REGEXP =
+	       /^<((?:[a-zA-Z])[\w:-]*)((?:\s+[\w:-]+(?:\s*=\s*(?:(?:"[^"]*")|(?:'[^']*')|[^>\s]+))?)*)\s*(\/?)\s*(>?)/,
+	  END_TAG_REGEXP = /^<\/\s*([\w:-]+)[^>]*>/,
+	  ATTR_REGEXP = /([\w:-]+)(?:\s*=\s*(?:(?:"((?:[^"])*)")|(?:'((?:[^'])*)')|([^>\s]+)))?/g,
+	  BEGIN_TAG_REGEXP = /^</,
+	  BEGING_END_TAGE_REGEXP = /^<\//,
+	  COMMENT_REGEXP = /<!--(.*?)-->/g,
+	  DOCTYPE_REGEXP = /<!DOCTYPE([^>]*?)>/i,
+	  CDATA_REGEXP = /<!\[CDATA\[(.*?)]]>/g,
+	  SURROGATE_PAIR_REGEXP = /[\uD800-\uDBFF][\uDC00-\uDFFF]/g,
+	  // Match everything outside of normal chars and " (quote character)
+	  NON_ALPHANUMERIC_REGEXP = /([^\#-~| |!])/g;
+
+
+	// Good source of info about elements and attributes
+	// http://dev.w3.org/html5/spec/Overview.html#semantics
+	// http://simon.html5.org/html-elements
+
+	// Safe Void Elements - HTML5
+	// http://dev.w3.org/html5/spec/Overview.html#void-elements
+	var voidElements = makeMap("area,br,col,hr,img,wbr");
+
+	// Elements that you can, intentionally, leave open (and which close themselves)
+	// http://dev.w3.org/html5/spec/Overview.html#optional-tags
+	var optionalEndTagBlockElements = makeMap("colgroup,dd,dt,li,p,tbody,td,tfoot,th,thead,tr"),
+	    optionalEndTagInlineElements = makeMap("rp,rt"),
+	    optionalEndTagElements = angular.extend({},
+	                                            optionalEndTagInlineElements,
+	                                            optionalEndTagBlockElements);
+
+	// Safe Block Elements - HTML5
+	var blockElements = angular.extend({}, optionalEndTagBlockElements, makeMap("address,article," +
+	        "aside,blockquote,caption,center,del,dir,div,dl,figure,figcaption,footer,h1,h2,h3,h4,h5," +
+	        "h6,header,hgroup,hr,ins,map,menu,nav,ol,pre,script,section,table,ul"));
+
+	// Inline Elements - HTML5
+	var inlineElements = angular.extend({}, optionalEndTagInlineElements, makeMap("a,abbr,acronym,b," +
+	        "bdi,bdo,big,br,cite,code,del,dfn,em,font,i,img,ins,kbd,label,map,mark,q,ruby,rp,rt,s," +
+	        "samp,small,span,strike,strong,sub,sup,time,tt,u,var"));
+
+	// SVG Elements
+	// https://wiki.whatwg.org/wiki/Sanitization_rules#svg_Elements
+	var svgElements = makeMap("animate,animateColor,animateMotion,animateTransform,circle,defs," +
+	        "desc,ellipse,font-face,font-face-name,font-face-src,g,glyph,hkern,image,linearGradient," +
+	        "line,marker,metadata,missing-glyph,mpath,path,polygon,polyline,radialGradient,rect,set," +
+	        "stop,svg,switch,text,title,tspan,use");
+
+	// Special Elements (can contain anything)
+	var specialElements = makeMap("script,style");
+
+	var validElements = angular.extend({},
+	                                   voidElements,
+	                                   blockElements,
+	                                   inlineElements,
+	                                   optionalEndTagElements,
+	                                   svgElements);
+
+	//Attributes that have href and hence need to be sanitized
+	var uriAttrs = makeMap("background,cite,href,longdesc,src,usemap,xlink:href");
+
+	var htmlAttrs = makeMap('abbr,align,alt,axis,bgcolor,border,cellpadding,cellspacing,class,clear,'+
+	    'color,cols,colspan,compact,coords,dir,face,headers,height,hreflang,hspace,'+
+	    'ismap,lang,language,nohref,nowrap,rel,rev,rows,rowspan,rules,'+
+	    'scope,scrolling,shape,size,span,start,summary,target,title,type,'+
+	    'valign,value,vspace,width');
+
+	// SVG attributes (without "id" and "name" attributes)
+	// https://wiki.whatwg.org/wiki/Sanitization_rules#svg_Attributes
+	var svgAttrs = makeMap('accent-height,accumulate,additive,alphabetic,arabic-form,ascent,'+
+	    'attributeName,attributeType,baseProfile,bbox,begin,by,calcMode,cap-height,class,color,'+
+	    'color-rendering,content,cx,cy,d,dx,dy,descent,display,dur,end,fill,fill-rule,font-family,'+
+	    'font-size,font-stretch,font-style,font-variant,font-weight,from,fx,fy,g1,g2,glyph-name,'+
+	    'gradientUnits,hanging,height,horiz-adv-x,horiz-origin-x,ideographic,k,keyPoints,'+
+	    'keySplines,keyTimes,lang,marker-end,marker-mid,marker-start,markerHeight,markerUnits,'+
+	    'markerWidth,mathematical,max,min,offset,opacity,orient,origin,overline-position,'+
+	    'overline-thickness,panose-1,path,pathLength,points,preserveAspectRatio,r,refX,refY,'+
+	    'repeatCount,repeatDur,requiredExtensions,requiredFeatures,restart,rotate,rx,ry,slope,stemh,'+
+	    'stemv,stop-color,stop-opacity,strikethrough-position,strikethrough-thickness,stroke,'+
+	    'stroke-dasharray,stroke-dashoffset,stroke-linecap,stroke-linejoin,stroke-miterlimit,'+
+	    'stroke-opacity,stroke-width,systemLanguage,target,text-anchor,to,transform,type,u1,u2,'+
+	    'underline-position,underline-thickness,unicode,unicode-range,units-per-em,values,version,'+
+	    'viewBox,visibility,width,widths,x,x-height,x1,x2,xlink:actuate,xlink:arcrole,xlink:role,'+
+	    'xlink:show,xlink:title,xlink:type,xml:base,xml:lang,xml:space,xmlns,xmlns:xlink,y,y1,y2,'+
+	    'zoomAndPan');
+
+	var validAttrs = angular.extend({},
+	                                uriAttrs,
+	                                svgAttrs,
+	                                htmlAttrs);
+
+	function makeMap(str) {
+	  var obj = {}, items = str.split(','), i;
+	  for (i = 0; i < items.length; i++) obj[items[i]] = true;
+	  return obj;
+	}
+
+
+	/**
+	 * @example
+	 * htmlParser(htmlString, {
+	 *     start: function(tag, attrs, unary) {},
+	 *     end: function(tag) {},
+	 *     chars: function(text) {},
+	 *     comment: function(text) {}
+	 * });
+	 *
+	 * @param {string} html string
+	 * @param {object} handler
+	 */
+	function htmlParser(html, handler) {
+	  if (typeof html !== 'string') {
+	    if (html === null || typeof html === 'undefined') {
+	      html = '';
+	    } else {
+	      html = '' + html;
+	    }
+	  }
+	  var index, chars, match, stack = [], last = html, text;
+	  stack.last = function() { return stack[ stack.length - 1 ]; };
+
+	  while (html) {
+	    text = '';
+	    chars = true;
+
+	    // Make sure we're not in a script or style element
+	    if (!stack.last() || !specialElements[ stack.last() ]) {
+
+	      // Comment
+	      if (html.indexOf("<!--") === 0) {
+	        // comments containing -- are not allowed unless they terminate the comment
+	        index = html.indexOf("--", 4);
+
+	        if (index >= 0 && html.lastIndexOf("-->", index) === index) {
+	          if (handler.comment) handler.comment(html.substring(4, index));
+	          html = html.substring(index + 3);
+	          chars = false;
+	        }
+	      // DOCTYPE
+	      } else if (DOCTYPE_REGEXP.test(html)) {
+	        match = html.match(DOCTYPE_REGEXP);
+
+	        if (match) {
+	          html = html.replace(match[0], '');
+	          chars = false;
+	        }
+	      // end tag
+	      } else if (BEGING_END_TAGE_REGEXP.test(html)) {
+	        match = html.match(END_TAG_REGEXP);
+
+	        if (match) {
+	          html = html.substring(match[0].length);
+	          match[0].replace(END_TAG_REGEXP, parseEndTag);
+	          chars = false;
+	        }
+
+	      // start tag
+	      } else if (BEGIN_TAG_REGEXP.test(html)) {
+	        match = html.match(START_TAG_REGEXP);
+
+	        if (match) {
+	          // We only have a valid start-tag if there is a '>'.
+	          if (match[4]) {
+	            html = html.substring(match[0].length);
+	            match[0].replace(START_TAG_REGEXP, parseStartTag);
+	          }
+	          chars = false;
+	        } else {
+	          // no ending tag found --- this piece should be encoded as an entity.
+	          text += '<';
+	          html = html.substring(1);
+	        }
+	      }
+
+	      if (chars) {
+	        index = html.indexOf("<");
+
+	        text += index < 0 ? html : html.substring(0, index);
+	        html = index < 0 ? "" : html.substring(index);
+
+	        if (handler.chars) handler.chars(decodeEntities(text));
+	      }
+
+	    } else {
+	      html = html.replace(new RegExp("(.*)<\\s*\\/\\s*" + stack.last() + "[^>]*>", 'i'),
+	        function(all, text) {
+	          text = text.replace(COMMENT_REGEXP, "$1").replace(CDATA_REGEXP, "$1");
+
+	          if (handler.chars) handler.chars(decodeEntities(text));
+
+	          return "";
+	      });
+
+	      parseEndTag("", stack.last());
+	    }
+
+	    if (html == last) {
+	      throw $sanitizeMinErr('badparse', "The sanitizer was unable to parse the following block " +
+	                                        "of html: {0}", html);
+	    }
+	    last = html;
+	  }
+
+	  // Clean up any remaining tags
+	  parseEndTag();
+
+	  function parseStartTag(tag, tagName, rest, unary) {
+	    tagName = angular.lowercase(tagName);
+	    if (blockElements[ tagName ]) {
+	      while (stack.last() && inlineElements[ stack.last() ]) {
+	        parseEndTag("", stack.last());
+	      }
+	    }
+
+	    if (optionalEndTagElements[ tagName ] && stack.last() == tagName) {
+	      parseEndTag("", tagName);
+	    }
+
+	    unary = voidElements[ tagName ] || !!unary;
+
+	    if (!unary)
+	      stack.push(tagName);
+
+	    var attrs = {};
+
+	    rest.replace(ATTR_REGEXP,
+	      function(match, name, doubleQuotedValue, singleQuotedValue, unquotedValue) {
+	        var value = doubleQuotedValue
+	          || singleQuotedValue
+	          || unquotedValue
+	          || '';
+
+	        attrs[name] = decodeEntities(value);
+	    });
+	    if (handler.start) handler.start(tagName, attrs, unary);
+	  }
+
+	  function parseEndTag(tag, tagName) {
+	    var pos = 0, i;
+	    tagName = angular.lowercase(tagName);
+	    if (tagName)
+	      // Find the closest opened tag of the same type
+	      for (pos = stack.length - 1; pos >= 0; pos--)
+	        if (stack[ pos ] == tagName)
+	          break;
+
+	    if (pos >= 0) {
+	      // Close all the open elements, up the stack
+	      for (i = stack.length - 1; i >= pos; i--)
+	        if (handler.end) handler.end(stack[ i ]);
+
+	      // Remove the open elements from the stack
+	      stack.length = pos;
+	    }
+	  }
+	}
+
+	var hiddenPre=document.createElement("pre");
+	var spaceRe = /^(\s*)([\s\S]*?)(\s*)$/;
+	/**
+	 * decodes all entities into regular string
+	 * @param value
+	 * @returns {string} A string with decoded entities.
+	 */
+	function decodeEntities(value) {
+	  if (!value) { return ''; }
+
+	  // Note: IE8 does not preserve spaces at the start/end of innerHTML
+	  // so we must capture them and reattach them afterward
+	  var parts = spaceRe.exec(value);
+	  var spaceBefore = parts[1];
+	  var spaceAfter = parts[3];
+	  var content = parts[2];
+	  if (content) {
+	    hiddenPre.innerHTML=content.replace(/</g,"&lt;");
+	    // innerText depends on styling as it doesn't display hidden elements.
+	    // Therefore, it's better to use textContent not to cause unnecessary
+	    // reflows. However, IE<9 don't support textContent so the innerText
+	    // fallback is necessary.
+	    content = 'textContent' in hiddenPre ?
+	      hiddenPre.textContent : hiddenPre.innerText;
+	  }
+	  return spaceBefore + content + spaceAfter;
+	}
+
+	/**
+	 * Escapes all potentially dangerous characters, so that the
+	 * resulting string can be safely inserted into attribute or
+	 * element text.
+	 * @param value
+	 * @returns {string} escaped text
+	 */
+	function encodeEntities(value) {
+	  return value.
+	    replace(/&/g, '&amp;').
+	    replace(SURROGATE_PAIR_REGEXP, function(value) {
+	      var hi = value.charCodeAt(0);
+	      var low = value.charCodeAt(1);
+	      return '&#' + (((hi - 0xD800) * 0x400) + (low - 0xDC00) + 0x10000) + ';';
+	    }).
+	    replace(NON_ALPHANUMERIC_REGEXP, function(value) {
+	      return '&#' + value.charCodeAt(0) + ';';
+	    }).
+	    replace(/</g, '&lt;').
+	    replace(/>/g, '&gt;');
+	}
+
+	/**
+	 * create an HTML/XML writer which writes to buffer
+	 * @param {Array} buf use buf.jain('') to get out sanitized html string
+	 * @returns {object} in the form of {
+	 *     start: function(tag, attrs, unary) {},
+	 *     end: function(tag) {},
+	 *     chars: function(text) {},
+	 *     comment: function(text) {}
+	 * }
+	 */
+	function htmlSanitizeWriter(buf, uriValidator) {
+	  var ignore = false;
+	  var out = angular.bind(buf, buf.push);
+	  return {
+	    start: function(tag, attrs, unary) {
+	      tag = angular.lowercase(tag);
+	      if (!ignore && specialElements[tag]) {
+	        ignore = tag;
+	      }
+	      if (!ignore && validElements[tag] === true) {
+	        out('<');
+	        out(tag);
+	        angular.forEach(attrs, function(value, key) {
+	          var lkey=angular.lowercase(key);
+	          var isImage = (tag === 'img' && lkey === 'src') || (lkey === 'background');
+	          if (validAttrs[lkey] === true &&
+	            (uriAttrs[lkey] !== true || uriValidator(value, isImage))) {
+	            out(' ');
+	            out(key);
+	            out('="');
+	            out(encodeEntities(value));
+	            out('"');
+	          }
+	        });
+	        out(unary ? '/>' : '>');
+	      }
+	    },
+	    end: function(tag) {
+	        tag = angular.lowercase(tag);
+	        if (!ignore && validElements[tag] === true) {
+	          out('</');
+	          out(tag);
+	          out('>');
+	        }
+	        if (tag == ignore) {
+	          ignore = false;
+	        }
+	      },
+	    chars: function(chars) {
+	        if (!ignore) {
+	          out(encodeEntities(chars));
+	        }
+	      }
+	  };
+	}
+
+
+	// define ngSanitize module and register $sanitize service
+	angular.module('ngSanitize', []).provider('$sanitize', $SanitizeProvider);
+
+	/* global sanitizeText: false */
+
+	/**
+	 * @ngdoc filter
+	 * @name linky
+	 * @kind function
+	 *
+	 * @description
+	 * Finds links in text input and turns them into html links. Supports http/https/ftp/mailto and
+	 * plain email address links.
+	 *
+	 * Requires the {@link ngSanitize `ngSanitize`} module to be installed.
+	 *
+	 * @param {string} text Input text.
+	 * @param {string} target Window (_blank|_self|_parent|_top) or named frame to open links in.
+	 * @returns {string} Html-linkified text.
+	 *
+	 * @usage
+	   <span ng-bind-html="linky_expression | linky"></span>
+	 *
+	 * @example
+	   <example module="linkyExample" deps="angular-sanitize.js">
+	     <file name="index.html">
+	       <script>
+	         angular.module('linkyExample', ['ngSanitize'])
+	           .controller('ExampleController', ['$scope', function($scope) {
+	             $scope.snippet =
+	               'Pretty text with some links:\n'+
+	               'http://angularjs.org/,\n'+
+	               'mailto:us@somewhere.org,\n'+
+	               'another@somewhere.org,\n'+
+	               'and one more: ftp://127.0.0.1/.';
+	             $scope.snippetWithTarget = 'http://angularjs.org/';
+	           }]);
+	       </script>
+	       <div ng-controller="ExampleController">
+	       Snippet: <textarea ng-model="snippet" cols="60" rows="3"></textarea>
+	       <table>
+	         <tr>
+	           <td>Filter</td>
+	           <td>Source</td>
+	           <td>Rendered</td>
+	         </tr>
+	         <tr id="linky-filter">
+	           <td>linky filter</td>
+	           <td>
+	             <pre>&lt;div ng-bind-html="snippet | linky"&gt;<br>&lt;/div&gt;</pre>
+	           </td>
+	           <td>
+	             <div ng-bind-html="snippet | linky"></div>
+	           </td>
+	         </tr>
+	         <tr id="linky-target">
+	          <td>linky target</td>
+	          <td>
+	            <pre>&lt;div ng-bind-html="snippetWithTarget | linky:'_blank'"&gt;<br>&lt;/div&gt;</pre>
+	          </td>
+	          <td>
+	            <div ng-bind-html="snippetWithTarget | linky:'_blank'"></div>
+	          </td>
+	         </tr>
+	         <tr id="escaped-html">
+	           <td>no filter</td>
+	           <td><pre>&lt;div ng-bind="snippet"&gt;<br>&lt;/div&gt;</pre></td>
+	           <td><div ng-bind="snippet"></div></td>
+	         </tr>
+	       </table>
+	     </file>
+	     <file name="protractor.js" type="protractor">
+	       it('should linkify the snippet with urls', function() {
+	         expect(element(by.id('linky-filter')).element(by.binding('snippet | linky')).getText()).
+	             toBe('Pretty text with some links: http://angularjs.org/, us@somewhere.org, ' +
+	                  'another@somewhere.org, and one more: ftp://127.0.0.1/.');
+	         expect(element.all(by.css('#linky-filter a')).count()).toEqual(4);
+	       });
+
+	       it('should not linkify snippet without the linky filter', function() {
+	         expect(element(by.id('escaped-html')).element(by.binding('snippet')).getText()).
+	             toBe('Pretty text with some links: http://angularjs.org/, mailto:us@somewhere.org, ' +
+	                  'another@somewhere.org, and one more: ftp://127.0.0.1/.');
+	         expect(element.all(by.css('#escaped-html a')).count()).toEqual(0);
+	       });
+
+	       it('should update', function() {
+	         element(by.model('snippet')).clear();
+	         element(by.model('snippet')).sendKeys('new http://link.');
+	         expect(element(by.id('linky-filter')).element(by.binding('snippet | linky')).getText()).
+	             toBe('new http://link.');
+	         expect(element.all(by.css('#linky-filter a')).count()).toEqual(1);
+	         expect(element(by.id('escaped-html')).element(by.binding('snippet')).getText())
+	             .toBe('new http://link.');
+	       });
+
+	       it('should work with the target property', function() {
+	        expect(element(by.id('linky-target')).
+	            element(by.binding("snippetWithTarget | linky:'_blank'")).getText()).
+	            toBe('http://angularjs.org/');
+	        expect(element(by.css('#linky-target a')).getAttribute('target')).toEqual('_blank');
+	       });
+	     </file>
+	   </example>
+	 */
+	angular.module('ngSanitize').filter('linky', ['$sanitize', function($sanitize) {
+	  var LINKY_URL_REGEXP =
+	        /((ftp|https?):\/\/|(mailto:)?[A-Za-z0-9._%+-]+@)\S*[^\s.;,(){}<>"]/,
+	      MAILTO_REGEXP = /^mailto:/;
+
+	  return function(text, target) {
+	    if (!text) return text;
+	    var match;
+	    var raw = text;
+	    var html = [];
+	    var url;
+	    var i;
+	    while ((match = raw.match(LINKY_URL_REGEXP))) {
+	      // We can not end in these as they are sometimes found at the end of the sentence
+	      url = match[0];
+	      // if we did not match ftp/http/mailto then assume mailto
+	      if (match[2] == match[3]) url = 'mailto:' + url;
+	      i = match.index;
+	      addText(raw.substr(0, i));
+	      addLink(url, match[0].replace(MAILTO_REGEXP, ''));
+	      raw = raw.substring(i + match[0].length);
+	    }
+	    addText(raw);
+	    return $sanitize(html.join(''));
+
+	    function addText(text) {
+	      if (!text) {
+	        return;
+	      }
+	      html.push(sanitizeText(text));
+	    }
+
+	    function addLink(url, text) {
+	      html.push('<a ');
+	      if (angular.isDefined(target)) {
+	        html.push('target="');
+	        html.push(target);
+	        html.push('" ');
+	      }
+	      html.push('href="');
+	      html.push(url);
+	      html.push('">');
+	      addText(text);
+	      html.push('</a>');
+	    }
+	  };
+	}]);
+
+
+	})(window, window.angular);
+
+
+/***/ },
+/* 13 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/**
+	 * @license AngularJS v1.3.2
+	 * (c) 2010-2014 Google, Inc. http://angularjs.org
+	 * License: MIT
+	 */
+	(function(window, angular, undefined) {'use strict';
+
+	/* jshint maxlen: false */
+
+	/**
+	 * @ngdoc module
+	 * @name ngAnimate
+	 * @description
+	 *
+	 * The `ngAnimate` module provides support for JavaScript, CSS3 transition and CSS3 keyframe animation hooks within existing core and custom directives.
+	 *
+	 * <div doc-module-components="ngAnimate"></div>
+	 *
+	 * # Usage
+	 *
+	 * To see animations in action, all that is required is to define the appropriate CSS classes
+	 * or to register a JavaScript animation via the myModule.animation() function. The directives that support animation automatically are:
+	 * `ngRepeat`, `ngInclude`, `ngIf`, `ngSwitch`, `ngShow`, `ngHide`, `ngView` and `ngClass`. Custom directives can take advantage of animation
+	 * by using the `$animate` service.
+	 *
+	 * Below is a more detailed breakdown of the supported animation events provided by pre-existing ng directives:
+	 *
+	 * | Directive                                                                                                | Supported Animations                                                     |
+	 * |----------------------------------------------------------------------------------------------------------|--------------------------------------------------------------------------|
+	 * | {@link ng.directive:ngRepeat#animations ngRepeat}                                                        | enter, leave and move                                                    |
+	 * | {@link ngRoute.directive:ngView#animations ngView}                                                       | enter and leave                                                          |
+	 * | {@link ng.directive:ngInclude#animations ngInclude}                                                      | enter and leave                                                          |
+	 * | {@link ng.directive:ngSwitch#animations ngSwitch}                                                        | enter and leave                                                          |
+	 * | {@link ng.directive:ngIf#animations ngIf}                                                                | enter and leave                                                          |
+	 * | {@link ng.directive:ngClass#animations ngClass}                                                          | add and remove (the CSS class(es) present)                               |
+	 * | {@link ng.directive:ngShow#animations ngShow} & {@link ng.directive:ngHide#animations ngHide}            | add and remove (the ng-hide class value)                                 |
+	 * | {@link ng.directive:form#animation-hooks form} & {@link ng.directive:ngModel#animation-hooks ngModel}    | add and remove (dirty, pristine, valid, invalid & all other validations) |
+	 * | {@link module:ngMessages#animations ngMessages}                                                          | add and remove (ng-active & ng-inactive)                                 |
+	 * | {@link module:ngMessages#animations ngMessage}                                                           | enter and leave                                                          |
+	 *
+	 * You can find out more information about animations upon visiting each directive page.
+	 *
+	 * Below is an example of how to apply animations to a directive that supports animation hooks:
+	 *
+	 * ```html
+	 * <style type="text/css">
+	 * .slide.ng-enter, .slide.ng-leave {
+	 *   -webkit-transition:0.5s linear all;
+	 *   transition:0.5s linear all;
+	 * }
+	 *
+	 * .slide.ng-enter { }        /&#42; starting animations for enter &#42;/
+	 * .slide.ng-enter.ng-enter-active { } /&#42; terminal animations for enter &#42;/
+	 * .slide.ng-leave { }        /&#42; starting animations for leave &#42;/
+	 * .slide.ng-leave.ng-leave-active { } /&#42; terminal animations for leave &#42;/
+	 * </style>
+	 *
+	 * <!--
+	 * the animate service will automatically add .ng-enter and .ng-leave to the element
+	 * to trigger the CSS transition/animations
+	 * -->
+	 * <ANY class="slide" ng-include="..."></ANY>
+	 * ```
+	 *
+	 * Keep in mind that, by default, if an animation is running, any child elements cannot be animated
+	 * until the parent element's animation has completed. This blocking feature can be overridden by
+	 * placing the `ng-animate-children` attribute on a parent container tag.
+	 *
+	 * ```html
+	 * <div class="slide-animation" ng-if="on" ng-animate-children>
+	 *   <div class="fade-animation" ng-if="on">
+	 *     <div class="explode-animation" ng-if="on">
+	 *        ...
+	 *     </div>
+	 *   </div>
+	 * </div>
+	 * ```
+	 *
+	 * When the `on` expression value changes and an animation is triggered then each of the elements within
+	 * will all animate without the block being applied to child elements.
+	 *
+	 * ## Are animations run when the application starts?
+	 * No they are not. When an application is bootstrapped Angular will disable animations from running to avoid
+	 * a frenzy of animations from being triggered as soon as the browser has rendered the screen. For this to work,
+	 * Angular will wait for two digest cycles until enabling animations. From there on, any animation-triggering
+	 * layout changes in the application will trigger animations as normal.
+	 *
+	 * In addition, upon bootstrap, if the routing system or any directives or load remote data (via $http) then Angular
+	 * will automatically extend the wait time to enable animations once **all** of the outbound HTTP requests
+	 * are complete.
+	 *
+	 * ## CSS-defined Animations
+	 * The animate service will automatically apply two CSS classes to the animated element and these two CSS classes
+	 * are designed to contain the start and end CSS styling. Both CSS transitions and keyframe animations are supported
+	 * and can be used to play along with this naming structure.
+	 *
+	 * The following code below demonstrates how to perform animations using **CSS transitions** with Angular:
+	 *
+	 * ```html
+	 * <style type="text/css">
+	 * /&#42;
+	 *  The animate class is apart of the element and the ng-enter class
+	 *  is attached to the element once the enter animation event is triggered
+	 * &#42;/
+	 * .reveal-animation.ng-enter {
+	 *  -webkit-transition: 1s linear all; /&#42; Safari/Chrome &#42;/
+	 *  transition: 1s linear all; /&#42; All other modern browsers and IE10+ &#42;/
+	 *
+	 *  /&#42; The animation preparation code &#42;/
+	 *  opacity: 0;
+	 * }
+	 *
+	 * /&#42;
+	 *  Keep in mind that you want to combine both CSS
+	 *  classes together to avoid any CSS-specificity
+	 *  conflicts
+	 * &#42;/
+	 * .reveal-animation.ng-enter.ng-enter-active {
+	 *  /&#42; The animation code itself &#42;/
+	 *  opacity: 1;
+	 * }
+	 * </style>
+	 *
+	 * <div class="view-container">
+	 *   <div ng-view class="reveal-animation"></div>
+	 * </div>
+	 * ```
+	 *
+	 * The following code below demonstrates how to perform animations using **CSS animations** with Angular:
+	 *
+	 * ```html
+	 * <style type="text/css">
+	 * .reveal-animation.ng-enter {
+	 *   -webkit-animation: enter_sequence 1s linear; /&#42; Safari/Chrome &#42;/
+	 *   animation: enter_sequence 1s linear; /&#42; IE10+ and Future Browsers &#42;/
+	 * }
+	 * @-webkit-keyframes enter_sequence {
+	 *   from { opacity:0; }
+	 *   to { opacity:1; }
+	 * }
+	 * @keyframes enter_sequence {
+	 *   from { opacity:0; }
+	 *   to { opacity:1; }
+	 * }
+	 * </style>
+	 *
+	 * <div class="view-container">
+	 *   <div ng-view class="reveal-animation"></div>
+	 * </div>
+	 * ```
+	 *
+	 * Both CSS3 animations and transitions can be used together and the animate service will figure out the correct duration and delay timing.
+	 *
+	 * Upon DOM mutation, the event class is added first (something like `ng-enter`), then the browser prepares itself to add
+	 * the active class (in this case `ng-enter-active`) which then triggers the animation. The animation module will automatically
+	 * detect the CSS code to determine when the animation ends. Once the animation is over then both CSS classes will be
+	 * removed from the DOM. If a browser does not support CSS transitions or CSS animations then the animation will start and end
+	 * immediately resulting in a DOM element that is at its final state. This final state is when the DOM element
+	 * has no CSS transition/animation classes applied to it.
+	 *
+	 * ### Structural transition animations
+	 *
+	 * Structural transitions (such as enter, leave and move) will always apply a `0s none` transition
+	 * value to force the browser into rendering the styles defined in the setup (.ng-enter, .ng-leave
+	 * or .ng-move) class. This means that any active transition animations operating on the element
+	 * will be cut off to make way for the enter, leave or move animation.
+	 *
+	 * ### Class-based transition animations
+	 *
+	 * Class-based transitions refer to transition animations that are triggered when a CSS class is
+	 * added to or removed from the element (via `$animate.addClass`, `$animate.removeClass`,
+	 * `$animate.setClass`, or by directives such as `ngClass`, `ngModel` and `form`).
+	 * They are different when compared to structural animations since they **do not cancel existing
+	 * animations** nor do they **block successive transitions** from rendering on the same element.
+	 * This distinction allows for **multiple class-based transitions** to be performed on the same element.
+	 *
+	 * In addition to ngAnimate supporting the default (natural) functionality of class-based transition
+	 * animations, ngAnimate also decorates the element with starting and ending CSS classes to aid the
+	 * developer in further styling the element throughout the transition animation. Earlier versions
+	 * of ngAnimate may have caused natural CSS transitions to break and not render properly due to
+	 * $animate temporarily blocking transitions using `0s none` in order to allow the setup CSS class
+	 * (the `-add` or `-remove` class) to be applied without triggering an animation. However, as of
+	 * **version 1.3**, this workaround has been removed with ngAnimate and all non-ngAnimate CSS
+	 * class transitions are compatible with ngAnimate.
+	 *
+	 * There is, however, one special case when dealing with class-based transitions in ngAnimate.
+	 * When rendering class-based transitions that make use of the setup and active CSS classes
+	 * (e.g. `.fade-add` and `.fade-add-active` for when `.fade` is added) be sure to define
+	 * the transition value **on the active CSS class** and not the setup class.
+	 *
+	 * ```css
+	 * .fade-add {
+	 *   /&#42; remember to place a 0s transition here
+	 *      to ensure that the styles are applied instantly
+	 *      even if the element already has a transition style &#42;/
+	 *   transition:0s linear all;
+	 *
+	 *   /&#42; starting CSS styles &#42;/
+	 *   opacity:1;
+	 * }
+	 * .fade-add.fade-add-active {
+	 *   /&#42; this will be the length of the animation &#42;/
+	 *   transition:1s linear all;
+	 *   opacity:0;
+	 * }
+	 * ```
+	 *
+	 * The setup CSS class (in this case `.fade-add`) also has a transition style property, however, it
+	 * has a duration of zero. This may not be required, however, incase the browser is unable to render
+	 * the styling present in this CSS class instantly then it could be that the browser is attempting
+	 * to perform an unnecessary transition.
+	 *
+	 * This workaround, however, does not apply to  standard class-based transitions that are rendered
+	 * when a CSS class containing a transition is applied to an element:
+	 *
+	 * ```css
+	 * /&#42; this works as expected &#42;/
+	 * .fade {
+	 *   transition:1s linear all;
+	 *   opacity:0;
+	 * }
+	 * ```
+	 *
+	 * Please keep this in mind when coding the CSS markup that will be used within class-based transitions.
+	 * Also, try not to mix the two class-based animation flavors together since the CSS code may become
+	 * overly complex.
+	 *
+	 *
+	 * ### Preventing Collisions With Third Party Libraries
+	 *
+	 * Some third-party frameworks place animation duration defaults across many element or className
+	 * selectors in order to make their code small and reuseable. This can lead to issues with ngAnimate, which
+	 * is expecting actual animations on these elements and has to wait for their completion.
+	 *
+	 * You can prevent this unwanted behavior by using a prefix on all your animation classes:
+	 *
+	 * ```css
+	 * /&#42; prefixed with animate- &#42;/
+	 * .animate-fade-add.animate-fade-add-active {
+	 *   transition:1s linear all;
+	 *   opacity:0;
+	 * }
+	 * ```
+	 *
+	 * You then configure `$animate` to enforce this prefix:
+	 *
+	 * ```js
+	 * $animateProvider.classNamePrefix(/animate-/);
+	 * ```
+	 * </div>
+	 *
+	 * ### CSS Staggering Animations
+	 * A Staggering animation is a collection of animations that are issued with a slight delay in between each successive operation resulting in a
+	 * curtain-like effect. The ngAnimate module (versions >=1.2) supports staggering animations and the stagger effect can be
+	 * performed by creating a **ng-EVENT-stagger** CSS class and attaching that class to the base CSS class used for
+	 * the animation. The style property expected within the stagger class can either be a **transition-delay** or an
+	 * **animation-delay** property (or both if your animation contains both transitions and keyframe animations).
+	 *
+	 * ```css
+	 * .my-animation.ng-enter {
+	 *   /&#42; standard transition code &#42;/
+	 *   -webkit-transition: 1s linear all;
+	 *   transition: 1s linear all;
+	 *   opacity:0;
+	 * }
+	 * .my-animation.ng-enter-stagger {
+	 *   /&#42; this will have a 100ms delay between each successive leave animation &#42;/
+	 *   -webkit-transition-delay: 0.1s;
+	 *   transition-delay: 0.1s;
+	 *
+	 *   /&#42; in case the stagger doesn't work then these two values
+	 *    must be set to 0 to avoid an accidental CSS inheritance &#42;/
+	 *   -webkit-transition-duration: 0s;
+	 *   transition-duration: 0s;
+	 * }
+	 * .my-animation.ng-enter.ng-enter-active {
+	 *   /&#42; standard transition styles &#42;/
+	 *   opacity:1;
+	 * }
+	 * ```
+	 *
+	 * Staggering animations work by default in ngRepeat (so long as the CSS class is defined). Outside of ngRepeat, to use staggering animations
+	 * on your own, they can be triggered by firing multiple calls to the same event on $animate. However, the restrictions surrounding this
+	 * are that each of the elements must have the same CSS className value as well as the same parent element. A stagger operation
+	 * will also be reset if more than 10ms has passed after the last animation has been fired.
+	 *
+	 * The following code will issue the **ng-leave-stagger** event on the element provided:
+	 *
+	 * ```js
+	 * var kids = parent.children();
+	 *
+	 * $animate.leave(kids[0]); //stagger index=0
+	 * $animate.leave(kids[1]); //stagger index=1
+	 * $animate.leave(kids[2]); //stagger index=2
+	 * $animate.leave(kids[3]); //stagger index=3
+	 * $animate.leave(kids[4]); //stagger index=4
+	 *
+	 * $timeout(function() {
+	 *   //stagger has reset itself
+	 *   $animate.leave(kids[5]); //stagger index=0
+	 *   $animate.leave(kids[6]); //stagger index=1
+	 * }, 100, false);
+	 * ```
+	 *
+	 * Stagger animations are currently only supported within CSS-defined animations.
+	 *
+	 * ## JavaScript-defined Animations
+	 * In the event that you do not want to use CSS3 transitions or CSS3 animations or if you wish to offer animations on browsers that do not
+	 * yet support CSS transitions/animations, then you can make use of JavaScript animations defined inside of your AngularJS module.
+	 *
+	 * ```js
+	 * //!annotate="YourApp" Your AngularJS Module|Replace this or ngModule with the module that you used to define your application.
+	 * var ngModule = angular.module('YourApp', ['ngAnimate']);
+	 * ngModule.animation('.my-crazy-animation', function() {
+	 *   return {
+	 *     enter: function(element, done) {
+	 *       //run the animation here and call done when the animation is complete
+	 *       return function(cancelled) {
+	 *         //this (optional) function will be called when the animation
+	 *         //completes or when the animation is cancelled (the cancelled
+	 *         //flag will be set to true if cancelled).
+	 *       };
+	 *     },
+	 *     leave: function(element, done) { },
+	 *     move: function(element, done) { },
+	 *
+	 *     //animation that can be triggered before the class is added
+	 *     beforeAddClass: function(element, className, done) { },
+	 *
+	 *     //animation that can be triggered after the class is added
+	 *     addClass: function(element, className, done) { },
+	 *
+	 *     //animation that can be triggered before the class is removed
+	 *     beforeRemoveClass: function(element, className, done) { },
+	 *
+	 *     //animation that can be triggered after the class is removed
+	 *     removeClass: function(element, className, done) { }
+	 *   };
+	 * });
+	 * ```
+	 *
+	 * JavaScript-defined animations are created with a CSS-like class selector and a collection of events which are set to run
+	 * a javascript callback function. When an animation is triggered, $animate will look for a matching animation which fits
+	 * the element's CSS class attribute value and then run the matching animation event function (if found).
+	 * In other words, if the CSS classes present on the animated element match any of the JavaScript animations then the callback function will
+	 * be executed. It should be also noted that only simple, single class selectors are allowed (compound class selectors are not supported).
+	 *
+	 * Within a JavaScript animation, an object containing various event callback animation functions is expected to be returned.
+	 * As explained above, these callbacks are triggered based on the animation event. Therefore if an enter animation is run,
+	 * and the JavaScript animation is found, then the enter callback will handle that animation (in addition to the CSS keyframe animation
+	 * or transition code that is defined via a stylesheet).
+	 *
+	 *
+	 * ### Applying Directive-specific Styles to an Animation
+	 * In some cases a directive or service may want to provide `$animate` with extra details that the animation will
+	 * include into its animation. Let's say for example we wanted to render an animation that animates an element
+	 * towards the mouse coordinates as to where the user clicked last. By collecting the X/Y coordinates of the click
+	 * (via the event parameter) we can set the `top` and `left` styles into an object and pass that into our function
+	 * call to `$animate.addClass`.
+	 *
+	 * ```js
+	 * canvas.on('click', function(e) {
+	 *   $animate.addClass(element, 'on', {
+	 *     to: {
+	 *       left : e.client.x + 'px',
+	 *       top : e.client.y + 'px'
+	 *     }
+	 *   }):
+	 * });
+	 * ```
+	 *
+	 * Now when the animation runs, and a transition or keyframe animation is picked up, then the animation itself will
+	 * also include and transition the styling of the `left` and `top` properties into its running animation. If we want
+	 * to provide some starting animation values then we can do so by placing the starting animations styles into an object
+	 * called `from` in the same object as the `to` animations.
+	 *
+	 * ```js
+	 * canvas.on('click', function(e) {
+	 *   $animate.addClass(element, 'on', {
+	 *     from: {
+	 *        position: 'absolute',
+	 *        left: '0px',
+	 *        top: '0px'
+	 *     },
+	 *     to: {
+	 *       left : e.client.x + 'px',
+	 *       top : e.client.y + 'px'
+	 *     }
+	 *   }):
+	 * });
+	 * ```
+	 *
+	 * Once the animation is complete or cancelled then the union of both the before and after styles are applied to the
+	 * element. If `ngAnimate` is not present then the styles will be applied immediately.
+	 *
+	 */
+
+	angular.module('ngAnimate', ['ng'])
+
+	  /**
+	   * @ngdoc provider
+	   * @name $animateProvider
+	   * @description
+	   *
+	   * The `$animateProvider` allows developers to register JavaScript animation event handlers directly inside of a module.
+	   * When an animation is triggered, the $animate service will query the $animate service to find any animations that match
+	   * the provided name value.
+	   *
+	   * Requires the {@link ngAnimate `ngAnimate`} module to be installed.
+	   *
+	   * Please visit the {@link ngAnimate `ngAnimate`} module overview page learn more about how to use animations in your application.
+	   *
+	   */
+	  .directive('ngAnimateChildren', function() {
+	    var NG_ANIMATE_CHILDREN = '$$ngAnimateChildren';
+	    return function(scope, element, attrs) {
+	      var val = attrs.ngAnimateChildren;
+	      if (angular.isString(val) && val.length === 0) { //empty attribute
+	        element.data(NG_ANIMATE_CHILDREN, true);
+	      } else {
+	        scope.$watch(val, function(value) {
+	          element.data(NG_ANIMATE_CHILDREN, !!value);
+	        });
+	      }
+	    };
+	  })
+
+	  //this private service is only used within CSS-enabled animations
+	  //IE8 + IE9 do not support rAF natively, but that is fine since they
+	  //also don't support transitions and keyframes which means that the code
+	  //below will never be used by the two browsers.
+	  .factory('$$animateReflow', ['$$rAF', '$document', function($$rAF, $document) {
+	    var bod = $document[0].body;
+	    return function(fn) {
+	      //the returned function acts as the cancellation function
+	      return $$rAF(function() {
+	        //the line below will force the browser to perform a repaint
+	        //so that all the animated elements within the animation frame
+	        //will be properly updated and drawn on screen. This is
+	        //required to perform multi-class CSS based animations with
+	        //Firefox. DO NOT REMOVE THIS LINE.
+	        var a = bod.offsetWidth + 1;
+	        fn();
+	      });
+	    };
+	  }])
+
+	  .config(['$provide', '$animateProvider', function($provide, $animateProvider) {
+	    var noop = angular.noop;
+	    var forEach = angular.forEach;
+	    var selectors = $animateProvider.$$selectors;
+	    var isArray = angular.isArray;
+	    var isString = angular.isString;
+	    var isObject = angular.isObject;
+
+	    var ELEMENT_NODE = 1;
+	    var NG_ANIMATE_STATE = '$$ngAnimateState';
+	    var NG_ANIMATE_CHILDREN = '$$ngAnimateChildren';
+	    var NG_ANIMATE_CLASS_NAME = 'ng-animate';
+	    var rootAnimateState = {running: true};
+
+	    function extractElementNode(element) {
+	      for (var i = 0; i < element.length; i++) {
+	        var elm = element[i];
+	        if (elm.nodeType == ELEMENT_NODE) {
+	          return elm;
+	        }
+	      }
+	    }
+
+	    function prepareElement(element) {
+	      return element && angular.element(element);
+	    }
+
+	    function stripCommentsFromElement(element) {
+	      return angular.element(extractElementNode(element));
+	    }
+
+	    function isMatchingElement(elm1, elm2) {
+	      return extractElementNode(elm1) == extractElementNode(elm2);
+	    }
+
+	    $provide.decorator('$animate',
+	        ['$delegate', '$$q', '$injector', '$sniffer', '$rootElement', '$$asyncCallback', '$rootScope', '$document', '$templateRequest',
+	 function($delegate,   $$q,   $injector,   $sniffer,   $rootElement,   $$asyncCallback,   $rootScope,   $document,   $templateRequest) {
+
+	      $rootElement.data(NG_ANIMATE_STATE, rootAnimateState);
+
+	      // Wait until all directive and route-related templates are downloaded and
+	      // compiled. The $templateRequest.totalPendingRequests variable keeps track of
+	      // all of the remote templates being currently downloaded. If there are no
+	      // templates currently downloading then the watcher will still fire anyway.
+	      var deregisterWatch = $rootScope.$watch(
+	        function() { return $templateRequest.totalPendingRequests; },
+	        function(val, oldVal) {
+	          if (val !== 0) return;
+	          deregisterWatch();
+
+	          // Now that all templates have been downloaded, $animate will wait until
+	          // the post digest queue is empty before enabling animations. By having two
+	          // calls to $postDigest calls we can ensure that the flag is enabled at the
+	          // very end of the post digest queue. Since all of the animations in $animate
+	          // use $postDigest, it's important that the code below executes at the end.
+	          // This basically means that the page is fully downloaded and compiled before
+	          // any animations are triggered.
+	          $rootScope.$$postDigest(function() {
+	            $rootScope.$$postDigest(function() {
+	              rootAnimateState.running = false;
+	            });
+	          });
+	        }
+	      );
+
+	      var globalAnimationCounter = 0;
+	      var classNameFilter = $animateProvider.classNameFilter();
+	      var isAnimatableClassName = !classNameFilter
+	              ? function() { return true; }
+	              : function(className) {
+	                return classNameFilter.test(className);
+	              };
+
+	      function classBasedAnimationsBlocked(element, setter) {
+	        var data = element.data(NG_ANIMATE_STATE) || {};
+	        if (setter) {
+	          data.running = true;
+	          data.structural = true;
+	          element.data(NG_ANIMATE_STATE, data);
+	        }
+	        return data.disabled || (data.running && data.structural);
+	      }
+
+	      function runAnimationPostDigest(fn) {
+	        var cancelFn, defer = $$q.defer();
+	        defer.promise.$$cancelFn = function() {
+	          cancelFn && cancelFn();
+	        };
+	        $rootScope.$$postDigest(function() {
+	          cancelFn = fn(function() {
+	            defer.resolve();
+	          });
+	        });
+	        return defer.promise;
+	      }
+
+	      function parseAnimateOptions(options) {
+	        // some plugin code may still be passing in the callback
+	        // function as the last param for the $animate methods so
+	        // it's best to only allow string or array values for now
+	        if (isObject(options)) {
+	          if (options.tempClasses && isString(options.tempClasses)) {
+	            options.tempClasses = options.tempClasses.split(/\s+/);
+	          }
+	          return options;
+	        }
+	      }
+
+	      function resolveElementClasses(element, cache, runningAnimations) {
+	        runningAnimations = runningAnimations || {};
+
+	        var lookup = {};
+	        forEach(runningAnimations, function(data, selector) {
+	          forEach(selector.split(' '), function(s) {
+	            lookup[s]=data;
+	          });
+	        });
+
+	        var hasClasses = Object.create(null);
+	        forEach((element.attr('class') || '').split(/\s+/), function(className) {
+	          hasClasses[className] = true;
+	        });
+
+	        var toAdd = [], toRemove = [];
+	        forEach((cache && cache.classes) || [], function(status, className) {
+	          var hasClass = hasClasses[className];
+	          var matchingAnimation = lookup[className] || {};
+
+	          // When addClass and removeClass is called then $animate will check to
+	          // see if addClass and removeClass cancel each other out. When there are
+	          // more calls to removeClass than addClass then the count falls below 0
+	          // and then the removeClass animation will be allowed. Otherwise if the
+	          // count is above 0 then that means an addClass animation will commence.
+	          // Once an animation is allowed then the code will also check to see if
+	          // there exists any on-going animation that is already adding or remvoing
+	          // the matching CSS class.
+	          if (status === false) {
+	            //does it have the class or will it have the class
+	            if (hasClass || matchingAnimation.event == 'addClass') {
+	              toRemove.push(className);
+	            }
+	          } else if (status === true) {
+	            //is the class missing or will it be removed?
+	            if (!hasClass || matchingAnimation.event == 'removeClass') {
+	              toAdd.push(className);
+	            }
+	          }
+	        });
+
+	        return (toAdd.length + toRemove.length) > 0 && [toAdd.join(' '), toRemove.join(' ')];
+	      }
+
+	      function lookup(name) {
+	        if (name) {
+	          var matches = [],
+	              flagMap = {},
+	              classes = name.substr(1).split('.');
+
+	          //the empty string value is the default animation
+	          //operation which performs CSS transition and keyframe
+	          //animations sniffing. This is always included for each
+	          //element animation procedure if the browser supports
+	          //transitions and/or keyframe animations. The default
+	          //animation is added to the top of the list to prevent
+	          //any previous animations from affecting the element styling
+	          //prior to the element being animated.
+	          if ($sniffer.transitions || $sniffer.animations) {
+	            matches.push($injector.get(selectors['']));
+	          }
+
+	          for (var i=0; i < classes.length; i++) {
+	            var klass = classes[i],
+	                selectorFactoryName = selectors[klass];
+	            if (selectorFactoryName && !flagMap[klass]) {
+	              matches.push($injector.get(selectorFactoryName));
+	              flagMap[klass] = true;
+	            }
+	          }
+	          return matches;
+	        }
+	      }
+
+	      function animationRunner(element, animationEvent, className, options) {
+	        //transcluded directives may sometimes fire an animation using only comment nodes
+	        //best to catch this early on to prevent any animation operations from occurring
+	        var node = element[0];
+	        if (!node) {
+	          return;
+	        }
+
+	        if (options) {
+	          options.to = options.to || {};
+	          options.from = options.from || {};
+	        }
+
+	        var classNameAdd;
+	        var classNameRemove;
+	        if (isArray(className)) {
+	          classNameAdd = className[0];
+	          classNameRemove = className[1];
+	          if (!classNameAdd) {
+	            className = classNameRemove;
+	            animationEvent = 'removeClass';
+	          } else if (!classNameRemove) {
+	            className = classNameAdd;
+	            animationEvent = 'addClass';
+	          } else {
+	            className = classNameAdd + ' ' + classNameRemove;
+	          }
+	        }
+
+	        var isSetClassOperation = animationEvent == 'setClass';
+	        var isClassBased = isSetClassOperation
+	                           || animationEvent == 'addClass'
+	                           || animationEvent == 'removeClass'
+	                           || animationEvent == 'animate';
+
+	        var currentClassName = element.attr('class');
+	        var classes = currentClassName + ' ' + className;
+	        if (!isAnimatableClassName(classes)) {
+	          return;
+	        }
+
+	        var beforeComplete = noop,
+	            beforeCancel = [],
+	            before = [],
+	            afterComplete = noop,
+	            afterCancel = [],
+	            after = [];
+
+	        var animationLookup = (' ' + classes).replace(/\s+/g,'.');
+	        forEach(lookup(animationLookup), function(animationFactory) {
+	          var created = registerAnimation(animationFactory, animationEvent);
+	          if (!created && isSetClassOperation) {
+	            registerAnimation(animationFactory, 'addClass');
+	            registerAnimation(animationFactory, 'removeClass');
+	          }
+	        });
+
+	        function registerAnimation(animationFactory, event) {
+	          var afterFn = animationFactory[event];
+	          var beforeFn = animationFactory['before' + event.charAt(0).toUpperCase() + event.substr(1)];
+	          if (afterFn || beforeFn) {
+	            if (event == 'leave') {
+	              beforeFn = afterFn;
+	              //when set as null then animation knows to skip this phase
+	              afterFn = null;
+	            }
+	            after.push({
+	              event: event, fn: afterFn
+	            });
+	            before.push({
+	              event: event, fn: beforeFn
+	            });
+	            return true;
+	          }
+	        }
+
+	        function run(fns, cancellations, allCompleteFn) {
+	          var animations = [];
+	          forEach(fns, function(animation) {
+	            animation.fn && animations.push(animation);
+	          });
+
+	          var count = 0;
+	          function afterAnimationComplete(index) {
+	            if (cancellations) {
+	              (cancellations[index] || noop)();
+	              if (++count < animations.length) return;
+	              cancellations = null;
+	            }
+	            allCompleteFn();
+	          }
+
+	          //The code below adds directly to the array in order to work with
+	          //both sync and async animations. Sync animations are when the done()
+	          //operation is called right away. DO NOT REFACTOR!
+	          forEach(animations, function(animation, index) {
+	            var progress = function() {
+	              afterAnimationComplete(index);
+	            };
+	            switch (animation.event) {
+	              case 'setClass':
+	                cancellations.push(animation.fn(element, classNameAdd, classNameRemove, progress, options));
+	                break;
+	              case 'animate':
+	                cancellations.push(animation.fn(element, className, options.from, options.to, progress));
+	                break;
+	              case 'addClass':
+	                cancellations.push(animation.fn(element, classNameAdd || className,     progress, options));
+	                break;
+	              case 'removeClass':
+	                cancellations.push(animation.fn(element, classNameRemove || className,  progress, options));
+	                break;
+	              default:
+	                cancellations.push(animation.fn(element, progress, options));
+	                break;
+	            }
+	          });
+
+	          if (cancellations && cancellations.length === 0) {
+	            allCompleteFn();
+	          }
+	        }
+
+	        return {
+	          node: node,
+	          event: animationEvent,
+	          className: className,
+	          isClassBased: isClassBased,
+	          isSetClassOperation: isSetClassOperation,
+	          applyStyles: function() {
+	            if (options) {
+	              element.css(angular.extend(options.from || {}, options.to || {}));
+	            }
+	          },
+	          before: function(allCompleteFn) {
+	            beforeComplete = allCompleteFn;
+	            run(before, beforeCancel, function() {
+	              beforeComplete = noop;
+	              allCompleteFn();
+	            });
+	          },
+	          after: function(allCompleteFn) {
+	            afterComplete = allCompleteFn;
+	            run(after, afterCancel, function() {
+	              afterComplete = noop;
+	              allCompleteFn();
+	            });
+	          },
+	          cancel: function() {
+	            if (beforeCancel) {
+	              forEach(beforeCancel, function(cancelFn) {
+	                (cancelFn || noop)(true);
+	              });
+	              beforeComplete(true);
+	            }
+	            if (afterCancel) {
+	              forEach(afterCancel, function(cancelFn) {
+	                (cancelFn || noop)(true);
+	              });
+	              afterComplete(true);
+	            }
+	          }
+	        };
+	      }
+
+	      /**
+	       * @ngdoc service
+	       * @name $animate
+	       * @kind object
+	       *
+	       * @description
+	       * The `$animate` service provides animation detection support while performing DOM operations (enter, leave and move) as well as during addClass and removeClass operations.
+	       * When any of these operations are run, the $animate service
+	       * will examine any JavaScript-defined animations (which are defined by using the $animateProvider provider object)
+	       * as well as any CSS-defined animations against the CSS classes present on the element once the DOM operation is run.
+	       *
+	       * The `$animate` service is used behind the scenes with pre-existing directives and animation with these directives
+	       * will work out of the box without any extra configuration.
+	       *
+	       * Requires the {@link ngAnimate `ngAnimate`} module to be installed.
+	       *
+	       * Please visit the {@link ngAnimate `ngAnimate`} module overview page learn more about how to use animations in your application.
+	       * ## Callback Promises
+	       * With AngularJS 1.3, each of the animation methods, on the `$animate` service, return a promise when called. The
+	       * promise itself is then resolved once the animation has completed itself, has been cancelled or has been
+	       * skipped due to animations being disabled. (Note that even if the animation is cancelled it will still
+	       * call the resolve function of the animation.)
+	       *
+	       * ```js
+	       * $animate.enter(element, container).then(function() {
+	       *   //...this is called once the animation is complete...
+	       * });
+	       * ```
+	       *
+	       * Also note that, due to the nature of the callback promise, if any Angular-specific code (like changing the scope,
+	       * location of the page, etc...) is executed within the callback promise then be sure to wrap the code using
+	       * `$scope.$apply(...)`;
+	       *
+	       * ```js
+	       * $animate.leave(element).then(function() {
+	       *   $scope.$apply(function() {
+	       *     $location.path('/new-page');
+	       *   });
+	       * });
+	       * ```
+	       *
+	       * An animation can also be cancelled by calling the `$animate.cancel(promise)` method with the provided
+	       * promise that was returned when the animation was started.
+	       *
+	       * ```js
+	       * var promise = $animate.addClass(element, 'super-long-animation').then(function() {
+	       *   //this will still be called even if cancelled
+	       * });
+	       *
+	       * element.on('click', function() {
+	       *   //tooo lazy to wait for the animation to end
+	       *   $animate.cancel(promise);
+	       * });
+	       * ```
+	       *
+	       * (Keep in mind that the promise cancellation is unique to `$animate` since promises in
+	       * general cannot be cancelled.)
+	       *
+	       */
+	      return {
+	        /**
+	         * @ngdoc method
+	         * @name $animate#animate
+	         * @kind function
+	         *
+	         * @description
+	         * Performs an inline animation on the element which applies the provided `to` and `from` CSS styles to the element.
+	         * If any detected CSS transition, keyframe or JavaScript matches the provided `className` value then the animation
+	         * will take on the provided styles. For example, if a transition animation is set for the given className then the
+	         * provided `from` and `to` styles will be applied alongside the given transition. If a JavaScript animation is
+	         * detected then the provided styles will be given in as function paramters.
+	         *
+	         * ```js
+	         * ngModule.animation('.my-inline-animation', function() {
+	         *   return {
+	         *     animate : function(element, className, from, to, done) {
+	         *       //styles
+	         *     }
+	         *   }
+	         * });
+	         * ```
+	         *
+	         * Below is a breakdown of each step that occurs during the `animate` animation:
+	         *
+	         * | Animation Step                                                                                                    | What the element class attribute looks like                |
+	         * |-------------------------------------------------------------------------------------------------------------------|------------------------------------------------------------|
+	         * | 1. $animate.animate(...) is called                                                                                | class="my-animation"                                       |
+	         * | 2. $animate waits for the next digest to start the animation                                                      | class="my-animation ng-animate"                            |
+	         * | 3. $animate runs the JavaScript-defined animations detected on the element                                        | class="my-animation ng-animate"                            |
+	         * | 4. the className class value is added to the element                                                              | class="my-animation ng-animate className"                  |
+	         * | 5. $animate scans the element styles to get the CSS transition/animation duration and delay                       | class="my-animation ng-animate className"                  |
+	         * | 6. $animate blocks all CSS transitions on the element to ensure the .className class styling is applied right away| class="my-animation ng-animate className"                  |
+	         * | 7. $animate applies the provided collection of `from` CSS styles to the element                                   | class="my-animation ng-animate className"                  |
+	         * | 8. $animate waits for a single animation frame (this performs a reflow)                                           | class="my-animation ng-animate className"                  |
+	         * | 9. $animate removes the CSS transition block placed on the element                                                | class="my-animation ng-animate className"                  |
+	         * | 10. the className-active class is added (this triggers the CSS transition/animation)                              | class="my-animation ng-animate className className-active" |
+	         * | 11. $animate applies the collection of `to` CSS styles to the element which are then handled by the transition    | class="my-animation ng-animate className className-active" |
+	         * | 12. $animate waits for the animation to complete (via events and timeout)                                         | class="my-animation ng-animate className className-active" |
+	         * | 13. The animation ends and all generated CSS classes are removed from the element                                 | class="my-animation"                                       |
+	         * | 14. The returned promise is resolved.                                                                             | class="my-animation"                                       |
+	         *
+	         * @param {DOMElement} element the element that will be the focus of the enter animation
+	         * @param {object} from a collection of CSS styles that will be applied to the element at the start of the animation
+	         * @param {object} to a collection of CSS styles that the element will animate towards
+	         * @param {string=} className an optional CSS class that will be added to the element for the duration of the animation (the default class is `ng-inline-animate`)
+	         * @param {object=} options an optional collection of options that will be picked up by the CSS transition/animation
+	         * @return {Promise} the animation callback promise
+	        */
+	        animate: function(element, from, to, className, options) {
+	          className = className || 'ng-inline-animate';
+	          options = parseAnimateOptions(options) || {};
+	          options.from = to ? from : null;
+	          options.to   = to ? to : from;
+
+	          return runAnimationPostDigest(function(done) {
+	            return performAnimation('animate', className, stripCommentsFromElement(element), null, null, noop, options, done);
+	          });
+	        },
+
+	        /**
+	         * @ngdoc method
+	         * @name $animate#enter
+	         * @kind function
+	         *
+	         * @description
+	         * Appends the element to the parentElement element that resides in the document and then runs the enter animation. Once
+	         * the animation is started, the following CSS classes will be present on the element for the duration of the animation:
+	         *
+	         * Below is a breakdown of each step that occurs during enter animation:
+	         *
+	         * | Animation Step                                                                                                    | What the element class attribute looks like              |
+	         * |-------------------------------------------------------------------------------------------------------------------|----------------------------------------------------------|
+	         * | 1. $animate.enter(...) is called                                                                                  | class="my-animation"                                     |
+	         * | 2. element is inserted into the parentElement element or beside the afterElement element                          | class="my-animation"                                     |
+	         * | 3. $animate waits for the next digest to start the animation                                                      | class="my-animation ng-animate"                          |
+	         * | 4. $animate runs the JavaScript-defined animations detected on the element                                        | class="my-animation ng-animate"                          |
+	         * | 5. the .ng-enter class is added to the element                                                                    | class="my-animation ng-animate ng-enter"                 |
+	         * | 6. $animate scans the element styles to get the CSS transition/animation duration and delay                       | class="my-animation ng-animate ng-enter"                 |
+	         * | 7. $animate blocks all CSS transitions on the element to ensure the .ng-enter class styling is applied right away | class="my-animation ng-animate ng-enter"                 |
+	         * | 8. $animate waits for a single animation frame (this performs a reflow)                                           | class="my-animation ng-animate ng-enter"                 |
+	         * | 9. $animate removes the CSS transition block placed on the element                                                | class="my-animation ng-animate ng-enter"                 |
+	         * | 10. the .ng-enter-active class is added (this triggers the CSS transition/animation)                              | class="my-animation ng-animate ng-enter ng-enter-active" |
+	         * | 11. $animate waits for the animation to complete (via events and timeout)                                         | class="my-animation ng-animate ng-enter ng-enter-active" |
+	         * | 12. The animation ends and all generated CSS classes are removed from the element                                 | class="my-animation"                                     |
+	         * | 13. The returned promise is resolved.                                                                             | class="my-animation"                                     |
+	         *
+	         * @param {DOMElement} element the element that will be the focus of the enter animation
+	         * @param {DOMElement} parentElement the parent element of the element that will be the focus of the enter animation
+	         * @param {DOMElement} afterElement the sibling element (which is the previous element) of the element that will be the focus of the enter animation
+	         * @param {object=} options an optional collection of options that will be picked up by the CSS transition/animation
+	         * @return {Promise} the animation callback promise
+	        */
+	        enter: function(element, parentElement, afterElement, options) {
+	          options = parseAnimateOptions(options);
+	          element = angular.element(element);
+	          parentElement = prepareElement(parentElement);
+	          afterElement = prepareElement(afterElement);
+
+	          classBasedAnimationsBlocked(element, true);
+	          $delegate.enter(element, parentElement, afterElement);
+	          return runAnimationPostDigest(function(done) {
+	            return performAnimation('enter', 'ng-enter', stripCommentsFromElement(element), parentElement, afterElement, noop, options, done);
+	          });
+	        },
+
+	        /**
+	         * @ngdoc method
+	         * @name $animate#leave
+	         * @kind function
+	         *
+	         * @description
+	         * Runs the leave animation operation and, upon completion, removes the element from the DOM. Once
+	         * the animation is started, the following CSS classes will be added for the duration of the animation:
+	         *
+	         * Below is a breakdown of each step that occurs during leave animation:
+	         *
+	         * | Animation Step                                                                                                    | What the element class attribute looks like              |
+	         * |-------------------------------------------------------------------------------------------------------------------|----------------------------------------------------------|
+	         * | 1. $animate.leave(...) is called                                                                                  | class="my-animation"                                     |
+	         * | 2. $animate runs the JavaScript-defined animations detected on the element                                        | class="my-animation ng-animate"                          |
+	         * | 3. $animate waits for the next digest to start the animation                                                      | class="my-animation ng-animate"                          |
+	         * | 4. the .ng-leave class is added to the element                                                                    | class="my-animation ng-animate ng-leave"                 |
+	         * | 5. $animate scans the element styles to get the CSS transition/animation duration and delay                       | class="my-animation ng-animate ng-leave"                 |
+	         * | 6. $animate blocks all CSS transitions on the element to ensure the .ng-leave class styling is applied right away | class="my-animation ng-animate ng-leave”                 |
+	         * | 7. $animate waits for a single animation frame (this performs a reflow)                                           | class="my-animation ng-animate ng-leave"                 |
+	         * | 8. $animate removes the CSS transition block placed on the element                                                | class="my-animation ng-animate ng-leave”                 |
+	         * | 9. the .ng-leave-active class is added (this triggers the CSS transition/animation)                               | class="my-animation ng-animate ng-leave ng-leave-active" |
+	         * | 10. $animate waits for the animation to complete (via events and timeout)                                         | class="my-animation ng-animate ng-leave ng-leave-active" |
+	         * | 11. The animation ends and all generated CSS classes are removed from the element                                 | class="my-animation"                                     |
+	         * | 12. The element is removed from the DOM                                                                           | ...                                                      |
+	         * | 13. The returned promise is resolved.                                                                             | ...                                                      |
+	         *
+	         * @param {DOMElement} element the element that will be the focus of the leave animation
+	         * @param {object=} options an optional collection of styles that will be picked up by the CSS transition/animation
+	         * @return {Promise} the animation callback promise
+	        */
+	        leave: function(element, options) {
+	          options = parseAnimateOptions(options);
+	          element = angular.element(element);
+
+	          cancelChildAnimations(element);
+	          classBasedAnimationsBlocked(element, true);
+	          return runAnimationPostDigest(function(done) {
+	            return performAnimation('leave', 'ng-leave', stripCommentsFromElement(element), null, null, function() {
+	              $delegate.leave(element);
+	            }, options, done);
+	          });
+	        },
+
+	        /**
+	         * @ngdoc method
+	         * @name $animate#move
+	         * @kind function
+	         *
+	         * @description
+	         * Fires the move DOM operation. Just before the animation starts, the animate service will either append it into the parentElement container or
+	         * add the element directly after the afterElement element if present. Then the move animation will be run. Once
+	         * the animation is started, the following CSS classes will be added for the duration of the animation:
+	         *
+	         * Below is a breakdown of each step that occurs during move animation:
+	         *
+	         * | Animation Step                                                                                                   | What the element class attribute looks like            |
+	         * |------------------------------------------------------------------------------------------------------------------|--------------------------------------------------------|
+	         * | 1. $animate.move(...) is called                                                                                  | class="my-animation"                                   |
+	         * | 2. element is moved into the parentElement element or beside the afterElement element                            | class="my-animation"                                   |
+	         * | 3. $animate waits for the next digest to start the animation                                                     | class="my-animation ng-animate"                        |
+	         * | 4. $animate runs the JavaScript-defined animations detected on the element                                       | class="my-animation ng-animate"                        |
+	         * | 5. the .ng-move class is added to the element                                                                    | class="my-animation ng-animate ng-move"                |
+	         * | 6. $animate scans the element styles to get the CSS transition/animation duration and delay                      | class="my-animation ng-animate ng-move"                |
+	         * | 7. $animate blocks all CSS transitions on the element to ensure the .ng-move class styling is applied right away | class="my-animation ng-animate ng-move”                |
+	         * | 8. $animate waits for a single animation frame (this performs a reflow)                                          | class="my-animation ng-animate ng-move"                |
+	         * | 9. $animate removes the CSS transition block placed on the element                                               | class="my-animation ng-animate ng-move”                |
+	         * | 10. the .ng-move-active class is added (this triggers the CSS transition/animation)                              | class="my-animation ng-animate ng-move ng-move-active" |
+	         * | 11. $animate waits for the animation to complete (via events and timeout)                                        | class="my-animation ng-animate ng-move ng-move-active" |
+	         * | 12. The animation ends and all generated CSS classes are removed from the element                                | class="my-animation"                                   |
+	         * | 13. The returned promise is resolved.                                                                            | class="my-animation"                                   |
+	         *
+	         * @param {DOMElement} element the element that will be the focus of the move animation
+	         * @param {DOMElement} parentElement the parentElement element of the element that will be the focus of the move animation
+	         * @param {DOMElement} afterElement the sibling element (which is the previous element) of the element that will be the focus of the move animation
+	         * @param {object=} options an optional collection of styles that will be picked up by the CSS transition/animation
+	         * @return {Promise} the animation callback promise
+	        */
+	        move: function(element, parentElement, afterElement, options) {
+	          options = parseAnimateOptions(options);
+	          element = angular.element(element);
+	          parentElement = prepareElement(parentElement);
+	          afterElement = prepareElement(afterElement);
+
+	          cancelChildAnimations(element);
+	          classBasedAnimationsBlocked(element, true);
+	          $delegate.move(element, parentElement, afterElement);
+	          return runAnimationPostDigest(function(done) {
+	            return performAnimation('move', 'ng-move', stripCommentsFromElement(element), parentElement, afterElement, noop, options, done);
+	          });
+	        },
+
+	        /**
+	         * @ngdoc method
+	         * @name $animate#addClass
+	         *
+	         * @description
+	         * Triggers a custom animation event based off the className variable and then attaches the className value to the element as a CSS class.
+	         * Unlike the other animation methods, the animate service will suffix the className value with {@type -add} in order to provide
+	         * the animate service the setup and active CSS classes in order to trigger the animation (this will be skipped if no CSS transitions
+	         * or keyframes are defined on the -add-active or base CSS class).
+	         *
+	         * Below is a breakdown of each step that occurs during addClass animation:
+	         *
+	         * | Animation Step                                                                                     | What the element class attribute looks like                      |
+	         * |----------------------------------------------------------------------------------------------------|------------------------------------------------------------------|
+	         * | 1. $animate.addClass(element, 'super') is called                                                   | class="my-animation"                                             |
+	         * | 2. $animate runs the JavaScript-defined animations detected on the element                         | class="my-animation ng-animate"                                  |
+	         * | 3. the .super-add class is added to the element                                                    | class="my-animation ng-animate super-add"                        |
+	         * | 4. $animate waits for a single animation frame (this performs a reflow)                            | class="my-animation ng-animate super-add"                        |
+	         * | 5. the .super and .super-add-active classes are added (this triggers the CSS transition/animation) | class="my-animation ng-animate super super-add super-add-active" |
+	         * | 6. $animate scans the element styles to get the CSS transition/animation duration and delay        | class="my-animation ng-animate super-add"                        |
+	         * | 7. $animate waits for the animation to complete (via events and timeout)                           | class="my-animation super super-add super-add-active"            |
+	         * | 8. The animation ends and all generated CSS classes are removed from the element                   | class="my-animation super"                                       |
+	         * | 9. The super class is kept on the element                                                          | class="my-animation super"                                       |
+	         * | 10. The returned promise is resolved.                                                              | class="my-animation super"                                       |
+	         *
+	         * @param {DOMElement} element the element that will be animated
+	         * @param {string} className the CSS class that will be added to the element and then animated
+	         * @param {object=} options an optional collection of styles that will be picked up by the CSS transition/animation
+	         * @return {Promise} the animation callback promise
+	        */
+	        addClass: function(element, className, options) {
+	          return this.setClass(element, className, [], options);
+	        },
+
+	        /**
+	         * @ngdoc method
+	         * @name $animate#removeClass
+	         *
+	         * @description
+	         * Triggers a custom animation event based off the className variable and then removes the CSS class provided by the className value
+	         * from the element. Unlike the other animation methods, the animate service will suffix the className value with {@type -remove} in
+	         * order to provide the animate service the setup and active CSS classes in order to trigger the animation (this will be skipped if
+	         * no CSS transitions or keyframes are defined on the -remove or base CSS classes).
+	         *
+	         * Below is a breakdown of each step that occurs during removeClass animation:
+	         *
+	         * | Animation Step                                                                                                   | What the element class attribute looks like                      |
+	         * |------------------------------------------------------------------------------------------------------------------|------------------------------------------------------------------|
+	         * | 1. $animate.removeClass(element, 'super') is called                                                              | class="my-animation super"                                       |
+	         * | 2. $animate runs the JavaScript-defined animations detected on the element                                       | class="my-animation super ng-animate"                            |
+	         * | 3. the .super-remove class is added to the element                                                               | class="my-animation super ng-animate super-remove"               |
+	         * | 4. $animate waits for a single animation frame (this performs a reflow)                                          | class="my-animation super ng-animate super-remove"               |
+	         * | 5. the .super-remove-active classes are added and .super is removed (this triggers the CSS transition/animation) | class="my-animation ng-animate super-remove super-remove-active" |
+	         * | 6. $animate scans the element styles to get the CSS transition/animation duration and delay                      | class="my-animation super ng-animate super-remove"               |
+	         * | 7. $animate waits for the animation to complete (via events and timeout)                                         | class="my-animation ng-animate super-remove super-remove-active" |
+	         * | 8. The animation ends and all generated CSS classes are removed from the element                                 | class="my-animation"                                             |
+	         * | 9. The returned promise is resolved.                                                                             | class="my-animation"                                             |
+	         *
+	         *
+	         * @param {DOMElement} element the element that will be animated
+	         * @param {string} className the CSS class that will be animated and then removed from the element
+	         * @param {object=} options an optional collection of styles that will be picked up by the CSS transition/animation
+	         * @return {Promise} the animation callback promise
+	        */
+	        removeClass: function(element, className, options) {
+	          return this.setClass(element, [], className, options);
+	        },
+
+	        /**
+	         *
+	         * @ngdoc method
+	         * @name $animate#setClass
+	         *
+	         * @description Adds and/or removes the given CSS classes to and from the element.
+	         * Once complete, the done() callback will be fired (if provided).
+	         *
+	         * | Animation Step                                                                                                                       | What the element class attribute looks like                                          |
+	         * |--------------------------------------------------------------------------------------------------------------------------------------|--------------------------------------------------------------------------------------|
+	         * | 1. $animate.removeClass(element, ‘on’, ‘off’) is called                                                                              | class="my-animation super off”                                                       |
+	         * | 2. $animate runs the JavaScript-defined animations detected on the element                                                           | class="my-animation super ng-animate off”                                            |
+	         * | 3. the .on-add and .off-remove classes are added to the element                                                                      | class="my-animation ng-animate on-add off-remove off”                                |
+	         * | 4. $animate waits for a single animation frame (this performs a reflow)                                                              | class="my-animation ng-animate on-add off-remove off”                                |
+	         * | 5. the .on, .on-add-active and .off-remove-active classes are added and .off is removed (this triggers the CSS transition/animation) | class="my-animation ng-animate on on-add on-add-active off-remove off-remove-active” |
+	         * | 6. $animate scans the element styles to get the CSS transition/animation duration and delay                                          | class="my-animation ng-animate on on-add on-add-active off-remove off-remove-active" |
+	         * | 7. $animate waits for the animation to complete (via events and timeout)                                                             | class="my-animation ng-animate on on-add on-add-active off-remove off-remove-active" |
+	         * | 8. The animation ends and all generated CSS classes are removed from the element                                                     | class="my-animation on"                                                              |
+	         * | 9. The returned promise is resolved.                                                                                                 | class="my-animation on"                                                              |
+	         *
+	         * @param {DOMElement} element the element which will have its CSS classes changed
+	         *   removed from it
+	         * @param {string} add the CSS classes which will be added to the element
+	         * @param {string} remove the CSS class which will be removed from the element
+	         *   CSS classes have been set on the element
+	         * @param {object=} options an optional collection of styles that will be picked up by the CSS transition/animation
+	         * @return {Promise} the animation callback promise
+	         */
+	        setClass: function(element, add, remove, options) {
+	          options = parseAnimateOptions(options);
+
+	          var STORAGE_KEY = '$$animateClasses';
+	          element = angular.element(element);
+	          element = stripCommentsFromElement(element);
+
+	          if (classBasedAnimationsBlocked(element)) {
+	            return $delegate.$$setClassImmediately(element, add, remove, options);
+	          }
+
+	          // we're using a combined array for both the add and remove
+	          // operations since the ORDER OF addClass and removeClass matters
+	          var classes, cache = element.data(STORAGE_KEY);
+	          var hasCache = !!cache;
+	          if (!cache) {
+	            cache = {};
+	            cache.classes = {};
+	          }
+	          classes = cache.classes;
+
+	          add = isArray(add) ? add : add.split(' ');
+	          forEach(add, function(c) {
+	            if (c && c.length) {
+	              classes[c] = true;
+	            }
+	          });
+
+	          remove = isArray(remove) ? remove : remove.split(' ');
+	          forEach(remove, function(c) {
+	            if (c && c.length) {
+	              classes[c] = false;
+	            }
+	          });
+
+	          if (hasCache) {
+	            if (options && cache.options) {
+	              cache.options = angular.extend(cache.options || {}, options);
+	            }
+
+	            //the digest cycle will combine all the animations into one function
+	            return cache.promise;
+	          } else {
+	            element.data(STORAGE_KEY, cache = {
+	              classes: classes,
+	              options: options
+	            });
+	          }
+
+	          return cache.promise = runAnimationPostDigest(function(done) {
+	            var parentElement = element.parent();
+	            var elementNode = extractElementNode(element);
+	            var parentNode = elementNode.parentNode;
+	            // TODO(matsko): move this code into the animationsDisabled() function once #8092 is fixed
+	            if (!parentNode || parentNode['$$NG_REMOVED'] || elementNode['$$NG_REMOVED']) {
+	              done();
+	              return;
+	            }
+
+	            var cache = element.data(STORAGE_KEY);
+	            element.removeData(STORAGE_KEY);
+
+	            var state = element.data(NG_ANIMATE_STATE) || {};
+	            var classes = resolveElementClasses(element, cache, state.active);
+	            return !classes
+	              ? done()
+	              : performAnimation('setClass', classes, element, parentElement, null, function() {
+	                  if (classes[0]) $delegate.$$addClassImmediately(element, classes[0]);
+	                  if (classes[1]) $delegate.$$removeClassImmediately(element, classes[1]);
+	                }, cache.options, done);
+	          });
+	        },
+
+	        /**
+	         * @ngdoc method
+	         * @name $animate#cancel
+	         * @kind function
+	         *
+	         * @param {Promise} animationPromise The animation promise that is returned when an animation is started.
+	         *
+	         * @description
+	         * Cancels the provided animation.
+	        */
+	        cancel: function(promise) {
+	          promise.$$cancelFn();
+	        },
+
+	        /**
+	         * @ngdoc method
+	         * @name $animate#enabled
+	         * @kind function
+	         *
+	         * @param {boolean=} value If provided then set the animation on or off.
+	         * @param {DOMElement=} element If provided then the element will be used to represent the enable/disable operation
+	         * @return {boolean} Current animation state.
+	         *
+	         * @description
+	         * Globally enables/disables animations.
+	         *
+	        */
+	        enabled: function(value, element) {
+	          switch (arguments.length) {
+	            case 2:
+	              if (value) {
+	                cleanup(element);
+	              } else {
+	                var data = element.data(NG_ANIMATE_STATE) || {};
+	                data.disabled = true;
+	                element.data(NG_ANIMATE_STATE, data);
+	              }
+	            break;
+
+	            case 1:
+	              rootAnimateState.disabled = !value;
+	            break;
+
+	            default:
+	              value = !rootAnimateState.disabled;
+	            break;
+	          }
+	          return !!value;
+	         }
+	      };
+
+	      /*
+	        all animations call this shared animation triggering function internally.
+	        The animationEvent variable refers to the JavaScript animation event that will be triggered
+	        and the className value is the name of the animation that will be applied within the
+	        CSS code. Element, parentElement and afterElement are provided DOM elements for the animation
+	        and the onComplete callback will be fired once the animation is fully complete.
+	      */
+	      function performAnimation(animationEvent, className, element, parentElement, afterElement, domOperation, options, doneCallback) {
+	        var noopCancel = noop;
+	        var runner = animationRunner(element, animationEvent, className, options);
+	        if (!runner) {
+	          fireDOMOperation();
+	          fireBeforeCallbackAsync();
+	          fireAfterCallbackAsync();
+	          closeAnimation();
+	          return noopCancel;
+	        }
+
+	        animationEvent = runner.event;
+	        className = runner.className;
+	        var elementEvents = angular.element._data(runner.node);
+	        elementEvents = elementEvents && elementEvents.events;
+
+	        if (!parentElement) {
+	          parentElement = afterElement ? afterElement.parent() : element.parent();
+	        }
+
+	        //skip the animation if animations are disabled, a parent is already being animated,
+	        //the element is not currently attached to the document body or then completely close
+	        //the animation if any matching animations are not found at all.
+	        //NOTE: IE8 + IE9 should close properly (run closeAnimation()) in case an animation was found.
+	        if (animationsDisabled(element, parentElement)) {
+	          fireDOMOperation();
+	          fireBeforeCallbackAsync();
+	          fireAfterCallbackAsync();
+	          closeAnimation();
+	          return noopCancel;
+	        }
+
+	        var ngAnimateState  = element.data(NG_ANIMATE_STATE) || {};
+	        var runningAnimations     = ngAnimateState.active || {};
+	        var totalActiveAnimations = ngAnimateState.totalActive || 0;
+	        var lastAnimation         = ngAnimateState.last;
+	        var skipAnimation = false;
+
+	        if (totalActiveAnimations > 0) {
+	          var animationsToCancel = [];
+	          if (!runner.isClassBased) {
+	            if (animationEvent == 'leave' && runningAnimations['ng-leave']) {
+	              skipAnimation = true;
+	            } else {
+	              //cancel all animations when a structural animation takes place
+	              for (var klass in runningAnimations) {
+	                animationsToCancel.push(runningAnimations[klass]);
+	              }
+	              ngAnimateState = {};
+	              cleanup(element, true);
+	            }
+	          } else if (lastAnimation.event == 'setClass') {
+	            animationsToCancel.push(lastAnimation);
+	            cleanup(element, className);
+	          }
+	          else if (runningAnimations[className]) {
+	            var current = runningAnimations[className];
+	            if (current.event == animationEvent) {
+	              skipAnimation = true;
+	            } else {
+	              animationsToCancel.push(current);
+	              cleanup(element, className);
+	            }
+	          }
+
+	          if (animationsToCancel.length > 0) {
+	            forEach(animationsToCancel, function(operation) {
+	              operation.cancel();
+	            });
+	          }
+	        }
+
+	        if (runner.isClassBased
+	            && !runner.isSetClassOperation
+	            && animationEvent != 'animate'
+	            && !skipAnimation) {
+	          skipAnimation = (animationEvent == 'addClass') == element.hasClass(className); //opposite of XOR
+	        }
+
+	        if (skipAnimation) {
+	          fireDOMOperation();
+	          fireBeforeCallbackAsync();
+	          fireAfterCallbackAsync();
+	          fireDoneCallbackAsync();
+	          return noopCancel;
+	        }
+
+	        runningAnimations     = ngAnimateState.active || {};
+	        totalActiveAnimations = ngAnimateState.totalActive || 0;
+
+	        if (animationEvent == 'leave') {
+	          //there's no need to ever remove the listener since the element
+	          //will be removed (destroyed) after the leave animation ends or
+	          //is cancelled midway
+	          element.one('$destroy', function(e) {
+	            var element = angular.element(this);
+	            var state = element.data(NG_ANIMATE_STATE);
+	            if (state) {
+	              var activeLeaveAnimation = state.active['ng-leave'];
+	              if (activeLeaveAnimation) {
+	                activeLeaveAnimation.cancel();
+	                cleanup(element, 'ng-leave');
+	              }
+	            }
+	          });
+	        }
+
+	        //the ng-animate class does nothing, but it's here to allow for
+	        //parent animations to find and cancel child animations when needed
+	        element.addClass(NG_ANIMATE_CLASS_NAME);
+	        if (options && options.tempClasses) {
+	          forEach(options.tempClasses, function(className) {
+	            element.addClass(className);
+	          });
+	        }
+
+	        var localAnimationCount = globalAnimationCounter++;
+	        totalActiveAnimations++;
+	        runningAnimations[className] = runner;
+
+	        element.data(NG_ANIMATE_STATE, {
+	          last: runner,
+	          active: runningAnimations,
+	          index: localAnimationCount,
+	          totalActive: totalActiveAnimations
+	        });
+
+	        //first we run the before animations and when all of those are complete
+	        //then we perform the DOM operation and run the next set of animations
+	        fireBeforeCallbackAsync();
+	        runner.before(function(cancelled) {
+	          var data = element.data(NG_ANIMATE_STATE);
+	          cancelled = cancelled ||
+	                        !data || !data.active[className] ||
+	                        (runner.isClassBased && data.active[className].event != animationEvent);
+
+	          fireDOMOperation();
+	          if (cancelled === true) {
+	            closeAnimation();
+	          } else {
+	            fireAfterCallbackAsync();
+	            runner.after(closeAnimation);
+	          }
+	        });
+
+	        return runner.cancel;
+
+	        function fireDOMCallback(animationPhase) {
+	          var eventName = '$animate:' + animationPhase;
+	          if (elementEvents && elementEvents[eventName] && elementEvents[eventName].length > 0) {
+	            $$asyncCallback(function() {
+	              element.triggerHandler(eventName, {
+	                event: animationEvent,
+	                className: className
+	              });
+	            });
+	          }
+	        }
+
+	        function fireBeforeCallbackAsync() {
+	          fireDOMCallback('before');
+	        }
+
+	        function fireAfterCallbackAsync() {
+	          fireDOMCallback('after');
+	        }
+
+	        function fireDoneCallbackAsync() {
+	          fireDOMCallback('close');
+	          doneCallback();
+	        }
+
+	        //it is less complicated to use a flag than managing and canceling
+	        //timeouts containing multiple callbacks.
+	        function fireDOMOperation() {
+	          if (!fireDOMOperation.hasBeenRun) {
+	            fireDOMOperation.hasBeenRun = true;
+	            domOperation();
+	          }
+	        }
+
+	        function closeAnimation() {
+	          if (!closeAnimation.hasBeenRun) {
+	            if (runner) { //the runner doesn't exist if it fails to instantiate
+	              runner.applyStyles();
+	            }
+
+	            closeAnimation.hasBeenRun = true;
+	            if (options && options.tempClasses) {
+	              forEach(options.tempClasses, function(className) {
+	                element.removeClass(className);
+	              });
+	            }
+
+	            var data = element.data(NG_ANIMATE_STATE);
+	            if (data) {
+
+	              /* only structural animations wait for reflow before removing an
+	                 animation, but class-based animations don't. An example of this
+	                 failing would be when a parent HTML tag has a ng-class attribute
+	                 causing ALL directives below to skip animations during the digest */
+	              if (runner && runner.isClassBased) {
+	                cleanup(element, className);
+	              } else {
+	                $$asyncCallback(function() {
+	                  var data = element.data(NG_ANIMATE_STATE) || {};
+	                  if (localAnimationCount == data.index) {
+	                    cleanup(element, className, animationEvent);
+	                  }
+	                });
+	                element.data(NG_ANIMATE_STATE, data);
+	              }
+	            }
+	            fireDoneCallbackAsync();
+	          }
+	        }
+	      }
+
+	      function cancelChildAnimations(element) {
+	        var node = extractElementNode(element);
+	        if (node) {
+	          var nodes = angular.isFunction(node.getElementsByClassName) ?
+	            node.getElementsByClassName(NG_ANIMATE_CLASS_NAME) :
+	            node.querySelectorAll('.' + NG_ANIMATE_CLASS_NAME);
+	          forEach(nodes, function(element) {
+	            element = angular.element(element);
+	            var data = element.data(NG_ANIMATE_STATE);
+	            if (data && data.active) {
+	              forEach(data.active, function(runner) {
+	                runner.cancel();
+	              });
+	            }
+	          });
+	        }
+	      }
+
+	      function cleanup(element, className) {
+	        if (isMatchingElement(element, $rootElement)) {
+	          if (!rootAnimateState.disabled) {
+	            rootAnimateState.running = false;
+	            rootAnimateState.structural = false;
+	          }
+	        } else if (className) {
+	          var data = element.data(NG_ANIMATE_STATE) || {};
+
+	          var removeAnimations = className === true;
+	          if (!removeAnimations && data.active && data.active[className]) {
+	            data.totalActive--;
+	            delete data.active[className];
+	          }
+
+	          if (removeAnimations || !data.totalActive) {
+	            element.removeClass(NG_ANIMATE_CLASS_NAME);
+	            element.removeData(NG_ANIMATE_STATE);
+	          }
+	        }
+	      }
+
+	      function animationsDisabled(element, parentElement) {
+	        if (rootAnimateState.disabled) {
+	          return true;
+	        }
+
+	        if (isMatchingElement(element, $rootElement)) {
+	          return rootAnimateState.running;
+	        }
+
+	        var allowChildAnimations, parentRunningAnimation, hasParent;
+	        do {
+	          //the element did not reach the root element which means that it
+	          //is not apart of the DOM. Therefore there is no reason to do
+	          //any animations on it
+	          if (parentElement.length === 0) break;
+
+	          var isRoot = isMatchingElement(parentElement, $rootElement);
+	          var state = isRoot ? rootAnimateState : (parentElement.data(NG_ANIMATE_STATE) || {});
+	          if (state.disabled) {
+	            return true;
+	          }
+
+	          //no matter what, for an animation to work it must reach the root element
+	          //this implies that the element is attached to the DOM when the animation is run
+	          if (isRoot) {
+	            hasParent = true;
+	          }
+
+	          //once a flag is found that is strictly false then everything before
+	          //it will be discarded and all child animations will be restricted
+	          if (allowChildAnimations !== false) {
+	            var animateChildrenFlag = parentElement.data(NG_ANIMATE_CHILDREN);
+	            if (angular.isDefined(animateChildrenFlag)) {
+	              allowChildAnimations = animateChildrenFlag;
+	            }
+	          }
+
+	          parentRunningAnimation = parentRunningAnimation ||
+	                                   state.running ||
+	                                   (state.last && !state.last.isClassBased);
+	        }
+	        while (parentElement = parentElement.parent());
+
+	        return !hasParent || (!allowChildAnimations && parentRunningAnimation);
+	      }
+	    }]);
+
+	    $animateProvider.register('', ['$window', '$sniffer', '$timeout', '$$animateReflow',
+	                           function($window,   $sniffer,   $timeout,   $$animateReflow) {
+	      // Detect proper transitionend/animationend event names.
+	      var CSS_PREFIX = '', TRANSITION_PROP, TRANSITIONEND_EVENT, ANIMATION_PROP, ANIMATIONEND_EVENT;
+
+	      // If unprefixed events are not supported but webkit-prefixed are, use the latter.
+	      // Otherwise, just use W3C names, browsers not supporting them at all will just ignore them.
+	      // Note: Chrome implements `window.onwebkitanimationend` and doesn't implement `window.onanimationend`
+	      // but at the same time dispatches the `animationend` event and not `webkitAnimationEnd`.
+	      // Register both events in case `window.onanimationend` is not supported because of that,
+	      // do the same for `transitionend` as Safari is likely to exhibit similar behavior.
+	      // Also, the only modern browser that uses vendor prefixes for transitions/keyframes is webkit
+	      // therefore there is no reason to test anymore for other vendor prefixes: http://caniuse.com/#search=transition
+	      if (window.ontransitionend === undefined && window.onwebkittransitionend !== undefined) {
+	        CSS_PREFIX = '-webkit-';
+	        TRANSITION_PROP = 'WebkitTransition';
+	        TRANSITIONEND_EVENT = 'webkitTransitionEnd transitionend';
+	      } else {
+	        TRANSITION_PROP = 'transition';
+	        TRANSITIONEND_EVENT = 'transitionend';
+	      }
+
+	      if (window.onanimationend === undefined && window.onwebkitanimationend !== undefined) {
+	        CSS_PREFIX = '-webkit-';
+	        ANIMATION_PROP = 'WebkitAnimation';
+	        ANIMATIONEND_EVENT = 'webkitAnimationEnd animationend';
+	      } else {
+	        ANIMATION_PROP = 'animation';
+	        ANIMATIONEND_EVENT = 'animationend';
+	      }
+
+	      var DURATION_KEY = 'Duration';
+	      var PROPERTY_KEY = 'Property';
+	      var DELAY_KEY = 'Delay';
+	      var ANIMATION_ITERATION_COUNT_KEY = 'IterationCount';
+	      var ANIMATION_PLAYSTATE_KEY = 'PlayState';
+	      var NG_ANIMATE_PARENT_KEY = '$$ngAnimateKey';
+	      var NG_ANIMATE_CSS_DATA_KEY = '$$ngAnimateCSS3Data';
+	      var ELAPSED_TIME_MAX_DECIMAL_PLACES = 3;
+	      var CLOSING_TIME_BUFFER = 1.5;
+	      var ONE_SECOND = 1000;
+
+	      var lookupCache = {};
+	      var parentCounter = 0;
+	      var animationReflowQueue = [];
+	      var cancelAnimationReflow;
+	      function clearCacheAfterReflow() {
+	        if (!cancelAnimationReflow) {
+	          cancelAnimationReflow = $$animateReflow(function() {
+	            animationReflowQueue = [];
+	            cancelAnimationReflow = null;
+	            lookupCache = {};
+	          });
+	        }
+	      }
+
+	      function afterReflow(element, callback) {
+	        if (cancelAnimationReflow) {
+	          cancelAnimationReflow();
+	        }
+	        animationReflowQueue.push(callback);
+	        cancelAnimationReflow = $$animateReflow(function() {
+	          forEach(animationReflowQueue, function(fn) {
+	            fn();
+	          });
+
+	          animationReflowQueue = [];
+	          cancelAnimationReflow = null;
+	          lookupCache = {};
+	        });
+	      }
+
+	      var closingTimer = null;
+	      var closingTimestamp = 0;
+	      var animationElementQueue = [];
+	      function animationCloseHandler(element, totalTime) {
+	        var node = extractElementNode(element);
+	        element = angular.element(node);
+
+	        //this item will be garbage collected by the closing
+	        //animation timeout
+	        animationElementQueue.push(element);
+
+	        //but it may not need to cancel out the existing timeout
+	        //if the timestamp is less than the previous one
+	        var futureTimestamp = Date.now() + totalTime;
+	        if (futureTimestamp <= closingTimestamp) {
+	          return;
+	        }
+
+	        $timeout.cancel(closingTimer);
+
+	        closingTimestamp = futureTimestamp;
+	        closingTimer = $timeout(function() {
+	          closeAllAnimations(animationElementQueue);
+	          animationElementQueue = [];
+	        }, totalTime, false);
+	      }
+
+	      function closeAllAnimations(elements) {
+	        forEach(elements, function(element) {
+	          var elementData = element.data(NG_ANIMATE_CSS_DATA_KEY);
+	          if (elementData) {
+	            forEach(elementData.closeAnimationFns, function(fn) {
+	              fn();
+	            });
+	          }
+	        });
+	      }
+
+	      function getElementAnimationDetails(element, cacheKey) {
+	        var data = cacheKey ? lookupCache[cacheKey] : null;
+	        if (!data) {
+	          var transitionDuration = 0;
+	          var transitionDelay = 0;
+	          var animationDuration = 0;
+	          var animationDelay = 0;
+
+	          //we want all the styles defined before and after
+	          forEach(element, function(element) {
+	            if (element.nodeType == ELEMENT_NODE) {
+	              var elementStyles = $window.getComputedStyle(element) || {};
+
+	              var transitionDurationStyle = elementStyles[TRANSITION_PROP + DURATION_KEY];
+	              transitionDuration = Math.max(parseMaxTime(transitionDurationStyle), transitionDuration);
+
+	              var transitionDelayStyle = elementStyles[TRANSITION_PROP + DELAY_KEY];
+	              transitionDelay  = Math.max(parseMaxTime(transitionDelayStyle), transitionDelay);
+
+	              var animationDelayStyle = elementStyles[ANIMATION_PROP + DELAY_KEY];
+	              animationDelay   = Math.max(parseMaxTime(elementStyles[ANIMATION_PROP + DELAY_KEY]), animationDelay);
+
+	              var aDuration  = parseMaxTime(elementStyles[ANIMATION_PROP + DURATION_KEY]);
+
+	              if (aDuration > 0) {
+	                aDuration *= parseInt(elementStyles[ANIMATION_PROP + ANIMATION_ITERATION_COUNT_KEY], 10) || 1;
+	              }
+	              animationDuration = Math.max(aDuration, animationDuration);
+	            }
+	          });
+	          data = {
+	            total: 0,
+	            transitionDelay: transitionDelay,
+	            transitionDuration: transitionDuration,
+	            animationDelay: animationDelay,
+	            animationDuration: animationDuration
+	          };
+	          if (cacheKey) {
+	            lookupCache[cacheKey] = data;
+	          }
+	        }
+	        return data;
+	      }
+
+	      function parseMaxTime(str) {
+	        var maxValue = 0;
+	        var values = isString(str) ?
+	          str.split(/\s*,\s*/) :
+	          [];
+	        forEach(values, function(value) {
+	          maxValue = Math.max(parseFloat(value) || 0, maxValue);
+	        });
+	        return maxValue;
+	      }
+
+	      function getCacheKey(element) {
+	        var parentElement = element.parent();
+	        var parentID = parentElement.data(NG_ANIMATE_PARENT_KEY);
+	        if (!parentID) {
+	          parentElement.data(NG_ANIMATE_PARENT_KEY, ++parentCounter);
+	          parentID = parentCounter;
+	        }
+	        return parentID + '-' + extractElementNode(element).getAttribute('class');
+	      }
+
+	      function animateSetup(animationEvent, element, className, styles) {
+	        var structural = ['ng-enter','ng-leave','ng-move'].indexOf(className) >= 0;
+
+	        var cacheKey = getCacheKey(element);
+	        var eventCacheKey = cacheKey + ' ' + className;
+	        var itemIndex = lookupCache[eventCacheKey] ? ++lookupCache[eventCacheKey].total : 0;
+
+	        var stagger = {};
+	        if (itemIndex > 0) {
+	          var staggerClassName = className + '-stagger';
+	          var staggerCacheKey = cacheKey + ' ' + staggerClassName;
+	          var applyClasses = !lookupCache[staggerCacheKey];
+
+	          applyClasses && element.addClass(staggerClassName);
+
+	          stagger = getElementAnimationDetails(element, staggerCacheKey);
+
+	          applyClasses && element.removeClass(staggerClassName);
+	        }
+
+	        element.addClass(className);
+
+	        var formerData = element.data(NG_ANIMATE_CSS_DATA_KEY) || {};
+	        var timings = getElementAnimationDetails(element, eventCacheKey);
+	        var transitionDuration = timings.transitionDuration;
+	        var animationDuration = timings.animationDuration;
+
+	        if (structural && transitionDuration === 0 && animationDuration === 0) {
+	          element.removeClass(className);
+	          return false;
+	        }
+
+	        var blockTransition = styles || (structural && transitionDuration > 0);
+	        var blockAnimation = animationDuration > 0 &&
+	                             stagger.animationDelay > 0 &&
+	                             stagger.animationDuration === 0;
+
+	        var closeAnimationFns = formerData.closeAnimationFns || [];
+	        element.data(NG_ANIMATE_CSS_DATA_KEY, {
+	          stagger: stagger,
+	          cacheKey: eventCacheKey,
+	          running: formerData.running || 0,
+	          itemIndex: itemIndex,
+	          blockTransition: blockTransition,
+	          closeAnimationFns: closeAnimationFns
+	        });
+
+	        var node = extractElementNode(element);
+
+	        if (blockTransition) {
+	          blockTransitions(node, true);
+	          if (styles) {
+	            element.css(styles);
+	          }
+	        }
+
+	        if (blockAnimation) {
+	          blockAnimations(node, true);
+	        }
+
+	        return true;
+	      }
+
+	      function animateRun(animationEvent, element, className, activeAnimationComplete, styles) {
+	        var node = extractElementNode(element);
+	        var elementData = element.data(NG_ANIMATE_CSS_DATA_KEY);
+	        if (node.getAttribute('class').indexOf(className) == -1 || !elementData) {
+	          activeAnimationComplete();
+	          return;
+	        }
+
+	        var activeClassName = '';
+	        var pendingClassName = '';
+	        forEach(className.split(' '), function(klass, i) {
+	          var prefix = (i > 0 ? ' ' : '') + klass;
+	          activeClassName += prefix + '-active';
+	          pendingClassName += prefix + '-pending';
+	        });
+
+	        var style = '';
+	        var appliedStyles = [];
+	        var itemIndex = elementData.itemIndex;
+	        var stagger = elementData.stagger;
+	        var staggerTime = 0;
+	        if (itemIndex > 0) {
+	          var transitionStaggerDelay = 0;
+	          if (stagger.transitionDelay > 0 && stagger.transitionDuration === 0) {
+	            transitionStaggerDelay = stagger.transitionDelay * itemIndex;
+	          }
+
+	          var animationStaggerDelay = 0;
+	          if (stagger.animationDelay > 0 && stagger.animationDuration === 0) {
+	            animationStaggerDelay = stagger.animationDelay * itemIndex;
+	            appliedStyles.push(CSS_PREFIX + 'animation-play-state');
+	          }
+
+	          staggerTime = Math.round(Math.max(transitionStaggerDelay, animationStaggerDelay) * 100) / 100;
+	        }
+
+	        if (!staggerTime) {
+	          element.addClass(activeClassName);
+	          if (elementData.blockTransition) {
+	            blockTransitions(node, false);
+	          }
+	        }
+
+	        var eventCacheKey = elementData.cacheKey + ' ' + activeClassName;
+	        var timings = getElementAnimationDetails(element, eventCacheKey);
+	        var maxDuration = Math.max(timings.transitionDuration, timings.animationDuration);
+	        if (maxDuration === 0) {
+	          element.removeClass(activeClassName);
+	          animateClose(element, className);
+	          activeAnimationComplete();
+	          return;
+	        }
+
+	        if (!staggerTime && styles) {
+	          if (!timings.transitionDuration) {
+	            element.css('transition', timings.animationDuration + 's linear all');
+	            appliedStyles.push('transition');
+	          }
+	          element.css(styles);
+	        }
+
+	        var maxDelay = Math.max(timings.transitionDelay, timings.animationDelay);
+	        var maxDelayTime = maxDelay * ONE_SECOND;
+
+	        if (appliedStyles.length > 0) {
+	          //the element being animated may sometimes contain comment nodes in
+	          //the jqLite object, so we're safe to use a single variable to house
+	          //the styles since there is always only one element being animated
+	          var oldStyle = node.getAttribute('style') || '';
+	          if (oldStyle.charAt(oldStyle.length-1) !== ';') {
+	            oldStyle += ';';
+	          }
+	          node.setAttribute('style', oldStyle + ' ' + style);
+	        }
+
+	        var startTime = Date.now();
+	        var css3AnimationEvents = ANIMATIONEND_EVENT + ' ' + TRANSITIONEND_EVENT;
+	        var animationTime     = (maxDelay + maxDuration) * CLOSING_TIME_BUFFER;
+	        var totalTime         = (staggerTime + animationTime) * ONE_SECOND;
+
+	        var staggerTimeout;
+	        if (staggerTime > 0) {
+	          element.addClass(pendingClassName);
+	          staggerTimeout = $timeout(function() {
+	            staggerTimeout = null;
+
+	            if (timings.transitionDuration > 0) {
+	              blockTransitions(node, false);
+	            }
+	            if (timings.animationDuration > 0) {
+	              blockAnimations(node, false);
+	            }
+
+	            element.addClass(activeClassName);
+	            element.removeClass(pendingClassName);
+
+	            if (styles) {
+	              if (timings.transitionDuration === 0) {
+	                element.css('transition', timings.animationDuration + 's linear all');
+	              }
+	              element.css(styles);
+	              appliedStyles.push('transition');
+	            }
+	          }, staggerTime * ONE_SECOND, false);
+	        }
+
+	        element.on(css3AnimationEvents, onAnimationProgress);
+	        elementData.closeAnimationFns.push(function() {
+	          onEnd();
+	          activeAnimationComplete();
+	        });
+
+	        elementData.running++;
+	        animationCloseHandler(element, totalTime);
+	        return onEnd;
+
+	        // This will automatically be called by $animate so
+	        // there is no need to attach this internally to the
+	        // timeout done method.
+	        function onEnd() {
+	          element.off(css3AnimationEvents, onAnimationProgress);
+	          element.removeClass(activeClassName);
+	          element.removeClass(pendingClassName);
+	          if (staggerTimeout) {
+	            $timeout.cancel(staggerTimeout);
+	          }
+	          animateClose(element, className);
+	          var node = extractElementNode(element);
+	          for (var i in appliedStyles) {
+	            node.style.removeProperty(appliedStyles[i]);
+	          }
+	        }
+
+	        function onAnimationProgress(event) {
+	          event.stopPropagation();
+	          var ev = event.originalEvent || event;
+	          var timeStamp = ev.$manualTimeStamp || ev.timeStamp || Date.now();
+
+	          /* Firefox (or possibly just Gecko) likes to not round values up
+	           * when a ms measurement is used for the animation */
+	          var elapsedTime = parseFloat(ev.elapsedTime.toFixed(ELAPSED_TIME_MAX_DECIMAL_PLACES));
+
+	          /* $manualTimeStamp is a mocked timeStamp value which is set
+	           * within browserTrigger(). This is only here so that tests can
+	           * mock animations properly. Real events fallback to event.timeStamp,
+	           * or, if they don't, then a timeStamp is automatically created for them.
+	           * We're checking to see if the timeStamp surpasses the expected delay,
+	           * but we're using elapsedTime instead of the timeStamp on the 2nd
+	           * pre-condition since animations sometimes close off early */
+	          if (Math.max(timeStamp - startTime, 0) >= maxDelayTime && elapsedTime >= maxDuration) {
+	            activeAnimationComplete();
+	          }
+	        }
+	      }
+
+	      function blockTransitions(node, bool) {
+	        node.style[TRANSITION_PROP + PROPERTY_KEY] = bool ? 'none' : '';
+	      }
+
+	      function blockAnimations(node, bool) {
+	        node.style[ANIMATION_PROP + ANIMATION_PLAYSTATE_KEY] = bool ? 'paused' : '';
+	      }
+
+	      function animateBefore(animationEvent, element, className, styles) {
+	        if (animateSetup(animationEvent, element, className, styles)) {
+	          return function(cancelled) {
+	            cancelled && animateClose(element, className);
+	          };
+	        }
+	      }
+
+	      function animateAfter(animationEvent, element, className, afterAnimationComplete, styles) {
+	        if (element.data(NG_ANIMATE_CSS_DATA_KEY)) {
+	          return animateRun(animationEvent, element, className, afterAnimationComplete, styles);
+	        } else {
+	          animateClose(element, className);
+	          afterAnimationComplete();
+	        }
+	      }
+
+	      function animate(animationEvent, element, className, animationComplete, options) {
+	        //If the animateSetup function doesn't bother returning a
+	        //cancellation function then it means that there is no animation
+	        //to perform at all
+	        var preReflowCancellation = animateBefore(animationEvent, element, className, options.from);
+	        if (!preReflowCancellation) {
+	          clearCacheAfterReflow();
+	          animationComplete();
+	          return;
+	        }
+
+	        //There are two cancellation functions: one is before the first
+	        //reflow animation and the second is during the active state
+	        //animation. The first function will take care of removing the
+	        //data from the element which will not make the 2nd animation
+	        //happen in the first place
+	        var cancel = preReflowCancellation;
+	        afterReflow(element, function() {
+	          //once the reflow is complete then we point cancel to
+	          //the new cancellation function which will remove all of the
+	          //animation properties from the active animation
+	          cancel = animateAfter(animationEvent, element, className, animationComplete, options.to);
+	        });
+
+	        return function(cancelled) {
+	          (cancel || noop)(cancelled);
+	        };
+	      }
+
+	      function animateClose(element, className) {
+	        element.removeClass(className);
+	        var data = element.data(NG_ANIMATE_CSS_DATA_KEY);
+	        if (data) {
+	          if (data.running) {
+	            data.running--;
+	          }
+	          if (!data.running || data.running === 0) {
+	            element.removeData(NG_ANIMATE_CSS_DATA_KEY);
+	          }
+	        }
+	      }
+
+	      return {
+	        animate: function(element, className, from, to, animationCompleted, options) {
+	          options = options || {};
+	          options.from = from;
+	          options.to = to;
+	          return animate('animate', element, className, animationCompleted, options);
+	        },
+
+	        enter: function(element, animationCompleted, options) {
+	          options = options || {};
+	          return animate('enter', element, 'ng-enter', animationCompleted, options);
+	        },
+
+	        leave: function(element, animationCompleted, options) {
+	          options = options || {};
+	          return animate('leave', element, 'ng-leave', animationCompleted, options);
+	        },
+
+	        move: function(element, animationCompleted, options) {
+	          options = options || {};
+	          return animate('move', element, 'ng-move', animationCompleted, options);
+	        },
+
+	        beforeSetClass: function(element, add, remove, animationCompleted, options) {
+	          options = options || {};
+	          var className = suffixClasses(remove, '-remove') + ' ' +
+	                          suffixClasses(add, '-add');
+	          var cancellationMethod = animateBefore('setClass', element, className, options.from);
+	          if (cancellationMethod) {
+	            afterReflow(element, animationCompleted);
+	            return cancellationMethod;
+	          }
+	          clearCacheAfterReflow();
+	          animationCompleted();
+	        },
+
+	        beforeAddClass: function(element, className, animationCompleted, options) {
+	          options = options || {};
+	          var cancellationMethod = animateBefore('addClass', element, suffixClasses(className, '-add'), options.from);
+	          if (cancellationMethod) {
+	            afterReflow(element, animationCompleted);
+	            return cancellationMethod;
+	          }
+	          clearCacheAfterReflow();
+	          animationCompleted();
+	        },
+
+	        beforeRemoveClass: function(element, className, animationCompleted, options) {
+	          options = options || {};
+	          var cancellationMethod = animateBefore('removeClass', element, suffixClasses(className, '-remove'), options.from);
+	          if (cancellationMethod) {
+	            afterReflow(element, animationCompleted);
+	            return cancellationMethod;
+	          }
+	          clearCacheAfterReflow();
+	          animationCompleted();
+	        },
+
+	        setClass: function(element, add, remove, animationCompleted, options) {
+	          options = options || {};
+	          remove = suffixClasses(remove, '-remove');
+	          add = suffixClasses(add, '-add');
+	          var className = remove + ' ' + add;
+	          return animateAfter('setClass', element, className, animationCompleted, options.to);
+	        },
+
+	        addClass: function(element, className, animationCompleted, options) {
+	          options = options || {};
+	          return animateAfter('addClass', element, suffixClasses(className, '-add'), animationCompleted, options.to);
+	        },
+
+	        removeClass: function(element, className, animationCompleted, options) {
+	          options = options || {};
+	          return animateAfter('removeClass', element, suffixClasses(className, '-remove'), animationCompleted, options.to);
+	        }
+	      };
+
+	      function suffixClasses(classes, suffix) {
+	        var className = '';
+	        classes = isArray(classes) ? classes : classes.split(/\s+/);
+	        forEach(classes, function(klass, i) {
+	          if (klass && klass.length > 0) {
+	            className += (i > 0 ? ' ' : '') + klass + suffix;
+	          }
+	        });
+	        return className;
+	      }
+	    }]);
+	  }]);
+
+
+	})(window, window.angular);
+
+
+/***/ },
+/* 14 */
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = __webpack_require__.p + "index.html"
+
+/***/ },
+/* 15 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var require;/**
@@ -26201,3842 +30100,8 @@
 	!window.angular.$$csp() && window.angular.element(document).find('head').prepend('<style type="text/css">@charset "UTF-8";[ng\\:cloak],[ng-cloak],[data-ng-cloak],[x-ng-cloak],.ng-cloak,.x-ng-cloak,.ng-hide:not(.ng-hide-animate){display:none !important;}ng\\:form{display:block;}</style>');
 
 /***/ },
-/* 11 */
+/* 16 */
 /***/ function(module, exports, __webpack_require__) {
-
-	/**
-	 * @license AngularJS v1.3.2
-	 * (c) 2010-2014 Google, Inc. http://angularjs.org
-	 * License: MIT
-	 */
-	(function(window, angular, undefined) {'use strict';
-
-	/**
-	 * @ngdoc module
-	 * @name ngRoute
-	 * @description
-	 *
-	 * # ngRoute
-	 *
-	 * The `ngRoute` module provides routing and deeplinking services and directives for angular apps.
-	 *
-	 * ## Example
-	 * See {@link ngRoute.$route#example $route} for an example of configuring and using `ngRoute`.
-	 *
-	 *
-	 * <div doc-module-components="ngRoute"></div>
-	 */
-	 /* global -ngRouteModule */
-	var ngRouteModule = angular.module('ngRoute', ['ng']).
-	                        provider('$route', $RouteProvider),
-	    $routeMinErr = angular.$$minErr('ngRoute');
-
-	/**
-	 * @ngdoc provider
-	 * @name $routeProvider
-	 *
-	 * @description
-	 *
-	 * Used for configuring routes.
-	 *
-	 * ## Example
-	 * See {@link ngRoute.$route#example $route} for an example of configuring and using `ngRoute`.
-	 *
-	 * ## Dependencies
-	 * Requires the {@link ngRoute `ngRoute`} module to be installed.
-	 */
-	function $RouteProvider() {
-	  function inherit(parent, extra) {
-	    return angular.extend(new (angular.extend(function() {}, {prototype:parent}))(), extra);
-	  }
-
-	  var routes = {};
-
-	  /**
-	   * @ngdoc method
-	   * @name $routeProvider#when
-	   *
-	   * @param {string} path Route path (matched against `$location.path`). If `$location.path`
-	   *    contains redundant trailing slash or is missing one, the route will still match and the
-	   *    `$location.path` will be updated to add or drop the trailing slash to exactly match the
-	   *    route definition.
-	   *
-	   *    * `path` can contain named groups starting with a colon: e.g. `:name`. All characters up
-	   *        to the next slash are matched and stored in `$routeParams` under the given `name`
-	   *        when the route matches.
-	   *    * `path` can contain named groups starting with a colon and ending with a star:
-	   *        e.g.`:name*`. All characters are eagerly stored in `$routeParams` under the given `name`
-	   *        when the route matches.
-	   *    * `path` can contain optional named groups with a question mark: e.g.`:name?`.
-	   *
-	   *    For example, routes like `/color/:color/largecode/:largecode*\/edit` will match
-	   *    `/color/brown/largecode/code/with/slashes/edit` and extract:
-	   *
-	   *    * `color: brown`
-	   *    * `largecode: code/with/slashes`.
-	   *
-	   *
-	   * @param {Object} route Mapping information to be assigned to `$route.current` on route
-	   *    match.
-	   *
-	   *    Object properties:
-	   *
-	   *    - `controller` – `{(string|function()=}` – Controller fn that should be associated with
-	   *      newly created scope or the name of a {@link angular.Module#controller registered
-	   *      controller} if passed as a string.
-	   *    - `controllerAs` – `{string=}` – A controller alias name. If present the controller will be
-	   *      published to scope under the `controllerAs` name.
-	   *    - `template` – `{string=|function()=}` – html template as a string or a function that
-	   *      returns an html template as a string which should be used by {@link
-	   *      ngRoute.directive:ngView ngView} or {@link ng.directive:ngInclude ngInclude} directives.
-	   *      This property takes precedence over `templateUrl`.
-	   *
-	   *      If `template` is a function, it will be called with the following parameters:
-	   *
-	   *      - `{Array.<Object>}` - route parameters extracted from the current
-	   *        `$location.path()` by applying the current route
-	   *
-	   *    - `templateUrl` – `{string=|function()=}` – path or function that returns a path to an html
-	   *      template that should be used by {@link ngRoute.directive:ngView ngView}.
-	   *
-	   *      If `templateUrl` is a function, it will be called with the following parameters:
-	   *
-	   *      - `{Array.<Object>}` - route parameters extracted from the current
-	   *        `$location.path()` by applying the current route
-	   *
-	   *    - `resolve` - `{Object.<string, function>=}` - An optional map of dependencies which should
-	   *      be injected into the controller. If any of these dependencies are promises, the router
-	   *      will wait for them all to be resolved or one to be rejected before the controller is
-	   *      instantiated.
-	   *      If all the promises are resolved successfully, the values of the resolved promises are
-	   *      injected and {@link ngRoute.$route#$routeChangeSuccess $routeChangeSuccess} event is
-	   *      fired. If any of the promises are rejected the
-	   *      {@link ngRoute.$route#$routeChangeError $routeChangeError} event is fired. The map object
-	   *      is:
-	   *
-	   *      - `key` – `{string}`: a name of a dependency to be injected into the controller.
-	   *      - `factory` - `{string|function}`: If `string` then it is an alias for a service.
-	   *        Otherwise if function, then it is {@link auto.$injector#invoke injected}
-	   *        and the return value is treated as the dependency. If the result is a promise, it is
-	   *        resolved before its value is injected into the controller. Be aware that
-	   *        `ngRoute.$routeParams` will still refer to the previous route within these resolve
-	   *        functions.  Use `$route.current.params` to access the new route parameters, instead.
-	   *
-	   *    - `redirectTo` – {(string|function())=} – value to update
-	   *      {@link ng.$location $location} path with and trigger route redirection.
-	   *
-	   *      If `redirectTo` is a function, it will be called with the following parameters:
-	   *
-	   *      - `{Object.<string>}` - route parameters extracted from the current
-	   *        `$location.path()` by applying the current route templateUrl.
-	   *      - `{string}` - current `$location.path()`
-	   *      - `{Object}` - current `$location.search()`
-	   *
-	   *      The custom `redirectTo` function is expected to return a string which will be used
-	   *      to update `$location.path()` and `$location.search()`.
-	   *
-	   *    - `[reloadOnSearch=true]` - {boolean=} - reload route when only `$location.search()`
-	   *      or `$location.hash()` changes.
-	   *
-	   *      If the option is set to `false` and url in the browser changes, then
-	   *      `$routeUpdate` event is broadcasted on the root scope.
-	   *
-	   *    - `[caseInsensitiveMatch=false]` - {boolean=} - match routes without being case sensitive
-	   *
-	   *      If the option is set to `true`, then the particular route can be matched without being
-	   *      case sensitive
-	   *
-	   * @returns {Object} self
-	   *
-	   * @description
-	   * Adds a new route definition to the `$route` service.
-	   */
-	  this.when = function(path, route) {
-	    //copy original route object to preserve params inherited from proto chain
-	    var routeCopy = angular.copy(route);
-	    if (angular.isUndefined(routeCopy.reloadOnSearch)) {
-	      routeCopy.reloadOnSearch = true;
-	    }
-	    routes[path] = angular.extend(
-	      routeCopy,
-	      path && pathRegExp(path, routeCopy)
-	    );
-
-	    // create redirection for trailing slashes
-	    if (path) {
-	      var redirectPath = (path[path.length-1] == '/')
-	            ? path.substr(0, path.length-1)
-	            : path +'/';
-
-	      routes[redirectPath] = angular.extend(
-	        {redirectTo: path},
-	        pathRegExp(redirectPath, routeCopy)
-	      );
-	    }
-
-	    return this;
-	  };
-
-	   /**
-	    * @param path {string} path
-	    * @param opts {Object} options
-	    * @return {?Object}
-	    *
-	    * @description
-	    * Normalizes the given path, returning a regular expression
-	    * and the original path.
-	    *
-	    * Inspired by pathRexp in visionmedia/express/lib/utils.js.
-	    */
-	  function pathRegExp(path, opts) {
-	    var insensitive = opts.caseInsensitiveMatch,
-	        ret = {
-	          originalPath: path,
-	          regexp: path
-	        },
-	        keys = ret.keys = [];
-
-	    path = path
-	      .replace(/([().])/g, '\\$1')
-	      .replace(/(\/)?:(\w+)([\?\*])?/g, function(_, slash, key, option) {
-	        var optional = option === '?' ? option : null;
-	        var star = option === '*' ? option : null;
-	        keys.push({ name: key, optional: !!optional });
-	        slash = slash || '';
-	        return ''
-	          + (optional ? '' : slash)
-	          + '(?:'
-	          + (optional ? slash : '')
-	          + (star && '(.+?)' || '([^/]+)')
-	          + (optional || '')
-	          + ')'
-	          + (optional || '');
-	      })
-	      .replace(/([\/$\*])/g, '\\$1');
-
-	    ret.regexp = new RegExp('^' + path + '$', insensitive ? 'i' : '');
-	    return ret;
-	  }
-
-	  /**
-	   * @ngdoc method
-	   * @name $routeProvider#otherwise
-	   *
-	   * @description
-	   * Sets route definition that will be used on route change when no other route definition
-	   * is matched.
-	   *
-	   * @param {Object|string} params Mapping information to be assigned to `$route.current`.
-	   * If called with a string, the value maps to `redirectTo`.
-	   * @returns {Object} self
-	   */
-	  this.otherwise = function(params) {
-	    if (typeof params === 'string') {
-	      params = {redirectTo: params};
-	    }
-	    this.when(null, params);
-	    return this;
-	  };
-
-
-	  this.$get = ['$rootScope',
-	               '$location',
-	               '$routeParams',
-	               '$q',
-	               '$injector',
-	               '$templateRequest',
-	               '$sce',
-	      function($rootScope, $location, $routeParams, $q, $injector, $templateRequest, $sce) {
-
-	    /**
-	     * @ngdoc service
-	     * @name $route
-	     * @requires $location
-	     * @requires $routeParams
-	     *
-	     * @property {Object} current Reference to the current route definition.
-	     * The route definition contains:
-	     *
-	     *   - `controller`: The controller constructor as define in route definition.
-	     *   - `locals`: A map of locals which is used by {@link ng.$controller $controller} service for
-	     *     controller instantiation. The `locals` contain
-	     *     the resolved values of the `resolve` map. Additionally the `locals` also contain:
-	     *
-	     *     - `$scope` - The current route scope.
-	     *     - `$template` - The current route template HTML.
-	     *
-	     * @property {Object} routes Object with all route configuration Objects as its properties.
-	     *
-	     * @description
-	     * `$route` is used for deep-linking URLs to controllers and views (HTML partials).
-	     * It watches `$location.url()` and tries to map the path to an existing route definition.
-	     *
-	     * Requires the {@link ngRoute `ngRoute`} module to be installed.
-	     *
-	     * You can define routes through {@link ngRoute.$routeProvider $routeProvider}'s API.
-	     *
-	     * The `$route` service is typically used in conjunction with the
-	     * {@link ngRoute.directive:ngView `ngView`} directive and the
-	     * {@link ngRoute.$routeParams `$routeParams`} service.
-	     *
-	     * @example
-	     * This example shows how changing the URL hash causes the `$route` to match a route against the
-	     * URL, and the `ngView` pulls in the partial.
-	     *
-	     * <example name="$route-service" module="ngRouteExample"
-	     *          deps="angular-route.js" fixBase="true">
-	     *   <file name="index.html">
-	     *     <div ng-controller="MainController">
-	     *       Choose:
-	     *       <a href="Book/Moby">Moby</a> |
-	     *       <a href="Book/Moby/ch/1">Moby: Ch1</a> |
-	     *       <a href="Book/Gatsby">Gatsby</a> |
-	     *       <a href="Book/Gatsby/ch/4?key=value">Gatsby: Ch4</a> |
-	     *       <a href="Book/Scarlet">Scarlet Letter</a><br/>
-	     *
-	     *       <div ng-view></div>
-	     *
-	     *       <hr />
-	     *
-	     *       <pre>$location.path() = {{$location.path()}}</pre>
-	     *       <pre>$route.current.templateUrl = {{$route.current.templateUrl}}</pre>
-	     *       <pre>$route.current.params = {{$route.current.params}}</pre>
-	     *       <pre>$route.current.scope.name = {{$route.current.scope.name}}</pre>
-	     *       <pre>$routeParams = {{$routeParams}}</pre>
-	     *     </div>
-	     *   </file>
-	     *
-	     *   <file name="book.html">
-	     *     controller: {{name}}<br />
-	     *     Book Id: {{params.bookId}}<br />
-	     *   </file>
-	     *
-	     *   <file name="chapter.html">
-	     *     controller: {{name}}<br />
-	     *     Book Id: {{params.bookId}}<br />
-	     *     Chapter Id: {{params.chapterId}}
-	     *   </file>
-	     *
-	     *   <file name="script.js">
-	     *     angular.module('ngRouteExample', ['ngRoute'])
-	     *
-	     *      .controller('MainController', function($scope, $route, $routeParams, $location) {
-	     *          $scope.$route = $route;
-	     *          $scope.$location = $location;
-	     *          $scope.$routeParams = $routeParams;
-	     *      })
-	     *
-	     *      .controller('BookController', function($scope, $routeParams) {
-	     *          $scope.name = "BookController";
-	     *          $scope.params = $routeParams;
-	     *      })
-	     *
-	     *      .controller('ChapterController', function($scope, $routeParams) {
-	     *          $scope.name = "ChapterController";
-	     *          $scope.params = $routeParams;
-	     *      })
-	     *
-	     *     .config(function($routeProvider, $locationProvider) {
-	     *       $routeProvider
-	     *        .when('/Book/:bookId', {
-	     *         templateUrl: 'book.html',
-	     *         controller: 'BookController',
-	     *         resolve: {
-	     *           // I will cause a 1 second delay
-	     *           delay: function($q, $timeout) {
-	     *             var delay = $q.defer();
-	     *             $timeout(delay.resolve, 1000);
-	     *             return delay.promise;
-	     *           }
-	     *         }
-	     *       })
-	     *       .when('/Book/:bookId/ch/:chapterId', {
-	     *         templateUrl: 'chapter.html',
-	     *         controller: 'ChapterController'
-	     *       });
-	     *
-	     *       // configure html5 to get links working on jsfiddle
-	     *       $locationProvider.html5Mode(true);
-	     *     });
-	     *
-	     *   </file>
-	     *
-	     *   <file name="protractor.js" type="protractor">
-	     *     it('should load and compile correct template', function() {
-	     *       element(by.linkText('Moby: Ch1')).click();
-	     *       var content = element(by.css('[ng-view]')).getText();
-	     *       expect(content).toMatch(/controller\: ChapterController/);
-	     *       expect(content).toMatch(/Book Id\: Moby/);
-	     *       expect(content).toMatch(/Chapter Id\: 1/);
-	     *
-	     *       element(by.partialLinkText('Scarlet')).click();
-	     *
-	     *       content = element(by.css('[ng-view]')).getText();
-	     *       expect(content).toMatch(/controller\: BookController/);
-	     *       expect(content).toMatch(/Book Id\: Scarlet/);
-	     *     });
-	     *   </file>
-	     * </example>
-	     */
-
-	    /**
-	     * @ngdoc event
-	     * @name $route#$routeChangeStart
-	     * @eventType broadcast on root scope
-	     * @description
-	     * Broadcasted before a route change. At this  point the route services starts
-	     * resolving all of the dependencies needed for the route change to occur.
-	     * Typically this involves fetching the view template as well as any dependencies
-	     * defined in `resolve` route property. Once  all of the dependencies are resolved
-	     * `$routeChangeSuccess` is fired.
-	     *
-	     * The route change (and the `$location` change that triggered it) can be prevented
-	     * by calling `preventDefault` method of the event. See {@link ng.$rootScope.Scope#$on}
-	     * for more details about event object.
-	     *
-	     * @param {Object} angularEvent Synthetic event object.
-	     * @param {Route} next Future route information.
-	     * @param {Route} current Current route information.
-	     */
-
-	    /**
-	     * @ngdoc event
-	     * @name $route#$routeChangeSuccess
-	     * @eventType broadcast on root scope
-	     * @description
-	     * Broadcasted after a route dependencies are resolved.
-	     * {@link ngRoute.directive:ngView ngView} listens for the directive
-	     * to instantiate the controller and render the view.
-	     *
-	     * @param {Object} angularEvent Synthetic event object.
-	     * @param {Route} current Current route information.
-	     * @param {Route|Undefined} previous Previous route information, or undefined if current is
-	     * first route entered.
-	     */
-
-	    /**
-	     * @ngdoc event
-	     * @name $route#$routeChangeError
-	     * @eventType broadcast on root scope
-	     * @description
-	     * Broadcasted if any of the resolve promises are rejected.
-	     *
-	     * @param {Object} angularEvent Synthetic event object
-	     * @param {Route} current Current route information.
-	     * @param {Route} previous Previous route information.
-	     * @param {Route} rejection Rejection of the promise. Usually the error of the failed promise.
-	     */
-
-	    /**
-	     * @ngdoc event
-	     * @name $route#$routeUpdate
-	     * @eventType broadcast on root scope
-	     * @description
-	     *
-	     * The `reloadOnSearch` property has been set to false, and we are reusing the same
-	     * instance of the Controller.
-	     */
-
-	    var forceReload = false,
-	        preparedRoute,
-	        preparedRouteIsUpdateOnly,
-	        $route = {
-	          routes: routes,
-
-	          /**
-	           * @ngdoc method
-	           * @name $route#reload
-	           *
-	           * @description
-	           * Causes `$route` service to reload the current route even if
-	           * {@link ng.$location $location} hasn't changed.
-	           *
-	           * As a result of that, {@link ngRoute.directive:ngView ngView}
-	           * creates new scope and reinstantiates the controller.
-	           */
-	          reload: function() {
-	            forceReload = true;
-	            $rootScope.$evalAsync(function() {
-	              // Don't support cancellation of a reload for now...
-	              prepareRoute();
-	              commitRoute();
-	            });
-	          },
-
-	          /**
-	           * @ngdoc method
-	           * @name $route#updateParams
-	           *
-	           * @description
-	           * Causes `$route` service to update the current URL, replacing
-	           * current route parameters with those specified in `newParams`.
-	           * Provided property names that match the route's path segment
-	           * definitions will be interpolated into the location's path, while
-	           * remaining properties will be treated as query params.
-	           *
-	           * @param {Object} newParams mapping of URL parameter names to values
-	           */
-	          updateParams: function(newParams) {
-	            if (this.current && this.current.$$route) {
-	              var searchParams = {}, self=this;
-
-	              angular.forEach(Object.keys(newParams), function(key) {
-	                if (!self.current.pathParams[key]) searchParams[key] = newParams[key];
-	              });
-
-	              newParams = angular.extend({}, this.current.params, newParams);
-	              $location.path(interpolate(this.current.$$route.originalPath, newParams));
-	              $location.search(angular.extend({}, $location.search(), searchParams));
-	            }
-	            else {
-	              throw $routeMinErr('norout', 'Tried updating route when with no current route');
-	            }
-	          }
-	        };
-
-	    $rootScope.$on('$locationChangeStart', prepareRoute);
-	    $rootScope.$on('$locationChangeSuccess', commitRoute);
-
-	    return $route;
-
-	    /////////////////////////////////////////////////////
-
-	    /**
-	     * @param on {string} current url
-	     * @param route {Object} route regexp to match the url against
-	     * @return {?Object}
-	     *
-	     * @description
-	     * Check if the route matches the current url.
-	     *
-	     * Inspired by match in
-	     * visionmedia/express/lib/router/router.js.
-	     */
-	    function switchRouteMatcher(on, route) {
-	      var keys = route.keys,
-	          params = {};
-
-	      if (!route.regexp) return null;
-
-	      var m = route.regexp.exec(on);
-	      if (!m) return null;
-
-	      for (var i = 1, len = m.length; i < len; ++i) {
-	        var key = keys[i - 1];
-
-	        var val = m[i];
-
-	        if (key && val) {
-	          params[key.name] = val;
-	        }
-	      }
-	      return params;
-	    }
-
-	    function prepareRoute($locationEvent) {
-	      var lastRoute = $route.current;
-
-	      preparedRoute = parseRoute();
-	      preparedRouteIsUpdateOnly = preparedRoute && lastRoute && preparedRoute.$$route === lastRoute.$$route
-	          && angular.equals(preparedRoute.pathParams, lastRoute.pathParams)
-	          && !preparedRoute.reloadOnSearch && !forceReload;
-
-	      if (!preparedRouteIsUpdateOnly && (lastRoute || preparedRoute)) {
-	        if ($rootScope.$broadcast('$routeChangeStart', preparedRoute, lastRoute).defaultPrevented) {
-	          if ($locationEvent) {
-	            $locationEvent.preventDefault();
-	          }
-	        }
-	      }
-	    }
-
-	    function commitRoute() {
-	      var lastRoute = $route.current;
-	      var nextRoute = preparedRoute;
-
-	      if (preparedRouteIsUpdateOnly) {
-	        lastRoute.params = nextRoute.params;
-	        angular.copy(lastRoute.params, $routeParams);
-	        $rootScope.$broadcast('$routeUpdate', lastRoute);
-	      } else if (nextRoute || lastRoute) {
-	        forceReload = false;
-	        $route.current = nextRoute;
-	        if (nextRoute) {
-	          if (nextRoute.redirectTo) {
-	            if (angular.isString(nextRoute.redirectTo)) {
-	              $location.path(interpolate(nextRoute.redirectTo, nextRoute.params)).search(nextRoute.params)
-	                       .replace();
-	            } else {
-	              $location.url(nextRoute.redirectTo(nextRoute.pathParams, $location.path(), $location.search()))
-	                       .replace();
-	            }
-	          }
-	        }
-
-	        $q.when(nextRoute).
-	          then(function() {
-	            if (nextRoute) {
-	              var locals = angular.extend({}, nextRoute.resolve),
-	                  template, templateUrl;
-
-	              angular.forEach(locals, function(value, key) {
-	                locals[key] = angular.isString(value) ?
-	                    $injector.get(value) : $injector.invoke(value, null, null, key);
-	              });
-
-	              if (angular.isDefined(template = nextRoute.template)) {
-	                if (angular.isFunction(template)) {
-	                  template = template(nextRoute.params);
-	                }
-	              } else if (angular.isDefined(templateUrl = nextRoute.templateUrl)) {
-	                if (angular.isFunction(templateUrl)) {
-	                  templateUrl = templateUrl(nextRoute.params);
-	                }
-	                templateUrl = $sce.getTrustedResourceUrl(templateUrl);
-	                if (angular.isDefined(templateUrl)) {
-	                  nextRoute.loadedTemplateUrl = templateUrl;
-	                  template = $templateRequest(templateUrl);
-	                }
-	              }
-	              if (angular.isDefined(template)) {
-	                locals['$template'] = template;
-	              }
-	              return $q.all(locals);
-	            }
-	          }).
-	          // after route change
-	          then(function(locals) {
-	            if (nextRoute == $route.current) {
-	              if (nextRoute) {
-	                nextRoute.locals = locals;
-	                angular.copy(nextRoute.params, $routeParams);
-	              }
-	              $rootScope.$broadcast('$routeChangeSuccess', nextRoute, lastRoute);
-	            }
-	          }, function(error) {
-	            if (nextRoute == $route.current) {
-	              $rootScope.$broadcast('$routeChangeError', nextRoute, lastRoute, error);
-	            }
-	          });
-	      }
-	    }
-
-
-	    /**
-	     * @returns {Object} the current active route, by matching it against the URL
-	     */
-	    function parseRoute() {
-	      // Match a route
-	      var params, match;
-	      angular.forEach(routes, function(route, path) {
-	        if (!match && (params = switchRouteMatcher($location.path(), route))) {
-	          match = inherit(route, {
-	            params: angular.extend({}, $location.search(), params),
-	            pathParams: params});
-	          match.$$route = route;
-	        }
-	      });
-	      // No route matched; fallback to "otherwise" route
-	      return match || routes[null] && inherit(routes[null], {params: {}, pathParams:{}});
-	    }
-
-	    /**
-	     * @returns {string} interpolation of the redirect path with the parameters
-	     */
-	    function interpolate(string, params) {
-	      var result = [];
-	      angular.forEach((string||'').split(':'), function(segment, i) {
-	        if (i === 0) {
-	          result.push(segment);
-	        } else {
-	          var segmentMatch = segment.match(/(\w+)(.*)/);
-	          var key = segmentMatch[1];
-	          result.push(params[key]);
-	          result.push(segmentMatch[2] || '');
-	          delete params[key];
-	        }
-	      });
-	      return result.join('');
-	    }
-	  }];
-	}
-
-	ngRouteModule.provider('$routeParams', $RouteParamsProvider);
-
-
-	/**
-	 * @ngdoc service
-	 * @name $routeParams
-	 * @requires $route
-	 *
-	 * @description
-	 * The `$routeParams` service allows you to retrieve the current set of route parameters.
-	 *
-	 * Requires the {@link ngRoute `ngRoute`} module to be installed.
-	 *
-	 * The route parameters are a combination of {@link ng.$location `$location`}'s
-	 * {@link ng.$location#search `search()`} and {@link ng.$location#path `path()`}.
-	 * The `path` parameters are extracted when the {@link ngRoute.$route `$route`} path is matched.
-	 *
-	 * In case of parameter name collision, `path` params take precedence over `search` params.
-	 *
-	 * The service guarantees that the identity of the `$routeParams` object will remain unchanged
-	 * (but its properties will likely change) even when a route change occurs.
-	 *
-	 * Note that the `$routeParams` are only updated *after* a route change completes successfully.
-	 * This means that you cannot rely on `$routeParams` being correct in route resolve functions.
-	 * Instead you can use `$route.current.params` to access the new route's parameters.
-	 *
-	 * @example
-	 * ```js
-	 *  // Given:
-	 *  // URL: http://server.com/index.html#/Chapter/1/Section/2?search=moby
-	 *  // Route: /Chapter/:chapterId/Section/:sectionId
-	 *  //
-	 *  // Then
-	 *  $routeParams ==> {chapterId:'1', sectionId:'2', search:'moby'}
-	 * ```
-	 */
-	function $RouteParamsProvider() {
-	  this.$get = function() { return {}; };
-	}
-
-	ngRouteModule.directive('ngView', ngViewFactory);
-	ngRouteModule.directive('ngView', ngViewFillContentFactory);
-
-
-	/**
-	 * @ngdoc directive
-	 * @name ngView
-	 * @restrict ECA
-	 *
-	 * @description
-	 * # Overview
-	 * `ngView` is a directive that complements the {@link ngRoute.$route $route} service by
-	 * including the rendered template of the current route into the main layout (`index.html`) file.
-	 * Every time the current route changes, the included view changes with it according to the
-	 * configuration of the `$route` service.
-	 *
-	 * Requires the {@link ngRoute `ngRoute`} module to be installed.
-	 *
-	 * @animations
-	 * enter - animation is used to bring new content into the browser.
-	 * leave - animation is used to animate existing content away.
-	 *
-	 * The enter and leave animation occur concurrently.
-	 *
-	 * @scope
-	 * @priority 400
-	 * @param {string=} onload Expression to evaluate whenever the view updates.
-	 *
-	 * @param {string=} autoscroll Whether `ngView` should call {@link ng.$anchorScroll
-	 *                  $anchorScroll} to scroll the viewport after the view is updated.
-	 *
-	 *                  - If the attribute is not set, disable scrolling.
-	 *                  - If the attribute is set without value, enable scrolling.
-	 *                  - Otherwise enable scrolling only if the `autoscroll` attribute value evaluated
-	 *                    as an expression yields a truthy value.
-	 * @example
-	    <example name="ngView-directive" module="ngViewExample"
-	             deps="angular-route.js;angular-animate.js"
-	             animations="true" fixBase="true">
-	      <file name="index.html">
-	        <div ng-controller="MainCtrl as main">
-	          Choose:
-	          <a href="Book/Moby">Moby</a> |
-	          <a href="Book/Moby/ch/1">Moby: Ch1</a> |
-	          <a href="Book/Gatsby">Gatsby</a> |
-	          <a href="Book/Gatsby/ch/4?key=value">Gatsby: Ch4</a> |
-	          <a href="Book/Scarlet">Scarlet Letter</a><br/>
-
-	          <div class="view-animate-container">
-	            <div ng-view class="view-animate"></div>
-	          </div>
-	          <hr />
-
-	          <pre>$location.path() = {{main.$location.path()}}</pre>
-	          <pre>$route.current.templateUrl = {{main.$route.current.templateUrl}}</pre>
-	          <pre>$route.current.params = {{main.$route.current.params}}</pre>
-	          <pre>$routeParams = {{main.$routeParams}}</pre>
-	        </div>
-	      </file>
-
-	      <file name="book.html">
-	        <div>
-	          controller: {{book.name}}<br />
-	          Book Id: {{book.params.bookId}}<br />
-	        </div>
-	      </file>
-
-	      <file name="chapter.html">
-	        <div>
-	          controller: {{chapter.name}}<br />
-	          Book Id: {{chapter.params.bookId}}<br />
-	          Chapter Id: {{chapter.params.chapterId}}
-	        </div>
-	      </file>
-
-	      <file name="animations.css">
-	        .view-animate-container {
-	          position:relative;
-	          height:100px!important;
-	          position:relative;
-	          background:white;
-	          border:1px solid black;
-	          height:40px;
-	          overflow:hidden;
-	        }
-
-	        .view-animate {
-	          padding:10px;
-	        }
-
-	        .view-animate.ng-enter, .view-animate.ng-leave {
-	          -webkit-transition:all cubic-bezier(0.250, 0.460, 0.450, 0.940) 1.5s;
-	          transition:all cubic-bezier(0.250, 0.460, 0.450, 0.940) 1.5s;
-
-	          display:block;
-	          width:100%;
-	          border-left:1px solid black;
-
-	          position:absolute;
-	          top:0;
-	          left:0;
-	          right:0;
-	          bottom:0;
-	          padding:10px;
-	        }
-
-	        .view-animate.ng-enter {
-	          left:100%;
-	        }
-	        .view-animate.ng-enter.ng-enter-active {
-	          left:0;
-	        }
-	        .view-animate.ng-leave.ng-leave-active {
-	          left:-100%;
-	        }
-	      </file>
-
-	      <file name="script.js">
-	        angular.module('ngViewExample', ['ngRoute', 'ngAnimate'])
-	          .config(['$routeProvider', '$locationProvider',
-	            function($routeProvider, $locationProvider) {
-	              $routeProvider
-	                .when('/Book/:bookId', {
-	                  templateUrl: 'book.html',
-	                  controller: 'BookCtrl',
-	                  controllerAs: 'book'
-	                })
-	                .when('/Book/:bookId/ch/:chapterId', {
-	                  templateUrl: 'chapter.html',
-	                  controller: 'ChapterCtrl',
-	                  controllerAs: 'chapter'
-	                });
-
-	              $locationProvider.html5Mode(true);
-	          }])
-	          .controller('MainCtrl', ['$route', '$routeParams', '$location',
-	            function($route, $routeParams, $location) {
-	              this.$route = $route;
-	              this.$location = $location;
-	              this.$routeParams = $routeParams;
-	          }])
-	          .controller('BookCtrl', ['$routeParams', function($routeParams) {
-	            this.name = "BookCtrl";
-	            this.params = $routeParams;
-	          }])
-	          .controller('ChapterCtrl', ['$routeParams', function($routeParams) {
-	            this.name = "ChapterCtrl";
-	            this.params = $routeParams;
-	          }]);
-
-	      </file>
-
-	      <file name="protractor.js" type="protractor">
-	        it('should load and compile correct template', function() {
-	          element(by.linkText('Moby: Ch1')).click();
-	          var content = element(by.css('[ng-view]')).getText();
-	          expect(content).toMatch(/controller\: ChapterCtrl/);
-	          expect(content).toMatch(/Book Id\: Moby/);
-	          expect(content).toMatch(/Chapter Id\: 1/);
-
-	          element(by.partialLinkText('Scarlet')).click();
-
-	          content = element(by.css('[ng-view]')).getText();
-	          expect(content).toMatch(/controller\: BookCtrl/);
-	          expect(content).toMatch(/Book Id\: Scarlet/);
-	        });
-	      </file>
-	    </example>
-	 */
-
-
-	/**
-	 * @ngdoc event
-	 * @name ngView#$viewContentLoaded
-	 * @eventType emit on the current ngView scope
-	 * @description
-	 * Emitted every time the ngView content is reloaded.
-	 */
-	ngViewFactory.$inject = ['$route', '$anchorScroll', '$animate'];
-	function ngViewFactory($route, $anchorScroll, $animate) {
-	  return {
-	    restrict: 'ECA',
-	    terminal: true,
-	    priority: 400,
-	    transclude: 'element',
-	    link: function(scope, $element, attr, ctrl, $transclude) {
-	        var currentScope,
-	            currentElement,
-	            previousLeaveAnimation,
-	            autoScrollExp = attr.autoscroll,
-	            onloadExp = attr.onload || '';
-
-	        scope.$on('$routeChangeSuccess', update);
-	        update();
-
-	        function cleanupLastView() {
-	          if (previousLeaveAnimation) {
-	            $animate.cancel(previousLeaveAnimation);
-	            previousLeaveAnimation = null;
-	          }
-
-	          if (currentScope) {
-	            currentScope.$destroy();
-	            currentScope = null;
-	          }
-	          if (currentElement) {
-	            previousLeaveAnimation = $animate.leave(currentElement);
-	            previousLeaveAnimation.then(function() {
-	              previousLeaveAnimation = null;
-	            });
-	            currentElement = null;
-	          }
-	        }
-
-	        function update() {
-	          var locals = $route.current && $route.current.locals,
-	              template = locals && locals.$template;
-
-	          if (angular.isDefined(template)) {
-	            var newScope = scope.$new();
-	            var current = $route.current;
-
-	            // Note: This will also link all children of ng-view that were contained in the original
-	            // html. If that content contains controllers, ... they could pollute/change the scope.
-	            // However, using ng-view on an element with additional content does not make sense...
-	            // Note: We can't remove them in the cloneAttchFn of $transclude as that
-	            // function is called before linking the content, which would apply child
-	            // directives to non existing elements.
-	            var clone = $transclude(newScope, function(clone) {
-	              $animate.enter(clone, null, currentElement || $element).then(function onNgViewEnter() {
-	                if (angular.isDefined(autoScrollExp)
-	                  && (!autoScrollExp || scope.$eval(autoScrollExp))) {
-	                  $anchorScroll();
-	                }
-	              });
-	              cleanupLastView();
-	            });
-
-	            currentElement = clone;
-	            currentScope = current.scope = newScope;
-	            currentScope.$emit('$viewContentLoaded');
-	            currentScope.$eval(onloadExp);
-	          } else {
-	            cleanupLastView();
-	          }
-	        }
-	    }
-	  };
-	}
-
-	// This directive is called during the $transclude call of the first `ngView` directive.
-	// It will replace and compile the content of the element with the loaded template.
-	// We need this directive so that the element content is already filled when
-	// the link function of another directive on the same element as ngView
-	// is called.
-	ngViewFillContentFactory.$inject = ['$compile', '$controller', '$route'];
-	function ngViewFillContentFactory($compile, $controller, $route) {
-	  return {
-	    restrict: 'ECA',
-	    priority: -400,
-	    link: function(scope, $element) {
-	      var current = $route.current,
-	          locals = current.locals;
-
-	      $element.html(locals.$template);
-
-	      var link = $compile($element.contents());
-
-	      if (current.controller) {
-	        locals.$scope = scope;
-	        var controller = $controller(current.controller, locals);
-	        if (current.controllerAs) {
-	          scope[current.controllerAs] = controller;
-	        }
-	        $element.data('$ngControllerController', controller);
-	        $element.children().data('$ngControllerController', controller);
-	      }
-
-	      link(scope);
-	    }
-	  };
-	}
-
-
-	})(window, window.angular);
-
-
-/***/ },
-/* 12 */
-/***/ function(module, exports, __webpack_require__) {
-
-	/**
-	 * @license AngularJS v1.3.2
-	 * (c) 2010-2014 Google, Inc. http://angularjs.org
-	 * License: MIT
-	 */
-	(function(window, angular, undefined) {'use strict';
-
-	var $sanitizeMinErr = angular.$$minErr('$sanitize');
-
-	/**
-	 * @ngdoc module
-	 * @name ngSanitize
-	 * @description
-	 *
-	 * # ngSanitize
-	 *
-	 * The `ngSanitize` module provides functionality to sanitize HTML.
-	 *
-	 *
-	 * <div doc-module-components="ngSanitize"></div>
-	 *
-	 * See {@link ngSanitize.$sanitize `$sanitize`} for usage.
-	 */
-
-	/*
-	 * HTML Parser By Misko Hevery (misko@hevery.com)
-	 * based on:  HTML Parser By John Resig (ejohn.org)
-	 * Original code by Erik Arvidsson, Mozilla Public License
-	 * http://erik.eae.net/simplehtmlparser/simplehtmlparser.js
-	 *
-	 * // Use like so:
-	 * htmlParser(htmlString, {
-	 *     start: function(tag, attrs, unary) {},
-	 *     end: function(tag) {},
-	 *     chars: function(text) {},
-	 *     comment: function(text) {}
-	 * });
-	 *
-	 */
-
-
-	/**
-	 * @ngdoc service
-	 * @name $sanitize
-	 * @kind function
-	 *
-	 * @description
-	 *   The input is sanitized by parsing the HTML into tokens. All safe tokens (from a whitelist) are
-	 *   then serialized back to properly escaped html string. This means that no unsafe input can make
-	 *   it into the returned string, however, since our parser is more strict than a typical browser
-	 *   parser, it's possible that some obscure input, which would be recognized as valid HTML by a
-	 *   browser, won't make it through the sanitizer. The input may also contain SVG markup.
-	 *   The whitelist is configured using the functions `aHrefSanitizationWhitelist` and
-	 *   `imgSrcSanitizationWhitelist` of {@link ng.$compileProvider `$compileProvider`}.
-	 *
-	 * @param {string} html HTML input.
-	 * @returns {string} Sanitized HTML.
-	 *
-	 * @example
-	   <example module="sanitizeExample" deps="angular-sanitize.js">
-	   <file name="index.html">
-	     <script>
-	         angular.module('sanitizeExample', ['ngSanitize'])
-	           .controller('ExampleController', ['$scope', '$sce', function($scope, $sce) {
-	             $scope.snippet =
-	               '<p style="color:blue">an html\n' +
-	               '<em onmouseover="this.textContent=\'PWN3D!\'">click here</em>\n' +
-	               'snippet</p>';
-	             $scope.deliberatelyTrustDangerousSnippet = function() {
-	               return $sce.trustAsHtml($scope.snippet);
-	             };
-	           }]);
-	     </script>
-	     <div ng-controller="ExampleController">
-	        Snippet: <textarea ng-model="snippet" cols="60" rows="3"></textarea>
-	       <table>
-	         <tr>
-	           <td>Directive</td>
-	           <td>How</td>
-	           <td>Source</td>
-	           <td>Rendered</td>
-	         </tr>
-	         <tr id="bind-html-with-sanitize">
-	           <td>ng-bind-html</td>
-	           <td>Automatically uses $sanitize</td>
-	           <td><pre>&lt;div ng-bind-html="snippet"&gt;<br/>&lt;/div&gt;</pre></td>
-	           <td><div ng-bind-html="snippet"></div></td>
-	         </tr>
-	         <tr id="bind-html-with-trust">
-	           <td>ng-bind-html</td>
-	           <td>Bypass $sanitize by explicitly trusting the dangerous value</td>
-	           <td>
-	           <pre>&lt;div ng-bind-html="deliberatelyTrustDangerousSnippet()"&gt;
-	&lt;/div&gt;</pre>
-	           </td>
-	           <td><div ng-bind-html="deliberatelyTrustDangerousSnippet()"></div></td>
-	         </tr>
-	         <tr id="bind-default">
-	           <td>ng-bind</td>
-	           <td>Automatically escapes</td>
-	           <td><pre>&lt;div ng-bind="snippet"&gt;<br/>&lt;/div&gt;</pre></td>
-	           <td><div ng-bind="snippet"></div></td>
-	         </tr>
-	       </table>
-	       </div>
-	   </file>
-	   <file name="protractor.js" type="protractor">
-	     it('should sanitize the html snippet by default', function() {
-	       expect(element(by.css('#bind-html-with-sanitize div')).getInnerHtml()).
-	         toBe('<p>an html\n<em>click here</em>\nsnippet</p>');
-	     });
-
-	     it('should inline raw snippet if bound to a trusted value', function() {
-	       expect(element(by.css('#bind-html-with-trust div')).getInnerHtml()).
-	         toBe("<p style=\"color:blue\">an html\n" +
-	              "<em onmouseover=\"this.textContent='PWN3D!'\">click here</em>\n" +
-	              "snippet</p>");
-	     });
-
-	     it('should escape snippet without any filter', function() {
-	       expect(element(by.css('#bind-default div')).getInnerHtml()).
-	         toBe("&lt;p style=\"color:blue\"&gt;an html\n" +
-	              "&lt;em onmouseover=\"this.textContent='PWN3D!'\"&gt;click here&lt;/em&gt;\n" +
-	              "snippet&lt;/p&gt;");
-	     });
-
-	     it('should update', function() {
-	       element(by.model('snippet')).clear();
-	       element(by.model('snippet')).sendKeys('new <b onclick="alert(1)">text</b>');
-	       expect(element(by.css('#bind-html-with-sanitize div')).getInnerHtml()).
-	         toBe('new <b>text</b>');
-	       expect(element(by.css('#bind-html-with-trust div')).getInnerHtml()).toBe(
-	         'new <b onclick="alert(1)">text</b>');
-	       expect(element(by.css('#bind-default div')).getInnerHtml()).toBe(
-	         "new &lt;b onclick=\"alert(1)\"&gt;text&lt;/b&gt;");
-	     });
-	   </file>
-	   </example>
-	 */
-	function $SanitizeProvider() {
-	  this.$get = ['$$sanitizeUri', function($$sanitizeUri) {
-	    return function(html) {
-	      var buf = [];
-	      htmlParser(html, htmlSanitizeWriter(buf, function(uri, isImage) {
-	        return !/^unsafe/.test($$sanitizeUri(uri, isImage));
-	      }));
-	      return buf.join('');
-	    };
-	  }];
-	}
-
-	function sanitizeText(chars) {
-	  var buf = [];
-	  var writer = htmlSanitizeWriter(buf, angular.noop);
-	  writer.chars(chars);
-	  return buf.join('');
-	}
-
-
-	// Regular Expressions for parsing tags and attributes
-	var START_TAG_REGEXP =
-	       /^<((?:[a-zA-Z])[\w:-]*)((?:\s+[\w:-]+(?:\s*=\s*(?:(?:"[^"]*")|(?:'[^']*')|[^>\s]+))?)*)\s*(\/?)\s*(>?)/,
-	  END_TAG_REGEXP = /^<\/\s*([\w:-]+)[^>]*>/,
-	  ATTR_REGEXP = /([\w:-]+)(?:\s*=\s*(?:(?:"((?:[^"])*)")|(?:'((?:[^'])*)')|([^>\s]+)))?/g,
-	  BEGIN_TAG_REGEXP = /^</,
-	  BEGING_END_TAGE_REGEXP = /^<\//,
-	  COMMENT_REGEXP = /<!--(.*?)-->/g,
-	  DOCTYPE_REGEXP = /<!DOCTYPE([^>]*?)>/i,
-	  CDATA_REGEXP = /<!\[CDATA\[(.*?)]]>/g,
-	  SURROGATE_PAIR_REGEXP = /[\uD800-\uDBFF][\uDC00-\uDFFF]/g,
-	  // Match everything outside of normal chars and " (quote character)
-	  NON_ALPHANUMERIC_REGEXP = /([^\#-~| |!])/g;
-
-
-	// Good source of info about elements and attributes
-	// http://dev.w3.org/html5/spec/Overview.html#semantics
-	// http://simon.html5.org/html-elements
-
-	// Safe Void Elements - HTML5
-	// http://dev.w3.org/html5/spec/Overview.html#void-elements
-	var voidElements = makeMap("area,br,col,hr,img,wbr");
-
-	// Elements that you can, intentionally, leave open (and which close themselves)
-	// http://dev.w3.org/html5/spec/Overview.html#optional-tags
-	var optionalEndTagBlockElements = makeMap("colgroup,dd,dt,li,p,tbody,td,tfoot,th,thead,tr"),
-	    optionalEndTagInlineElements = makeMap("rp,rt"),
-	    optionalEndTagElements = angular.extend({},
-	                                            optionalEndTagInlineElements,
-	                                            optionalEndTagBlockElements);
-
-	// Safe Block Elements - HTML5
-	var blockElements = angular.extend({}, optionalEndTagBlockElements, makeMap("address,article," +
-	        "aside,blockquote,caption,center,del,dir,div,dl,figure,figcaption,footer,h1,h2,h3,h4,h5," +
-	        "h6,header,hgroup,hr,ins,map,menu,nav,ol,pre,script,section,table,ul"));
-
-	// Inline Elements - HTML5
-	var inlineElements = angular.extend({}, optionalEndTagInlineElements, makeMap("a,abbr,acronym,b," +
-	        "bdi,bdo,big,br,cite,code,del,dfn,em,font,i,img,ins,kbd,label,map,mark,q,ruby,rp,rt,s," +
-	        "samp,small,span,strike,strong,sub,sup,time,tt,u,var"));
-
-	// SVG Elements
-	// https://wiki.whatwg.org/wiki/Sanitization_rules#svg_Elements
-	var svgElements = makeMap("animate,animateColor,animateMotion,animateTransform,circle,defs," +
-	        "desc,ellipse,font-face,font-face-name,font-face-src,g,glyph,hkern,image,linearGradient," +
-	        "line,marker,metadata,missing-glyph,mpath,path,polygon,polyline,radialGradient,rect,set," +
-	        "stop,svg,switch,text,title,tspan,use");
-
-	// Special Elements (can contain anything)
-	var specialElements = makeMap("script,style");
-
-	var validElements = angular.extend({},
-	                                   voidElements,
-	                                   blockElements,
-	                                   inlineElements,
-	                                   optionalEndTagElements,
-	                                   svgElements);
-
-	//Attributes that have href and hence need to be sanitized
-	var uriAttrs = makeMap("background,cite,href,longdesc,src,usemap,xlink:href");
-
-	var htmlAttrs = makeMap('abbr,align,alt,axis,bgcolor,border,cellpadding,cellspacing,class,clear,'+
-	    'color,cols,colspan,compact,coords,dir,face,headers,height,hreflang,hspace,'+
-	    'ismap,lang,language,nohref,nowrap,rel,rev,rows,rowspan,rules,'+
-	    'scope,scrolling,shape,size,span,start,summary,target,title,type,'+
-	    'valign,value,vspace,width');
-
-	// SVG attributes (without "id" and "name" attributes)
-	// https://wiki.whatwg.org/wiki/Sanitization_rules#svg_Attributes
-	var svgAttrs = makeMap('accent-height,accumulate,additive,alphabetic,arabic-form,ascent,'+
-	    'attributeName,attributeType,baseProfile,bbox,begin,by,calcMode,cap-height,class,color,'+
-	    'color-rendering,content,cx,cy,d,dx,dy,descent,display,dur,end,fill,fill-rule,font-family,'+
-	    'font-size,font-stretch,font-style,font-variant,font-weight,from,fx,fy,g1,g2,glyph-name,'+
-	    'gradientUnits,hanging,height,horiz-adv-x,horiz-origin-x,ideographic,k,keyPoints,'+
-	    'keySplines,keyTimes,lang,marker-end,marker-mid,marker-start,markerHeight,markerUnits,'+
-	    'markerWidth,mathematical,max,min,offset,opacity,orient,origin,overline-position,'+
-	    'overline-thickness,panose-1,path,pathLength,points,preserveAspectRatio,r,refX,refY,'+
-	    'repeatCount,repeatDur,requiredExtensions,requiredFeatures,restart,rotate,rx,ry,slope,stemh,'+
-	    'stemv,stop-color,stop-opacity,strikethrough-position,strikethrough-thickness,stroke,'+
-	    'stroke-dasharray,stroke-dashoffset,stroke-linecap,stroke-linejoin,stroke-miterlimit,'+
-	    'stroke-opacity,stroke-width,systemLanguage,target,text-anchor,to,transform,type,u1,u2,'+
-	    'underline-position,underline-thickness,unicode,unicode-range,units-per-em,values,version,'+
-	    'viewBox,visibility,width,widths,x,x-height,x1,x2,xlink:actuate,xlink:arcrole,xlink:role,'+
-	    'xlink:show,xlink:title,xlink:type,xml:base,xml:lang,xml:space,xmlns,xmlns:xlink,y,y1,y2,'+
-	    'zoomAndPan');
-
-	var validAttrs = angular.extend({},
-	                                uriAttrs,
-	                                svgAttrs,
-	                                htmlAttrs);
-
-	function makeMap(str) {
-	  var obj = {}, items = str.split(','), i;
-	  for (i = 0; i < items.length; i++) obj[items[i]] = true;
-	  return obj;
-	}
-
-
-	/**
-	 * @example
-	 * htmlParser(htmlString, {
-	 *     start: function(tag, attrs, unary) {},
-	 *     end: function(tag) {},
-	 *     chars: function(text) {},
-	 *     comment: function(text) {}
-	 * });
-	 *
-	 * @param {string} html string
-	 * @param {object} handler
-	 */
-	function htmlParser(html, handler) {
-	  if (typeof html !== 'string') {
-	    if (html === null || typeof html === 'undefined') {
-	      html = '';
-	    } else {
-	      html = '' + html;
-	    }
-	  }
-	  var index, chars, match, stack = [], last = html, text;
-	  stack.last = function() { return stack[ stack.length - 1 ]; };
-
-	  while (html) {
-	    text = '';
-	    chars = true;
-
-	    // Make sure we're not in a script or style element
-	    if (!stack.last() || !specialElements[ stack.last() ]) {
-
-	      // Comment
-	      if (html.indexOf("<!--") === 0) {
-	        // comments containing -- are not allowed unless they terminate the comment
-	        index = html.indexOf("--", 4);
-
-	        if (index >= 0 && html.lastIndexOf("-->", index) === index) {
-	          if (handler.comment) handler.comment(html.substring(4, index));
-	          html = html.substring(index + 3);
-	          chars = false;
-	        }
-	      // DOCTYPE
-	      } else if (DOCTYPE_REGEXP.test(html)) {
-	        match = html.match(DOCTYPE_REGEXP);
-
-	        if (match) {
-	          html = html.replace(match[0], '');
-	          chars = false;
-	        }
-	      // end tag
-	      } else if (BEGING_END_TAGE_REGEXP.test(html)) {
-	        match = html.match(END_TAG_REGEXP);
-
-	        if (match) {
-	          html = html.substring(match[0].length);
-	          match[0].replace(END_TAG_REGEXP, parseEndTag);
-	          chars = false;
-	        }
-
-	      // start tag
-	      } else if (BEGIN_TAG_REGEXP.test(html)) {
-	        match = html.match(START_TAG_REGEXP);
-
-	        if (match) {
-	          // We only have a valid start-tag if there is a '>'.
-	          if (match[4]) {
-	            html = html.substring(match[0].length);
-	            match[0].replace(START_TAG_REGEXP, parseStartTag);
-	          }
-	          chars = false;
-	        } else {
-	          // no ending tag found --- this piece should be encoded as an entity.
-	          text += '<';
-	          html = html.substring(1);
-	        }
-	      }
-
-	      if (chars) {
-	        index = html.indexOf("<");
-
-	        text += index < 0 ? html : html.substring(0, index);
-	        html = index < 0 ? "" : html.substring(index);
-
-	        if (handler.chars) handler.chars(decodeEntities(text));
-	      }
-
-	    } else {
-	      html = html.replace(new RegExp("(.*)<\\s*\\/\\s*" + stack.last() + "[^>]*>", 'i'),
-	        function(all, text) {
-	          text = text.replace(COMMENT_REGEXP, "$1").replace(CDATA_REGEXP, "$1");
-
-	          if (handler.chars) handler.chars(decodeEntities(text));
-
-	          return "";
-	      });
-
-	      parseEndTag("", stack.last());
-	    }
-
-	    if (html == last) {
-	      throw $sanitizeMinErr('badparse', "The sanitizer was unable to parse the following block " +
-	                                        "of html: {0}", html);
-	    }
-	    last = html;
-	  }
-
-	  // Clean up any remaining tags
-	  parseEndTag();
-
-	  function parseStartTag(tag, tagName, rest, unary) {
-	    tagName = angular.lowercase(tagName);
-	    if (blockElements[ tagName ]) {
-	      while (stack.last() && inlineElements[ stack.last() ]) {
-	        parseEndTag("", stack.last());
-	      }
-	    }
-
-	    if (optionalEndTagElements[ tagName ] && stack.last() == tagName) {
-	      parseEndTag("", tagName);
-	    }
-
-	    unary = voidElements[ tagName ] || !!unary;
-
-	    if (!unary)
-	      stack.push(tagName);
-
-	    var attrs = {};
-
-	    rest.replace(ATTR_REGEXP,
-	      function(match, name, doubleQuotedValue, singleQuotedValue, unquotedValue) {
-	        var value = doubleQuotedValue
-	          || singleQuotedValue
-	          || unquotedValue
-	          || '';
-
-	        attrs[name] = decodeEntities(value);
-	    });
-	    if (handler.start) handler.start(tagName, attrs, unary);
-	  }
-
-	  function parseEndTag(tag, tagName) {
-	    var pos = 0, i;
-	    tagName = angular.lowercase(tagName);
-	    if (tagName)
-	      // Find the closest opened tag of the same type
-	      for (pos = stack.length - 1; pos >= 0; pos--)
-	        if (stack[ pos ] == tagName)
-	          break;
-
-	    if (pos >= 0) {
-	      // Close all the open elements, up the stack
-	      for (i = stack.length - 1; i >= pos; i--)
-	        if (handler.end) handler.end(stack[ i ]);
-
-	      // Remove the open elements from the stack
-	      stack.length = pos;
-	    }
-	  }
-	}
-
-	var hiddenPre=document.createElement("pre");
-	var spaceRe = /^(\s*)([\s\S]*?)(\s*)$/;
-	/**
-	 * decodes all entities into regular string
-	 * @param value
-	 * @returns {string} A string with decoded entities.
-	 */
-	function decodeEntities(value) {
-	  if (!value) { return ''; }
-
-	  // Note: IE8 does not preserve spaces at the start/end of innerHTML
-	  // so we must capture them and reattach them afterward
-	  var parts = spaceRe.exec(value);
-	  var spaceBefore = parts[1];
-	  var spaceAfter = parts[3];
-	  var content = parts[2];
-	  if (content) {
-	    hiddenPre.innerHTML=content.replace(/</g,"&lt;");
-	    // innerText depends on styling as it doesn't display hidden elements.
-	    // Therefore, it's better to use textContent not to cause unnecessary
-	    // reflows. However, IE<9 don't support textContent so the innerText
-	    // fallback is necessary.
-	    content = 'textContent' in hiddenPre ?
-	      hiddenPre.textContent : hiddenPre.innerText;
-	  }
-	  return spaceBefore + content + spaceAfter;
-	}
-
-	/**
-	 * Escapes all potentially dangerous characters, so that the
-	 * resulting string can be safely inserted into attribute or
-	 * element text.
-	 * @param value
-	 * @returns {string} escaped text
-	 */
-	function encodeEntities(value) {
-	  return value.
-	    replace(/&/g, '&amp;').
-	    replace(SURROGATE_PAIR_REGEXP, function(value) {
-	      var hi = value.charCodeAt(0);
-	      var low = value.charCodeAt(1);
-	      return '&#' + (((hi - 0xD800) * 0x400) + (low - 0xDC00) + 0x10000) + ';';
-	    }).
-	    replace(NON_ALPHANUMERIC_REGEXP, function(value) {
-	      return '&#' + value.charCodeAt(0) + ';';
-	    }).
-	    replace(/</g, '&lt;').
-	    replace(/>/g, '&gt;');
-	}
-
-	/**
-	 * create an HTML/XML writer which writes to buffer
-	 * @param {Array} buf use buf.jain('') to get out sanitized html string
-	 * @returns {object} in the form of {
-	 *     start: function(tag, attrs, unary) {},
-	 *     end: function(tag) {},
-	 *     chars: function(text) {},
-	 *     comment: function(text) {}
-	 * }
-	 */
-	function htmlSanitizeWriter(buf, uriValidator) {
-	  var ignore = false;
-	  var out = angular.bind(buf, buf.push);
-	  return {
-	    start: function(tag, attrs, unary) {
-	      tag = angular.lowercase(tag);
-	      if (!ignore && specialElements[tag]) {
-	        ignore = tag;
-	      }
-	      if (!ignore && validElements[tag] === true) {
-	        out('<');
-	        out(tag);
-	        angular.forEach(attrs, function(value, key) {
-	          var lkey=angular.lowercase(key);
-	          var isImage = (tag === 'img' && lkey === 'src') || (lkey === 'background');
-	          if (validAttrs[lkey] === true &&
-	            (uriAttrs[lkey] !== true || uriValidator(value, isImage))) {
-	            out(' ');
-	            out(key);
-	            out('="');
-	            out(encodeEntities(value));
-	            out('"');
-	          }
-	        });
-	        out(unary ? '/>' : '>');
-	      }
-	    },
-	    end: function(tag) {
-	        tag = angular.lowercase(tag);
-	        if (!ignore && validElements[tag] === true) {
-	          out('</');
-	          out(tag);
-	          out('>');
-	        }
-	        if (tag == ignore) {
-	          ignore = false;
-	        }
-	      },
-	    chars: function(chars) {
-	        if (!ignore) {
-	          out(encodeEntities(chars));
-	        }
-	      }
-	  };
-	}
-
-
-	// define ngSanitize module and register $sanitize service
-	angular.module('ngSanitize', []).provider('$sanitize', $SanitizeProvider);
-
-	/* global sanitizeText: false */
-
-	/**
-	 * @ngdoc filter
-	 * @name linky
-	 * @kind function
-	 *
-	 * @description
-	 * Finds links in text input and turns them into html links. Supports http/https/ftp/mailto and
-	 * plain email address links.
-	 *
-	 * Requires the {@link ngSanitize `ngSanitize`} module to be installed.
-	 *
-	 * @param {string} text Input text.
-	 * @param {string} target Window (_blank|_self|_parent|_top) or named frame to open links in.
-	 * @returns {string} Html-linkified text.
-	 *
-	 * @usage
-	   <span ng-bind-html="linky_expression | linky"></span>
-	 *
-	 * @example
-	   <example module="linkyExample" deps="angular-sanitize.js">
-	     <file name="index.html">
-	       <script>
-	         angular.module('linkyExample', ['ngSanitize'])
-	           .controller('ExampleController', ['$scope', function($scope) {
-	             $scope.snippet =
-	               'Pretty text with some links:\n'+
-	               'http://angularjs.org/,\n'+
-	               'mailto:us@somewhere.org,\n'+
-	               'another@somewhere.org,\n'+
-	               'and one more: ftp://127.0.0.1/.';
-	             $scope.snippetWithTarget = 'http://angularjs.org/';
-	           }]);
-	       </script>
-	       <div ng-controller="ExampleController">
-	       Snippet: <textarea ng-model="snippet" cols="60" rows="3"></textarea>
-	       <table>
-	         <tr>
-	           <td>Filter</td>
-	           <td>Source</td>
-	           <td>Rendered</td>
-	         </tr>
-	         <tr id="linky-filter">
-	           <td>linky filter</td>
-	           <td>
-	             <pre>&lt;div ng-bind-html="snippet | linky"&gt;<br>&lt;/div&gt;</pre>
-	           </td>
-	           <td>
-	             <div ng-bind-html="snippet | linky"></div>
-	           </td>
-	         </tr>
-	         <tr id="linky-target">
-	          <td>linky target</td>
-	          <td>
-	            <pre>&lt;div ng-bind-html="snippetWithTarget | linky:'_blank'"&gt;<br>&lt;/div&gt;</pre>
-	          </td>
-	          <td>
-	            <div ng-bind-html="snippetWithTarget | linky:'_blank'"></div>
-	          </td>
-	         </tr>
-	         <tr id="escaped-html">
-	           <td>no filter</td>
-	           <td><pre>&lt;div ng-bind="snippet"&gt;<br>&lt;/div&gt;</pre></td>
-	           <td><div ng-bind="snippet"></div></td>
-	         </tr>
-	       </table>
-	     </file>
-	     <file name="protractor.js" type="protractor">
-	       it('should linkify the snippet with urls', function() {
-	         expect(element(by.id('linky-filter')).element(by.binding('snippet | linky')).getText()).
-	             toBe('Pretty text with some links: http://angularjs.org/, us@somewhere.org, ' +
-	                  'another@somewhere.org, and one more: ftp://127.0.0.1/.');
-	         expect(element.all(by.css('#linky-filter a')).count()).toEqual(4);
-	       });
-
-	       it('should not linkify snippet without the linky filter', function() {
-	         expect(element(by.id('escaped-html')).element(by.binding('snippet')).getText()).
-	             toBe('Pretty text with some links: http://angularjs.org/, mailto:us@somewhere.org, ' +
-	                  'another@somewhere.org, and one more: ftp://127.0.0.1/.');
-	         expect(element.all(by.css('#escaped-html a')).count()).toEqual(0);
-	       });
-
-	       it('should update', function() {
-	         element(by.model('snippet')).clear();
-	         element(by.model('snippet')).sendKeys('new http://link.');
-	         expect(element(by.id('linky-filter')).element(by.binding('snippet | linky')).getText()).
-	             toBe('new http://link.');
-	         expect(element.all(by.css('#linky-filter a')).count()).toEqual(1);
-	         expect(element(by.id('escaped-html')).element(by.binding('snippet')).getText())
-	             .toBe('new http://link.');
-	       });
-
-	       it('should work with the target property', function() {
-	        expect(element(by.id('linky-target')).
-	            element(by.binding("snippetWithTarget | linky:'_blank'")).getText()).
-	            toBe('http://angularjs.org/');
-	        expect(element(by.css('#linky-target a')).getAttribute('target')).toEqual('_blank');
-	       });
-	     </file>
-	   </example>
-	 */
-	angular.module('ngSanitize').filter('linky', ['$sanitize', function($sanitize) {
-	  var LINKY_URL_REGEXP =
-	        /((ftp|https?):\/\/|(mailto:)?[A-Za-z0-9._%+-]+@)\S*[^\s.;,(){}<>"]/,
-	      MAILTO_REGEXP = /^mailto:/;
-
-	  return function(text, target) {
-	    if (!text) return text;
-	    var match;
-	    var raw = text;
-	    var html = [];
-	    var url;
-	    var i;
-	    while ((match = raw.match(LINKY_URL_REGEXP))) {
-	      // We can not end in these as they are sometimes found at the end of the sentence
-	      url = match[0];
-	      // if we did not match ftp/http/mailto then assume mailto
-	      if (match[2] == match[3]) url = 'mailto:' + url;
-	      i = match.index;
-	      addText(raw.substr(0, i));
-	      addLink(url, match[0].replace(MAILTO_REGEXP, ''));
-	      raw = raw.substring(i + match[0].length);
-	    }
-	    addText(raw);
-	    return $sanitize(html.join(''));
-
-	    function addText(text) {
-	      if (!text) {
-	        return;
-	      }
-	      html.push(sanitizeText(text));
-	    }
-
-	    function addLink(url, text) {
-	      html.push('<a ');
-	      if (angular.isDefined(target)) {
-	        html.push('target="');
-	        html.push(target);
-	        html.push('" ');
-	      }
-	      html.push('href="');
-	      html.push(url);
-	      html.push('">');
-	      addText(text);
-	      html.push('</a>');
-	    }
-	  };
-	}]);
-
-
-	})(window, window.angular);
-
-
-/***/ },
-/* 13 */
-/***/ function(module, exports, __webpack_require__) {
-
-	/**
-	 * @license AngularJS v1.3.2
-	 * (c) 2010-2014 Google, Inc. http://angularjs.org
-	 * License: MIT
-	 */
-	(function(window, angular, undefined) {'use strict';
-
-	/* jshint maxlen: false */
-
-	/**
-	 * @ngdoc module
-	 * @name ngAnimate
-	 * @description
-	 *
-	 * The `ngAnimate` module provides support for JavaScript, CSS3 transition and CSS3 keyframe animation hooks within existing core and custom directives.
-	 *
-	 * <div doc-module-components="ngAnimate"></div>
-	 *
-	 * # Usage
-	 *
-	 * To see animations in action, all that is required is to define the appropriate CSS classes
-	 * or to register a JavaScript animation via the myModule.animation() function. The directives that support animation automatically are:
-	 * `ngRepeat`, `ngInclude`, `ngIf`, `ngSwitch`, `ngShow`, `ngHide`, `ngView` and `ngClass`. Custom directives can take advantage of animation
-	 * by using the `$animate` service.
-	 *
-	 * Below is a more detailed breakdown of the supported animation events provided by pre-existing ng directives:
-	 *
-	 * | Directive                                                                                                | Supported Animations                                                     |
-	 * |----------------------------------------------------------------------------------------------------------|--------------------------------------------------------------------------|
-	 * | {@link ng.directive:ngRepeat#animations ngRepeat}                                                        | enter, leave and move                                                    |
-	 * | {@link ngRoute.directive:ngView#animations ngView}                                                       | enter and leave                                                          |
-	 * | {@link ng.directive:ngInclude#animations ngInclude}                                                      | enter and leave                                                          |
-	 * | {@link ng.directive:ngSwitch#animations ngSwitch}                                                        | enter and leave                                                          |
-	 * | {@link ng.directive:ngIf#animations ngIf}                                                                | enter and leave                                                          |
-	 * | {@link ng.directive:ngClass#animations ngClass}                                                          | add and remove (the CSS class(es) present)                               |
-	 * | {@link ng.directive:ngShow#animations ngShow} & {@link ng.directive:ngHide#animations ngHide}            | add and remove (the ng-hide class value)                                 |
-	 * | {@link ng.directive:form#animation-hooks form} & {@link ng.directive:ngModel#animation-hooks ngModel}    | add and remove (dirty, pristine, valid, invalid & all other validations) |
-	 * | {@link module:ngMessages#animations ngMessages}                                                          | add and remove (ng-active & ng-inactive)                                 |
-	 * | {@link module:ngMessages#animations ngMessage}                                                           | enter and leave                                                          |
-	 *
-	 * You can find out more information about animations upon visiting each directive page.
-	 *
-	 * Below is an example of how to apply animations to a directive that supports animation hooks:
-	 *
-	 * ```html
-	 * <style type="text/css">
-	 * .slide.ng-enter, .slide.ng-leave {
-	 *   -webkit-transition:0.5s linear all;
-	 *   transition:0.5s linear all;
-	 * }
-	 *
-	 * .slide.ng-enter { }        /&#42; starting animations for enter &#42;/
-	 * .slide.ng-enter.ng-enter-active { } /&#42; terminal animations for enter &#42;/
-	 * .slide.ng-leave { }        /&#42; starting animations for leave &#42;/
-	 * .slide.ng-leave.ng-leave-active { } /&#42; terminal animations for leave &#42;/
-	 * </style>
-	 *
-	 * <!--
-	 * the animate service will automatically add .ng-enter and .ng-leave to the element
-	 * to trigger the CSS transition/animations
-	 * -->
-	 * <ANY class="slide" ng-include="..."></ANY>
-	 * ```
-	 *
-	 * Keep in mind that, by default, if an animation is running, any child elements cannot be animated
-	 * until the parent element's animation has completed. This blocking feature can be overridden by
-	 * placing the `ng-animate-children` attribute on a parent container tag.
-	 *
-	 * ```html
-	 * <div class="slide-animation" ng-if="on" ng-animate-children>
-	 *   <div class="fade-animation" ng-if="on">
-	 *     <div class="explode-animation" ng-if="on">
-	 *        ...
-	 *     </div>
-	 *   </div>
-	 * </div>
-	 * ```
-	 *
-	 * When the `on` expression value changes and an animation is triggered then each of the elements within
-	 * will all animate without the block being applied to child elements.
-	 *
-	 * ## Are animations run when the application starts?
-	 * No they are not. When an application is bootstrapped Angular will disable animations from running to avoid
-	 * a frenzy of animations from being triggered as soon as the browser has rendered the screen. For this to work,
-	 * Angular will wait for two digest cycles until enabling animations. From there on, any animation-triggering
-	 * layout changes in the application will trigger animations as normal.
-	 *
-	 * In addition, upon bootstrap, if the routing system or any directives or load remote data (via $http) then Angular
-	 * will automatically extend the wait time to enable animations once **all** of the outbound HTTP requests
-	 * are complete.
-	 *
-	 * ## CSS-defined Animations
-	 * The animate service will automatically apply two CSS classes to the animated element and these two CSS classes
-	 * are designed to contain the start and end CSS styling. Both CSS transitions and keyframe animations are supported
-	 * and can be used to play along with this naming structure.
-	 *
-	 * The following code below demonstrates how to perform animations using **CSS transitions** with Angular:
-	 *
-	 * ```html
-	 * <style type="text/css">
-	 * /&#42;
-	 *  The animate class is apart of the element and the ng-enter class
-	 *  is attached to the element once the enter animation event is triggered
-	 * &#42;/
-	 * .reveal-animation.ng-enter {
-	 *  -webkit-transition: 1s linear all; /&#42; Safari/Chrome &#42;/
-	 *  transition: 1s linear all; /&#42; All other modern browsers and IE10+ &#42;/
-	 *
-	 *  /&#42; The animation preparation code &#42;/
-	 *  opacity: 0;
-	 * }
-	 *
-	 * /&#42;
-	 *  Keep in mind that you want to combine both CSS
-	 *  classes together to avoid any CSS-specificity
-	 *  conflicts
-	 * &#42;/
-	 * .reveal-animation.ng-enter.ng-enter-active {
-	 *  /&#42; The animation code itself &#42;/
-	 *  opacity: 1;
-	 * }
-	 * </style>
-	 *
-	 * <div class="view-container">
-	 *   <div ng-view class="reveal-animation"></div>
-	 * </div>
-	 * ```
-	 *
-	 * The following code below demonstrates how to perform animations using **CSS animations** with Angular:
-	 *
-	 * ```html
-	 * <style type="text/css">
-	 * .reveal-animation.ng-enter {
-	 *   -webkit-animation: enter_sequence 1s linear; /&#42; Safari/Chrome &#42;/
-	 *   animation: enter_sequence 1s linear; /&#42; IE10+ and Future Browsers &#42;/
-	 * }
-	 * @-webkit-keyframes enter_sequence {
-	 *   from { opacity:0; }
-	 *   to { opacity:1; }
-	 * }
-	 * @keyframes enter_sequence {
-	 *   from { opacity:0; }
-	 *   to { opacity:1; }
-	 * }
-	 * </style>
-	 *
-	 * <div class="view-container">
-	 *   <div ng-view class="reveal-animation"></div>
-	 * </div>
-	 * ```
-	 *
-	 * Both CSS3 animations and transitions can be used together and the animate service will figure out the correct duration and delay timing.
-	 *
-	 * Upon DOM mutation, the event class is added first (something like `ng-enter`), then the browser prepares itself to add
-	 * the active class (in this case `ng-enter-active`) which then triggers the animation. The animation module will automatically
-	 * detect the CSS code to determine when the animation ends. Once the animation is over then both CSS classes will be
-	 * removed from the DOM. If a browser does not support CSS transitions or CSS animations then the animation will start and end
-	 * immediately resulting in a DOM element that is at its final state. This final state is when the DOM element
-	 * has no CSS transition/animation classes applied to it.
-	 *
-	 * ### Structural transition animations
-	 *
-	 * Structural transitions (such as enter, leave and move) will always apply a `0s none` transition
-	 * value to force the browser into rendering the styles defined in the setup (.ng-enter, .ng-leave
-	 * or .ng-move) class. This means that any active transition animations operating on the element
-	 * will be cut off to make way for the enter, leave or move animation.
-	 *
-	 * ### Class-based transition animations
-	 *
-	 * Class-based transitions refer to transition animations that are triggered when a CSS class is
-	 * added to or removed from the element (via `$animate.addClass`, `$animate.removeClass`,
-	 * `$animate.setClass`, or by directives such as `ngClass`, `ngModel` and `form`).
-	 * They are different when compared to structural animations since they **do not cancel existing
-	 * animations** nor do they **block successive transitions** from rendering on the same element.
-	 * This distinction allows for **multiple class-based transitions** to be performed on the same element.
-	 *
-	 * In addition to ngAnimate supporting the default (natural) functionality of class-based transition
-	 * animations, ngAnimate also decorates the element with starting and ending CSS classes to aid the
-	 * developer in further styling the element throughout the transition animation. Earlier versions
-	 * of ngAnimate may have caused natural CSS transitions to break and not render properly due to
-	 * $animate temporarily blocking transitions using `0s none` in order to allow the setup CSS class
-	 * (the `-add` or `-remove` class) to be applied without triggering an animation. However, as of
-	 * **version 1.3**, this workaround has been removed with ngAnimate and all non-ngAnimate CSS
-	 * class transitions are compatible with ngAnimate.
-	 *
-	 * There is, however, one special case when dealing with class-based transitions in ngAnimate.
-	 * When rendering class-based transitions that make use of the setup and active CSS classes
-	 * (e.g. `.fade-add` and `.fade-add-active` for when `.fade` is added) be sure to define
-	 * the transition value **on the active CSS class** and not the setup class.
-	 *
-	 * ```css
-	 * .fade-add {
-	 *   /&#42; remember to place a 0s transition here
-	 *      to ensure that the styles are applied instantly
-	 *      even if the element already has a transition style &#42;/
-	 *   transition:0s linear all;
-	 *
-	 *   /&#42; starting CSS styles &#42;/
-	 *   opacity:1;
-	 * }
-	 * .fade-add.fade-add-active {
-	 *   /&#42; this will be the length of the animation &#42;/
-	 *   transition:1s linear all;
-	 *   opacity:0;
-	 * }
-	 * ```
-	 *
-	 * The setup CSS class (in this case `.fade-add`) also has a transition style property, however, it
-	 * has a duration of zero. This may not be required, however, incase the browser is unable to render
-	 * the styling present in this CSS class instantly then it could be that the browser is attempting
-	 * to perform an unnecessary transition.
-	 *
-	 * This workaround, however, does not apply to  standard class-based transitions that are rendered
-	 * when a CSS class containing a transition is applied to an element:
-	 *
-	 * ```css
-	 * /&#42; this works as expected &#42;/
-	 * .fade {
-	 *   transition:1s linear all;
-	 *   opacity:0;
-	 * }
-	 * ```
-	 *
-	 * Please keep this in mind when coding the CSS markup that will be used within class-based transitions.
-	 * Also, try not to mix the two class-based animation flavors together since the CSS code may become
-	 * overly complex.
-	 *
-	 *
-	 * ### Preventing Collisions With Third Party Libraries
-	 *
-	 * Some third-party frameworks place animation duration defaults across many element or className
-	 * selectors in order to make their code small and reuseable. This can lead to issues with ngAnimate, which
-	 * is expecting actual animations on these elements and has to wait for their completion.
-	 *
-	 * You can prevent this unwanted behavior by using a prefix on all your animation classes:
-	 *
-	 * ```css
-	 * /&#42; prefixed with animate- &#42;/
-	 * .animate-fade-add.animate-fade-add-active {
-	 *   transition:1s linear all;
-	 *   opacity:0;
-	 * }
-	 * ```
-	 *
-	 * You then configure `$animate` to enforce this prefix:
-	 *
-	 * ```js
-	 * $animateProvider.classNamePrefix(/animate-/);
-	 * ```
-	 * </div>
-	 *
-	 * ### CSS Staggering Animations
-	 * A Staggering animation is a collection of animations that are issued with a slight delay in between each successive operation resulting in a
-	 * curtain-like effect. The ngAnimate module (versions >=1.2) supports staggering animations and the stagger effect can be
-	 * performed by creating a **ng-EVENT-stagger** CSS class and attaching that class to the base CSS class used for
-	 * the animation. The style property expected within the stagger class can either be a **transition-delay** or an
-	 * **animation-delay** property (or both if your animation contains both transitions and keyframe animations).
-	 *
-	 * ```css
-	 * .my-animation.ng-enter {
-	 *   /&#42; standard transition code &#42;/
-	 *   -webkit-transition: 1s linear all;
-	 *   transition: 1s linear all;
-	 *   opacity:0;
-	 * }
-	 * .my-animation.ng-enter-stagger {
-	 *   /&#42; this will have a 100ms delay between each successive leave animation &#42;/
-	 *   -webkit-transition-delay: 0.1s;
-	 *   transition-delay: 0.1s;
-	 *
-	 *   /&#42; in case the stagger doesn't work then these two values
-	 *    must be set to 0 to avoid an accidental CSS inheritance &#42;/
-	 *   -webkit-transition-duration: 0s;
-	 *   transition-duration: 0s;
-	 * }
-	 * .my-animation.ng-enter.ng-enter-active {
-	 *   /&#42; standard transition styles &#42;/
-	 *   opacity:1;
-	 * }
-	 * ```
-	 *
-	 * Staggering animations work by default in ngRepeat (so long as the CSS class is defined). Outside of ngRepeat, to use staggering animations
-	 * on your own, they can be triggered by firing multiple calls to the same event on $animate. However, the restrictions surrounding this
-	 * are that each of the elements must have the same CSS className value as well as the same parent element. A stagger operation
-	 * will also be reset if more than 10ms has passed after the last animation has been fired.
-	 *
-	 * The following code will issue the **ng-leave-stagger** event on the element provided:
-	 *
-	 * ```js
-	 * var kids = parent.children();
-	 *
-	 * $animate.leave(kids[0]); //stagger index=0
-	 * $animate.leave(kids[1]); //stagger index=1
-	 * $animate.leave(kids[2]); //stagger index=2
-	 * $animate.leave(kids[3]); //stagger index=3
-	 * $animate.leave(kids[4]); //stagger index=4
-	 *
-	 * $timeout(function() {
-	 *   //stagger has reset itself
-	 *   $animate.leave(kids[5]); //stagger index=0
-	 *   $animate.leave(kids[6]); //stagger index=1
-	 * }, 100, false);
-	 * ```
-	 *
-	 * Stagger animations are currently only supported within CSS-defined animations.
-	 *
-	 * ## JavaScript-defined Animations
-	 * In the event that you do not want to use CSS3 transitions or CSS3 animations or if you wish to offer animations on browsers that do not
-	 * yet support CSS transitions/animations, then you can make use of JavaScript animations defined inside of your AngularJS module.
-	 *
-	 * ```js
-	 * //!annotate="YourApp" Your AngularJS Module|Replace this or ngModule with the module that you used to define your application.
-	 * var ngModule = angular.module('YourApp', ['ngAnimate']);
-	 * ngModule.animation('.my-crazy-animation', function() {
-	 *   return {
-	 *     enter: function(element, done) {
-	 *       //run the animation here and call done when the animation is complete
-	 *       return function(cancelled) {
-	 *         //this (optional) function will be called when the animation
-	 *         //completes or when the animation is cancelled (the cancelled
-	 *         //flag will be set to true if cancelled).
-	 *       };
-	 *     },
-	 *     leave: function(element, done) { },
-	 *     move: function(element, done) { },
-	 *
-	 *     //animation that can be triggered before the class is added
-	 *     beforeAddClass: function(element, className, done) { },
-	 *
-	 *     //animation that can be triggered after the class is added
-	 *     addClass: function(element, className, done) { },
-	 *
-	 *     //animation that can be triggered before the class is removed
-	 *     beforeRemoveClass: function(element, className, done) { },
-	 *
-	 *     //animation that can be triggered after the class is removed
-	 *     removeClass: function(element, className, done) { }
-	 *   };
-	 * });
-	 * ```
-	 *
-	 * JavaScript-defined animations are created with a CSS-like class selector and a collection of events which are set to run
-	 * a javascript callback function. When an animation is triggered, $animate will look for a matching animation which fits
-	 * the element's CSS class attribute value and then run the matching animation event function (if found).
-	 * In other words, if the CSS classes present on the animated element match any of the JavaScript animations then the callback function will
-	 * be executed. It should be also noted that only simple, single class selectors are allowed (compound class selectors are not supported).
-	 *
-	 * Within a JavaScript animation, an object containing various event callback animation functions is expected to be returned.
-	 * As explained above, these callbacks are triggered based on the animation event. Therefore if an enter animation is run,
-	 * and the JavaScript animation is found, then the enter callback will handle that animation (in addition to the CSS keyframe animation
-	 * or transition code that is defined via a stylesheet).
-	 *
-	 *
-	 * ### Applying Directive-specific Styles to an Animation
-	 * In some cases a directive or service may want to provide `$animate` with extra details that the animation will
-	 * include into its animation. Let's say for example we wanted to render an animation that animates an element
-	 * towards the mouse coordinates as to where the user clicked last. By collecting the X/Y coordinates of the click
-	 * (via the event parameter) we can set the `top` and `left` styles into an object and pass that into our function
-	 * call to `$animate.addClass`.
-	 *
-	 * ```js
-	 * canvas.on('click', function(e) {
-	 *   $animate.addClass(element, 'on', {
-	 *     to: {
-	 *       left : e.client.x + 'px',
-	 *       top : e.client.y + 'px'
-	 *     }
-	 *   }):
-	 * });
-	 * ```
-	 *
-	 * Now when the animation runs, and a transition or keyframe animation is picked up, then the animation itself will
-	 * also include and transition the styling of the `left` and `top` properties into its running animation. If we want
-	 * to provide some starting animation values then we can do so by placing the starting animations styles into an object
-	 * called `from` in the same object as the `to` animations.
-	 *
-	 * ```js
-	 * canvas.on('click', function(e) {
-	 *   $animate.addClass(element, 'on', {
-	 *     from: {
-	 *        position: 'absolute',
-	 *        left: '0px',
-	 *        top: '0px'
-	 *     },
-	 *     to: {
-	 *       left : e.client.x + 'px',
-	 *       top : e.client.y + 'px'
-	 *     }
-	 *   }):
-	 * });
-	 * ```
-	 *
-	 * Once the animation is complete or cancelled then the union of both the before and after styles are applied to the
-	 * element. If `ngAnimate` is not present then the styles will be applied immediately.
-	 *
-	 */
-
-	angular.module('ngAnimate', ['ng'])
-
-	  /**
-	   * @ngdoc provider
-	   * @name $animateProvider
-	   * @description
-	   *
-	   * The `$animateProvider` allows developers to register JavaScript animation event handlers directly inside of a module.
-	   * When an animation is triggered, the $animate service will query the $animate service to find any animations that match
-	   * the provided name value.
-	   *
-	   * Requires the {@link ngAnimate `ngAnimate`} module to be installed.
-	   *
-	   * Please visit the {@link ngAnimate `ngAnimate`} module overview page learn more about how to use animations in your application.
-	   *
-	   */
-	  .directive('ngAnimateChildren', function() {
-	    var NG_ANIMATE_CHILDREN = '$$ngAnimateChildren';
-	    return function(scope, element, attrs) {
-	      var val = attrs.ngAnimateChildren;
-	      if (angular.isString(val) && val.length === 0) { //empty attribute
-	        element.data(NG_ANIMATE_CHILDREN, true);
-	      } else {
-	        scope.$watch(val, function(value) {
-	          element.data(NG_ANIMATE_CHILDREN, !!value);
-	        });
-	      }
-	    };
-	  })
-
-	  //this private service is only used within CSS-enabled animations
-	  //IE8 + IE9 do not support rAF natively, but that is fine since they
-	  //also don't support transitions and keyframes which means that the code
-	  //below will never be used by the two browsers.
-	  .factory('$$animateReflow', ['$$rAF', '$document', function($$rAF, $document) {
-	    var bod = $document[0].body;
-	    return function(fn) {
-	      //the returned function acts as the cancellation function
-	      return $$rAF(function() {
-	        //the line below will force the browser to perform a repaint
-	        //so that all the animated elements within the animation frame
-	        //will be properly updated and drawn on screen. This is
-	        //required to perform multi-class CSS based animations with
-	        //Firefox. DO NOT REMOVE THIS LINE.
-	        var a = bod.offsetWidth + 1;
-	        fn();
-	      });
-	    };
-	  }])
-
-	  .config(['$provide', '$animateProvider', function($provide, $animateProvider) {
-	    var noop = angular.noop;
-	    var forEach = angular.forEach;
-	    var selectors = $animateProvider.$$selectors;
-	    var isArray = angular.isArray;
-	    var isString = angular.isString;
-	    var isObject = angular.isObject;
-
-	    var ELEMENT_NODE = 1;
-	    var NG_ANIMATE_STATE = '$$ngAnimateState';
-	    var NG_ANIMATE_CHILDREN = '$$ngAnimateChildren';
-	    var NG_ANIMATE_CLASS_NAME = 'ng-animate';
-	    var rootAnimateState = {running: true};
-
-	    function extractElementNode(element) {
-	      for (var i = 0; i < element.length; i++) {
-	        var elm = element[i];
-	        if (elm.nodeType == ELEMENT_NODE) {
-	          return elm;
-	        }
-	      }
-	    }
-
-	    function prepareElement(element) {
-	      return element && angular.element(element);
-	    }
-
-	    function stripCommentsFromElement(element) {
-	      return angular.element(extractElementNode(element));
-	    }
-
-	    function isMatchingElement(elm1, elm2) {
-	      return extractElementNode(elm1) == extractElementNode(elm2);
-	    }
-
-	    $provide.decorator('$animate',
-	        ['$delegate', '$$q', '$injector', '$sniffer', '$rootElement', '$$asyncCallback', '$rootScope', '$document', '$templateRequest',
-	 function($delegate,   $$q,   $injector,   $sniffer,   $rootElement,   $$asyncCallback,   $rootScope,   $document,   $templateRequest) {
-
-	      $rootElement.data(NG_ANIMATE_STATE, rootAnimateState);
-
-	      // Wait until all directive and route-related templates are downloaded and
-	      // compiled. The $templateRequest.totalPendingRequests variable keeps track of
-	      // all of the remote templates being currently downloaded. If there are no
-	      // templates currently downloading then the watcher will still fire anyway.
-	      var deregisterWatch = $rootScope.$watch(
-	        function() { return $templateRequest.totalPendingRequests; },
-	        function(val, oldVal) {
-	          if (val !== 0) return;
-	          deregisterWatch();
-
-	          // Now that all templates have been downloaded, $animate will wait until
-	          // the post digest queue is empty before enabling animations. By having two
-	          // calls to $postDigest calls we can ensure that the flag is enabled at the
-	          // very end of the post digest queue. Since all of the animations in $animate
-	          // use $postDigest, it's important that the code below executes at the end.
-	          // This basically means that the page is fully downloaded and compiled before
-	          // any animations are triggered.
-	          $rootScope.$$postDigest(function() {
-	            $rootScope.$$postDigest(function() {
-	              rootAnimateState.running = false;
-	            });
-	          });
-	        }
-	      );
-
-	      var globalAnimationCounter = 0;
-	      var classNameFilter = $animateProvider.classNameFilter();
-	      var isAnimatableClassName = !classNameFilter
-	              ? function() { return true; }
-	              : function(className) {
-	                return classNameFilter.test(className);
-	              };
-
-	      function classBasedAnimationsBlocked(element, setter) {
-	        var data = element.data(NG_ANIMATE_STATE) || {};
-	        if (setter) {
-	          data.running = true;
-	          data.structural = true;
-	          element.data(NG_ANIMATE_STATE, data);
-	        }
-	        return data.disabled || (data.running && data.structural);
-	      }
-
-	      function runAnimationPostDigest(fn) {
-	        var cancelFn, defer = $$q.defer();
-	        defer.promise.$$cancelFn = function() {
-	          cancelFn && cancelFn();
-	        };
-	        $rootScope.$$postDigest(function() {
-	          cancelFn = fn(function() {
-	            defer.resolve();
-	          });
-	        });
-	        return defer.promise;
-	      }
-
-	      function parseAnimateOptions(options) {
-	        // some plugin code may still be passing in the callback
-	        // function as the last param for the $animate methods so
-	        // it's best to only allow string or array values for now
-	        if (isObject(options)) {
-	          if (options.tempClasses && isString(options.tempClasses)) {
-	            options.tempClasses = options.tempClasses.split(/\s+/);
-	          }
-	          return options;
-	        }
-	      }
-
-	      function resolveElementClasses(element, cache, runningAnimations) {
-	        runningAnimations = runningAnimations || {};
-
-	        var lookup = {};
-	        forEach(runningAnimations, function(data, selector) {
-	          forEach(selector.split(' '), function(s) {
-	            lookup[s]=data;
-	          });
-	        });
-
-	        var hasClasses = Object.create(null);
-	        forEach((element.attr('class') || '').split(/\s+/), function(className) {
-	          hasClasses[className] = true;
-	        });
-
-	        var toAdd = [], toRemove = [];
-	        forEach((cache && cache.classes) || [], function(status, className) {
-	          var hasClass = hasClasses[className];
-	          var matchingAnimation = lookup[className] || {};
-
-	          // When addClass and removeClass is called then $animate will check to
-	          // see if addClass and removeClass cancel each other out. When there are
-	          // more calls to removeClass than addClass then the count falls below 0
-	          // and then the removeClass animation will be allowed. Otherwise if the
-	          // count is above 0 then that means an addClass animation will commence.
-	          // Once an animation is allowed then the code will also check to see if
-	          // there exists any on-going animation that is already adding or remvoing
-	          // the matching CSS class.
-	          if (status === false) {
-	            //does it have the class or will it have the class
-	            if (hasClass || matchingAnimation.event == 'addClass') {
-	              toRemove.push(className);
-	            }
-	          } else if (status === true) {
-	            //is the class missing or will it be removed?
-	            if (!hasClass || matchingAnimation.event == 'removeClass') {
-	              toAdd.push(className);
-	            }
-	          }
-	        });
-
-	        return (toAdd.length + toRemove.length) > 0 && [toAdd.join(' '), toRemove.join(' ')];
-	      }
-
-	      function lookup(name) {
-	        if (name) {
-	          var matches = [],
-	              flagMap = {},
-	              classes = name.substr(1).split('.');
-
-	          //the empty string value is the default animation
-	          //operation which performs CSS transition and keyframe
-	          //animations sniffing. This is always included for each
-	          //element animation procedure if the browser supports
-	          //transitions and/or keyframe animations. The default
-	          //animation is added to the top of the list to prevent
-	          //any previous animations from affecting the element styling
-	          //prior to the element being animated.
-	          if ($sniffer.transitions || $sniffer.animations) {
-	            matches.push($injector.get(selectors['']));
-	          }
-
-	          for (var i=0; i < classes.length; i++) {
-	            var klass = classes[i],
-	                selectorFactoryName = selectors[klass];
-	            if (selectorFactoryName && !flagMap[klass]) {
-	              matches.push($injector.get(selectorFactoryName));
-	              flagMap[klass] = true;
-	            }
-	          }
-	          return matches;
-	        }
-	      }
-
-	      function animationRunner(element, animationEvent, className, options) {
-	        //transcluded directives may sometimes fire an animation using only comment nodes
-	        //best to catch this early on to prevent any animation operations from occurring
-	        var node = element[0];
-	        if (!node) {
-	          return;
-	        }
-
-	        if (options) {
-	          options.to = options.to || {};
-	          options.from = options.from || {};
-	        }
-
-	        var classNameAdd;
-	        var classNameRemove;
-	        if (isArray(className)) {
-	          classNameAdd = className[0];
-	          classNameRemove = className[1];
-	          if (!classNameAdd) {
-	            className = classNameRemove;
-	            animationEvent = 'removeClass';
-	          } else if (!classNameRemove) {
-	            className = classNameAdd;
-	            animationEvent = 'addClass';
-	          } else {
-	            className = classNameAdd + ' ' + classNameRemove;
-	          }
-	        }
-
-	        var isSetClassOperation = animationEvent == 'setClass';
-	        var isClassBased = isSetClassOperation
-	                           || animationEvent == 'addClass'
-	                           || animationEvent == 'removeClass'
-	                           || animationEvent == 'animate';
-
-	        var currentClassName = element.attr('class');
-	        var classes = currentClassName + ' ' + className;
-	        if (!isAnimatableClassName(classes)) {
-	          return;
-	        }
-
-	        var beforeComplete = noop,
-	            beforeCancel = [],
-	            before = [],
-	            afterComplete = noop,
-	            afterCancel = [],
-	            after = [];
-
-	        var animationLookup = (' ' + classes).replace(/\s+/g,'.');
-	        forEach(lookup(animationLookup), function(animationFactory) {
-	          var created = registerAnimation(animationFactory, animationEvent);
-	          if (!created && isSetClassOperation) {
-	            registerAnimation(animationFactory, 'addClass');
-	            registerAnimation(animationFactory, 'removeClass');
-	          }
-	        });
-
-	        function registerAnimation(animationFactory, event) {
-	          var afterFn = animationFactory[event];
-	          var beforeFn = animationFactory['before' + event.charAt(0).toUpperCase() + event.substr(1)];
-	          if (afterFn || beforeFn) {
-	            if (event == 'leave') {
-	              beforeFn = afterFn;
-	              //when set as null then animation knows to skip this phase
-	              afterFn = null;
-	            }
-	            after.push({
-	              event: event, fn: afterFn
-	            });
-	            before.push({
-	              event: event, fn: beforeFn
-	            });
-	            return true;
-	          }
-	        }
-
-	        function run(fns, cancellations, allCompleteFn) {
-	          var animations = [];
-	          forEach(fns, function(animation) {
-	            animation.fn && animations.push(animation);
-	          });
-
-	          var count = 0;
-	          function afterAnimationComplete(index) {
-	            if (cancellations) {
-	              (cancellations[index] || noop)();
-	              if (++count < animations.length) return;
-	              cancellations = null;
-	            }
-	            allCompleteFn();
-	          }
-
-	          //The code below adds directly to the array in order to work with
-	          //both sync and async animations. Sync animations are when the done()
-	          //operation is called right away. DO NOT REFACTOR!
-	          forEach(animations, function(animation, index) {
-	            var progress = function() {
-	              afterAnimationComplete(index);
-	            };
-	            switch (animation.event) {
-	              case 'setClass':
-	                cancellations.push(animation.fn(element, classNameAdd, classNameRemove, progress, options));
-	                break;
-	              case 'animate':
-	                cancellations.push(animation.fn(element, className, options.from, options.to, progress));
-	                break;
-	              case 'addClass':
-	                cancellations.push(animation.fn(element, classNameAdd || className,     progress, options));
-	                break;
-	              case 'removeClass':
-	                cancellations.push(animation.fn(element, classNameRemove || className,  progress, options));
-	                break;
-	              default:
-	                cancellations.push(animation.fn(element, progress, options));
-	                break;
-	            }
-	          });
-
-	          if (cancellations && cancellations.length === 0) {
-	            allCompleteFn();
-	          }
-	        }
-
-	        return {
-	          node: node,
-	          event: animationEvent,
-	          className: className,
-	          isClassBased: isClassBased,
-	          isSetClassOperation: isSetClassOperation,
-	          applyStyles: function() {
-	            if (options) {
-	              element.css(angular.extend(options.from || {}, options.to || {}));
-	            }
-	          },
-	          before: function(allCompleteFn) {
-	            beforeComplete = allCompleteFn;
-	            run(before, beforeCancel, function() {
-	              beforeComplete = noop;
-	              allCompleteFn();
-	            });
-	          },
-	          after: function(allCompleteFn) {
-	            afterComplete = allCompleteFn;
-	            run(after, afterCancel, function() {
-	              afterComplete = noop;
-	              allCompleteFn();
-	            });
-	          },
-	          cancel: function() {
-	            if (beforeCancel) {
-	              forEach(beforeCancel, function(cancelFn) {
-	                (cancelFn || noop)(true);
-	              });
-	              beforeComplete(true);
-	            }
-	            if (afterCancel) {
-	              forEach(afterCancel, function(cancelFn) {
-	                (cancelFn || noop)(true);
-	              });
-	              afterComplete(true);
-	            }
-	          }
-	        };
-	      }
-
-	      /**
-	       * @ngdoc service
-	       * @name $animate
-	       * @kind object
-	       *
-	       * @description
-	       * The `$animate` service provides animation detection support while performing DOM operations (enter, leave and move) as well as during addClass and removeClass operations.
-	       * When any of these operations are run, the $animate service
-	       * will examine any JavaScript-defined animations (which are defined by using the $animateProvider provider object)
-	       * as well as any CSS-defined animations against the CSS classes present on the element once the DOM operation is run.
-	       *
-	       * The `$animate` service is used behind the scenes with pre-existing directives and animation with these directives
-	       * will work out of the box without any extra configuration.
-	       *
-	       * Requires the {@link ngAnimate `ngAnimate`} module to be installed.
-	       *
-	       * Please visit the {@link ngAnimate `ngAnimate`} module overview page learn more about how to use animations in your application.
-	       * ## Callback Promises
-	       * With AngularJS 1.3, each of the animation methods, on the `$animate` service, return a promise when called. The
-	       * promise itself is then resolved once the animation has completed itself, has been cancelled or has been
-	       * skipped due to animations being disabled. (Note that even if the animation is cancelled it will still
-	       * call the resolve function of the animation.)
-	       *
-	       * ```js
-	       * $animate.enter(element, container).then(function() {
-	       *   //...this is called once the animation is complete...
-	       * });
-	       * ```
-	       *
-	       * Also note that, due to the nature of the callback promise, if any Angular-specific code (like changing the scope,
-	       * location of the page, etc...) is executed within the callback promise then be sure to wrap the code using
-	       * `$scope.$apply(...)`;
-	       *
-	       * ```js
-	       * $animate.leave(element).then(function() {
-	       *   $scope.$apply(function() {
-	       *     $location.path('/new-page');
-	       *   });
-	       * });
-	       * ```
-	       *
-	       * An animation can also be cancelled by calling the `$animate.cancel(promise)` method with the provided
-	       * promise that was returned when the animation was started.
-	       *
-	       * ```js
-	       * var promise = $animate.addClass(element, 'super-long-animation').then(function() {
-	       *   //this will still be called even if cancelled
-	       * });
-	       *
-	       * element.on('click', function() {
-	       *   //tooo lazy to wait for the animation to end
-	       *   $animate.cancel(promise);
-	       * });
-	       * ```
-	       *
-	       * (Keep in mind that the promise cancellation is unique to `$animate` since promises in
-	       * general cannot be cancelled.)
-	       *
-	       */
-	      return {
-	        /**
-	         * @ngdoc method
-	         * @name $animate#animate
-	         * @kind function
-	         *
-	         * @description
-	         * Performs an inline animation on the element which applies the provided `to` and `from` CSS styles to the element.
-	         * If any detected CSS transition, keyframe or JavaScript matches the provided `className` value then the animation
-	         * will take on the provided styles. For example, if a transition animation is set for the given className then the
-	         * provided `from` and `to` styles will be applied alongside the given transition. If a JavaScript animation is
-	         * detected then the provided styles will be given in as function paramters.
-	         *
-	         * ```js
-	         * ngModule.animation('.my-inline-animation', function() {
-	         *   return {
-	         *     animate : function(element, className, from, to, done) {
-	         *       //styles
-	         *     }
-	         *   }
-	         * });
-	         * ```
-	         *
-	         * Below is a breakdown of each step that occurs during the `animate` animation:
-	         *
-	         * | Animation Step                                                                                                    | What the element class attribute looks like                |
-	         * |-------------------------------------------------------------------------------------------------------------------|------------------------------------------------------------|
-	         * | 1. $animate.animate(...) is called                                                                                | class="my-animation"                                       |
-	         * | 2. $animate waits for the next digest to start the animation                                                      | class="my-animation ng-animate"                            |
-	         * | 3. $animate runs the JavaScript-defined animations detected on the element                                        | class="my-animation ng-animate"                            |
-	         * | 4. the className class value is added to the element                                                              | class="my-animation ng-animate className"                  |
-	         * | 5. $animate scans the element styles to get the CSS transition/animation duration and delay                       | class="my-animation ng-animate className"                  |
-	         * | 6. $animate blocks all CSS transitions on the element to ensure the .className class styling is applied right away| class="my-animation ng-animate className"                  |
-	         * | 7. $animate applies the provided collection of `from` CSS styles to the element                                   | class="my-animation ng-animate className"                  |
-	         * | 8. $animate waits for a single animation frame (this performs a reflow)                                           | class="my-animation ng-animate className"                  |
-	         * | 9. $animate removes the CSS transition block placed on the element                                                | class="my-animation ng-animate className"                  |
-	         * | 10. the className-active class is added (this triggers the CSS transition/animation)                              | class="my-animation ng-animate className className-active" |
-	         * | 11. $animate applies the collection of `to` CSS styles to the element which are then handled by the transition    | class="my-animation ng-animate className className-active" |
-	         * | 12. $animate waits for the animation to complete (via events and timeout)                                         | class="my-animation ng-animate className className-active" |
-	         * | 13. The animation ends and all generated CSS classes are removed from the element                                 | class="my-animation"                                       |
-	         * | 14. The returned promise is resolved.                                                                             | class="my-animation"                                       |
-	         *
-	         * @param {DOMElement} element the element that will be the focus of the enter animation
-	         * @param {object} from a collection of CSS styles that will be applied to the element at the start of the animation
-	         * @param {object} to a collection of CSS styles that the element will animate towards
-	         * @param {string=} className an optional CSS class that will be added to the element for the duration of the animation (the default class is `ng-inline-animate`)
-	         * @param {object=} options an optional collection of options that will be picked up by the CSS transition/animation
-	         * @return {Promise} the animation callback promise
-	        */
-	        animate: function(element, from, to, className, options) {
-	          className = className || 'ng-inline-animate';
-	          options = parseAnimateOptions(options) || {};
-	          options.from = to ? from : null;
-	          options.to   = to ? to : from;
-
-	          return runAnimationPostDigest(function(done) {
-	            return performAnimation('animate', className, stripCommentsFromElement(element), null, null, noop, options, done);
-	          });
-	        },
-
-	        /**
-	         * @ngdoc method
-	         * @name $animate#enter
-	         * @kind function
-	         *
-	         * @description
-	         * Appends the element to the parentElement element that resides in the document and then runs the enter animation. Once
-	         * the animation is started, the following CSS classes will be present on the element for the duration of the animation:
-	         *
-	         * Below is a breakdown of each step that occurs during enter animation:
-	         *
-	         * | Animation Step                                                                                                    | What the element class attribute looks like              |
-	         * |-------------------------------------------------------------------------------------------------------------------|----------------------------------------------------------|
-	         * | 1. $animate.enter(...) is called                                                                                  | class="my-animation"                                     |
-	         * | 2. element is inserted into the parentElement element or beside the afterElement element                          | class="my-animation"                                     |
-	         * | 3. $animate waits for the next digest to start the animation                                                      | class="my-animation ng-animate"                          |
-	         * | 4. $animate runs the JavaScript-defined animations detected on the element                                        | class="my-animation ng-animate"                          |
-	         * | 5. the .ng-enter class is added to the element                                                                    | class="my-animation ng-animate ng-enter"                 |
-	         * | 6. $animate scans the element styles to get the CSS transition/animation duration and delay                       | class="my-animation ng-animate ng-enter"                 |
-	         * | 7. $animate blocks all CSS transitions on the element to ensure the .ng-enter class styling is applied right away | class="my-animation ng-animate ng-enter"                 |
-	         * | 8. $animate waits for a single animation frame (this performs a reflow)                                           | class="my-animation ng-animate ng-enter"                 |
-	         * | 9. $animate removes the CSS transition block placed on the element                                                | class="my-animation ng-animate ng-enter"                 |
-	         * | 10. the .ng-enter-active class is added (this triggers the CSS transition/animation)                              | class="my-animation ng-animate ng-enter ng-enter-active" |
-	         * | 11. $animate waits for the animation to complete (via events and timeout)                                         | class="my-animation ng-animate ng-enter ng-enter-active" |
-	         * | 12. The animation ends and all generated CSS classes are removed from the element                                 | class="my-animation"                                     |
-	         * | 13. The returned promise is resolved.                                                                             | class="my-animation"                                     |
-	         *
-	         * @param {DOMElement} element the element that will be the focus of the enter animation
-	         * @param {DOMElement} parentElement the parent element of the element that will be the focus of the enter animation
-	         * @param {DOMElement} afterElement the sibling element (which is the previous element) of the element that will be the focus of the enter animation
-	         * @param {object=} options an optional collection of options that will be picked up by the CSS transition/animation
-	         * @return {Promise} the animation callback promise
-	        */
-	        enter: function(element, parentElement, afterElement, options) {
-	          options = parseAnimateOptions(options);
-	          element = angular.element(element);
-	          parentElement = prepareElement(parentElement);
-	          afterElement = prepareElement(afterElement);
-
-	          classBasedAnimationsBlocked(element, true);
-	          $delegate.enter(element, parentElement, afterElement);
-	          return runAnimationPostDigest(function(done) {
-	            return performAnimation('enter', 'ng-enter', stripCommentsFromElement(element), parentElement, afterElement, noop, options, done);
-	          });
-	        },
-
-	        /**
-	         * @ngdoc method
-	         * @name $animate#leave
-	         * @kind function
-	         *
-	         * @description
-	         * Runs the leave animation operation and, upon completion, removes the element from the DOM. Once
-	         * the animation is started, the following CSS classes will be added for the duration of the animation:
-	         *
-	         * Below is a breakdown of each step that occurs during leave animation:
-	         *
-	         * | Animation Step                                                                                                    | What the element class attribute looks like              |
-	         * |-------------------------------------------------------------------------------------------------------------------|----------------------------------------------------------|
-	         * | 1. $animate.leave(...) is called                                                                                  | class="my-animation"                                     |
-	         * | 2. $animate runs the JavaScript-defined animations detected on the element                                        | class="my-animation ng-animate"                          |
-	         * | 3. $animate waits for the next digest to start the animation                                                      | class="my-animation ng-animate"                          |
-	         * | 4. the .ng-leave class is added to the element                                                                    | class="my-animation ng-animate ng-leave"                 |
-	         * | 5. $animate scans the element styles to get the CSS transition/animation duration and delay                       | class="my-animation ng-animate ng-leave"                 |
-	         * | 6. $animate blocks all CSS transitions on the element to ensure the .ng-leave class styling is applied right away | class="my-animation ng-animate ng-leave”                 |
-	         * | 7. $animate waits for a single animation frame (this performs a reflow)                                           | class="my-animation ng-animate ng-leave"                 |
-	         * | 8. $animate removes the CSS transition block placed on the element                                                | class="my-animation ng-animate ng-leave”                 |
-	         * | 9. the .ng-leave-active class is added (this triggers the CSS transition/animation)                               | class="my-animation ng-animate ng-leave ng-leave-active" |
-	         * | 10. $animate waits for the animation to complete (via events and timeout)                                         | class="my-animation ng-animate ng-leave ng-leave-active" |
-	         * | 11. The animation ends and all generated CSS classes are removed from the element                                 | class="my-animation"                                     |
-	         * | 12. The element is removed from the DOM                                                                           | ...                                                      |
-	         * | 13. The returned promise is resolved.                                                                             | ...                                                      |
-	         *
-	         * @param {DOMElement} element the element that will be the focus of the leave animation
-	         * @param {object=} options an optional collection of styles that will be picked up by the CSS transition/animation
-	         * @return {Promise} the animation callback promise
-	        */
-	        leave: function(element, options) {
-	          options = parseAnimateOptions(options);
-	          element = angular.element(element);
-
-	          cancelChildAnimations(element);
-	          classBasedAnimationsBlocked(element, true);
-	          return runAnimationPostDigest(function(done) {
-	            return performAnimation('leave', 'ng-leave', stripCommentsFromElement(element), null, null, function() {
-	              $delegate.leave(element);
-	            }, options, done);
-	          });
-	        },
-
-	        /**
-	         * @ngdoc method
-	         * @name $animate#move
-	         * @kind function
-	         *
-	         * @description
-	         * Fires the move DOM operation. Just before the animation starts, the animate service will either append it into the parentElement container or
-	         * add the element directly after the afterElement element if present. Then the move animation will be run. Once
-	         * the animation is started, the following CSS classes will be added for the duration of the animation:
-	         *
-	         * Below is a breakdown of each step that occurs during move animation:
-	         *
-	         * | Animation Step                                                                                                   | What the element class attribute looks like            |
-	         * |------------------------------------------------------------------------------------------------------------------|--------------------------------------------------------|
-	         * | 1. $animate.move(...) is called                                                                                  | class="my-animation"                                   |
-	         * | 2. element is moved into the parentElement element or beside the afterElement element                            | class="my-animation"                                   |
-	         * | 3. $animate waits for the next digest to start the animation                                                     | class="my-animation ng-animate"                        |
-	         * | 4. $animate runs the JavaScript-defined animations detected on the element                                       | class="my-animation ng-animate"                        |
-	         * | 5. the .ng-move class is added to the element                                                                    | class="my-animation ng-animate ng-move"                |
-	         * | 6. $animate scans the element styles to get the CSS transition/animation duration and delay                      | class="my-animation ng-animate ng-move"                |
-	         * | 7. $animate blocks all CSS transitions on the element to ensure the .ng-move class styling is applied right away | class="my-animation ng-animate ng-move”                |
-	         * | 8. $animate waits for a single animation frame (this performs a reflow)                                          | class="my-animation ng-animate ng-move"                |
-	         * | 9. $animate removes the CSS transition block placed on the element                                               | class="my-animation ng-animate ng-move”                |
-	         * | 10. the .ng-move-active class is added (this triggers the CSS transition/animation)                              | class="my-animation ng-animate ng-move ng-move-active" |
-	         * | 11. $animate waits for the animation to complete (via events and timeout)                                        | class="my-animation ng-animate ng-move ng-move-active" |
-	         * | 12. The animation ends and all generated CSS classes are removed from the element                                | class="my-animation"                                   |
-	         * | 13. The returned promise is resolved.                                                                            | class="my-animation"                                   |
-	         *
-	         * @param {DOMElement} element the element that will be the focus of the move animation
-	         * @param {DOMElement} parentElement the parentElement element of the element that will be the focus of the move animation
-	         * @param {DOMElement} afterElement the sibling element (which is the previous element) of the element that will be the focus of the move animation
-	         * @param {object=} options an optional collection of styles that will be picked up by the CSS transition/animation
-	         * @return {Promise} the animation callback promise
-	        */
-	        move: function(element, parentElement, afterElement, options) {
-	          options = parseAnimateOptions(options);
-	          element = angular.element(element);
-	          parentElement = prepareElement(parentElement);
-	          afterElement = prepareElement(afterElement);
-
-	          cancelChildAnimations(element);
-	          classBasedAnimationsBlocked(element, true);
-	          $delegate.move(element, parentElement, afterElement);
-	          return runAnimationPostDigest(function(done) {
-	            return performAnimation('move', 'ng-move', stripCommentsFromElement(element), parentElement, afterElement, noop, options, done);
-	          });
-	        },
-
-	        /**
-	         * @ngdoc method
-	         * @name $animate#addClass
-	         *
-	         * @description
-	         * Triggers a custom animation event based off the className variable and then attaches the className value to the element as a CSS class.
-	         * Unlike the other animation methods, the animate service will suffix the className value with {@type -add} in order to provide
-	         * the animate service the setup and active CSS classes in order to trigger the animation (this will be skipped if no CSS transitions
-	         * or keyframes are defined on the -add-active or base CSS class).
-	         *
-	         * Below is a breakdown of each step that occurs during addClass animation:
-	         *
-	         * | Animation Step                                                                                     | What the element class attribute looks like                      |
-	         * |----------------------------------------------------------------------------------------------------|------------------------------------------------------------------|
-	         * | 1. $animate.addClass(element, 'super') is called                                                   | class="my-animation"                                             |
-	         * | 2. $animate runs the JavaScript-defined animations detected on the element                         | class="my-animation ng-animate"                                  |
-	         * | 3. the .super-add class is added to the element                                                    | class="my-animation ng-animate super-add"                        |
-	         * | 4. $animate waits for a single animation frame (this performs a reflow)                            | class="my-animation ng-animate super-add"                        |
-	         * | 5. the .super and .super-add-active classes are added (this triggers the CSS transition/animation) | class="my-animation ng-animate super super-add super-add-active" |
-	         * | 6. $animate scans the element styles to get the CSS transition/animation duration and delay        | class="my-animation ng-animate super-add"                        |
-	         * | 7. $animate waits for the animation to complete (via events and timeout)                           | class="my-animation super super-add super-add-active"            |
-	         * | 8. The animation ends and all generated CSS classes are removed from the element                   | class="my-animation super"                                       |
-	         * | 9. The super class is kept on the element                                                          | class="my-animation super"                                       |
-	         * | 10. The returned promise is resolved.                                                              | class="my-animation super"                                       |
-	         *
-	         * @param {DOMElement} element the element that will be animated
-	         * @param {string} className the CSS class that will be added to the element and then animated
-	         * @param {object=} options an optional collection of styles that will be picked up by the CSS transition/animation
-	         * @return {Promise} the animation callback promise
-	        */
-	        addClass: function(element, className, options) {
-	          return this.setClass(element, className, [], options);
-	        },
-
-	        /**
-	         * @ngdoc method
-	         * @name $animate#removeClass
-	         *
-	         * @description
-	         * Triggers a custom animation event based off the className variable and then removes the CSS class provided by the className value
-	         * from the element. Unlike the other animation methods, the animate service will suffix the className value with {@type -remove} in
-	         * order to provide the animate service the setup and active CSS classes in order to trigger the animation (this will be skipped if
-	         * no CSS transitions or keyframes are defined on the -remove or base CSS classes).
-	         *
-	         * Below is a breakdown of each step that occurs during removeClass animation:
-	         *
-	         * | Animation Step                                                                                                   | What the element class attribute looks like                      |
-	         * |------------------------------------------------------------------------------------------------------------------|------------------------------------------------------------------|
-	         * | 1. $animate.removeClass(element, 'super') is called                                                              | class="my-animation super"                                       |
-	         * | 2. $animate runs the JavaScript-defined animations detected on the element                                       | class="my-animation super ng-animate"                            |
-	         * | 3. the .super-remove class is added to the element                                                               | class="my-animation super ng-animate super-remove"               |
-	         * | 4. $animate waits for a single animation frame (this performs a reflow)                                          | class="my-animation super ng-animate super-remove"               |
-	         * | 5. the .super-remove-active classes are added and .super is removed (this triggers the CSS transition/animation) | class="my-animation ng-animate super-remove super-remove-active" |
-	         * | 6. $animate scans the element styles to get the CSS transition/animation duration and delay                      | class="my-animation super ng-animate super-remove"               |
-	         * | 7. $animate waits for the animation to complete (via events and timeout)                                         | class="my-animation ng-animate super-remove super-remove-active" |
-	         * | 8. The animation ends and all generated CSS classes are removed from the element                                 | class="my-animation"                                             |
-	         * | 9. The returned promise is resolved.                                                                             | class="my-animation"                                             |
-	         *
-	         *
-	         * @param {DOMElement} element the element that will be animated
-	         * @param {string} className the CSS class that will be animated and then removed from the element
-	         * @param {object=} options an optional collection of styles that will be picked up by the CSS transition/animation
-	         * @return {Promise} the animation callback promise
-	        */
-	        removeClass: function(element, className, options) {
-	          return this.setClass(element, [], className, options);
-	        },
-
-	        /**
-	         *
-	         * @ngdoc method
-	         * @name $animate#setClass
-	         *
-	         * @description Adds and/or removes the given CSS classes to and from the element.
-	         * Once complete, the done() callback will be fired (if provided).
-	         *
-	         * | Animation Step                                                                                                                       | What the element class attribute looks like                                          |
-	         * |--------------------------------------------------------------------------------------------------------------------------------------|--------------------------------------------------------------------------------------|
-	         * | 1. $animate.removeClass(element, ‘on’, ‘off’) is called                                                                              | class="my-animation super off”                                                       |
-	         * | 2. $animate runs the JavaScript-defined animations detected on the element                                                           | class="my-animation super ng-animate off”                                            |
-	         * | 3. the .on-add and .off-remove classes are added to the element                                                                      | class="my-animation ng-animate on-add off-remove off”                                |
-	         * | 4. $animate waits for a single animation frame (this performs a reflow)                                                              | class="my-animation ng-animate on-add off-remove off”                                |
-	         * | 5. the .on, .on-add-active and .off-remove-active classes are added and .off is removed (this triggers the CSS transition/animation) | class="my-animation ng-animate on on-add on-add-active off-remove off-remove-active” |
-	         * | 6. $animate scans the element styles to get the CSS transition/animation duration and delay                                          | class="my-animation ng-animate on on-add on-add-active off-remove off-remove-active" |
-	         * | 7. $animate waits for the animation to complete (via events and timeout)                                                             | class="my-animation ng-animate on on-add on-add-active off-remove off-remove-active" |
-	         * | 8. The animation ends and all generated CSS classes are removed from the element                                                     | class="my-animation on"                                                              |
-	         * | 9. The returned promise is resolved.                                                                                                 | class="my-animation on"                                                              |
-	         *
-	         * @param {DOMElement} element the element which will have its CSS classes changed
-	         *   removed from it
-	         * @param {string} add the CSS classes which will be added to the element
-	         * @param {string} remove the CSS class which will be removed from the element
-	         *   CSS classes have been set on the element
-	         * @param {object=} options an optional collection of styles that will be picked up by the CSS transition/animation
-	         * @return {Promise} the animation callback promise
-	         */
-	        setClass: function(element, add, remove, options) {
-	          options = parseAnimateOptions(options);
-
-	          var STORAGE_KEY = '$$animateClasses';
-	          element = angular.element(element);
-	          element = stripCommentsFromElement(element);
-
-	          if (classBasedAnimationsBlocked(element)) {
-	            return $delegate.$$setClassImmediately(element, add, remove, options);
-	          }
-
-	          // we're using a combined array for both the add and remove
-	          // operations since the ORDER OF addClass and removeClass matters
-	          var classes, cache = element.data(STORAGE_KEY);
-	          var hasCache = !!cache;
-	          if (!cache) {
-	            cache = {};
-	            cache.classes = {};
-	          }
-	          classes = cache.classes;
-
-	          add = isArray(add) ? add : add.split(' ');
-	          forEach(add, function(c) {
-	            if (c && c.length) {
-	              classes[c] = true;
-	            }
-	          });
-
-	          remove = isArray(remove) ? remove : remove.split(' ');
-	          forEach(remove, function(c) {
-	            if (c && c.length) {
-	              classes[c] = false;
-	            }
-	          });
-
-	          if (hasCache) {
-	            if (options && cache.options) {
-	              cache.options = angular.extend(cache.options || {}, options);
-	            }
-
-	            //the digest cycle will combine all the animations into one function
-	            return cache.promise;
-	          } else {
-	            element.data(STORAGE_KEY, cache = {
-	              classes: classes,
-	              options: options
-	            });
-	          }
-
-	          return cache.promise = runAnimationPostDigest(function(done) {
-	            var parentElement = element.parent();
-	            var elementNode = extractElementNode(element);
-	            var parentNode = elementNode.parentNode;
-	            // TODO(matsko): move this code into the animationsDisabled() function once #8092 is fixed
-	            if (!parentNode || parentNode['$$NG_REMOVED'] || elementNode['$$NG_REMOVED']) {
-	              done();
-	              return;
-	            }
-
-	            var cache = element.data(STORAGE_KEY);
-	            element.removeData(STORAGE_KEY);
-
-	            var state = element.data(NG_ANIMATE_STATE) || {};
-	            var classes = resolveElementClasses(element, cache, state.active);
-	            return !classes
-	              ? done()
-	              : performAnimation('setClass', classes, element, parentElement, null, function() {
-	                  if (classes[0]) $delegate.$$addClassImmediately(element, classes[0]);
-	                  if (classes[1]) $delegate.$$removeClassImmediately(element, classes[1]);
-	                }, cache.options, done);
-	          });
-	        },
-
-	        /**
-	         * @ngdoc method
-	         * @name $animate#cancel
-	         * @kind function
-	         *
-	         * @param {Promise} animationPromise The animation promise that is returned when an animation is started.
-	         *
-	         * @description
-	         * Cancels the provided animation.
-	        */
-	        cancel: function(promise) {
-	          promise.$$cancelFn();
-	        },
-
-	        /**
-	         * @ngdoc method
-	         * @name $animate#enabled
-	         * @kind function
-	         *
-	         * @param {boolean=} value If provided then set the animation on or off.
-	         * @param {DOMElement=} element If provided then the element will be used to represent the enable/disable operation
-	         * @return {boolean} Current animation state.
-	         *
-	         * @description
-	         * Globally enables/disables animations.
-	         *
-	        */
-	        enabled: function(value, element) {
-	          switch (arguments.length) {
-	            case 2:
-	              if (value) {
-	                cleanup(element);
-	              } else {
-	                var data = element.data(NG_ANIMATE_STATE) || {};
-	                data.disabled = true;
-	                element.data(NG_ANIMATE_STATE, data);
-	              }
-	            break;
-
-	            case 1:
-	              rootAnimateState.disabled = !value;
-	            break;
-
-	            default:
-	              value = !rootAnimateState.disabled;
-	            break;
-	          }
-	          return !!value;
-	         }
-	      };
-
-	      /*
-	        all animations call this shared animation triggering function internally.
-	        The animationEvent variable refers to the JavaScript animation event that will be triggered
-	        and the className value is the name of the animation that will be applied within the
-	        CSS code. Element, parentElement and afterElement are provided DOM elements for the animation
-	        and the onComplete callback will be fired once the animation is fully complete.
-	      */
-	      function performAnimation(animationEvent, className, element, parentElement, afterElement, domOperation, options, doneCallback) {
-	        var noopCancel = noop;
-	        var runner = animationRunner(element, animationEvent, className, options);
-	        if (!runner) {
-	          fireDOMOperation();
-	          fireBeforeCallbackAsync();
-	          fireAfterCallbackAsync();
-	          closeAnimation();
-	          return noopCancel;
-	        }
-
-	        animationEvent = runner.event;
-	        className = runner.className;
-	        var elementEvents = angular.element._data(runner.node);
-	        elementEvents = elementEvents && elementEvents.events;
-
-	        if (!parentElement) {
-	          parentElement = afterElement ? afterElement.parent() : element.parent();
-	        }
-
-	        //skip the animation if animations are disabled, a parent is already being animated,
-	        //the element is not currently attached to the document body or then completely close
-	        //the animation if any matching animations are not found at all.
-	        //NOTE: IE8 + IE9 should close properly (run closeAnimation()) in case an animation was found.
-	        if (animationsDisabled(element, parentElement)) {
-	          fireDOMOperation();
-	          fireBeforeCallbackAsync();
-	          fireAfterCallbackAsync();
-	          closeAnimation();
-	          return noopCancel;
-	        }
-
-	        var ngAnimateState  = element.data(NG_ANIMATE_STATE) || {};
-	        var runningAnimations     = ngAnimateState.active || {};
-	        var totalActiveAnimations = ngAnimateState.totalActive || 0;
-	        var lastAnimation         = ngAnimateState.last;
-	        var skipAnimation = false;
-
-	        if (totalActiveAnimations > 0) {
-	          var animationsToCancel = [];
-	          if (!runner.isClassBased) {
-	            if (animationEvent == 'leave' && runningAnimations['ng-leave']) {
-	              skipAnimation = true;
-	            } else {
-	              //cancel all animations when a structural animation takes place
-	              for (var klass in runningAnimations) {
-	                animationsToCancel.push(runningAnimations[klass]);
-	              }
-	              ngAnimateState = {};
-	              cleanup(element, true);
-	            }
-	          } else if (lastAnimation.event == 'setClass') {
-	            animationsToCancel.push(lastAnimation);
-	            cleanup(element, className);
-	          }
-	          else if (runningAnimations[className]) {
-	            var current = runningAnimations[className];
-	            if (current.event == animationEvent) {
-	              skipAnimation = true;
-	            } else {
-	              animationsToCancel.push(current);
-	              cleanup(element, className);
-	            }
-	          }
-
-	          if (animationsToCancel.length > 0) {
-	            forEach(animationsToCancel, function(operation) {
-	              operation.cancel();
-	            });
-	          }
-	        }
-
-	        if (runner.isClassBased
-	            && !runner.isSetClassOperation
-	            && animationEvent != 'animate'
-	            && !skipAnimation) {
-	          skipAnimation = (animationEvent == 'addClass') == element.hasClass(className); //opposite of XOR
-	        }
-
-	        if (skipAnimation) {
-	          fireDOMOperation();
-	          fireBeforeCallbackAsync();
-	          fireAfterCallbackAsync();
-	          fireDoneCallbackAsync();
-	          return noopCancel;
-	        }
-
-	        runningAnimations     = ngAnimateState.active || {};
-	        totalActiveAnimations = ngAnimateState.totalActive || 0;
-
-	        if (animationEvent == 'leave') {
-	          //there's no need to ever remove the listener since the element
-	          //will be removed (destroyed) after the leave animation ends or
-	          //is cancelled midway
-	          element.one('$destroy', function(e) {
-	            var element = angular.element(this);
-	            var state = element.data(NG_ANIMATE_STATE);
-	            if (state) {
-	              var activeLeaveAnimation = state.active['ng-leave'];
-	              if (activeLeaveAnimation) {
-	                activeLeaveAnimation.cancel();
-	                cleanup(element, 'ng-leave');
-	              }
-	            }
-	          });
-	        }
-
-	        //the ng-animate class does nothing, but it's here to allow for
-	        //parent animations to find and cancel child animations when needed
-	        element.addClass(NG_ANIMATE_CLASS_NAME);
-	        if (options && options.tempClasses) {
-	          forEach(options.tempClasses, function(className) {
-	            element.addClass(className);
-	          });
-	        }
-
-	        var localAnimationCount = globalAnimationCounter++;
-	        totalActiveAnimations++;
-	        runningAnimations[className] = runner;
-
-	        element.data(NG_ANIMATE_STATE, {
-	          last: runner,
-	          active: runningAnimations,
-	          index: localAnimationCount,
-	          totalActive: totalActiveAnimations
-	        });
-
-	        //first we run the before animations and when all of those are complete
-	        //then we perform the DOM operation and run the next set of animations
-	        fireBeforeCallbackAsync();
-	        runner.before(function(cancelled) {
-	          var data = element.data(NG_ANIMATE_STATE);
-	          cancelled = cancelled ||
-	                        !data || !data.active[className] ||
-	                        (runner.isClassBased && data.active[className].event != animationEvent);
-
-	          fireDOMOperation();
-	          if (cancelled === true) {
-	            closeAnimation();
-	          } else {
-	            fireAfterCallbackAsync();
-	            runner.after(closeAnimation);
-	          }
-	        });
-
-	        return runner.cancel;
-
-	        function fireDOMCallback(animationPhase) {
-	          var eventName = '$animate:' + animationPhase;
-	          if (elementEvents && elementEvents[eventName] && elementEvents[eventName].length > 0) {
-	            $$asyncCallback(function() {
-	              element.triggerHandler(eventName, {
-	                event: animationEvent,
-	                className: className
-	              });
-	            });
-	          }
-	        }
-
-	        function fireBeforeCallbackAsync() {
-	          fireDOMCallback('before');
-	        }
-
-	        function fireAfterCallbackAsync() {
-	          fireDOMCallback('after');
-	        }
-
-	        function fireDoneCallbackAsync() {
-	          fireDOMCallback('close');
-	          doneCallback();
-	        }
-
-	        //it is less complicated to use a flag than managing and canceling
-	        //timeouts containing multiple callbacks.
-	        function fireDOMOperation() {
-	          if (!fireDOMOperation.hasBeenRun) {
-	            fireDOMOperation.hasBeenRun = true;
-	            domOperation();
-	          }
-	        }
-
-	        function closeAnimation() {
-	          if (!closeAnimation.hasBeenRun) {
-	            if (runner) { //the runner doesn't exist if it fails to instantiate
-	              runner.applyStyles();
-	            }
-
-	            closeAnimation.hasBeenRun = true;
-	            if (options && options.tempClasses) {
-	              forEach(options.tempClasses, function(className) {
-	                element.removeClass(className);
-	              });
-	            }
-
-	            var data = element.data(NG_ANIMATE_STATE);
-	            if (data) {
-
-	              /* only structural animations wait for reflow before removing an
-	                 animation, but class-based animations don't. An example of this
-	                 failing would be when a parent HTML tag has a ng-class attribute
-	                 causing ALL directives below to skip animations during the digest */
-	              if (runner && runner.isClassBased) {
-	                cleanup(element, className);
-	              } else {
-	                $$asyncCallback(function() {
-	                  var data = element.data(NG_ANIMATE_STATE) || {};
-	                  if (localAnimationCount == data.index) {
-	                    cleanup(element, className, animationEvent);
-	                  }
-	                });
-	                element.data(NG_ANIMATE_STATE, data);
-	              }
-	            }
-	            fireDoneCallbackAsync();
-	          }
-	        }
-	      }
-
-	      function cancelChildAnimations(element) {
-	        var node = extractElementNode(element);
-	        if (node) {
-	          var nodes = angular.isFunction(node.getElementsByClassName) ?
-	            node.getElementsByClassName(NG_ANIMATE_CLASS_NAME) :
-	            node.querySelectorAll('.' + NG_ANIMATE_CLASS_NAME);
-	          forEach(nodes, function(element) {
-	            element = angular.element(element);
-	            var data = element.data(NG_ANIMATE_STATE);
-	            if (data && data.active) {
-	              forEach(data.active, function(runner) {
-	                runner.cancel();
-	              });
-	            }
-	          });
-	        }
-	      }
-
-	      function cleanup(element, className) {
-	        if (isMatchingElement(element, $rootElement)) {
-	          if (!rootAnimateState.disabled) {
-	            rootAnimateState.running = false;
-	            rootAnimateState.structural = false;
-	          }
-	        } else if (className) {
-	          var data = element.data(NG_ANIMATE_STATE) || {};
-
-	          var removeAnimations = className === true;
-	          if (!removeAnimations && data.active && data.active[className]) {
-	            data.totalActive--;
-	            delete data.active[className];
-	          }
-
-	          if (removeAnimations || !data.totalActive) {
-	            element.removeClass(NG_ANIMATE_CLASS_NAME);
-	            element.removeData(NG_ANIMATE_STATE);
-	          }
-	        }
-	      }
-
-	      function animationsDisabled(element, parentElement) {
-	        if (rootAnimateState.disabled) {
-	          return true;
-	        }
-
-	        if (isMatchingElement(element, $rootElement)) {
-	          return rootAnimateState.running;
-	        }
-
-	        var allowChildAnimations, parentRunningAnimation, hasParent;
-	        do {
-	          //the element did not reach the root element which means that it
-	          //is not apart of the DOM. Therefore there is no reason to do
-	          //any animations on it
-	          if (parentElement.length === 0) break;
-
-	          var isRoot = isMatchingElement(parentElement, $rootElement);
-	          var state = isRoot ? rootAnimateState : (parentElement.data(NG_ANIMATE_STATE) || {});
-	          if (state.disabled) {
-	            return true;
-	          }
-
-	          //no matter what, for an animation to work it must reach the root element
-	          //this implies that the element is attached to the DOM when the animation is run
-	          if (isRoot) {
-	            hasParent = true;
-	          }
-
-	          //once a flag is found that is strictly false then everything before
-	          //it will be discarded and all child animations will be restricted
-	          if (allowChildAnimations !== false) {
-	            var animateChildrenFlag = parentElement.data(NG_ANIMATE_CHILDREN);
-	            if (angular.isDefined(animateChildrenFlag)) {
-	              allowChildAnimations = animateChildrenFlag;
-	            }
-	          }
-
-	          parentRunningAnimation = parentRunningAnimation ||
-	                                   state.running ||
-	                                   (state.last && !state.last.isClassBased);
-	        }
-	        while (parentElement = parentElement.parent());
-
-	        return !hasParent || (!allowChildAnimations && parentRunningAnimation);
-	      }
-	    }]);
-
-	    $animateProvider.register('', ['$window', '$sniffer', '$timeout', '$$animateReflow',
-	                           function($window,   $sniffer,   $timeout,   $$animateReflow) {
-	      // Detect proper transitionend/animationend event names.
-	      var CSS_PREFIX = '', TRANSITION_PROP, TRANSITIONEND_EVENT, ANIMATION_PROP, ANIMATIONEND_EVENT;
-
-	      // If unprefixed events are not supported but webkit-prefixed are, use the latter.
-	      // Otherwise, just use W3C names, browsers not supporting them at all will just ignore them.
-	      // Note: Chrome implements `window.onwebkitanimationend` and doesn't implement `window.onanimationend`
-	      // but at the same time dispatches the `animationend` event and not `webkitAnimationEnd`.
-	      // Register both events in case `window.onanimationend` is not supported because of that,
-	      // do the same for `transitionend` as Safari is likely to exhibit similar behavior.
-	      // Also, the only modern browser that uses vendor prefixes for transitions/keyframes is webkit
-	      // therefore there is no reason to test anymore for other vendor prefixes: http://caniuse.com/#search=transition
-	      if (window.ontransitionend === undefined && window.onwebkittransitionend !== undefined) {
-	        CSS_PREFIX = '-webkit-';
-	        TRANSITION_PROP = 'WebkitTransition';
-	        TRANSITIONEND_EVENT = 'webkitTransitionEnd transitionend';
-	      } else {
-	        TRANSITION_PROP = 'transition';
-	        TRANSITIONEND_EVENT = 'transitionend';
-	      }
-
-	      if (window.onanimationend === undefined && window.onwebkitanimationend !== undefined) {
-	        CSS_PREFIX = '-webkit-';
-	        ANIMATION_PROP = 'WebkitAnimation';
-	        ANIMATIONEND_EVENT = 'webkitAnimationEnd animationend';
-	      } else {
-	        ANIMATION_PROP = 'animation';
-	        ANIMATIONEND_EVENT = 'animationend';
-	      }
-
-	      var DURATION_KEY = 'Duration';
-	      var PROPERTY_KEY = 'Property';
-	      var DELAY_KEY = 'Delay';
-	      var ANIMATION_ITERATION_COUNT_KEY = 'IterationCount';
-	      var ANIMATION_PLAYSTATE_KEY = 'PlayState';
-	      var NG_ANIMATE_PARENT_KEY = '$$ngAnimateKey';
-	      var NG_ANIMATE_CSS_DATA_KEY = '$$ngAnimateCSS3Data';
-	      var ELAPSED_TIME_MAX_DECIMAL_PLACES = 3;
-	      var CLOSING_TIME_BUFFER = 1.5;
-	      var ONE_SECOND = 1000;
-
-	      var lookupCache = {};
-	      var parentCounter = 0;
-	      var animationReflowQueue = [];
-	      var cancelAnimationReflow;
-	      function clearCacheAfterReflow() {
-	        if (!cancelAnimationReflow) {
-	          cancelAnimationReflow = $$animateReflow(function() {
-	            animationReflowQueue = [];
-	            cancelAnimationReflow = null;
-	            lookupCache = {};
-	          });
-	        }
-	      }
-
-	      function afterReflow(element, callback) {
-	        if (cancelAnimationReflow) {
-	          cancelAnimationReflow();
-	        }
-	        animationReflowQueue.push(callback);
-	        cancelAnimationReflow = $$animateReflow(function() {
-	          forEach(animationReflowQueue, function(fn) {
-	            fn();
-	          });
-
-	          animationReflowQueue = [];
-	          cancelAnimationReflow = null;
-	          lookupCache = {};
-	        });
-	      }
-
-	      var closingTimer = null;
-	      var closingTimestamp = 0;
-	      var animationElementQueue = [];
-	      function animationCloseHandler(element, totalTime) {
-	        var node = extractElementNode(element);
-	        element = angular.element(node);
-
-	        //this item will be garbage collected by the closing
-	        //animation timeout
-	        animationElementQueue.push(element);
-
-	        //but it may not need to cancel out the existing timeout
-	        //if the timestamp is less than the previous one
-	        var futureTimestamp = Date.now() + totalTime;
-	        if (futureTimestamp <= closingTimestamp) {
-	          return;
-	        }
-
-	        $timeout.cancel(closingTimer);
-
-	        closingTimestamp = futureTimestamp;
-	        closingTimer = $timeout(function() {
-	          closeAllAnimations(animationElementQueue);
-	          animationElementQueue = [];
-	        }, totalTime, false);
-	      }
-
-	      function closeAllAnimations(elements) {
-	        forEach(elements, function(element) {
-	          var elementData = element.data(NG_ANIMATE_CSS_DATA_KEY);
-	          if (elementData) {
-	            forEach(elementData.closeAnimationFns, function(fn) {
-	              fn();
-	            });
-	          }
-	        });
-	      }
-
-	      function getElementAnimationDetails(element, cacheKey) {
-	        var data = cacheKey ? lookupCache[cacheKey] : null;
-	        if (!data) {
-	          var transitionDuration = 0;
-	          var transitionDelay = 0;
-	          var animationDuration = 0;
-	          var animationDelay = 0;
-
-	          //we want all the styles defined before and after
-	          forEach(element, function(element) {
-	            if (element.nodeType == ELEMENT_NODE) {
-	              var elementStyles = $window.getComputedStyle(element) || {};
-
-	              var transitionDurationStyle = elementStyles[TRANSITION_PROP + DURATION_KEY];
-	              transitionDuration = Math.max(parseMaxTime(transitionDurationStyle), transitionDuration);
-
-	              var transitionDelayStyle = elementStyles[TRANSITION_PROP + DELAY_KEY];
-	              transitionDelay  = Math.max(parseMaxTime(transitionDelayStyle), transitionDelay);
-
-	              var animationDelayStyle = elementStyles[ANIMATION_PROP + DELAY_KEY];
-	              animationDelay   = Math.max(parseMaxTime(elementStyles[ANIMATION_PROP + DELAY_KEY]), animationDelay);
-
-	              var aDuration  = parseMaxTime(elementStyles[ANIMATION_PROP + DURATION_KEY]);
-
-	              if (aDuration > 0) {
-	                aDuration *= parseInt(elementStyles[ANIMATION_PROP + ANIMATION_ITERATION_COUNT_KEY], 10) || 1;
-	              }
-	              animationDuration = Math.max(aDuration, animationDuration);
-	            }
-	          });
-	          data = {
-	            total: 0,
-	            transitionDelay: transitionDelay,
-	            transitionDuration: transitionDuration,
-	            animationDelay: animationDelay,
-	            animationDuration: animationDuration
-	          };
-	          if (cacheKey) {
-	            lookupCache[cacheKey] = data;
-	          }
-	        }
-	        return data;
-	      }
-
-	      function parseMaxTime(str) {
-	        var maxValue = 0;
-	        var values = isString(str) ?
-	          str.split(/\s*,\s*/) :
-	          [];
-	        forEach(values, function(value) {
-	          maxValue = Math.max(parseFloat(value) || 0, maxValue);
-	        });
-	        return maxValue;
-	      }
-
-	      function getCacheKey(element) {
-	        var parentElement = element.parent();
-	        var parentID = parentElement.data(NG_ANIMATE_PARENT_KEY);
-	        if (!parentID) {
-	          parentElement.data(NG_ANIMATE_PARENT_KEY, ++parentCounter);
-	          parentID = parentCounter;
-	        }
-	        return parentID + '-' + extractElementNode(element).getAttribute('class');
-	      }
-
-	      function animateSetup(animationEvent, element, className, styles) {
-	        var structural = ['ng-enter','ng-leave','ng-move'].indexOf(className) >= 0;
-
-	        var cacheKey = getCacheKey(element);
-	        var eventCacheKey = cacheKey + ' ' + className;
-	        var itemIndex = lookupCache[eventCacheKey] ? ++lookupCache[eventCacheKey].total : 0;
-
-	        var stagger = {};
-	        if (itemIndex > 0) {
-	          var staggerClassName = className + '-stagger';
-	          var staggerCacheKey = cacheKey + ' ' + staggerClassName;
-	          var applyClasses = !lookupCache[staggerCacheKey];
-
-	          applyClasses && element.addClass(staggerClassName);
-
-	          stagger = getElementAnimationDetails(element, staggerCacheKey);
-
-	          applyClasses && element.removeClass(staggerClassName);
-	        }
-
-	        element.addClass(className);
-
-	        var formerData = element.data(NG_ANIMATE_CSS_DATA_KEY) || {};
-	        var timings = getElementAnimationDetails(element, eventCacheKey);
-	        var transitionDuration = timings.transitionDuration;
-	        var animationDuration = timings.animationDuration;
-
-	        if (structural && transitionDuration === 0 && animationDuration === 0) {
-	          element.removeClass(className);
-	          return false;
-	        }
-
-	        var blockTransition = styles || (structural && transitionDuration > 0);
-	        var blockAnimation = animationDuration > 0 &&
-	                             stagger.animationDelay > 0 &&
-	                             stagger.animationDuration === 0;
-
-	        var closeAnimationFns = formerData.closeAnimationFns || [];
-	        element.data(NG_ANIMATE_CSS_DATA_KEY, {
-	          stagger: stagger,
-	          cacheKey: eventCacheKey,
-	          running: formerData.running || 0,
-	          itemIndex: itemIndex,
-	          blockTransition: blockTransition,
-	          closeAnimationFns: closeAnimationFns
-	        });
-
-	        var node = extractElementNode(element);
-
-	        if (blockTransition) {
-	          blockTransitions(node, true);
-	          if (styles) {
-	            element.css(styles);
-	          }
-	        }
-
-	        if (blockAnimation) {
-	          blockAnimations(node, true);
-	        }
-
-	        return true;
-	      }
-
-	      function animateRun(animationEvent, element, className, activeAnimationComplete, styles) {
-	        var node = extractElementNode(element);
-	        var elementData = element.data(NG_ANIMATE_CSS_DATA_KEY);
-	        if (node.getAttribute('class').indexOf(className) == -1 || !elementData) {
-	          activeAnimationComplete();
-	          return;
-	        }
-
-	        var activeClassName = '';
-	        var pendingClassName = '';
-	        forEach(className.split(' '), function(klass, i) {
-	          var prefix = (i > 0 ? ' ' : '') + klass;
-	          activeClassName += prefix + '-active';
-	          pendingClassName += prefix + '-pending';
-	        });
-
-	        var style = '';
-	        var appliedStyles = [];
-	        var itemIndex = elementData.itemIndex;
-	        var stagger = elementData.stagger;
-	        var staggerTime = 0;
-	        if (itemIndex > 0) {
-	          var transitionStaggerDelay = 0;
-	          if (stagger.transitionDelay > 0 && stagger.transitionDuration === 0) {
-	            transitionStaggerDelay = stagger.transitionDelay * itemIndex;
-	          }
-
-	          var animationStaggerDelay = 0;
-	          if (stagger.animationDelay > 0 && stagger.animationDuration === 0) {
-	            animationStaggerDelay = stagger.animationDelay * itemIndex;
-	            appliedStyles.push(CSS_PREFIX + 'animation-play-state');
-	          }
-
-	          staggerTime = Math.round(Math.max(transitionStaggerDelay, animationStaggerDelay) * 100) / 100;
-	        }
-
-	        if (!staggerTime) {
-	          element.addClass(activeClassName);
-	          if (elementData.blockTransition) {
-	            blockTransitions(node, false);
-	          }
-	        }
-
-	        var eventCacheKey = elementData.cacheKey + ' ' + activeClassName;
-	        var timings = getElementAnimationDetails(element, eventCacheKey);
-	        var maxDuration = Math.max(timings.transitionDuration, timings.animationDuration);
-	        if (maxDuration === 0) {
-	          element.removeClass(activeClassName);
-	          animateClose(element, className);
-	          activeAnimationComplete();
-	          return;
-	        }
-
-	        if (!staggerTime && styles) {
-	          if (!timings.transitionDuration) {
-	            element.css('transition', timings.animationDuration + 's linear all');
-	            appliedStyles.push('transition');
-	          }
-	          element.css(styles);
-	        }
-
-	        var maxDelay = Math.max(timings.transitionDelay, timings.animationDelay);
-	        var maxDelayTime = maxDelay * ONE_SECOND;
-
-	        if (appliedStyles.length > 0) {
-	          //the element being animated may sometimes contain comment nodes in
-	          //the jqLite object, so we're safe to use a single variable to house
-	          //the styles since there is always only one element being animated
-	          var oldStyle = node.getAttribute('style') || '';
-	          if (oldStyle.charAt(oldStyle.length-1) !== ';') {
-	            oldStyle += ';';
-	          }
-	          node.setAttribute('style', oldStyle + ' ' + style);
-	        }
-
-	        var startTime = Date.now();
-	        var css3AnimationEvents = ANIMATIONEND_EVENT + ' ' + TRANSITIONEND_EVENT;
-	        var animationTime     = (maxDelay + maxDuration) * CLOSING_TIME_BUFFER;
-	        var totalTime         = (staggerTime + animationTime) * ONE_SECOND;
-
-	        var staggerTimeout;
-	        if (staggerTime > 0) {
-	          element.addClass(pendingClassName);
-	          staggerTimeout = $timeout(function() {
-	            staggerTimeout = null;
-
-	            if (timings.transitionDuration > 0) {
-	              blockTransitions(node, false);
-	            }
-	            if (timings.animationDuration > 0) {
-	              blockAnimations(node, false);
-	            }
-
-	            element.addClass(activeClassName);
-	            element.removeClass(pendingClassName);
-
-	            if (styles) {
-	              if (timings.transitionDuration === 0) {
-	                element.css('transition', timings.animationDuration + 's linear all');
-	              }
-	              element.css(styles);
-	              appliedStyles.push('transition');
-	            }
-	          }, staggerTime * ONE_SECOND, false);
-	        }
-
-	        element.on(css3AnimationEvents, onAnimationProgress);
-	        elementData.closeAnimationFns.push(function() {
-	          onEnd();
-	          activeAnimationComplete();
-	        });
-
-	        elementData.running++;
-	        animationCloseHandler(element, totalTime);
-	        return onEnd;
-
-	        // This will automatically be called by $animate so
-	        // there is no need to attach this internally to the
-	        // timeout done method.
-	        function onEnd() {
-	          element.off(css3AnimationEvents, onAnimationProgress);
-	          element.removeClass(activeClassName);
-	          element.removeClass(pendingClassName);
-	          if (staggerTimeout) {
-	            $timeout.cancel(staggerTimeout);
-	          }
-	          animateClose(element, className);
-	          var node = extractElementNode(element);
-	          for (var i in appliedStyles) {
-	            node.style.removeProperty(appliedStyles[i]);
-	          }
-	        }
-
-	        function onAnimationProgress(event) {
-	          event.stopPropagation();
-	          var ev = event.originalEvent || event;
-	          var timeStamp = ev.$manualTimeStamp || ev.timeStamp || Date.now();
-
-	          /* Firefox (or possibly just Gecko) likes to not round values up
-	           * when a ms measurement is used for the animation */
-	          var elapsedTime = parseFloat(ev.elapsedTime.toFixed(ELAPSED_TIME_MAX_DECIMAL_PLACES));
-
-	          /* $manualTimeStamp is a mocked timeStamp value which is set
-	           * within browserTrigger(). This is only here so that tests can
-	           * mock animations properly. Real events fallback to event.timeStamp,
-	           * or, if they don't, then a timeStamp is automatically created for them.
-	           * We're checking to see if the timeStamp surpasses the expected delay,
-	           * but we're using elapsedTime instead of the timeStamp on the 2nd
-	           * pre-condition since animations sometimes close off early */
-	          if (Math.max(timeStamp - startTime, 0) >= maxDelayTime && elapsedTime >= maxDuration) {
-	            activeAnimationComplete();
-	          }
-	        }
-	      }
-
-	      function blockTransitions(node, bool) {
-	        node.style[TRANSITION_PROP + PROPERTY_KEY] = bool ? 'none' : '';
-	      }
-
-	      function blockAnimations(node, bool) {
-	        node.style[ANIMATION_PROP + ANIMATION_PLAYSTATE_KEY] = bool ? 'paused' : '';
-	      }
-
-	      function animateBefore(animationEvent, element, className, styles) {
-	        if (animateSetup(animationEvent, element, className, styles)) {
-	          return function(cancelled) {
-	            cancelled && animateClose(element, className);
-	          };
-	        }
-	      }
-
-	      function animateAfter(animationEvent, element, className, afterAnimationComplete, styles) {
-	        if (element.data(NG_ANIMATE_CSS_DATA_KEY)) {
-	          return animateRun(animationEvent, element, className, afterAnimationComplete, styles);
-	        } else {
-	          animateClose(element, className);
-	          afterAnimationComplete();
-	        }
-	      }
-
-	      function animate(animationEvent, element, className, animationComplete, options) {
-	        //If the animateSetup function doesn't bother returning a
-	        //cancellation function then it means that there is no animation
-	        //to perform at all
-	        var preReflowCancellation = animateBefore(animationEvent, element, className, options.from);
-	        if (!preReflowCancellation) {
-	          clearCacheAfterReflow();
-	          animationComplete();
-	          return;
-	        }
-
-	        //There are two cancellation functions: one is before the first
-	        //reflow animation and the second is during the active state
-	        //animation. The first function will take care of removing the
-	        //data from the element which will not make the 2nd animation
-	        //happen in the first place
-	        var cancel = preReflowCancellation;
-	        afterReflow(element, function() {
-	          //once the reflow is complete then we point cancel to
-	          //the new cancellation function which will remove all of the
-	          //animation properties from the active animation
-	          cancel = animateAfter(animationEvent, element, className, animationComplete, options.to);
-	        });
-
-	        return function(cancelled) {
-	          (cancel || noop)(cancelled);
-	        };
-	      }
-
-	      function animateClose(element, className) {
-	        element.removeClass(className);
-	        var data = element.data(NG_ANIMATE_CSS_DATA_KEY);
-	        if (data) {
-	          if (data.running) {
-	            data.running--;
-	          }
-	          if (!data.running || data.running === 0) {
-	            element.removeData(NG_ANIMATE_CSS_DATA_KEY);
-	          }
-	        }
-	      }
-
-	      return {
-	        animate: function(element, className, from, to, animationCompleted, options) {
-	          options = options || {};
-	          options.from = from;
-	          options.to = to;
-	          return animate('animate', element, className, animationCompleted, options);
-	        },
-
-	        enter: function(element, animationCompleted, options) {
-	          options = options || {};
-	          return animate('enter', element, 'ng-enter', animationCompleted, options);
-	        },
-
-	        leave: function(element, animationCompleted, options) {
-	          options = options || {};
-	          return animate('leave', element, 'ng-leave', animationCompleted, options);
-	        },
-
-	        move: function(element, animationCompleted, options) {
-	          options = options || {};
-	          return animate('move', element, 'ng-move', animationCompleted, options);
-	        },
-
-	        beforeSetClass: function(element, add, remove, animationCompleted, options) {
-	          options = options || {};
-	          var className = suffixClasses(remove, '-remove') + ' ' +
-	                          suffixClasses(add, '-add');
-	          var cancellationMethod = animateBefore('setClass', element, className, options.from);
-	          if (cancellationMethod) {
-	            afterReflow(element, animationCompleted);
-	            return cancellationMethod;
-	          }
-	          clearCacheAfterReflow();
-	          animationCompleted();
-	        },
-
-	        beforeAddClass: function(element, className, animationCompleted, options) {
-	          options = options || {};
-	          var cancellationMethod = animateBefore('addClass', element, suffixClasses(className, '-add'), options.from);
-	          if (cancellationMethod) {
-	            afterReflow(element, animationCompleted);
-	            return cancellationMethod;
-	          }
-	          clearCacheAfterReflow();
-	          animationCompleted();
-	        },
-
-	        beforeRemoveClass: function(element, className, animationCompleted, options) {
-	          options = options || {};
-	          var cancellationMethod = animateBefore('removeClass', element, suffixClasses(className, '-remove'), options.from);
-	          if (cancellationMethod) {
-	            afterReflow(element, animationCompleted);
-	            return cancellationMethod;
-	          }
-	          clearCacheAfterReflow();
-	          animationCompleted();
-	        },
-
-	        setClass: function(element, add, remove, animationCompleted, options) {
-	          options = options || {};
-	          remove = suffixClasses(remove, '-remove');
-	          add = suffixClasses(add, '-add');
-	          var className = remove + ' ' + add;
-	          return animateAfter('setClass', element, className, animationCompleted, options.to);
-	        },
-
-	        addClass: function(element, className, animationCompleted, options) {
-	          options = options || {};
-	          return animateAfter('addClass', element, suffixClasses(className, '-add'), animationCompleted, options.to);
-	        },
-
-	        removeClass: function(element, className, animationCompleted, options) {
-	          options = options || {};
-	          return animateAfter('removeClass', element, suffixClasses(className, '-remove'), animationCompleted, options.to);
-	        }
-	      };
-
-	      function suffixClasses(classes, suffix) {
-	        var className = '';
-	        classes = isArray(classes) ? classes : classes.split(/\s+/);
-	        forEach(classes, function(klass, i) {
-	          if (klass && klass.length > 0) {
-	            className += (i > 0 ? ' ' : '') + klass + suffix;
-	          }
-	        });
-	        return className;
-	      }
-	    }]);
-	  }]);
-
-
-	})(window, window.angular);
-
-
-/***/ },
-/* 14 */
-/***/ function(module, exports, __webpack_require__) {
-
-	__webpack_require__(36);
-
-	__webpack_require__(37);
-
-	__webpack_require__(38);
-
-	__webpack_require__(39);
-
-	__webpack_require__(40);
-
-	__webpack_require__(41);
-
-	__webpack_require__(42);
-
-	__webpack_require__(43);
-
-	__webpack_require__(44);
-
-	__webpack_require__(45);
 
 	__webpack_require__(46);
 
@@ -30050,16 +30115,36 @@
 
 	__webpack_require__(51);
 
+	__webpack_require__(52);
+
+	__webpack_require__(53);
+
+	__webpack_require__(54);
+
+	__webpack_require__(55);
+
+	__webpack_require__(56);
+
+	__webpack_require__(57);
+
+	__webpack_require__(58);
+
+	__webpack_require__(59);
+
+	__webpack_require__(60);
+
+	__webpack_require__(61);
+
 
 /***/ },
-/* 15 */
+/* 17 */
 /***/ function(module, exports, __webpack_require__) {
 
 	module.exports = [{"name":"Afghanistan","alpha-2":"AF","alpha-3":"AFG","country-code":"004","iso_3166-2":"ISO 3166-2:AF","region-code":"142","sub-region-code":"034"},{"name":"Åland Islands","alpha-2":"AX","alpha-3":"ALA","country-code":"248","iso_3166-2":"ISO 3166-2:AX","region-code":"150","sub-region-code":"154"},{"name":"Albania","alpha-2":"AL","alpha-3":"ALB","country-code":"008","iso_3166-2":"ISO 3166-2:AL","region-code":"150","sub-region-code":"039"},{"name":"Algeria","alpha-2":"DZ","alpha-3":"DZA","country-code":"012","iso_3166-2":"ISO 3166-2:DZ","region-code":"002","sub-region-code":"015"},{"name":"American Samoa","alpha-2":"AS","alpha-3":"ASM","country-code":"016","iso_3166-2":"ISO 3166-2:AS","region-code":"009","sub-region-code":"061"},{"name":"Andorra","alpha-2":"AD","alpha-3":"AND","country-code":"020","iso_3166-2":"ISO 3166-2:AD","region-code":"150","sub-region-code":"039"},{"name":"Angola","alpha-2":"AO","alpha-3":"AGO","country-code":"024","iso_3166-2":"ISO 3166-2:AO","region-code":"002","sub-region-code":"017"},{"name":"Anguilla","alpha-2":"AI","alpha-3":"AIA","country-code":"660","iso_3166-2":"ISO 3166-2:AI","region-code":"019","sub-region-code":"029"},{"name":"Antarctica","alpha-2":"AQ","alpha-3":"ATA","country-code":"010","iso_3166-2":"ISO 3166-2:AQ"},{"name":"Antigua and Barbuda","alpha-2":"AG","alpha-3":"ATG","country-code":"028","iso_3166-2":"ISO 3166-2:AG","region-code":"019","sub-region-code":"029"},{"name":"Argentina","alpha-2":"AR","alpha-3":"ARG","country-code":"032","iso_3166-2":"ISO 3166-2:AR","region-code":"019","sub-region-code":"005"},{"name":"Armenia","alpha-2":"AM","alpha-3":"ARM","country-code":"051","iso_3166-2":"ISO 3166-2:AM","region-code":"142","sub-region-code":"145"},{"name":"Aruba","alpha-2":"AW","alpha-3":"ABW","country-code":"533","iso_3166-2":"ISO 3166-2:AW","region-code":"019","sub-region-code":"029"},{"name":"Australia","alpha-2":"AU","alpha-3":"AUS","country-code":"036","iso_3166-2":"ISO 3166-2:AU","region-code":"009","sub-region-code":"053"},{"name":"Austria","alpha-2":"AT","alpha-3":"AUT","country-code":"040","iso_3166-2":"ISO 3166-2:AT","region-code":"150","sub-region-code":"155"},{"name":"Azerbaijan","alpha-2":"AZ","alpha-3":"AZE","country-code":"031","iso_3166-2":"ISO 3166-2:AZ","region-code":"142","sub-region-code":"145"},{"name":"Bahamas","alpha-2":"BS","alpha-3":"BHS","country-code":"044","iso_3166-2":"ISO 3166-2:BS","region-code":"019","sub-region-code":"029"},{"name":"Bahrain","alpha-2":"BH","alpha-3":"BHR","country-code":"048","iso_3166-2":"ISO 3166-2:BH","region-code":"142","sub-region-code":"145"},{"name":"Bangladesh","alpha-2":"BD","alpha-3":"BGD","country-code":"050","iso_3166-2":"ISO 3166-2:BD","region-code":"142","sub-region-code":"034"},{"name":"Barbados","alpha-2":"BB","alpha-3":"BRB","country-code":"052","iso_3166-2":"ISO 3166-2:BB","region-code":"019","sub-region-code":"029"},{"name":"Belarus","alpha-2":"BY","alpha-3":"BLR","country-code":"112","iso_3166-2":"ISO 3166-2:BY","region-code":"150","sub-region-code":"151"},{"name":"Belgium","alpha-2":"BE","alpha-3":"BEL","country-code":"056","iso_3166-2":"ISO 3166-2:BE","region-code":"150","sub-region-code":"155"},{"name":"Belize","alpha-2":"BZ","alpha-3":"BLZ","country-code":"084","iso_3166-2":"ISO 3166-2:BZ","region-code":"019","sub-region-code":"013"},{"name":"Benin","alpha-2":"BJ","alpha-3":"BEN","country-code":"204","iso_3166-2":"ISO 3166-2:BJ","region-code":"002","sub-region-code":"011"},{"name":"Bermuda","alpha-2":"BM","alpha-3":"BMU","country-code":"060","iso_3166-2":"ISO 3166-2:BM","region-code":"019","sub-region-code":"021"},{"name":"Bhutan","alpha-2":"BT","alpha-3":"BTN","country-code":"064","iso_3166-2":"ISO 3166-2:BT","region-code":"142","sub-region-code":"034"},{"name":"Bolivia, Plurinational State of","alpha-2":"BO","alpha-3":"BOL","country-code":"068","iso_3166-2":"ISO 3166-2:BO","region-code":"019","sub-region-code":"005"},{"name":"Bonaire, Sint Eustatius and Saba","alpha-2":"BQ","alpha-3":"BES","country-code":"535","iso_3166-2":"ISO 3166-2:BQ","region-code":"019","sub-region-code":"029"},{"name":"Bosnia and Herzegovina","alpha-2":"BA","alpha-3":"BIH","country-code":"070","iso_3166-2":"ISO 3166-2:BA","region-code":"150","sub-region-code":"039"},{"name":"Botswana","alpha-2":"BW","alpha-3":"BWA","country-code":"072","iso_3166-2":"ISO 3166-2:BW","region-code":"002","sub-region-code":"018"},{"name":"Bouvet Island","alpha-2":"BV","alpha-3":"BVT","country-code":"074","iso_3166-2":"ISO 3166-2:BV"},{"name":"Brazil","alpha-2":"BR","alpha-3":"BRA","country-code":"076","iso_3166-2":"ISO 3166-2:BR","region-code":"019","sub-region-code":"005"},{"name":"British Indian Ocean Territory","alpha-2":"IO","alpha-3":"IOT","country-code":"086","iso_3166-2":"ISO 3166-2:IO"},{"name":"Brunei Darussalam","alpha-2":"BN","alpha-3":"BRN","country-code":"096","iso_3166-2":"ISO 3166-2:BN","region-code":"142","sub-region-code":"035"},{"name":"Bulgaria","alpha-2":"BG","alpha-3":"BGR","country-code":"100","iso_3166-2":"ISO 3166-2:BG","region-code":"150","sub-region-code":"151"},{"name":"Burkina Faso","alpha-2":"BF","alpha-3":"BFA","country-code":"854","iso_3166-2":"ISO 3166-2:BF","region-code":"002","sub-region-code":"011"},{"name":"Burundi","alpha-2":"BI","alpha-3":"BDI","country-code":"108","iso_3166-2":"ISO 3166-2:BI","region-code":"002","sub-region-code":"014"},{"name":"Cambodia","alpha-2":"KH","alpha-3":"KHM","country-code":"116","iso_3166-2":"ISO 3166-2:KH","region-code":"142","sub-region-code":"035"},{"name":"Cameroon","alpha-2":"CM","alpha-3":"CMR","country-code":"120","iso_3166-2":"ISO 3166-2:CM","region-code":"002","sub-region-code":"017"},{"name":"Canada","alpha-2":"CA","alpha-3":"CAN","country-code":"124","iso_3166-2":"ISO 3166-2:CA","region-code":"019","sub-region-code":"021"},{"name":"Cape Verde","alpha-2":"CV","alpha-3":"CPV","country-code":"132","iso_3166-2":"ISO 3166-2:CV","region-code":"002","sub-region-code":"011"},{"name":"Cayman Islands","alpha-2":"KY","alpha-3":"CYM","country-code":"136","iso_3166-2":"ISO 3166-2:KY","region-code":"019","sub-region-code":"029"},{"name":"Central African Republic","alpha-2":"CF","alpha-3":"CAF","country-code":"140","iso_3166-2":"ISO 3166-2:CF","region-code":"002","sub-region-code":"017"},{"name":"Chad","alpha-2":"TD","alpha-3":"TCD","country-code":"148","iso_3166-2":"ISO 3166-2:TD","region-code":"002","sub-region-code":"017"},{"name":"Chile","alpha-2":"CL","alpha-3":"CHL","country-code":"152","iso_3166-2":"ISO 3166-2:CL","region-code":"019","sub-region-code":"005"},{"name":"China","alpha-2":"CN","alpha-3":"CHN","country-code":"156","iso_3166-2":"ISO 3166-2:CN","region-code":"142","sub-region-code":"030"},{"name":"Christmas Island","alpha-2":"CX","alpha-3":"CXR","country-code":"162","iso_3166-2":"ISO 3166-2:CX"},{"name":"Cocos (Keeling) Islands","alpha-2":"CC","alpha-3":"CCK","country-code":"166","iso_3166-2":"ISO 3166-2:CC"},{"name":"Colombia","alpha-2":"CO","alpha-3":"COL","country-code":"170","iso_3166-2":"ISO 3166-2:CO","region-code":"019","sub-region-code":"005"},{"name":"Comoros","alpha-2":"KM","alpha-3":"COM","country-code":"174","iso_3166-2":"ISO 3166-2:KM","region-code":"002","sub-region-code":"014"},{"name":"Congo","alpha-2":"CG","alpha-3":"COG","country-code":"178","iso_3166-2":"ISO 3166-2:CG","region-code":"002","sub-region-code":"017"},{"name":"Congo, the Democratic Republic of the","alpha-2":"CD","alpha-3":"COD","country-code":"180","iso_3166-2":"ISO 3166-2:CD","region-code":"002","sub-region-code":"017"},{"name":"Cook Islands","alpha-2":"CK","alpha-3":"COK","country-code":"184","iso_3166-2":"ISO 3166-2:CK","region-code":"009","sub-region-code":"061"},{"name":"Costa Rica","alpha-2":"CR","alpha-3":"CRI","country-code":"188","iso_3166-2":"ISO 3166-2:CR","region-code":"019","sub-region-code":"013"},{"name":"Côte d'Ivoire","alpha-2":"CI","alpha-3":"CIV","country-code":"384","iso_3166-2":"ISO 3166-2:CI","region-code":"002","sub-region-code":"011"},{"name":"Croatia","alpha-2":"HR","alpha-3":"HRV","country-code":"191","iso_3166-2":"ISO 3166-2:HR","region-code":"150","sub-region-code":"039"},{"name":"Cuba","alpha-2":"CU","alpha-3":"CUB","country-code":"192","iso_3166-2":"ISO 3166-2:CU","region-code":"019","sub-region-code":"029"},{"name":"Curaçao","alpha-2":"CW","alpha-3":"CUW","country-code":"531","iso_3166-2":"ISO 3166-2:CW","region-code":"019","sub-region-code":"029"},{"name":"Cyprus","alpha-2":"CY","alpha-3":"CYP","country-code":"196","iso_3166-2":"ISO 3166-2:CY","region-code":"142","sub-region-code":"145"},{"name":"Czech Republic","alpha-2":"CZ","alpha-3":"CZE","country-code":"203","iso_3166-2":"ISO 3166-2:CZ","region-code":"150","sub-region-code":"151"},{"name":"Denmark","alpha-2":"DK","alpha-3":"DNK","country-code":"208","iso_3166-2":"ISO 3166-2:DK","region-code":"150","sub-region-code":"154"},{"name":"Djibouti","alpha-2":"DJ","alpha-3":"DJI","country-code":"262","iso_3166-2":"ISO 3166-2:DJ","region-code":"002","sub-region-code":"014"},{"name":"Dominica","alpha-2":"DM","alpha-3":"DMA","country-code":"212","iso_3166-2":"ISO 3166-2:DM","region-code":"019","sub-region-code":"029"},{"name":"Dominican Republic","alpha-2":"DO","alpha-3":"DOM","country-code":"214","iso_3166-2":"ISO 3166-2:DO","region-code":"019","sub-region-code":"029"},{"name":"Ecuador","alpha-2":"EC","alpha-3":"ECU","country-code":"218","iso_3166-2":"ISO 3166-2:EC","region-code":"019","sub-region-code":"005"},{"name":"Egypt","alpha-2":"EG","alpha-3":"EGY","country-code":"818","iso_3166-2":"ISO 3166-2:EG","region-code":"002","sub-region-code":"015"},{"name":"El Salvador","alpha-2":"SV","alpha-3":"SLV","country-code":"222","iso_3166-2":"ISO 3166-2:SV","region-code":"019","sub-region-code":"013"},{"name":"Equatorial Guinea","alpha-2":"GQ","alpha-3":"GNQ","country-code":"226","iso_3166-2":"ISO 3166-2:GQ","region-code":"002","sub-region-code":"017"},{"name":"Eritrea","alpha-2":"ER","alpha-3":"ERI","country-code":"232","iso_3166-2":"ISO 3166-2:ER","region-code":"002","sub-region-code":"014"},{"name":"Estonia","alpha-2":"EE","alpha-3":"EST","country-code":"233","iso_3166-2":"ISO 3166-2:EE","region-code":"150","sub-region-code":"154"},{"name":"Ethiopia","alpha-2":"ET","alpha-3":"ETH","country-code":"231","iso_3166-2":"ISO 3166-2:ET","region-code":"002","sub-region-code":"014"},{"name":"Falkland Islands (Malvinas)","alpha-2":"FK","alpha-3":"FLK","country-code":"238","iso_3166-2":"ISO 3166-2:FK","region-code":"019","sub-region-code":"005"},{"name":"Faroe Islands","alpha-2":"FO","alpha-3":"FRO","country-code":"234","iso_3166-2":"ISO 3166-2:FO","region-code":"150","sub-region-code":"154"},{"name":"Fiji","alpha-2":"FJ","alpha-3":"FJI","country-code":"242","iso_3166-2":"ISO 3166-2:FJ","region-code":"009","sub-region-code":"054"},{"name":"Finland","alpha-2":"FI","alpha-3":"FIN","country-code":"246","iso_3166-2":"ISO 3166-2:FI","region-code":"150","sub-region-code":"154"},{"name":"France","alpha-2":"FR","alpha-3":"FRA","country-code":"250","iso_3166-2":"ISO 3166-2:FR","region-code":"150","sub-region-code":"155"},{"name":"French Guiana","alpha-2":"GF","alpha-3":"GUF","country-code":"254","iso_3166-2":"ISO 3166-2:GF","region-code":"019","sub-region-code":"005"},{"name":"French Polynesia","alpha-2":"PF","alpha-3":"PYF","country-code":"258","iso_3166-2":"ISO 3166-2:PF","region-code":"009","sub-region-code":"061"},{"name":"French Southern Territories","alpha-2":"TF","alpha-3":"ATF","country-code":"260","iso_3166-2":"ISO 3166-2:TF"},{"name":"Gabon","alpha-2":"GA","alpha-3":"GAB","country-code":"266","iso_3166-2":"ISO 3166-2:GA","region-code":"002","sub-region-code":"017"},{"name":"Gambia","alpha-2":"GM","alpha-3":"GMB","country-code":"270","iso_3166-2":"ISO 3166-2:GM","region-code":"002","sub-region-code":"011"},{"name":"Georgia","alpha-2":"GE","alpha-3":"GEO","country-code":"268","iso_3166-2":"ISO 3166-2:GE","region-code":"142","sub-region-code":"145"},{"name":"Germany","alpha-2":"DE","alpha-3":"DEU","country-code":"276","iso_3166-2":"ISO 3166-2:DE","region-code":"150","sub-region-code":"155"},{"name":"Ghana","alpha-2":"GH","alpha-3":"GHA","country-code":"288","iso_3166-2":"ISO 3166-2:GH","region-code":"002","sub-region-code":"011"},{"name":"Gibraltar","alpha-2":"GI","alpha-3":"GIB","country-code":"292","iso_3166-2":"ISO 3166-2:GI","region-code":"150","sub-region-code":"039"},{"name":"Greece","alpha-2":"GR","alpha-3":"GRC","country-code":"300","iso_3166-2":"ISO 3166-2:GR","region-code":"150","sub-region-code":"039"},{"name":"Greenland","alpha-2":"GL","alpha-3":"GRL","country-code":"304","iso_3166-2":"ISO 3166-2:GL","region-code":"019","sub-region-code":"021"},{"name":"Grenada","alpha-2":"GD","alpha-3":"GRD","country-code":"308","iso_3166-2":"ISO 3166-2:GD","region-code":"019","sub-region-code":"029"},{"name":"Guadeloupe","alpha-2":"GP","alpha-3":"GLP","country-code":"312","iso_3166-2":"ISO 3166-2:GP","region-code":"019","sub-region-code":"029"},{"name":"Guam","alpha-2":"GU","alpha-3":"GUM","country-code":"316","iso_3166-2":"ISO 3166-2:GU","region-code":"009","sub-region-code":"057"},{"name":"Guatemala","alpha-2":"GT","alpha-3":"GTM","country-code":"320","iso_3166-2":"ISO 3166-2:GT","region-code":"019","sub-region-code":"013"},{"name":"Guernsey","alpha-2":"GG","alpha-3":"GGY","country-code":"831","iso_3166-2":"ISO 3166-2:GG","region-code":"150","sub-region-code":"154"},{"name":"Guinea","alpha-2":"GN","alpha-3":"GIN","country-code":"324","iso_3166-2":"ISO 3166-2:GN","region-code":"002","sub-region-code":"011"},{"name":"Guinea-Bissau","alpha-2":"GW","alpha-3":"GNB","country-code":"624","iso_3166-2":"ISO 3166-2:GW","region-code":"002","sub-region-code":"011"},{"name":"Guyana","alpha-2":"GY","alpha-3":"GUY","country-code":"328","iso_3166-2":"ISO 3166-2:GY","region-code":"019","sub-region-code":"005"},{"name":"Haiti","alpha-2":"HT","alpha-3":"HTI","country-code":"332","iso_3166-2":"ISO 3166-2:HT","region-code":"019","sub-region-code":"029"},{"name":"Heard Island and McDonald Islands","alpha-2":"HM","alpha-3":"HMD","country-code":"334","iso_3166-2":"ISO 3166-2:HM"},{"name":"Holy See (Vatican City State)","alpha-2":"VA","alpha-3":"VAT","country-code":"336","iso_3166-2":"ISO 3166-2:VA","region-code":"150","sub-region-code":"039"},{"name":"Honduras","alpha-2":"HN","alpha-3":"HND","country-code":"340","iso_3166-2":"ISO 3166-2:HN","region-code":"019","sub-region-code":"013"},{"name":"Hong Kong","alpha-2":"HK","alpha-3":"HKG","country-code":"344","iso_3166-2":"ISO 3166-2:HK","region-code":"142","sub-region-code":"030"},{"name":"Hungary","alpha-2":"HU","alpha-3":"HUN","country-code":"348","iso_3166-2":"ISO 3166-2:HU","region-code":"150","sub-region-code":"151"},{"name":"Iceland","alpha-2":"IS","alpha-3":"ISL","country-code":"352","iso_3166-2":"ISO 3166-2:IS","region-code":"150","sub-region-code":"154"},{"name":"India","alpha-2":"IN","alpha-3":"IND","country-code":"356","iso_3166-2":"ISO 3166-2:IN","region-code":"142","sub-region-code":"034"},{"name":"Indonesia","alpha-2":"ID","alpha-3":"IDN","country-code":"360","iso_3166-2":"ISO 3166-2:ID","region-code":"142","sub-region-code":"035"},{"name":"Iran, Islamic Republic of","alpha-2":"IR","alpha-3":"IRN","country-code":"364","iso_3166-2":"ISO 3166-2:IR","region-code":"142","sub-region-code":"034"},{"name":"Iraq","alpha-2":"IQ","alpha-3":"IRQ","country-code":"368","iso_3166-2":"ISO 3166-2:IQ","region-code":"142","sub-region-code":"145"},{"name":"Ireland","alpha-2":"IE","alpha-3":"IRL","country-code":"372","iso_3166-2":"ISO 3166-2:IE","region-code":"150","sub-region-code":"154"},{"name":"Isle of Man","alpha-2":"IM","alpha-3":"IMN","country-code":"833","iso_3166-2":"ISO 3166-2:IM","region-code":"150","sub-region-code":"154"},{"name":"Israel","alpha-2":"IL","alpha-3":"ISR","country-code":"376","iso_3166-2":"ISO 3166-2:IL","region-code":"142","sub-region-code":"145"},{"name":"Italy","alpha-2":"IT","alpha-3":"ITA","country-code":"380","iso_3166-2":"ISO 3166-2:IT","region-code":"150","sub-region-code":"039"},{"name":"Jamaica","alpha-2":"JM","alpha-3":"JAM","country-code":"388","iso_3166-2":"ISO 3166-2:JM","region-code":"019","sub-region-code":"029"},{"name":"Japan","alpha-2":"JP","alpha-3":"JPN","country-code":"392","iso_3166-2":"ISO 3166-2:JP","region-code":"142","sub-region-code":"030"},{"name":"Jersey","alpha-2":"JE","alpha-3":"JEY","country-code":"832","iso_3166-2":"ISO 3166-2:JE","region-code":"150","sub-region-code":"154"},{"name":"Jordan","alpha-2":"JO","alpha-3":"JOR","country-code":"400","iso_3166-2":"ISO 3166-2:JO","region-code":"142","sub-region-code":"145"},{"name":"Kazakhstan","alpha-2":"KZ","alpha-3":"KAZ","country-code":"398","iso_3166-2":"ISO 3166-2:KZ","region-code":"142","sub-region-code":"143"},{"name":"Kenya","alpha-2":"KE","alpha-3":"KEN","country-code":"404","iso_3166-2":"ISO 3166-2:KE","region-code":"002","sub-region-code":"014"},{"name":"Kiribati","alpha-2":"KI","alpha-3":"KIR","country-code":"296","iso_3166-2":"ISO 3166-2:KI","region-code":"009","sub-region-code":"057"},{"name":"Korea, Democratic People's Republic of","alpha-2":"KP","alpha-3":"PRK","country-code":"408","iso_3166-2":"ISO 3166-2:KP","region-code":"142","sub-region-code":"030"},{"name":"Korea, Republic of","alpha-2":"KR","alpha-3":"KOR","country-code":"410","iso_3166-2":"ISO 3166-2:KR","region-code":"142","sub-region-code":"030"},{"name":"Kuwait","alpha-2":"KW","alpha-3":"KWT","country-code":"414","iso_3166-2":"ISO 3166-2:KW","region-code":"142","sub-region-code":"145"},{"name":"Kyrgyzstan","alpha-2":"KG","alpha-3":"KGZ","country-code":"417","iso_3166-2":"ISO 3166-2:KG","region-code":"142","sub-region-code":"143"},{"name":"Lao People's Democratic Republic","alpha-2":"LA","alpha-3":"LAO","country-code":"418","iso_3166-2":"ISO 3166-2:LA","region-code":"142","sub-region-code":"035"},{"name":"Latvia","alpha-2":"LV","alpha-3":"LVA","country-code":"428","iso_3166-2":"ISO 3166-2:LV","region-code":"150","sub-region-code":"154"},{"name":"Lebanon","alpha-2":"LB","alpha-3":"LBN","country-code":"422","iso_3166-2":"ISO 3166-2:LB","region-code":"142","sub-region-code":"145"},{"name":"Lesotho","alpha-2":"LS","alpha-3":"LSO","country-code":"426","iso_3166-2":"ISO 3166-2:LS","region-code":"002","sub-region-code":"018"},{"name":"Liberia","alpha-2":"LR","alpha-3":"LBR","country-code":"430","iso_3166-2":"ISO 3166-2:LR","region-code":"002","sub-region-code":"011"},{"name":"Libya","alpha-2":"LY","alpha-3":"LBY","country-code":"434","iso_3166-2":"ISO 3166-2:LY","region-code":"002","sub-region-code":"015"},{"name":"Liechtenstein","alpha-2":"LI","alpha-3":"LIE","country-code":"438","iso_3166-2":"ISO 3166-2:LI","region-code":"150","sub-region-code":"155"},{"name":"Lithuania","alpha-2":"LT","alpha-3":"LTU","country-code":"440","iso_3166-2":"ISO 3166-2:LT","region-code":"150","sub-region-code":"154"},{"name":"Luxembourg","alpha-2":"LU","alpha-3":"LUX","country-code":"442","iso_3166-2":"ISO 3166-2:LU","region-code":"150","sub-region-code":"155"},{"name":"Macao","alpha-2":"MO","alpha-3":"MAC","country-code":"446","iso_3166-2":"ISO 3166-2:MO","region-code":"142","sub-region-code":"030"},{"name":"Macedonia, the former Yugoslav Republic of","alpha-2":"MK","alpha-3":"MKD","country-code":"807","iso_3166-2":"ISO 3166-2:MK","region-code":"150","sub-region-code":"039"},{"name":"Madagascar","alpha-2":"MG","alpha-3":"MDG","country-code":"450","iso_3166-2":"ISO 3166-2:MG","region-code":"002","sub-region-code":"014"},{"name":"Malawi","alpha-2":"MW","alpha-3":"MWI","country-code":"454","iso_3166-2":"ISO 3166-2:MW","region-code":"002","sub-region-code":"014"},{"name":"Malaysia","alpha-2":"MY","alpha-3":"MYS","country-code":"458","iso_3166-2":"ISO 3166-2:MY","region-code":"142","sub-region-code":"035"},{"name":"Maldives","alpha-2":"MV","alpha-3":"MDV","country-code":"462","iso_3166-2":"ISO 3166-2:MV","region-code":"142","sub-region-code":"034"},{"name":"Mali","alpha-2":"ML","alpha-3":"MLI","country-code":"466","iso_3166-2":"ISO 3166-2:ML","region-code":"002","sub-region-code":"011"},{"name":"Malta","alpha-2":"MT","alpha-3":"MLT","country-code":"470","iso_3166-2":"ISO 3166-2:MT","region-code":"150","sub-region-code":"039"},{"name":"Marshall Islands","alpha-2":"MH","alpha-3":"MHL","country-code":"584","iso_3166-2":"ISO 3166-2:MH","region-code":"009","sub-region-code":"057"},{"name":"Martinique","alpha-2":"MQ","alpha-3":"MTQ","country-code":"474","iso_3166-2":"ISO 3166-2:MQ","region-code":"019","sub-region-code":"029"},{"name":"Mauritania","alpha-2":"MR","alpha-3":"MRT","country-code":"478","iso_3166-2":"ISO 3166-2:MR","region-code":"002","sub-region-code":"011"},{"name":"Mauritius","alpha-2":"MU","alpha-3":"MUS","country-code":"480","iso_3166-2":"ISO 3166-2:MU","region-code":"002","sub-region-code":"014"},{"name":"Mayotte","alpha-2":"YT","alpha-3":"MYT","country-code":"175","iso_3166-2":"ISO 3166-2:YT","region-code":"002","sub-region-code":"014"},{"name":"Mexico","alpha-2":"MX","alpha-3":"MEX","country-code":"484","iso_3166-2":"ISO 3166-2:MX","region-code":"019","sub-region-code":"013"},{"name":"Micronesia, Federated States of","alpha-2":"FM","alpha-3":"FSM","country-code":"583","iso_3166-2":"ISO 3166-2:FM","region-code":"009","sub-region-code":"057"},{"name":"Moldova, Republic of","alpha-2":"MD","alpha-3":"MDA","country-code":"498","iso_3166-2":"ISO 3166-2:MD","region-code":"150","sub-region-code":"151"},{"name":"Monaco","alpha-2":"MC","alpha-3":"MCO","country-code":"492","iso_3166-2":"ISO 3166-2:MC","region-code":"150","sub-region-code":"155"},{"name":"Mongolia","alpha-2":"MN","alpha-3":"MNG","country-code":"496","iso_3166-2":"ISO 3166-2:MN","region-code":"142","sub-region-code":"030"},{"name":"Montenegro","alpha-2":"ME","alpha-3":"MNE","country-code":"499","iso_3166-2":"ISO 3166-2:ME","region-code":"150","sub-region-code":"039"},{"name":"Montserrat","alpha-2":"MS","alpha-3":"MSR","country-code":"500","iso_3166-2":"ISO 3166-2:MS","region-code":"019","sub-region-code":"029"},{"name":"Morocco","alpha-2":"MA","alpha-3":"MAR","country-code":"504","iso_3166-2":"ISO 3166-2:MA","region-code":"002","sub-region-code":"015"},{"name":"Mozambique","alpha-2":"MZ","alpha-3":"MOZ","country-code":"508","iso_3166-2":"ISO 3166-2:MZ","region-code":"002","sub-region-code":"014"},{"name":"Myanmar","alpha-2":"MM","alpha-3":"MMR","country-code":"104","iso_3166-2":"ISO 3166-2:MM","region-code":"142","sub-region-code":"035"},{"name":"Namibia","alpha-2":"NA","alpha-3":"NAM","country-code":"516","iso_3166-2":"ISO 3166-2:NA","region-code":"002","sub-region-code":"018"},{"name":"Nauru","alpha-2":"NR","alpha-3":"NRU","country-code":"520","iso_3166-2":"ISO 3166-2:NR","region-code":"009","sub-region-code":"057"},{"name":"Nepal","alpha-2":"NP","alpha-3":"NPL","country-code":"524","iso_3166-2":"ISO 3166-2:NP","region-code":"142","sub-region-code":"034"},{"name":"Netherlands","alpha-2":"NL","alpha-3":"NLD","country-code":"528","iso_3166-2":"ISO 3166-2:NL","region-code":"150","sub-region-code":"155"},{"name":"New Caledonia","alpha-2":"NC","alpha-3":"NCL","country-code":"540","iso_3166-2":"ISO 3166-2:NC","region-code":"009","sub-region-code":"054"},{"name":"New Zealand","alpha-2":"NZ","alpha-3":"NZL","country-code":"554","iso_3166-2":"ISO 3166-2:NZ","region-code":"009","sub-region-code":"053"},{"name":"Nicaragua","alpha-2":"NI","alpha-3":"NIC","country-code":"558","iso_3166-2":"ISO 3166-2:NI","region-code":"019","sub-region-code":"013"},{"name":"Niger","alpha-2":"NE","alpha-3":"NER","country-code":"562","iso_3166-2":"ISO 3166-2:NE","region-code":"002","sub-region-code":"011"},{"name":"Nigeria","alpha-2":"NG","alpha-3":"NGA","country-code":"566","iso_3166-2":"ISO 3166-2:NG","region-code":"002","sub-region-code":"011"},{"name":"Niue","alpha-2":"NU","alpha-3":"NIU","country-code":"570","iso_3166-2":"ISO 3166-2:NU","region-code":"009","sub-region-code":"061"},{"name":"Norfolk Island","alpha-2":"NF","alpha-3":"NFK","country-code":"574","iso_3166-2":"ISO 3166-2:NF","region-code":"009","sub-region-code":"053"},{"name":"Northern Mariana Islands","alpha-2":"MP","alpha-3":"MNP","country-code":"580","iso_3166-2":"ISO 3166-2:MP","region-code":"009","sub-region-code":"057"},{"name":"Norway","alpha-2":"NO","alpha-3":"NOR","country-code":"578","iso_3166-2":"ISO 3166-2:NO","region-code":"150","sub-region-code":"154"},{"name":"Oman","alpha-2":"OM","alpha-3":"OMN","country-code":"512","iso_3166-2":"ISO 3166-2:OM","region-code":"142","sub-region-code":"145"},{"name":"Pakistan","alpha-2":"PK","alpha-3":"PAK","country-code":"586","iso_3166-2":"ISO 3166-2:PK","region-code":"142","sub-region-code":"034"},{"name":"Palau","alpha-2":"PW","alpha-3":"PLW","country-code":"585","iso_3166-2":"ISO 3166-2:PW","region-code":"009","sub-region-code":"057"},{"name":"Palestinian Territory, Occupied","alpha-2":"PS","alpha-3":"PSE","country-code":"275","iso_3166-2":"ISO 3166-2:PS","region-code":"142","sub-region-code":"145"},{"name":"Panama","alpha-2":"PA","alpha-3":"PAN","country-code":"591","iso_3166-2":"ISO 3166-2:PA","region-code":"019","sub-region-code":"013"},{"name":"Papua New Guinea","alpha-2":"PG","alpha-3":"PNG","country-code":"598","iso_3166-2":"ISO 3166-2:PG","region-code":"009","sub-region-code":"054"},{"name":"Paraguay","alpha-2":"PY","alpha-3":"PRY","country-code":"600","iso_3166-2":"ISO 3166-2:PY","region-code":"019","sub-region-code":"005"},{"name":"Peru","alpha-2":"PE","alpha-3":"PER","country-code":"604","iso_3166-2":"ISO 3166-2:PE","region-code":"019","sub-region-code":"005"},{"name":"Philippines","alpha-2":"PH","alpha-3":"PHL","country-code":"608","iso_3166-2":"ISO 3166-2:PH","region-code":"142","sub-region-code":"035"},{"name":"Pitcairn","alpha-2":"PN","alpha-3":"PCN","country-code":"612","iso_3166-2":"ISO 3166-2:PN","region-code":"009","sub-region-code":"061"},{"name":"Poland","alpha-2":"PL","alpha-3":"POL","country-code":"616","iso_3166-2":"ISO 3166-2:PL","region-code":"150","sub-region-code":"151"},{"name":"Portugal","alpha-2":"PT","alpha-3":"PRT","country-code":"620","iso_3166-2":"ISO 3166-2:PT","region-code":"150","sub-region-code":"039"},{"name":"Puerto Rico","alpha-2":"PR","alpha-3":"PRI","country-code":"630","iso_3166-2":"ISO 3166-2:PR","region-code":"019","sub-region-code":"029"},{"name":"Qatar","alpha-2":"QA","alpha-3":"QAT","country-code":"634","iso_3166-2":"ISO 3166-2:QA","region-code":"142","sub-region-code":"145"},{"name":"Réunion","alpha-2":"RE","alpha-3":"REU","country-code":"638","iso_3166-2":"ISO 3166-2:RE","region-code":"002","sub-region-code":"014"},{"name":"Romania","alpha-2":"RO","alpha-3":"ROU","country-code":"642","iso_3166-2":"ISO 3166-2:RO","region-code":"150","sub-region-code":"151"},{"name":"Russian Federation","alpha-2":"RU","alpha-3":"RUS","country-code":"643","iso_3166-2":"ISO 3166-2:RU","region-code":"150","sub-region-code":"151"},{"name":"Rwanda","alpha-2":"RW","alpha-3":"RWA","country-code":"646","iso_3166-2":"ISO 3166-2:RW","region-code":"002","sub-region-code":"014"},{"name":"Saint Barthélemy","alpha-2":"BL","alpha-3":"BLM","country-code":"652","iso_3166-2":"ISO 3166-2:BL","region-code":"019","sub-region-code":"029"},{"name":"Saint Helena, Ascension and Tristan da Cunha","alpha-2":"SH","alpha-3":"SHN","country-code":"654","iso_3166-2":"ISO 3166-2:SH","region-code":"002","sub-region-code":"011"},{"name":"Saint Kitts and Nevis","alpha-2":"KN","alpha-3":"KNA","country-code":"659","iso_3166-2":"ISO 3166-2:KN","region-code":"019","sub-region-code":"029"},{"name":"Saint Lucia","alpha-2":"LC","alpha-3":"LCA","country-code":"662","iso_3166-2":"ISO 3166-2:LC","region-code":"019","sub-region-code":"029"},{"name":"Saint Martin (French part)","alpha-2":"MF","alpha-3":"MAF","country-code":"663","iso_3166-2":"ISO 3166-2:MF","region-code":"019","sub-region-code":"029"},{"name":"Saint Pierre and Miquelon","alpha-2":"PM","alpha-3":"SPM","country-code":"666","iso_3166-2":"ISO 3166-2:PM","region-code":"019","sub-region-code":"021"},{"name":"Saint Vincent and the Grenadines","alpha-2":"VC","alpha-3":"VCT","country-code":"670","iso_3166-2":"ISO 3166-2:VC","region-code":"019","sub-region-code":"029"},{"name":"Samoa","alpha-2":"WS","alpha-3":"WSM","country-code":"882","iso_3166-2":"ISO 3166-2:WS","region-code":"009","sub-region-code":"061"},{"name":"San Marino","alpha-2":"SM","alpha-3":"SMR","country-code":"674","iso_3166-2":"ISO 3166-2:SM","region-code":"150","sub-region-code":"039"},{"name":"Sao Tome and Principe","alpha-2":"ST","alpha-3":"STP","country-code":"678","iso_3166-2":"ISO 3166-2:ST","region-code":"002","sub-region-code":"017"},{"name":"Saudi Arabia","alpha-2":"SA","alpha-3":"SAU","country-code":"682","iso_3166-2":"ISO 3166-2:SA","region-code":"142","sub-region-code":"145"},{"name":"Senegal","alpha-2":"SN","alpha-3":"SEN","country-code":"686","iso_3166-2":"ISO 3166-2:SN","region-code":"002","sub-region-code":"011"},{"name":"Serbia","alpha-2":"RS","alpha-3":"SRB","country-code":"688","iso_3166-2":"ISO 3166-2:RS","region-code":"150","sub-region-code":"039"},{"name":"Seychelles","alpha-2":"SC","alpha-3":"SYC","country-code":"690","iso_3166-2":"ISO 3166-2:SC","region-code":"002","sub-region-code":"014"},{"name":"Sierra Leone","alpha-2":"SL","alpha-3":"SLE","country-code":"694","iso_3166-2":"ISO 3166-2:SL","region-code":"002","sub-region-code":"011"},{"name":"Singapore","alpha-2":"SG","alpha-3":"SGP","country-code":"702","iso_3166-2":"ISO 3166-2:SG","region-code":"142","sub-region-code":"035"},{"name":"Sint Maarten (Dutch part)","alpha-2":"SX","alpha-3":"SXM","country-code":"534","iso_3166-2":"ISO 3166-2:SX","region-code":"019","sub-region-code":"029"},{"name":"Slovakia","alpha-2":"SK","alpha-3":"SVK","country-code":"703","iso_3166-2":"ISO 3166-2:SK","region-code":"150","sub-region-code":"151"},{"name":"Slovenia","alpha-2":"SI","alpha-3":"SVN","country-code":"705","iso_3166-2":"ISO 3166-2:SI","region-code":"150","sub-region-code":"039"},{"name":"Solomon Islands","alpha-2":"SB","alpha-3":"SLB","country-code":"090","iso_3166-2":"ISO 3166-2:SB","region-code":"009","sub-region-code":"054"},{"name":"Somalia","alpha-2":"SO","alpha-3":"SOM","country-code":"706","iso_3166-2":"ISO 3166-2:SO","region-code":"002","sub-region-code":"014"},{"name":"South Africa","alpha-2":"ZA","alpha-3":"ZAF","country-code":"710","iso_3166-2":"ISO 3166-2:ZA","region-code":"002","sub-region-code":"018"},{"name":"South Georgia and the South Sandwich Islands","alpha-2":"GS","alpha-3":"SGS","country-code":"239","iso_3166-2":"ISO 3166-2:GS"},{"name":"South Sudan","alpha-2":"SS","alpha-3":"SSD","country-code":"728","iso_3166-2":"ISO 3166-2:SS","region-code":"002","sub-region-code":"015"},{"name":"Spain","alpha-2":"ES","alpha-3":"ESP","country-code":"724","iso_3166-2":"ISO 3166-2:ES","region-code":"150","sub-region-code":"039"},{"name":"Sri Lanka","alpha-2":"LK","alpha-3":"LKA","country-code":"144","iso_3166-2":"ISO 3166-2:LK","region-code":"142","sub-region-code":"034"},{"name":"Sudan","alpha-2":"SD","alpha-3":"SDN","country-code":"729","iso_3166-2":"ISO 3166-2:SD","region-code":"002","sub-region-code":"015"},{"name":"Suriname","alpha-2":"SR","alpha-3":"SUR","country-code":"740","iso_3166-2":"ISO 3166-2:SR","region-code":"019","sub-region-code":"005"},{"name":"Svalbard and Jan Mayen","alpha-2":"SJ","alpha-3":"SJM","country-code":"744","iso_3166-2":"ISO 3166-2:SJ","region-code":"150","sub-region-code":"154"},{"name":"Swaziland","alpha-2":"SZ","alpha-3":"SWZ","country-code":"748","iso_3166-2":"ISO 3166-2:SZ","region-code":"002","sub-region-code":"018"},{"name":"Sweden","alpha-2":"SE","alpha-3":"SWE","country-code":"752","iso_3166-2":"ISO 3166-2:SE","region-code":"150","sub-region-code":"154"},{"name":"Switzerland","alpha-2":"CH","alpha-3":"CHE","country-code":"756","iso_3166-2":"ISO 3166-2:CH","region-code":"150","sub-region-code":"155"},{"name":"Syrian Arab Republic","alpha-2":"SY","alpha-3":"SYR","country-code":"760","iso_3166-2":"ISO 3166-2:SY","region-code":"142","sub-region-code":"145"},{"name":"Taiwan, Province of China","alpha-2":"TW","alpha-3":"TWN","country-code":"158","iso_3166-2":"ISO 3166-2:TW","region-code":"142","sub-region-code":"030"},{"name":"Tajikistan","alpha-2":"TJ","alpha-3":"TJK","country-code":"762","iso_3166-2":"ISO 3166-2:TJ","region-code":"142","sub-region-code":"143"},{"name":"Tanzania, United Republic of","alpha-2":"TZ","alpha-3":"TZA","country-code":"834","iso_3166-2":"ISO 3166-2:TZ","region-code":"002","sub-region-code":"014"},{"name":"Thailand","alpha-2":"TH","alpha-3":"THA","country-code":"764","iso_3166-2":"ISO 3166-2:TH","region-code":"142","sub-region-code":"035"},{"name":"Timor-Leste","alpha-2":"TL","alpha-3":"TLS","country-code":"626","iso_3166-2":"ISO 3166-2:TL","region-code":"142","sub-region-code":"035"},{"name":"Togo","alpha-2":"TG","alpha-3":"TGO","country-code":"768","iso_3166-2":"ISO 3166-2:TG","region-code":"002","sub-region-code":"011"},{"name":"Tokelau","alpha-2":"TK","alpha-3":"TKL","country-code":"772","iso_3166-2":"ISO 3166-2:TK","region-code":"009","sub-region-code":"061"},{"name":"Tonga","alpha-2":"TO","alpha-3":"TON","country-code":"776","iso_3166-2":"ISO 3166-2:TO","region-code":"009","sub-region-code":"061"},{"name":"Trinidad and Tobago","alpha-2":"TT","alpha-3":"TTO","country-code":"780","iso_3166-2":"ISO 3166-2:TT","region-code":"019","sub-region-code":"029"},{"name":"Tunisia","alpha-2":"TN","alpha-3":"TUN","country-code":"788","iso_3166-2":"ISO 3166-2:TN","region-code":"002","sub-region-code":"015"},{"name":"Turkey","alpha-2":"TR","alpha-3":"TUR","country-code":"792","iso_3166-2":"ISO 3166-2:TR","region-code":"142","sub-region-code":"145"},{"name":"Turkmenistan","alpha-2":"TM","alpha-3":"TKM","country-code":"795","iso_3166-2":"ISO 3166-2:TM","region-code":"142","sub-region-code":"143"},{"name":"Turks and Caicos Islands","alpha-2":"TC","alpha-3":"TCA","country-code":"796","iso_3166-2":"ISO 3166-2:TC","region-code":"019","sub-region-code":"029"},{"name":"Tuvalu","alpha-2":"TV","alpha-3":"TUV","country-code":"798","iso_3166-2":"ISO 3166-2:TV","region-code":"009","sub-region-code":"061"},{"name":"Uganda","alpha-2":"UG","alpha-3":"UGA","country-code":"800","iso_3166-2":"ISO 3166-2:UG","region-code":"002","sub-region-code":"014"},{"name":"Ukraine","alpha-2":"UA","alpha-3":"UKR","country-code":"804","iso_3166-2":"ISO 3166-2:UA","region-code":"150","sub-region-code":"151"},{"name":"United Arab Emirates","alpha-2":"AE","alpha-3":"ARE","country-code":"784","iso_3166-2":"ISO 3166-2:AE","region-code":"142","sub-region-code":"145"},{"name":"United Kingdom","alpha-2":"GB","alpha-3":"GBR","country-code":"826","iso_3166-2":"ISO 3166-2:GB","region-code":"150","sub-region-code":"154"},{"name":"United States","alpha-2":"US","alpha-3":"USA","country-code":"840","iso_3166-2":"ISO 3166-2:US","region-code":"019","sub-region-code":"021"},{"name":"United States Minor Outlying Islands","alpha-2":"UM","alpha-3":"UMI","country-code":"581","iso_3166-2":"ISO 3166-2:UM"},{"name":"Uruguay","alpha-2":"UY","alpha-3":"URY","country-code":"858","iso_3166-2":"ISO 3166-2:UY","region-code":"019","sub-region-code":"005"},{"name":"Uzbekistan","alpha-2":"UZ","alpha-3":"UZB","country-code":"860","iso_3166-2":"ISO 3166-2:UZ","region-code":"142","sub-region-code":"143"},{"name":"Vanuatu","alpha-2":"VU","alpha-3":"VUT","country-code":"548","iso_3166-2":"ISO 3166-2:VU","region-code":"009","sub-region-code":"054"},{"name":"Venezuela, Bolivarian Republic of","alpha-2":"VE","alpha-3":"VEN","country-code":"862","iso_3166-2":"ISO 3166-2:VE","region-code":"019","sub-region-code":"005"},{"name":"Viet Nam","alpha-2":"VN","alpha-3":"VNM","country-code":"704","iso_3166-2":"ISO 3166-2:VN","region-code":"142","sub-region-code":"035"},{"name":"Virgin Islands, British","alpha-2":"VG","alpha-3":"VGB","country-code":"092","iso_3166-2":"ISO 3166-2:VG","region-code":"019","sub-region-code":"029"},{"name":"Virgin Islands, U.S.","alpha-2":"VI","alpha-3":"VIR","country-code":"850","iso_3166-2":"ISO 3166-2:VI","region-code":"019","sub-region-code":"029"},{"name":"Wallis and Futuna","alpha-2":"WF","alpha-3":"WLF","country-code":"876","iso_3166-2":"ISO 3166-2:WF","region-code":"009","sub-region-code":"061"},{"name":"Western Sahara","alpha-2":"EH","alpha-3":"ESH","country-code":"732","iso_3166-2":"ISO 3166-2:EH","region-code":"002","sub-region-code":"015"},{"name":"Yemen","alpha-2":"YE","alpha-3":"YEM","country-code":"887","iso_3166-2":"ISO 3166-2:YE","region-code":"142","sub-region-code":"145"},{"name":"Zambia","alpha-2":"ZM","alpha-3":"ZMB","country-code":"894","iso_3166-2":"ISO 3166-2:ZM","region-code":"002","sub-region-code":"014"},{"name":"Zimbabwe","alpha-2":"ZW","alpha-3":"ZWE","country-code":"716","iso_3166-2":"ISO 3166-2:ZW","region-code":"002","sub-region-code":"014"}]
 
 
 /***/ },
-/* 16 */
+/* 18 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var v1="<h1>FormStamp</h1> <h2>Pure angularjs widgets for declarative forms</h2>";
@@ -30067,7 +30152,7 @@
 	module.exports=v1;
 
 /***/ },
-/* 17 */
+/* 19 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var v1="<div class=\"markdown\" ng-bind-html=\"readme\"> </div>";
@@ -30075,7 +30160,7 @@
 	module.exports=v1;
 
 /***/ },
-/* 18 */
+/* 20 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var v1="<pre markdown>\n  ##  Directive _fsFormFor_\n\n  ---\n\n  This directive allows to construct complex\n  horizontal forms with easy DSL-like markup.\n\n  Each form row is described with fsInput directive. It has following attributes:\n\n  * as - specifies type of input\n  * label - specifies label text\n  * name - specifies model's attribute to which input will be bound\n  * Other attributes (like items) are directly passed into input directive.\n\n\n  See [source code](https://github.com/formstamp/formstamp/blob/master/src/coffee/formFor.coffee)\n\n</pre> <pre sample label=\"label\" src=\"src\">\n<fs-form-for model=\"samurai\">\n<fieldset class=\"form-horizontal\">\n  <legend>Samurai Personal Info</legend>\n  <fs-input as=\"fs-datetime\" name=\"birthdate\" required=\"\" label=\"Date of Birth\"></fs-input>\n  <fs-input as=\"fs-date\" name=\"date\" required label=\"Date\" custom-validation-future></fs-input>\n  <fs-input as=\"fs-time\" name=\"time\" required label=\"Time\"></fs-input>\n  <fs-input as=\"textarea\" name=\"details\" required label=\"Details\"></fs-input>\n  <fs-row label=\"Living district\">\n  <div class=\"row\">\n    <div class=\"col-xs-3\"><div fs-select=\"\" ng-model=\"samurai.district\" items=\"districts\">{{ item }}</div></div>\n    <div class=\"col-xs-3\"><div fs-date=\"\" ng-model=\"samurai.districtMoveDate\" placeholder=\"Settled date\"></div></div>\n  </div>\n  </fs-row>\n</fieldset>\n\n<fieldset class=\"form-horizontal\">\n  <legend>Samurai CV</legend>\n  <fs-input as=\"fs-radio\" name=\"learningStage\" label=\"Current Learning Stage\" items=\"learningStages\"></fs-input>\n  <fs-input as=\"fs-multiselect\" name=\"weapons\" label=\"Owned Weapons\" items=\"weapons\">{{ item.label }}</fs-input>\n  <fs-input as=\"fs-multiselect\" name=\"weaponStyles\" freetext=\"123\" label=\"Weapon Styles\" items=\"weaponStyles\">{{ item }}</fs-input>\n  <fs-input as=\"fs-select\" name=\"meal\" label=\"Preferable Food\" items=\"meals\"><b>{{ item.id.toUpperCase() }}</b> {{ item.label }}</fs-input>\n  <fs-input as=\"fs-checkbox\" name=\"otherFacts\" label=\"Other Facts\" items=\"otherFacts\">{{ item }}</fs-input>\n</fieldset>\n\n<fieldset class=\"form-horizontal\">\n  <legend>Angular native</legend>\n  <fs-input as=\"text\" required name=\"ngName\"></fs-input>\n  <fs-input as=\"email\" required name=\"ngEmail\"></fs-input>\n  <fs-input as=\"number\" name=\"ngNumber\"></fs-input>\n  <fs-input as=\"url\" name=\"ngUrl\"></fs-input>\n  <fs-input as=\"time\" name=\"ngTime\"></fs-input>\n  <fs-input as=\"date\" name=\"ngDate\"></fs-input>\n  <fs-input as=\"datetime-local\" name=\"ngDatelocal\"></fs-input>\n  <fs-input as=\"week\" name=\"ngWeek\"></fs-input>\n  <fs-input as=\"month\" name=\"ngMonth\"></fs-input>\n</fieldset>\n</fs-form-for>\n<h4>Angular Scope</h4>\n<pre>samurai = {{samurai | json}}</pre>\n</pre>";
@@ -30083,7 +30168,7 @@
 	module.exports=v1;
 
 /***/ },
-/* 19 */
+/* 21 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var v1="<pre markdown>\n## Directive `fs-select`\n\n### Warning!\n\n  You should never use this directive on\n  `input` tag.  Use `div` instead.\n\n\nThis directive creates a 'select' widget.\nThis widget provides default select-like behavior.\nDepending on freetext attribute,\nit allows to select item from predefined list or enter custom value.\nIn both cases, text input field is used as a search box.\nItems and selected value can be objects, strings or integers.\n\nSupports several Angular directives:\n`ngModel`, `ngDisabled`, `ngRequired`.\nYou can provide template for single item in list to display any information you need,\nnot only label text.\nIn ngModel it holds full object, not only value.\n\nSupported attributes:\n\n* items - property of scope containing list of available values (of strings for autocomplete, if freetext is enabled)\n* ng-model - see AngularJS documentation for [ngModel](http://docs.angularjs.org/api/ng/directive/ngModel) directive\n* ng-disabled - disable/enable input with scope property\n* class - additional CSS classes\n</pre> <pre sample label=\"Two fsSelects binded to one model\">\n  <fs-form-for role=\"form\">\n    <fs-row label=\"Select weapon\">\n      <div class=\"col-xs-3\">\n        <div fs-select items=\"items\" ng-disabled=\"disabled\" ng-model=\"svalue\">\n          <span ng-show=\"item\"> <b>{{item.id}}</b> {{item.label}} </span>\n          <span ng-hide=\"item\"> Any weapon </span>\n        </div>\n      </div>\n      <div class=\"col-xs-3\">\n        <div fs-select items=\"items\" ng-disabled=\"disabled\" ng-model=\"svalue\">\n          <span ng-show=\"item\"> {{item.label}} </span>\n          <span ng-hide=\"item\"> Any weapon </span>\n        </div>\n      </div>\n      <div class=\"col-xs-1\">\n        <button class=\"btn btn-default\" ng-click=\"disabled=!disabled\">\n          {{disabled ? 'Enable' : 'Disable'}}\n        </button>\n      </div>\n    </fs-row>\n\n    <fs-row label=\"Result\">\n      <pre>Selected value: {{ svalue }}</pre>\n    </fs-row>\n\n    <hr/>\n\n    <fs-row label=\"Select country\">\n      <div class=\"col-xs-4\">\n        <div fs-select items=\"countries\" ng-model=\"country\">\n          <span ng-show=\"item\"><span class=\"flag flag-{{ item['alpha-2'].toLowerCase() }}\"></span>&nbsp;{{item.name}}</span>\n          <span ng-hide=\"item\"> No country </span>\n        </div>\n      </div>\n    </fs-row>\n\n    <fs-row label=\"Result\">\n      <pre>Selected country is: {{ country }}</pre>\n    </fs-row>\n\n    <hr/>\n\n    <fs-row label=\"Combo\">\n      <div class=\"col-xs-4\">\n        <div fs-select freetext=\"true\" items=\"laughs\" ng-disabled=\"disabled\" ng-model=\"laugh\">\n          {{item}}\n        </div>\n      </div>\n      <div class=\"col-xs-4\">\n        <button class=\"btn btn-default\" ng-click=\"disabled = !disabled\">{{disabled ? 'Enable' : 'Disable'}}</button>\n      </div>\n    </fs-row>\n\n    <fs-row label=\"Result\">\n      <pre>Your laugh is like: {{ laugh || '...' }}</pre>\n    </fs-row>\n  \n</fs-form-for></pre>";
@@ -30091,7 +30176,7 @@
 	module.exports=v1;
 
 /***/ },
-/* 20 */
+/* 22 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var v1="<pre markdown>\n## Directive `fs-multiselect`\n\n### Warning!\n\n  You should never use this directive on\n  `input` tag.  Use `div` instead.\n\nThis directive creates a 'multi-select' widget, i.e.\n'select' widget with multiple choices.\nDepending on freetext attribute,\nit allows to select items from predefined list or enter custom values.\nIn both cases, text input inside widget is used as a search box.\nItems and selected values can be objects, strings or integers.\n\nSupports several Angular directives:\n`ngModel`, `ngDisabled`, `ngRequired`.\nYou can provide template for single item in list to display any information you need,\nnot only label text. In ngModel it holds full object, not only value.\n\nSupported attributes:\n\n* items - property of scope containing list of available values (of strings for autocomplete, if freetext is enabled)\n* ng-model - see AngularJS documentation for ngModel directive\n* ng-disabled - disable/enable input with scope property\n* class - additional CSS classes\n\n</pre> <pre sample label=\"MultiSelect\">\n  <fs-form-for>\n<fieldset>\n<legend>fsMultiSelect without freetext</legend>\n    <div class=\"form-group\">\n      <label class=\"col-xs-2 control-label\">Select weapon</label>\n\n      <div fs-multiselect items=\"countries\" freetext class=\"col-xs-8\" ng-disabled=\"disabled\" ng-model=\"country\">\n          <span ng-show=\"item\"><span class=\"flag flag-{{ item['alpha-2'].toLowerCase() }}\"></span>&nbsp;{{item.name}}</span>\n          <span ng-hide=\"item\"> No country </span>\n      </div>\n\n      <div class=\"col-xs-2\">\n        <button class=\"btn btn-default\" ng-click=\"disabled=!disabled\">\n          {{disabled ? 'Enable' : 'Disable'}}\n        </button>\n      </div>\n    </div>\n    <fs-row label=\"Result\"><pre>Selection: {{country | json}}</pre></fs-row>\n</fieldset>\n\n<br/>\n<br/>\n\n<fieldset>\n<legend>fsMultiselect with freetext</legend>\n<div class=\"form-group row\">\n  <label class=\"col-xs-2 control-label\">\n    Where have you been?\n  </label>\n  <div fs-multiselect items=\"countryNames\" freetext class=\"col-xs-8\" ng-disabled=\"disabled\" ng-model=\"countryName\"></div>\n  <div class=\"col-xs-2\">\n    <button class=\"btn btn-default\" ng-click=\"disabled=!disabled\">\n      {{disabled ? 'Enable' : 'Disable'}}\n    </button>\n  </div>\n</div>\n\n<fs-row label=\"Result\"><pre>Selection: {{countryName | json}}</pre></fs-row>\n</fieldset>\n</fs-form-for>\n</pre>";
@@ -30099,7 +30184,7 @@
 	module.exports=v1;
 
 /***/ },
-/* 21 */
+/* 23 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var v1="<pre markdown>\n## Directive `fs-radio`\n\nThis directive creates a set of radio buttons.\nList of available choices is passed via items attribute and can be\nan Array of Objects, Strings, Numbers, etc.\n`fsRadio` supports custom templating for item's label.\n\nSupported attributes:\n\n* items - property of scope containing list of available values (of strings for autocomplete, if freetext is enabled)\n* ng-model - see AngularJS documentation for ngModel directive\n* ng-disabled - disable/enable input with scope property\n* class - additional CSS classes\n</pre> <pre sample>\n  <fs-form-for>\n    <div class=\"form-group\">\n      <label class=\"col-xs-2 control-label\">Choose your katawari</label>\n      <div class=\"col-xs-3\">\n        <div fs-radio items=\"items\" ng-disabled=\"disabled\" ng-model=\"radiovalue\">\n          <b>{{item.id}}</b> {{item.label}}\n        </div>\n      </div>\n      <div class=\"col-xs-2\">\n        <button class=\"btn btn-default\" ng-click=\"disabled=!disabled\">\n          {{disabled ? 'Enable' : 'Disable'}}\n        </button>\n      </div>\n    </div>\n    <div class=\"form-group\">\n      <label class=\"col-xs-2 control-label\">Choose your katawari</label>\n      <div class=\"col-xs-3\">\n        <div fs-radio items=\"items\" ng-model=\"radiovalue\">\n          {{item.label}}\n        </div>\n      </div>\n    </div>\n<fs-row label=\"Result\"><pre>Selected value: {{ radiovalue | json }}</pre></fs-row>\n\n<hr/>\n\n<div class=\"form-group\">\n  <label class=\"col-xs-2 control-label\">Your meal</label>\n  <div class=\"col-xs-3\">\n    <div fs-radio items=\"sushi\" ng-disabled=\"disabled\" ng-model=\"value\">\n      <img src=\"{{item.src}}\" width=\"24\" height=\"24\" alt=\"{{item.label}}\"/> {{item.label}}\n    </div>\n  </div>\n  <div class=\"col-xs-2\">\n    <button class=\"btn btn-default\" ng-click=\"disabled=!disabled\">\n      {{disabled ? 'Enable' : 'Disable'}}\n    </button>\n  </div>\n</div>\n<fs-row label=\"Result\"><pre>Selected dish: {{ value | json }}</pre></fs-row>\n  </fs-form-for>\n</pre>";
@@ -30107,7 +30192,7 @@
 	module.exports=v1;
 
 /***/ },
-/* 22 */
+/* 24 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var v1="<pre markdown>\n## Directive `fs-check`\n\nThis directive creates a set of checkboxes.\nList of available choices is passed via items attribute and can be an Array of Objects, Strings, Numbers, etc.\nUser can select multiple items. fsCheckbox supports custom templating for item's label.\n\nSupported attributes:\n\n* items - property of scope containing list of available values (of strings for autocomplete, if freetext is enabled)\n* ng-model - see AngularJS documentation for ngModel directive\n* ng-disabled - disable/enable input with scope property\n* class - additional CSS classes\n</pre> <pre sample>\n<fs-form-for>\n    <div class=\"form-group\">\n      <label class=\"col-xs-2 control-label\">Choose your katawari</label>\n      <div class=\"col-xs-6\">\n        <div fs-checkbox items=\"items\" ng-disabled=\"disabled\" ng-model=\"value\">\n            <b>{{item.id}}</b> {{item.label}}\n        </div>\n      </div>\n      <div class=\"col-xs-2\">\n        <button class=\"btn btn-default\" ng-click=\"disabled=!disabled\">\n          {{disabled ? 'Enable' : 'Disable'}}\n        </button>\n      </div>\n    </div>\n    <div class=\"form-group\">\n      <label class=\"col-xs-2 control-label\">Choose your katawari</label>\n      <div class=\"col-xs-6\">\n        <div fs-checkbox items=\"items\" ng-model=\"value\">\n          {{item.label}}\n        </div>\n      </div>\n    </div>\n<fs-row label=\"Result\">\n    <pre>Selected value: {{ value | json }}</pre>\n</fs-row>\n</fs-form-for>\n</pre>";
@@ -30115,7 +30200,7 @@
 	module.exports=v1;
 
 /***/ },
-/* 23 */
+/* 25 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var v1="<pre markdown>\n## Directive `fs-datetime`\n\n  This directive creates a time-input widget. This directive expects\n  that scope property specified in <var>ngModel</var> will be a Date,\n  and will modify only hours/minutes/seconds components of this Date,\n  year/month/day will remain unchanged. Supported attributes:\n\n</pre> <pre sample>\n<fs-form-for>\n<div class=\"form-group row\">\n  <label class=\"col-xs-2 control-label\">Choose convenient seppuku date</label>\n  <div class=\"col-xs-2\"><div fs-date ng-model=\"selectedDate\" ng-disabled=\"disabled\"></div></div>\n  <div class=\"col-xs-2 col-xs-offset-3\">\n    <button class=\"btn btn-default\" ng-click=\"disabled=!disabled\">\n      {{disabled ? 'Enable' : 'Disable'}}\n    </button>\n  </div>\n</div>\n<fs-row label=\"Calendar\"><fs-calendar ng-model=\"selectedDate\"/></fs-row>\n\n<hr/>\n\n\n<div class=\"form-group row\">\n<label class=\"col-xs-2 control-label\">Select appointment time</label>\n  <div class=\"col-xs-2\"><div fs-time ng-disabled=\"disabled\" ng-model=\"svalue\"></div></div>\n  <div class=\"col-xs-1\"><button class=\"btn btn-default\" ng-click=\"setTime('21:52')\"> 21:52 </button></div>\n  <div class=\"col-xs-1\"><button class=\"btn btn-default\" ng-click=\"setTime('19:22')\"> 19:22 </button> </div>\n  <div class=\"col-xs-2 col-xs-offset-1\">\n    <button class=\"btn btn-default\" ng-click=\"disabled=!disabled\">\n      {{disabled ? 'Enable' : 'Disable'}}\n    </button>\n  </div>\n</div>\n\n<fs-row label=\"Result\">\n<pre>Time is: {{ svalue | json }}</pre>\n</fs-row>\n\n<hr/>\n\n<div class=\"form-group row\">\n  <label class=\"col-xs-2 control-label\">DateTime</label>\n  <div class=\"col-xs-4\"><div fs-datetime ng-model=\"selectedDateTime\" ng-disabled=\"disabled\"></div></div>\n  <div class=\"col-xs-2 col-xs-offset-2\">\n    <button class=\"btn btn-default\" ng-click=\"disabled=!disabled\">\n      {{disabled ? 'Enable' : 'Disable'}}\n    </button>\n  </div>\n</div>\n\n<fs-row label=\"Result\">\n<pre>\nEntered datetime: {{ selectedDateTime | date:'medium'}}\n</pre></fs-row>\n\n</fs-form-for>\n</pre>";
@@ -30123,69 +30208,119 @@
 	module.exports=v1;
 
 /***/ },
-/* 24 */
-/***/ function(module, exports, __webpack_require__) {
-
-	// removed by extract-text-webpack-plugin
-
-/***/ },
-/* 25 */,
 /* 26 */
 /***/ function(module, exports, __webpack_require__) {
 
+	var v1="<pre markdown>\n## Directive `fs-list`\n\nThis directive renders a list of items, with one of them marked as\nselected. It provides interface for moving selection up or down.\nThis directive is used in <code class=\"ng-binding\">fsSelect</code>\nand <code class=\"ng-binding\">fsMultiselect</code> to create dropdowns.\n\nThis directive doesn't use <code class=\"ng-binding\">ngModel</code>\nto set selected value in scope. Instead, you should create\nspecial <code>listInterface</code> property in your scope and\nimplement <var>onSelect</var> callback function:\n\n```\n$scope.listInterface = {\n  onSelect: function(selectedItem) {\n    $scope.selectedItem = selectedItem;\n  }\n};\n```\n\nYou can call <code>scope.listInteface.move()</code> function from\nyour controller to move list's selection up or down.\n\nSupported attributes:\n* `items` - list of items to display\n* `class` - additional CSS classes for list\n</pre> <style>.dropdown.no-popup .dropdown-menu {\n  box-shadow: none;\n}</style> <pre sample>\n    <div class=\"row\">\n      <div class=\"col-xs-7\">\n        <input class=\"form-control\" autofocus=\"1\" fs-input fs-up=\"move(-1)\" fs-down=\"move(1)\" fs-enter=\"select()\" ng-model=\"search\"/>\n        <div fs-list items=\"tracks\" class=\"no-popup\">\n          <img src=\"{{ item.artwork_url }}\" width=\"30\" height=\"30\"/>\n          {{item.title}} <small class=\"text-muted\">{{item.genre}}</small>\n        </div>\n        <div class=\"alert alert-success\" style=\"margin-top: 20px\">\n          <strong>NB:</strong> you can navigate through list\n          using <kbd>Up</kbd> and <kbd>Down</kbd> arrows and select\n          track with <kbd>Enter</kbd> key.\n        </div>\n      </div>\n      <div class=\"col-xs-5\">\n        <demo-audio track=\"selectedTrack\"></demo-audio>\n        <pre style=\"margin-top: 20px\">Selected Item: {{ selectedTrack | json }}</pre>\n      </div>\n    </div>\n</pre>";
+	angular.module(["ng"]).run(["$templateCache",function(c){c.put("views/list.html", v1)}]);
+	module.exports=v1;
+
+/***/ },
+/* 27 */
+/***/ function(module, exports, __webpack_require__) {
+
 	// removed by extract-text-webpack-plugin
 
 /***/ },
-/* 27 */,
 /* 28 */,
 /* 29 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = "app = require('./module')\n\nsrc = require('raw!./form.js')\n\napp.controller('FormCtrl', function ($scope){\n  $scope.src = src\n\n  $scope.samurai = {\n    name: \"Unnamed\",\n    districts: []\n  };\n\n  $scope.learningStages = [\n    {id: 'S', label: 'Shu'},\n    {id: 'H', label: 'Ha'},\n    {id: 'R', label: 'Ri'}\n  ];\n\n  $scope.weapons = [\n    {id: '1', label: 'Katana'},\n    {id: '2', label: 'Naginata'},\n    {id: '3', label: 'Yari'},\n    {id: '4', label: 'Horagai'},\n    {id: '5', label: 'Horimono'}\n  ];\n\n  $scope.meals = [\n    {id: 'me', label: 'Meat'},\n    {id: 'mi', label: 'Milk'},\n    {id: 'or', label: 'Orange'},\n    {id: 'ri', label: 'Rice'}\n  ];\n\n  $scope.otherFacts = [\n    'Uruwashii', 'Buke', 'Mononofu', 'Musha', 'Rōnin', 'Shi', 'Tsuwamono'\n  ];\n\n  $scope.weaponStyles = ['Kenjutsu', 'Naginatajutsu', 'Sōjutsu'];\n\n  $scope.districts = [\n  'Kita District',\n    'Tsugaru District',\n    'Hei District',\n    'Iwai District',\n    'Akita District',\n    'Tagawa District',\n    'Murayama District',\n    'Okitama District',\n    'Aizu District',\n    'Shirakawa District',\n    'Ibaraki District',\n    'Tsuga District',\n    'Habu District',\n    'Sōma District',\n    'Katsushika District',\n    'Saitama District',\n    'Adachi District',\n    'Toshima District',\n    'Tama District',\n    'Kanbara District',\n    'Uonuma District',\n    'Kubiki District',\n    'Niikawa District',\n    'Tsuru District',\n    'Yamanashi District',\n    'Yatsushiro District',\n    'Koma District',\n    'Saku District',\n    'Takai District',\n    'Minochi District',\n    'Ina District',\n    'Chikuma District',\n    'Azumi District',\n    'Ishizu District',\n    'Shitara District',\n    'Kamo District',\n    'Kasugai District',\n    'Muro District',\n    'Azai District',\n    'Kuwata District',\n    'Ukena District',\n    'Uwa District',\n    'Matsuura District',\n    'Sonogi District',\n    'Takaki District',\n    'Kunisaki District',\n    'Amabe District',\n    'Usuki District',\n    'Naka District',\n    'Ōsumi District',\n    'Soo District',\n    'Isa District'\n  ];\n})\n"
+	// removed by extract-text-webpack-plugin
 
 /***/ },
-/* 30 */
-/***/ function(module, exports, __webpack_require__) {
-
-	module.exports = "app = require('./module')\n\nsrc = require('raw!./select.js')\n\ncountries = require('./countries')\n\napp.controller('SelectCtrl', function ($scope){\n  $scope.disabled = false;\n  $scope.src = src\n\n  $scope.items = [\n    {id: 'S', label: 'Shijima'},\n    {id: 'M', label: 'Musubi'},\n    {id: 'Y', label: 'Yosuga'}\n  ];\n\n  $scope.countries = countries;\n\n  $scope.laughs = ['Ha-ha-ha', 'Ho-ho-ho', 'He-he-he'];\n})\n"
-
-/***/ },
+/* 30 */,
 /* 31 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = "app = require('./module')\n\nsrc = require('raw!./multiselect.js')\n\ncountries = require('./countries')\napp.controller('MultiselectCtrl', function ($scope){\n    $scope.src = src;\n    $scope.disabled = false;\n\n    $scope.items = [\n      {id: 'S', label: 'Shijima'},\n      {id: 'M', label: 'Musubi'},\n      {id: 'Y', label: 'Yosuga'},\n      {id: 'GG', label: 'Genmai gohan'},\n      {id: 'K', label: 'Kamameshi'},\n      {id: 'MO', label: 'Mochi'},\n      {id: 'SH', label: 'Sekihan'}\n    ];\n\n    $scope.countries = countries\n    $scope.countryNames = countries.map(function(x){return x.name})\n\n})\n"
+	module.exports = __webpack_require__.p + "304c60b744c8de4aa52c10dfa9df5a44.gif"
 
 /***/ },
 /* 32 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = "app = require('./module')\n\nsrc = require('raw!./radio.js')\n\nsushi = [\n  {img: 'CaliforniaRoll', label: 'California Roll', src: require('../imgs/CaliforniaRoll.gif')},\n  {img: 'CucumberRoll', label: 'Cucumber Roll', src: require('../imgs/CucumberRoll.gif')},\n  {img: 'FattyTuna', label: 'Fatty Tuna',src: require('../imgs/FattyTuna.gif')},\n  {img: 'Inari', label: 'Inari',src: require('../imgs/Inari.gif')},\n  {img: 'Octopus', label: 'Octopus', src: require('../imgs/Octopus.gif')},\n  {img: 'Shrimp', label: 'Shrimp', src: require('../imgs/Shrimp.gif')}\n]\n\napp.controller('RadioCtrl', function ($scope){\n  $scope.src = src\n  $scope.sushi = sushi\n  $scope.items = [\n    {id: 'S', label: 'Shijima'},\n    {id: 'M', label: 'Musubi'},\n    {id: 'Y', label: 'Yosuga'}\n  ];\n})\n"
+	module.exports = __webpack_require__.p + "6f02f16bc352ece908c95f802dce2989.gif"
 
 /***/ },
 /* 33 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = "app = require('./module')\n\nsrc = require('raw!./check.js')\n\napp.controller('CheckCtrl', function ($scope){\n  $scope.src = src\n  $scope.items = [\n    {id: 'S', label: 'Shijima'},\n    {id: 'M', label: 'Musubi'},\n    {id: 'Y', label: 'Yosuga'}\n  ];\n})\n"
+	module.exports = __webpack_require__.p + "c2d75ae3c9f3bf580157e0d9c4aac80a.gif"
 
 /***/ },
 /* 34 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = "app = require('./module')\n\nsrc = require('raw!./datetime.js')\n\napp.controller('DatetimeCtrl', function ($scope){\n  $scope.selectedDate = new Date();\n  $scope.src = src\n  $scope.selectedDate = new Date();\n  $scope.disabled = false;\n  now = new Date();\n  $scope.svalue = now.getHours() + \":\" + now.getMinutes();\n  $scope.disabled = false;\n\n  $scope.setTime = function(str) {\n    $scope.svalue = str;\n  };\n  $scope.disabled = false;\n  $scope.selectedDateTime = new Date();\n})\n"
+	module.exports = __webpack_require__.p + "b929eb5e5195e021e7966f548226a76f.gif"
 
 /***/ },
 /* 35 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = "<h1 id=\"formstamp\">FormStamp</h1>\n<p><a href=\"https://travis-ci.org/formstamp/formstamp\"><img src=\"https://travis-ci.org/formstamp/formstamp.png?branch=master\" alt=\"Build Status\"></a></p>\n<p><a href=\"https://gitter.im/formstamp/formstamp\"><img src=\"https://badges.gitter.im/formstamp/formstamp.png\" alt=\"Gitter chat\"></a></p>\n<p><strong><em>This project is under development. Some API may be changed.</em></strong></p>\n<p>FormStamp is a pure AngularJS widgets library designed for rich\nfront-end web applications. FormStamp core principles are:</p>\n<ul>\n<li>all widgets are written from scratch;</li>\n<li>maximum AngularJS compatibility (supports ngDisabled, ngModel and\nother standard directives);</li>\n<li>styled with Twitter Bootstrap;</li>\n<li>clean &amp; minimalistic codebase.</li>\n</ul>\n<p><a href=\"http://formstamp.github.io/\">Live Demo</a></p>\n<h2 id=\"installation\">Installation</h2>\n<p>FormStamp can be installed via <a href=\"http://bower.io/\">Bower Package Manager</a>:</p>\n<pre><code>bower install angular-formstamp\n</code></pre><h2 id=\"structure\">Structure</h2>\n<p>There are 3 levels of directives:</p>\n<ul>\n<li>Form Builder - orchestrates building of complex forms; provides\nsimple DSL-like markup for describing forms and hides complex markup\nfrom you.</li>\n<li>Widget directives - most often used widgets.</li>\n<li>Low-level directives - common concerns for widgets construction, can\nbe used to build your own custom widgets.</li>\n</ul>\n<h2 id=\"form-builder\">Form Builder</h2>\n<ul>\n<li><code>fsFormFor</code> - root form builder directive;</li>\n<li><code>fsInput</code> - renders a row with input in form builder;</li>\n<li><code>fsRow</code> - renders a custom row.</li>\n</ul>\n<h2 id=\"widget-directives\">Widget Directives</h2>\n<ul>\n<li><code>fsSelect</code> - select input with free text support (select/combo);</li>\n<li><code>fsMultiselect</code> - multiple select input with free text support;</li>\n<li><code>fsTime</code> - time input;</li>\n<li><code>fsDate</code> - date input with <code>fsCalendar</code> inside dropdown;</li>\n<li><code>fsDatetime</code> - widget composed from <code>fsTime</code> and <code>fsDate</code> to enter\nboth date and time;</li>\n<li><code>fsRadio</code> - a group of radiobuttons;</li>\n<li><code>fsCheck</code> - a group of checkboxes.</li>\n</ul>\n<h2 id=\"low-level-directives\">Low-level Directives</h2>\n<ul>\n<li><code>fsList</code> - renders a list of items and allows to move selection up and\ndown (with custom templating for items);</li>\n<li><code>fsNullForm</code> - hides input with ngModel binding from a parent form;</li>\n<li><code>fsInput</code> - simplifies keyboard &amp; focus events handling;</li>\n<li><code>fsCalendar</code> - draws a calendar and allows to mark one day as selected.</li>\n</ul>\n<h2 id=\"todo\">TODO</h2>\n<ul>\n<li>support I18n</li>\n</ul>\n<h2 id=\"development-environment\">Development Environment</h2>\n<p>Install node.js</p>\n<pre><code>curl https://raw.github.com/creationix/nvm/master/install.sh | sh # install nvm\nnvm install 0.10\n</code></pre><p>Clone FormStamp repository</p>\n<pre><code>git clone git@github.com:formstamp/formstamp.git\n</code></pre><p>Install bower dependencies and node.js packages</p>\n<pre><code>cd formstamp\nnvm use 0.10\nnpm install # server deps\nnpm run-script bower # demo deps\n</code></pre><p>Build, start server and start watching changes using</p>\n<pre><code class=\"lang-sh\">\nnpm start\n\n# open browser @ localhost:8080/index.html\n</code></pre>\n<p>Now, point your browser to <a href=\"http://localhost:17405/\">http://localhost:17405/</a> and you&#39;ll see\nFormStamp&#39;s demo page.</p>\n<p>NOTE: These commands add <code>nvm</code> command to <code>.bash_profile</code>. It may not\nwork if you are not using <code>bash</code> shell (like <code>zsh</code>). In this case you\nhave to manually configure profile file.</p>\n<h2 id=\"running-tests\">Running Tests</h2>\n<p>Run unit tests:</p>\n<pre><code class=\"lang-sh\">npm test\n</code></pre>\n<p>To run protractor tests you could use:</p>\n<pre><code class=\"lang-sh\">./script/run-e2e.sh\n</code></pre>\n<h2 id=\"license\">License</h2>\n<p>FormStamp is released under\n<a href=\"https://raw.github.com/formstamp/formstamp/master/MIT-LICENSE\">MIT License</a>.</p>\n";
+	module.exports = __webpack_require__.p + "a2c54175ffc28b40fefbb42b1c1864b5.gif"
 
 /***/ },
 /* 36 */
 /***/ function(module, exports, __webpack_require__) {
 
+	module.exports = __webpack_require__.p + "18c84795d8c3b231b035a062ea3d331a.gif"
+
+/***/ },
+/* 37 */,
+/* 38 */
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = "app = require('./module')\n\nsrc = require('raw!./form.js')\n\napp.controller('FormCtrl', function ($scope){\n  $scope.src = src\n\n  $scope.samurai = {\n    name: \"Unnamed\",\n    districts: []\n  };\n\n  $scope.learningStages = [\n    {id: 'S', label: 'Shu'},\n    {id: 'H', label: 'Ha'},\n    {id: 'R', label: 'Ri'}\n  ];\n\n  $scope.weapons = [\n    {id: '1', label: 'Katana'},\n    {id: '2', label: 'Naginata'},\n    {id: '3', label: 'Yari'},\n    {id: '4', label: 'Horagai'},\n    {id: '5', label: 'Horimono'}\n  ];\n\n  $scope.meals = [\n    {id: 'me', label: 'Meat'},\n    {id: 'mi', label: 'Milk'},\n    {id: 'or', label: 'Orange'},\n    {id: 'ri', label: 'Rice'}\n  ];\n\n  $scope.otherFacts = [\n    'Uruwashii', 'Buke', 'Mononofu', 'Musha', 'Rōnin', 'Shi', 'Tsuwamono'\n  ];\n\n  $scope.weaponStyles = ['Kenjutsu', 'Naginatajutsu', 'Sōjutsu'];\n\n  $scope.districts = [\n  'Kita District',\n    'Tsugaru District',\n    'Hei District',\n    'Iwai District',\n    'Akita District',\n    'Tagawa District',\n    'Murayama District',\n    'Okitama District',\n    'Aizu District',\n    'Shirakawa District',\n    'Ibaraki District',\n    'Tsuga District',\n    'Habu District',\n    'Sōma District',\n    'Katsushika District',\n    'Saitama District',\n    'Adachi District',\n    'Toshima District',\n    'Tama District',\n    'Kanbara District',\n    'Uonuma District',\n    'Kubiki District',\n    'Niikawa District',\n    'Tsuru District',\n    'Yamanashi District',\n    'Yatsushiro District',\n    'Koma District',\n    'Saku District',\n    'Takai District',\n    'Minochi District',\n    'Ina District',\n    'Chikuma District',\n    'Azumi District',\n    'Ishizu District',\n    'Shitara District',\n    'Kamo District',\n    'Kasugai District',\n    'Muro District',\n    'Azai District',\n    'Kuwata District',\n    'Ukena District',\n    'Uwa District',\n    'Matsuura District',\n    'Sonogi District',\n    'Takaki District',\n    'Kunisaki District',\n    'Amabe District',\n    'Usuki District',\n    'Naka District',\n    'Ōsumi District',\n    'Soo District',\n    'Isa District'\n  ];\n})\n"
+
+/***/ },
+/* 39 */
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = "app = require('./module')\n\nsrc = require('raw!./select.js')\n\ncountries = require('./countries')\n\napp.controller('SelectCtrl', function ($scope){\n  $scope.disabled = false;\n  $scope.src = src\n\n  $scope.items = [\n    {id: 'S', label: 'Shijima'},\n    {id: 'M', label: 'Musubi'},\n    {id: 'Y', label: 'Yosuga'}\n  ];\n\n  $scope.countries = countries;\n\n  $scope.laughs = ['Ha-ha-ha', 'Ho-ho-ho', 'He-he-he'];\n})\n"
+
+/***/ },
+/* 40 */
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = "app = require('./module')\n\nsrc = require('raw!./multiselect.js')\n\ncountries = require('./countries')\napp.controller('MultiselectCtrl', function ($scope){\n    $scope.src = src;\n    $scope.disabled = false;\n\n    $scope.items = [\n      {id: 'S', label: 'Shijima'},\n      {id: 'M', label: 'Musubi'},\n      {id: 'Y', label: 'Yosuga'},\n      {id: 'GG', label: 'Genmai gohan'},\n      {id: 'K', label: 'Kamameshi'},\n      {id: 'MO', label: 'Mochi'},\n      {id: 'SH', label: 'Sekihan'}\n    ];\n\n    $scope.countries = countries\n    $scope.countryNames = countries.map(function(x){return x.name})\n\n})\n"
+
+/***/ },
+/* 41 */
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = "app = require('./module')\n\nsrc = require('raw!./radio.js')\n\nsushi = [\n  {img: 'CaliforniaRoll', label: 'California Roll', src: require('../imgs/CaliforniaRoll.gif')},\n  {img: 'CucumberRoll', label: 'Cucumber Roll', src: require('../imgs/CucumberRoll.gif')},\n  {img: 'FattyTuna', label: 'Fatty Tuna',src: require('../imgs/FattyTuna.gif')},\n  {img: 'Inari', label: 'Inari',src: require('../imgs/Inari.gif')},\n  {img: 'Octopus', label: 'Octopus', src: require('../imgs/Octopus.gif')},\n  {img: 'Shrimp', label: 'Shrimp', src: require('../imgs/Shrimp.gif')}\n]\n\napp.controller('RadioCtrl', function ($scope){\n  $scope.src = src\n  $scope.sushi = sushi\n  $scope.items = [\n    {id: 'S', label: 'Shijima'},\n    {id: 'M', label: 'Musubi'},\n    {id: 'Y', label: 'Yosuga'}\n  ];\n})\n"
+
+/***/ },
+/* 42 */
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = "app = require('./module')\n\nsrc = require('raw!./datetime.js')\n\napp.controller('DatetimeCtrl', function ($scope){\n  $scope.selectedDate = new Date();\n  $scope.src = src\n  $scope.selectedDate = new Date();\n  $scope.disabled = false;\n  now = new Date();\n  $scope.svalue = now.getHours() + \":\" + now.getMinutes();\n  $scope.disabled = false;\n\n  $scope.setTime = function(str) {\n    $scope.svalue = str;\n  };\n  $scope.disabled = false;\n  $scope.selectedDateTime = new Date();\n})\n"
+
+/***/ },
+/* 43 */
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = "app = require('./module')\n\nsrc = require('raw!./list.js')\n\napp.controller('ListCtrl', function ($scope){\n  $scope.src = src\n  SC.initialize({ client_id: '8399f2e0577e0acb4eee4d65d6c6cce6' });\n\n  $scope.$watch('search', function () {\n    SC.get('/tracks',\n      { q: $scope.search, license: 'cc-by-sa' },\n      function(tracks) {\n        $scope.$apply(function() { $scope.tracks = tracks })\n      })\n  });\n\n  $scope.search = 'bach';\n  $scope.tracks = [];\n\n  $scope.move = function (d) {\n    $scope.listInterface.move(d);\n  };\n\n  $scope.listInterface = {\n    onSelect: function (selectedItem) {\n      $scope.select(selectedItem)\n    }\n  };\n\n  $scope.select = function(selectedItem) {\n    $scope.selectedTrack = selectedItem || $scope.listInterface.selectedItem;\n  };\n})\n\napp.directive(\"demoAudio\", function() {\n  return {\n    restrict: \"E\",\n    scope: {\n      track: '='\n    },\n    template: \"<audio controls />\",\n    replace: true,\n    link: function($scope, $element, $attrs) {\n      return $scope.$watch('track', function(track) {\n        if (track) {\n          $element.attr('src', track.stream_url + \"?client_id=8399f2e0577e0acb4eee4d65d6c6cce6\");\n          return $element[0].play();\n        }\n      });\n    }\n  };\n});\n"
+
+/***/ },
+/* 44 */
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = "app = require('./module')\n\nsrc = require('raw!./check.js')\n\napp.controller('CheckCtrl', function ($scope){\n  $scope.src = src\n  $scope.items = [\n    {id: 'S', label: 'Shijima'},\n    {id: 'M', label: 'Musubi'},\n    {id: 'Y', label: 'Yosuga'}\n  ];\n})\n"
+
+/***/ },
+/* 45 */
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = "<h1 id=\"formstamp\">FormStamp</h1>\n<p><a href=\"https://travis-ci.org/formstamp/formstamp\"><img src=\"https://travis-ci.org/formstamp/formstamp.png?branch=master\" alt=\"Build Status\"></a></p>\n<p><a href=\"https://gitter.im/formstamp/formstamp\"><img src=\"https://badges.gitter.im/formstamp/formstamp.png\" alt=\"Gitter chat\"></a></p>\n<p><strong><em>This project is under development. Some API may be changed.</em></strong></p>\n<p>FormStamp is a pure AngularJS widgets library designed for rich\nfront-end web applications. FormStamp core principles are:</p>\n<ul>\n<li>all widgets are written from scratch;</li>\n<li>maximum AngularJS compatibility (supports ngDisabled, ngModel and\nother standard directives);</li>\n<li>styled with Twitter Bootstrap;</li>\n<li>clean &amp; minimalistic codebase.</li>\n</ul>\n<p><a href=\"http://formstamp.github.io/\">Live Demo</a></p>\n<h2 id=\"installation\">Installation</h2>\n<p>FormStamp can be installed via <a href=\"http://bower.io/\">Bower Package Manager</a>:</p>\n<pre><code>bower install angular-formstamp\n</code></pre><h2 id=\"structure\">Structure</h2>\n<p>There are 3 levels of directives:</p>\n<ul>\n<li>Form Builder - orchestrates building of complex forms; provides\nsimple DSL-like markup for describing forms and hides complex markup\nfrom you.</li>\n<li>Widget directives - most often used widgets.</li>\n<li>Low-level directives - common concerns for widgets construction, can\nbe used to build your own custom widgets.</li>\n</ul>\n<h2 id=\"form-builder\">Form Builder</h2>\n<ul>\n<li><code>fsFormFor</code> - root form builder directive;</li>\n<li><code>fsInput</code> - renders a row with input in form builder;</li>\n<li><code>fsRow</code> - renders a custom row.</li>\n</ul>\n<h2 id=\"widget-directives\">Widget Directives</h2>\n<ul>\n<li><code>fsSelect</code> - select input with free text support (select/combo);</li>\n<li><code>fsMultiselect</code> - multiple select input with free text support;</li>\n<li><code>fsTime</code> - time input;</li>\n<li><code>fsDate</code> - date input with <code>fsCalendar</code> inside dropdown;</li>\n<li><code>fsDatetime</code> - widget composed from <code>fsTime</code> and <code>fsDate</code> to enter\nboth date and time;</li>\n<li><code>fsRadio</code> - a group of radiobuttons;</li>\n<li><code>fsCheck</code> - a group of checkboxes.</li>\n</ul>\n<h2 id=\"low-level-directives\">Low-level Directives</h2>\n<ul>\n<li><code>fsList</code> - renders a list of items and allows to move selection up and\ndown (with custom templating for items);</li>\n<li><code>fsNullForm</code> - hides input with ngModel binding from a parent form;</li>\n<li><code>fsInput</code> - simplifies keyboard &amp; focus events handling;</li>\n<li><code>fsCalendar</code> - draws a calendar and allows to mark one day as selected.</li>\n</ul>\n<h2 id=\"development-environment\">Development Environment</h2>\n<p>Install node.js</p>\n<pre><code>curl https://raw.github.com/creationix/nvm/master/install.sh | sh # install nvm\nnvm install 0.10\n</code></pre><p>Clone FormStamp repository</p>\n<pre><code>git clone git@github.com:formstamp/formstamp.git\n</code></pre><p>Install bower dependencies and node.js packages</p>\n<pre><code class=\"lang-sh\">  cd formstamp\n  nvm use 0.10\n  npm install\n</code></pre>\n<p>Build, start demo server and start watching changes using</p>\n<pre><code class=\"lang-sh\">\nnpm start\n\n# open browser @ localhost:8080/index.html\n</code></pre>\n<p>Now, point your browser to <a href=\"http://localhost:8080/\">http://localhost:8080/</a> and you&#39;ll see\nFormStamp&#39;s demo page.</p>\n<p>NOTE: These commands add <code>nvm</code> command to <code>.bash_profile</code>. It may not\nwork if you are not using <code>bash</code> shell (like <code>zsh</code>). In this case you\nhave to manually configure profile file.</p>\n<h2 id=\"running-tests\">Running Tests</h2>\n<p>Run unit tests:</p>\n<pre><code class=\"lang-sh\">\nnpm test\n</code></pre>\n<p>To run protractor tests you could use:</p>\n<pre><code class=\"lang-sh\">\nnpm run-script e2e\n</code></pre>\n<h2 id=\"license\">License</h2>\n<p>FormStamp is released under\n<a href=\"https://raw.github.com/formstamp/formstamp/master/MIT-LICENSE\">MIT License</a>.</p>\n";
+
+/***/ },
+/* 46 */
+/***/ function(module, exports, __webpack_require__) {
+
 	var mod;
 
-	mod = __webpack_require__(64);
+	mod = __webpack_require__(68);
 
 	mod.provider('fsConfig', function() {
 	  this.$get = function() {
@@ -30196,18 +30331,18 @@
 
 
 /***/ },
-/* 37 */
+/* 47 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var mod, u;
 
-	mod = __webpack_require__(64);
+	mod = __webpack_require__(68);
 
-	__webpack_require__(65);
+	__webpack_require__(69);
 
-	u = __webpack_require__(67);
+	u = __webpack_require__(71);
 
-	__webpack_require__(82);
+	__webpack_require__(86);
 
 	mod.directive("fsRadio", [
 	  '$templateCache', function($templateCache) {
@@ -30246,18 +30381,18 @@
 
 
 /***/ },
-/* 38 */
+/* 48 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var mod, u;
 
-	mod = __webpack_require__(64);
+	mod = __webpack_require__(68);
 
-	__webpack_require__(68);
+	__webpack_require__(72);
 
-	__webpack_require__(83);
+	__webpack_require__(87);
 
-	u = __webpack_require__(67);
+	u = __webpack_require__(71);
 
 	mod.directive("fsList", [
 	  '$templateCache', function($templateCache) {
@@ -30334,7 +30469,7 @@
 
 
 /***/ },
-/* 39 */
+/* 49 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var parentsUntil;
@@ -30443,18 +30578,18 @@
 
 
 /***/ },
-/* 40 */
+/* 50 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var mod, u;
 
-	mod = __webpack_require__(64);
+	mod = __webpack_require__(68);
 
-	__webpack_require__(65);
+	__webpack_require__(69);
 
-	u = __webpack_require__(67);
+	u = __webpack_require__(71);
 
-	__webpack_require__(84);
+	__webpack_require__(88);
 
 	mod.directive("fsCheckbox", [
 	  '$window', '$templateCache', function($window, $templateCache) {
@@ -30516,16 +30651,16 @@
 
 
 /***/ },
-/* 41 */
+/* 51 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var VALIDATION_DIRECTIVES, mod;
 
-	mod = __webpack_require__(64);
+	mod = __webpack_require__(68);
 
 	VALIDATION_DIRECTIVES = ['ngRequired', 'ngMinlength', 'ngMaxlength', 'ngPattern', 'ngDisabled'];
 
-	__webpack_require__(85);
+	__webpack_require__(89);
 
 	mod.directive('fsField', [
 	  function() {
@@ -30592,19 +30727,19 @@
 
 
 /***/ },
-/* 42 */
+/* 52 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var mod, setAttrs,
 	  __hasProp = {}.hasOwnProperty;
 
-	mod = __webpack_require__(64);
+	mod = __webpack_require__(68);
 
-	__webpack_require__(86);
+	__webpack_require__(90);
 
-	__webpack_require__(87);
+	__webpack_require__(91);
 
-	__webpack_require__(88);
+	__webpack_require__(92);
 
 	setAttrs = function(el, attrs) {
 	  var attr, value, _results;
@@ -30733,18 +30868,18 @@
 
 
 /***/ },
-/* 43 */
+/* 53 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var mod;
 
-	mod = __webpack_require__(64);
+	mod = __webpack_require__(68);
 
-	__webpack_require__(70);
+	__webpack_require__(74);
 
-	__webpack_require__(72);
+	__webpack_require__(76);
 
-	__webpack_require__(89);
+	__webpack_require__(93);
 
 	mod.directive("fsSelect", [
 	  '$compile', '$templateCache', function($compile, $templateCache) {
@@ -30839,20 +30974,20 @@
 
 
 /***/ },
-/* 44 */
+/* 54 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var mod, u;
 
-	mod = __webpack_require__(64);
-
-	__webpack_require__(70);
+	mod = __webpack_require__(68);
 
 	__webpack_require__(74);
 
-	__webpack_require__(90);
+	__webpack_require__(78);
 
-	u = __webpack_require__(67);
+	__webpack_require__(94);
+
+	u = __webpack_require__(71);
 
 	mod.filter('exclude', function() {
 	  return function(input, selected) {
@@ -30968,18 +31103,18 @@
 
 
 /***/ },
-/* 45 */
+/* 55 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var IDEAL_REX, dynamicItems, mkTimeInput, mkTimeItems, mod, si, u, validInput;
 
-	mod = __webpack_require__(64);
+	mod = __webpack_require__(68);
 
-	__webpack_require__(91);
+	__webpack_require__(95);
 
-	u = __webpack_require__(67);
+	u = __webpack_require__(71);
 
-	si = __webpack_require__(76);
+	si = __webpack_require__(80);
 
 	IDEAL_REX = /^([0-1][0-9]|2[0-3]):([0-5][0-9])$/;
 
@@ -31134,12 +31269,12 @@
 
 
 /***/ },
-/* 46 */
+/* 56 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var mod;
 
-	mod = __webpack_require__(64);
+	mod = __webpack_require__(68);
 
 	mod.factory("dateParserHelpers", [
 	  function() {
@@ -31395,14 +31530,14 @@
 
 
 /***/ },
-/* 47 */
+/* 57 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var mod;
 
-	mod = __webpack_require__(64);
+	mod = __webpack_require__(68);
 
-	__webpack_require__(46);
+	__webpack_require__(56);
 
 	mod.directive('fsDateFormat', [
 	  '$locale', '$filter', '$dateParser', function($locale, $filter, $dateParser) {
@@ -31438,16 +31573,16 @@
 
 
 /***/ },
-/* 48 */
+/* 58 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var mod, u;
 
-	mod = __webpack_require__(64);
+	mod = __webpack_require__(68);
 
-	__webpack_require__(92);
+	__webpack_require__(96);
 
-	u = __webpack_require__(67);
+	u = __webpack_require__(71);
 
 	mod.directive('fsDate', function() {
 	  return {
@@ -31484,18 +31619,18 @@
 
 
 /***/ },
-/* 49 */
+/* 59 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var mod, shiftWeekDays, u;
 
-	mod = __webpack_require__(64);
+	mod = __webpack_require__(68);
 
-	__webpack_require__(77);
+	__webpack_require__(81);
 
-	__webpack_require__(93);
+	__webpack_require__(97);
 
-	u = __webpack_require__(67);
+	u = __webpack_require__(71);
 
 	shiftWeekDays = function(weekDays, firstDayOfWeek) {
 	  var weekDaysHead;
@@ -31680,20 +31815,20 @@
 
 
 /***/ },
-/* 50 */
+/* 60 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var mod, u;
 
-	mod = __webpack_require__(64);
+	mod = __webpack_require__(68);
 
-	__webpack_require__(94);
+	__webpack_require__(98);
 
-	__webpack_require__(70);
+	__webpack_require__(74);
 
-	__webpack_require__(79);
+	__webpack_require__(83);
 
-	u = __webpack_require__(67);
+	u = __webpack_require__(71);
 
 	mod.directive("fsDatetime", [
 	  '$compile', function($compile) {
@@ -31763,52 +31898,14 @@
 
 
 /***/ },
-/* 51 */
+/* 61 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// removed by extract-text-webpack-plugin
 
 /***/ },
-/* 52 */,
-/* 53 */
-/***/ function(module, exports, __webpack_require__) {
-
-	module.exports = __webpack_require__.p + "304c60b744c8de4aa52c10dfa9df5a44.gif"
-
-/***/ },
-/* 54 */
-/***/ function(module, exports, __webpack_require__) {
-
-	module.exports = __webpack_require__.p + "6f02f16bc352ece908c95f802dce2989.gif"
-
-/***/ },
-/* 55 */
-/***/ function(module, exports, __webpack_require__) {
-
-	module.exports = __webpack_require__.p + "c2d75ae3c9f3bf580157e0d9c4aac80a.gif"
-
-/***/ },
-/* 56 */
-/***/ function(module, exports, __webpack_require__) {
-
-	module.exports = __webpack_require__.p + "b929eb5e5195e021e7966f548226a76f.gif"
-
-/***/ },
-/* 57 */
-/***/ function(module, exports, __webpack_require__) {
-
-	module.exports = __webpack_require__.p + "a2c54175ffc28b40fefbb42b1c1864b5.gif"
-
-/***/ },
-/* 58 */
-/***/ function(module, exports, __webpack_require__) {
-
-	module.exports = __webpack_require__.p + "18c84795d8c3b231b035a062ea3d331a.gif"
-
-/***/ },
-/* 59 */,
-/* 60 */,
-/* 61 */
+/* 62 */,
+/* 63 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(global) {/**
@@ -33081,23 +33178,25 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
 
 /***/ },
-/* 62 */,
-/* 63 */,
-/* 64 */
+/* 64 */,
+/* 65 */,
+/* 66 */,
+/* 67 */,
+/* 68 */
 /***/ function(module, exports, __webpack_require__) {
 
 	module.exports = angular.module('formstamp', ['ng']);
 
 
 /***/ },
-/* 65 */
+/* 69 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// removed by extract-text-webpack-plugin
 
 /***/ },
-/* 66 */,
-/* 67 */
+/* 70 */,
+/* 71 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var getComputedStyleFor, innerHeightOf, uid;
@@ -33277,20 +33376,6 @@
 
 
 /***/ },
-/* 68 */
-/***/ function(module, exports, __webpack_require__) {
-
-	// removed by extract-text-webpack-plugin
-
-/***/ },
-/* 69 */,
-/* 70 */
-/***/ function(module, exports, __webpack_require__) {
-
-	// removed by extract-text-webpack-plugin
-
-/***/ },
-/* 71 */,
 /* 72 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -33306,6 +33391,20 @@
 /***/ },
 /* 75 */,
 /* 76 */
+/***/ function(module, exports, __webpack_require__) {
+
+	// removed by extract-text-webpack-plugin
+
+/***/ },
+/* 77 */,
+/* 78 */
+/***/ function(module, exports, __webpack_require__) {
+
+	// removed by extract-text-webpack-plugin
+
+/***/ },
+/* 79 */,
+/* 80 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var timeFixChain, timeInput, timeInputChain, timeLastFix;
@@ -33344,22 +33443,22 @@
 
 
 /***/ },
-/* 77 */
+/* 81 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// removed by extract-text-webpack-plugin
 
 /***/ },
-/* 78 */,
-/* 79 */
+/* 82 */,
+/* 83 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// removed by extract-text-webpack-plugin
 
 /***/ },
-/* 80 */,
-/* 81 */,
-/* 82 */
+/* 84 */,
+/* 85 */,
+/* 86 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var v1="<div class=\"fs-widget-root fs-radio fs-racheck\" ng-class=\"{disabled: disabled, enabled: !disabled}\"> <div class=\"fs-radio-item\" ng-repeat=\"item in items\"> <input fs-null-form type=\"radio\" ng-model=\"$parent.selectedItem\" name=\"::name\" ng-value=\"item\" ng-disabled=\"disabled\" id=\"::name_{{$index}}\"/> <label for=\"::name_{{$index}}\"> <span class=\"fs-radio-btn\"><span></span></span>\n::itemTpl </label> </div> </div>";
@@ -33367,7 +33466,7 @@
 	module.exports=v1;
 
 /***/ },
-/* 83 */
+/* 87 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var v1="<div class=\"dropdown open fs-list\"> <ul class=\"dropdown-menu\" role=\"menu\"> <li ng-repeat=\"item in items\" ng-class=\"{true: 'active'}[$index == highlightIndex]\"> <a ng-click=\"highlightItem(item)\" href=\"javascript:void(0)\" tabindex=\"-1\"> <span>::itemTpl</span> </a> </li> </ul> </div>";
@@ -33375,7 +33474,7 @@
 	module.exports=v1;
 
 /***/ },
-/* 84 */
+/* 88 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var v1="<div class=\"fs-racheck fs-checkbox\" ng-class=\"{disabled: disabled, enabled: !disabled}\"> <div ng-repeat=\"item in items\"> <div class=\"fs-racheck-item\" href=\"javascript:void(0)\" ng-disabled=\"disabled\" ng-click=\"toggle(item)\" fs-space=\"toggle(item)\"> <span class=\"fs-check-outer\"><span ng-show=\"isSelected(item)\" class=\"fs-check-inner\"></span></span>\n::itemTpl </div> </div> </div>";
@@ -33383,7 +33482,7 @@
 	module.exports=v1;
 
 /***/ },
-/* 85 */
+/* 89 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var v1="<div class=\"form-group\" ng-class=\"{&quot;has-error&quot;: object.$errors[field].length > 0}\"> <label for=\"{{ objectName }}[{{ field }}]\" class=\"col-sm-2 control-label\">Name</label> <div class=\"col-sm-10\"> <div w-combo class=\"w-field-input\" items=\"items\" invalid=\"object.$errors[field]\" name=\"{{ objectName }}[{{ field }}]\" ng-model=\"object[field]\"></div> <div> <p ng-repeat=\"error in object.$errors[field]\" class=\"text-danger\">{{ error }}</p> </div> </div> </div>";
@@ -33391,7 +33490,7 @@
 	module.exports=v1;
 
 /***/ },
-/* 86 */
+/* 90 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var v1="<div class=\"form-group\" ng-class=\"{'has-error': (form.::name.$dirty && form.::name.$invalid)}\"> <label class=\"col-sm-2 control-label\">::label</label> <div class=\"col-sm-10\"> ::content <div fs-errors model=\"form.::name\"></div> </div> </div>";
@@ -33399,7 +33498,7 @@
 	module.exports=v1;
 
 /***/ },
-/* 87 */
+/* 91 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var v1="<div class=\"form-group\"> <label class=\"col-sm-2 control-label\">::label</label> <div class=\"col-sm-10\"> ::content </div> </div>";
@@ -33407,7 +33506,7 @@
 	module.exports=v1;
 
 /***/ },
-/* 88 */
+/* 92 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var v1="<ul class=\"text-danger fs-errors\" ng-show=\"model.$dirty && messages && messages.length > 0\"> <li ng-repeat=\"msg in messages\">{{ msg }}</li> </ul>";
@@ -33415,7 +33514,7 @@
 	module.exports=v1;
 
 /***/ },
-/* 89 */
+/* 93 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var v1="<div class=\"fs-select fs-widget-root\"> <div ng-hide=\"active\" class=\"fs-select-sel\" ng-class=\"{'btn-group': item}\"> <a class=\"btn btn-default fs-select-active\" ng-class=\"{&quot;btn-danger&quot;: invalid}\" href=\"javascript:void(0)\" ng-click=\"active = true\" ng-disabled=\"disabled\"> ::itemTpl &nbsp; </a>\n<button type=\"button\" class=\"btn btn-default fs-close\" aria-hidden=\"true\" ng-show=\"item\" ng-disabled=\"disabled\" ng-click=\"unselectItem()\"></button> </div> <div class=\"open\" ng-show=\"active\"> <input class=\"form-control\" fs-input fs-focus-when=\"active\" fs-blur-when=\"!active\" fs-on-focus=\"active = true\" fs-on-blur=\"onBlur()\" fs-hold-focus fs-down=\"move(1)\" fs-up=\"move(-1)\" fs-pg-up=\"move(-11)\" fs-pg-down=\"move(11)\" fs-enter=\"onEnter($event)\" fs-esc=\"active = false\" type=\"text\" placeholder=\"Search\" ng-model=\"search\" fs-null-form/> <div ng-if=\"active && dropdownItems.length > 0\"> <div fs-list items=\"dropdownItems\"> ::itemTpl </div> </div> </div> </div>";
@@ -33423,7 +33522,7 @@
 	module.exports=v1;
 
 /***/ },
-/* 90 */
+/* 94 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var v1="<div class=\"fs-multiselect fs-widget-root\" ng-class=\"{ &quot;fs-with-selected-items&quot;: selectedItems.length > 0 }\"> <div class=\"fs-multiselect-wrapper\"> <div class=\"fs-multiselect-selected-items\" ng-if=\"selectedItems.length > 0\"> <a ng-repeat=\"item in selectedItems\" class=\"btn\" ng-click=\"unselectItem(item)\" ng-disabled=\"disabled\"> ::item-template\n<span class=\"fs-close\"></span> </a> </div> <input ng-keydown=\"onkeys($event)\" fs-null-form ng-disabled=\"disabled\" fs-input fs-hold-focus fs-on-focus=\"active = true\" fs-on-blur=\"onBlur()\" fs-blur-when=\"!active\" fs-down=\"listInterface.move(1)\" fs-up=\"listInterface.move(-1)\" fs-pgup=\"listInterface.move(-11)\" fs-pgdown=\"listInterface.move(11)\" fs-enter=\"onEnter()\" fs-esc=\"active = false\" class=\"form-control\" type=\"text\" placeholder=\"Select something\" ng-model=\"search\"/> <div ng-if=\"active && dropdownItems.length > 0\" class=\"open\"> <div fs-list items=\"dropdownItems\"> ::item-template </div> </div> </div> </div>";
@@ -33431,7 +33530,7 @@
 	module.exports=v1;
 
 /***/ },
-/* 91 */
+/* 95 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var v1="<div class=\"fs-time fs-widget-root\"> <input fs-null-form fs-input fs-focus-when=\"active\" fs-blur-when=\"!active\" fs-on-focus=\"active = true\" fs-on-blur=\"onBlur()\" fs-hold-focus fs-down=\"move(1)\" fs-up=\"move(-1)\" fs-pg-up=\"move(-11)\" fs-pg-down=\"move(11)\" fs-enter=\"onEnter()\" fs-esc=\"active = false\" class=\"form-control fs-time-role\" ng-disabled=\"disabled\" type=\"text\"/>\n<span class=\"glyphicon glyphicon-time\" ng-click=\"active = !disabled\"></span> <div ng-if=\"!disabled && active\" fs-list items=\"dropdownItems\"> {{item}} </div> </div>";
@@ -33439,7 +33538,7 @@
 	module.exports=v1;
 
 /***/ },
-/* 92 */
+/* 96 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var v1="<div class=\"fs-date fs-widget-root\"> <input fs-input fs-focus-when=\"active\" fs-blur-when=\"!active\" fs-on-focus=\"active = true\" fs-on-blur=\"active = false\" fs-hold-focus fs-esc=\"active = false\" type=\"text\" ng-disabled=\"disabled\" class=\"form-control\" ng-model=\"selectedDate.date\" fs-date-format=\"{{format}}\" placeholder=\"{{placeholder}}\" fs-null-form/>\n<span class=\"glyphicon glyphicon-calendar\" ng-click=\"active = !disabled\"></span> <div ng-if=\"!disabled && active\" class=\"open fs-calendar-wrapper\"> <div class=\"dropdown-menu\"> <fs-calendar ng-model=\"selectedDate.date\" on-select=\"close()\"/> </div> </div> </div>";
@@ -33447,7 +33546,7 @@
 	module.exports=v1;
 
 /***/ },
-/* 93 */
+/* 97 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var v1="<div class=\"fs-calendar\" data-ng-switch=\"selectionMode\"> <div data-ng-switch-when=\"year\"> <div class=\"fs-calendar-header\"> <span class=\"fs-calendar-prev\" data-ng-click=\"prevYearRange()\"></span>\n<span class=\"fs-calendar-title\" data-ng-click=\"switchSelectionMode()\"> {{ years[0] }}-{{ years[years.length-1] }} </span>\n<span class=\"fs-calendar-next\" data-ng-click=\"nextYearRange()\"></span> </div> <table class=\"table-condensed\"> <tr data-ng-repeat=\"yearGroup in yearGroups\"> <td data-ng-repeat=\"year in yearGroup\" data-ng-click=\"selectYear(year)\" data-ng-class=\"{'active': year == selectedYear}\" class=\"year\"> {{ year }} </td> </tr> </table> </div> <div data-ng-switch-when=\"month\"> <div class=\"fs-calendar-header\"> <span class=\"fs-calendar-prev\" data-ng-click=\"prevYear()\"></span>\n<span class=\"fs-calendar-title\" data-ng-click=\"switchSelectionMode()\"> {{ selectedYear }} </span>\n<span class=\"fs-calendar-next\" data-ng-click=\"nextYear()\"></span> </div> <table class=\"table-condensed\"> <tr data-ng-repeat=\"monthGroup in monthGroups\"> <td data-ng-repeat=\"month in monthGroup\" data-ng-click=\"selectMonth(month)\" data-ng-class=\"{'active': month == selectedMonth && isSameYear()}\" class=\"month\"> {{ month }} </td> </tr> </table> </div> <div data-ng-switch-default> <div class=\"fs-calendar-header\"> <span class=\"fs-calendar-prev\" data-ng-click=\"prevMonth()\"></span>\n<span class=\"fs-calendar-title\" data-ng-click=\"switchSelectionMode()\"> {{ selectedMonth + ', ' + selectedYear }} </span>\n<span class=\"fs-calendar-next\" data-ng-click=\"nextMonth()\"></span> </div> <table class=\"table-condensed\"> <thead> <tr> <th data-ng-repeat=\"weekDay in weekDays\"> {{ weekDay }} </th> </tr> </thead> <tbody> <tr data-ng-repeat=\"week in weeks\"> <td data-ng-repeat=\"day in week\" class=\"day\" data-ng-class=\"{'day-in-selected-month': isDayInSelectedMonth(day),\n                       'day-current': isCurrentDate(day),\n                       'active bg-info': isSelectedDate(day)}\" data-ng-click=\"selectDay(day)\"> {{ day.getDate() }} </td> </tr> </tbody> </table> </div> </div>";
@@ -33455,7 +33554,7 @@
 	module.exports=v1;
 
 /***/ },
-/* 94 */
+/* 98 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var v1="<div class=\"fs-datetime fs-widget-root\" ng-class=\"{ &quot;fs-with-value&quot;: value }\"> <div fs-date ng-model=\"date\" ng-disabled=\"disabled\" fs-null-form></div> <div fs-time ng-model=\"time\" ng-disabled=\"disabled\" fs-null-form with-date></div> <button type=\"button\" class=\"btn btn-default fs-close\" ng-show=\"value\" ng-disabled=\"disabled\" ng-click=\"clearDate()\"></button> </div>";
