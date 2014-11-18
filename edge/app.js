@@ -54,49 +54,51 @@
 
 	__webpack_require__(14);
 
+	__webpack_require__(16);
+
 	__webpack_require__(15);
 
-	app = __webpack_require__(8);
-
-	__webpack_require__(9);
-
-	__webpack_require__(10);
-
-	__webpack_require__(17);
-
-	__webpack_require__(18);
-
-	__webpack_require__(1);
-
-	__webpack_require__(19);
+	app = __webpack_require__(1);
 
 	__webpack_require__(2);
 
-	__webpack_require__(20);
-
 	__webpack_require__(3);
 
-	__webpack_require__(21);
+	__webpack_require__(18);
+
+	__webpack_require__(19);
 
 	__webpack_require__(4);
 
-	__webpack_require__(22);
+	__webpack_require__(20);
 
 	__webpack_require__(5);
 
-	__webpack_require__(23);
+	__webpack_require__(21);
 
 	__webpack_require__(6);
 
-	__webpack_require__(24);
+	__webpack_require__(22);
 
 	__webpack_require__(7);
 
+	__webpack_require__(23);
+
+	__webpack_require__(8);
+
+	__webpack_require__(24);
+
+	__webpack_require__(9);
+
 	__webpack_require__(25);
 
-	__webpack_require__(28);
+	__webpack_require__(10);
 
 	__webpack_require__(26);
+
+	__webpack_require__(29);
+
+	__webpack_require__(27);
 
 	capitalize = function(s) {
 	  return s && s[0].toUpperCase() + s.slice(1);
@@ -136,6 +138,10 @@
 	  ].map(buildSiteMap),
 	  user: [
 	    {
+	      name: 'src',
+	      label: 'Edge',
+	      href: 'http://formstamp.github.io/edge'
+	    }, {
 	      name: 'src',
 	      label: 'Source',
 	      icon: 'github',
@@ -179,7 +185,7 @@
 
 	app.controller('WelcomeCtrl', function() {});
 
-	app.readme = __webpack_require__(38);
+	app.readme = __webpack_require__(45);
 
 	app.controller('ReadmeCtrl', function($sce, $scope) {
 	  console.log($sce.trustAsHtml(app.readme));
@@ -191,9 +197,84 @@
 /* 1 */
 /***/ function(module, exports, __webpack_require__) {
 
-	app = __webpack_require__(8)
+	module.exports = angular.module('app', ['ngRoute', 'ngAnimate', 'formstamp']);
 
-	src = __webpack_require__(31)
+
+/***/ },
+/* 2 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var app, unindentCode,
+	  __slice = [].slice;
+
+	app = __webpack_require__(1);
+
+	unindentCode = function(str) {
+	  var leadingSpaces, re;
+	  str = str != null ? str : "";
+	  str = str.replace(/^\n/, "");
+	  leadingSpaces = str.match(/^\s+/);
+	  if (leadingSpaces) {
+	    re = new RegExp("^[ ]{" + leadingSpaces[0].length + "}", 'gm');
+	    return str.replace(re, '');
+	  } else {
+	    return str;
+	  }
+	};
+
+	app.directive('sample', function($sce) {
+	  return {
+	    restrict: 'A',
+	    controller: function($scope) {
+	      $scope.current = 'demo';
+	      return $scope.$watch('src', function(v) {
+	        return $scope.js = $sce.trustAsHtml(hljs.highlightAuto(v).value);
+	      });
+	    },
+	    replace: true,
+	    link: function() {
+	      var args, el, scope;
+	      scope = arguments[0], el = arguments[1], args = 3 <= arguments.length ? __slice.call(arguments, 2) : [];
+	    },
+	    template: function($el, attrs) {
+	      var html, orig;
+	      orig = $el.html();
+	      html = orig;
+	      html = hljs.highlightAuto(html).value.replace(/{{([^}]*)}}/g, "<b style='color:green;'>{{$1}}</b>").replace(/(fs-[-a-zA-Z]*)/g, "<b class='important'>$1</b>");
+	      return "<div class=\"fs-sample\">\n  <h4 class=\"pull-left\">" + (attrs.label || 'Example') + "</h4>\n\n  <div class=\"btn-group fstabs pull-right\">\n    <a class=\"btn btn-default\" ng-class=\"{'active': current == 'demo'}\" ng-click=\"current='demo'\">Demo</a>\n    <a class=\"btn btn-default\" ng-class=\"{'active': current == 'html'}\" ng-click=\"current='html'\">HTML</a>\n    <a class=\"btn btn-default\" ng-class=\"{'active': current == 'js'}\" ng-click=\"current='js'\">JavaScript</a>\n  </div>\n\n  <div class='clearfix' style=\"height: 0;\"></div>\n  <div ng-show=\"current=='demo'\">" + orig + "</div>\n  <div ng-show=\"current=='html'\"><pre ng-non-bindable>" + html + "</pre></div>\n  <div ng-show=\"current=='js'\"><pre ng-bind-html=\"js\"></pre></div>\n</div>";
+	    }
+	  };
+	});
+
+
+/***/ },
+/* 3 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var app, md;
+
+	app = __webpack_require__(1);
+
+	md = __webpack_require__(63);
+
+	app.directive('markdown', function() {
+	  return {
+	    restrict: 'A',
+	    replace: true,
+	    template: function(el) {
+	      return "<div>" + (md(el.html())) + "</div>";
+	    }
+	  };
+	});
+
+
+/***/ },
+/* 4 */
+/***/ function(module, exports, __webpack_require__) {
+
+	app = __webpack_require__(1)
+
+	src = __webpack_require__(38)
 
 	app.controller('FormCtrl', function ($scope){
 	  $scope.src = src
@@ -288,14 +369,14 @@
 
 
 /***/ },
-/* 2 */
+/* 5 */
 /***/ function(module, exports, __webpack_require__) {
 
-	app = __webpack_require__(8)
+	app = __webpack_require__(1)
 
-	src = __webpack_require__(32)
+	src = __webpack_require__(39)
 
-	countries = __webpack_require__(16)
+	countries = __webpack_require__(17)
 
 	app.controller('SelectCtrl', function ($scope){
 	  $scope.disabled = false;
@@ -314,14 +395,14 @@
 
 
 /***/ },
-/* 3 */
+/* 6 */
 /***/ function(module, exports, __webpack_require__) {
 
-	app = __webpack_require__(8)
+	app = __webpack_require__(1)
 
-	src = __webpack_require__(33)
+	src = __webpack_require__(40)
 
-	countries = __webpack_require__(16)
+	countries = __webpack_require__(17)
 	app.controller('MultiselectCtrl', function ($scope){
 	    $scope.src = src;
 	    $scope.disabled = false;
@@ -343,20 +424,20 @@
 
 
 /***/ },
-/* 4 */
+/* 7 */
 /***/ function(module, exports, __webpack_require__) {
 
-	app = __webpack_require__(8)
+	app = __webpack_require__(1)
 
-	src = __webpack_require__(34)
+	src = __webpack_require__(41)
 
 	sushi = [
-	  {img: 'CaliforniaRoll', label: 'California Roll', src: __webpack_require__(56)},
-	  {img: 'CucumberRoll', label: 'Cucumber Roll', src: __webpack_require__(57)},
-	  {img: 'FattyTuna', label: 'Fatty Tuna',src: __webpack_require__(58)},
-	  {img: 'Inari', label: 'Inari',src: __webpack_require__(59)},
-	  {img: 'Octopus', label: 'Octopus', src: __webpack_require__(60)},
-	  {img: 'Shrimp', label: 'Shrimp', src: __webpack_require__(61)}
+	  {img: 'CaliforniaRoll', label: 'California Roll', src: __webpack_require__(31)},
+	  {img: 'CucumberRoll', label: 'Cucumber Roll', src: __webpack_require__(32)},
+	  {img: 'FattyTuna', label: 'Fatty Tuna',src: __webpack_require__(33)},
+	  {img: 'Inari', label: 'Inari',src: __webpack_require__(34)},
+	  {img: 'Octopus', label: 'Octopus', src: __webpack_require__(35)},
+	  {img: 'Shrimp', label: 'Shrimp', src: __webpack_require__(36)}
 	]
 
 	app.controller('RadioCtrl', function ($scope){
@@ -371,12 +452,12 @@
 
 
 /***/ },
-/* 5 */
+/* 8 */
 /***/ function(module, exports, __webpack_require__) {
 
-	app = __webpack_require__(8)
+	app = __webpack_require__(1)
 
-	src = __webpack_require__(35)
+	src = __webpack_require__(42)
 
 	app.controller('CheckCtrl', function ($scope){
 	  $scope.src = src
@@ -389,12 +470,12 @@
 
 
 /***/ },
-/* 6 */
+/* 9 */
 /***/ function(module, exports, __webpack_require__) {
 
-	app = __webpack_require__(8)
+	app = __webpack_require__(1)
 
-	src = __webpack_require__(36)
+	src = __webpack_require__(43)
 
 	app.controller('DatetimeCtrl', function ($scope){
 	  $scope.selectedDate = new Date();
@@ -414,12 +495,12 @@
 
 
 /***/ },
-/* 7 */
+/* 10 */
 /***/ function(module, exports, __webpack_require__) {
 
-	app = __webpack_require__(8)
+	app = __webpack_require__(1)
 
-	src = __webpack_require__(37)
+	src = __webpack_require__(44)
 
 	app.controller('ListCtrl', function ($scope){
 	  $scope.src = src
@@ -472,86 +553,11 @@
 
 
 /***/ },
-/* 8 */
-/***/ function(module, exports, __webpack_require__) {
-
-	module.exports = angular.module('app', ['ngRoute', 'ngAnimate', 'formstamp']);
-
-
-/***/ },
-/* 9 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var app, unindentCode,
-	  __slice = [].slice;
-
-	app = __webpack_require__(8);
-
-	unindentCode = function(str) {
-	  var leadingSpaces, re;
-	  str = str != null ? str : "";
-	  str = str.replace(/^\n/, "");
-	  leadingSpaces = str.match(/^\s+/);
-	  if (leadingSpaces) {
-	    re = new RegExp("^[ ]{" + leadingSpaces[0].length + "}", 'gm');
-	    return str.replace(re, '');
-	  } else {
-	    return str;
-	  }
-	};
-
-	app.directive('sample', function($sce) {
-	  return {
-	    restrict: 'A',
-	    controller: function($scope) {
-	      $scope.current = 'demo';
-	      return $scope.$watch('src', function(v) {
-	        return $scope.js = $sce.trustAsHtml(hljs.highlightAuto(v).value);
-	      });
-	    },
-	    replace: true,
-	    link: function() {
-	      var args, el, scope;
-	      scope = arguments[0], el = arguments[1], args = 3 <= arguments.length ? __slice.call(arguments, 2) : [];
-	    },
-	    template: function($el, attrs) {
-	      var html, orig;
-	      orig = $el.html();
-	      html = orig;
-	      html = hljs.highlightAuto(html).value.replace(/{{([^}]*)}}/g, "<b style='color:green;'>{{$1}}</b>").replace(/(fs-[-a-zA-Z]*)/g, "<b class='important'>$1</b>");
-	      return "<div class=\"fs-sample\">\n  <h4 class=\"pull-left\">" + (attrs.label || 'Example') + "</h4>\n\n  <div class=\"btn-group fstabs pull-right\">\n    <a class=\"btn btn-default\" ng-class=\"{'active': current == 'demo'}\" ng-click=\"current='demo'\">Demo</a>\n    <a class=\"btn btn-default\" ng-class=\"{'active': current == 'html'}\" ng-click=\"current='html'\">HTML</a>\n    <a class=\"btn btn-default\" ng-class=\"{'active': current == 'js'}\" ng-click=\"current='js'\">JavaScript</a>\n  </div>\n\n  <div class='clearfix' style=\"height: 0;\"></div>\n  <div ng-show=\"current=='demo'\">" + orig + "</div>\n  <div ng-show=\"current=='html'\"><pre ng-non-bindable>" + html + "</pre></div>\n  <div ng-show=\"current=='js'\"><pre ng-bind-html=\"js\"></pre></div>\n</div>";
-	    }
-	  };
-	});
-
-
-/***/ },
-/* 10 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var app, md;
-
-	app = __webpack_require__(8);
-
-	md = __webpack_require__(64);
-
-	app.directive('markdown', function() {
-	  return {
-	    restrict: 'A',
-	    replace: true,
-	    template: function(el) {
-	      return "<div>" + (md(el.html())) + "</div>";
-	    }
-	  };
-	});
-
-
-/***/ },
 /* 11 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var require;/**
-	 * @license AngularJS v1.3.2
+	 * @license AngularJS v1.3.3
 	 * (c) 2010-2014 Google, Inc. http://angularjs.org
 	 * License: MIT
 	 */
@@ -594,40 +600,23 @@
 	      prefix = '[' + (module ? module + ':' : '') + code + '] ',
 	      template = arguments[1],
 	      templateArgs = arguments,
-	      stringify = function(obj) {
-	        if (typeof obj === 'function') {
-	          return obj.toString().replace(/ \{[\s\S]*$/, '');
-	        } else if (typeof obj === 'undefined') {
-	          return 'undefined';
-	        } else if (typeof obj !== 'string') {
-	          return JSON.stringify(obj);
-	        }
-	        return obj;
-	      },
+
 	      message, i;
 
 	    message = prefix + template.replace(/\{\d+\}/g, function(match) {
 	      var index = +match.slice(1, -1), arg;
 
 	      if (index + 2 < templateArgs.length) {
-	        arg = templateArgs[index + 2];
-	        if (typeof arg === 'function') {
-	          return arg.toString().replace(/ ?\{[\s\S]*$/, '');
-	        } else if (typeof arg === 'undefined') {
-	          return 'undefined';
-	        } else if (typeof arg !== 'string') {
-	          return toJson(arg);
-	        }
-	        return arg;
+	        return toDebugString(templateArgs[index + 2]);
 	      }
 	      return match;
 	    });
 
-	    message = message + '\nhttp://errors.angularjs.org/1.3.2/' +
+	    message = message + '\nhttp://errors.angularjs.org/1.3.3/' +
 	      (module ? module + '/' : '') + code;
 	    for (i = 2; i < arguments.length; i++) {
-	      message = message + (i == 2 ? '?' : '&') + 'p' + (i-2) + '=' +
-	        encodeURIComponent(stringify(arguments[i]));
+	      message = message + (i == 2 ? '?' : '&') + 'p' + (i - 2) + '=' +
+	        encodeURIComponent(toDebugString(arguments[i]));
 	    }
 	    return new ErrorConstructor(message);
 	  };
@@ -1267,7 +1256,7 @@
 
 	function arrayRemove(array, value) {
 	  var index = array.indexOf(value);
-	  if (index >=0)
+	  if (index >= 0)
 	    array.splice(index, 1);
 	  return value;
 	}
@@ -1468,7 +1457,7 @@
 	      if (isArray(o1)) {
 	        if (!isArray(o2)) return false;
 	        if ((length = o1.length) == o2.length) {
-	          for (key=0; key<length; key++) {
+	          for (key = 0; key < length; key++) {
 	            if (!equals(o1[key], o2[key])) return false;
 	          }
 	          return true;
@@ -1554,7 +1543,7 @@
 	    return curryArgs.length
 	      ? function() {
 	          return arguments.length
-	            ? fn.apply(self, curryArgs.concat(slice.call(arguments, 0)))
+	            ? fn.apply(self, concat(curryArgs, arguments, 0))
 	            : fn.apply(self, curryArgs);
 	        }
 	      : function() {
@@ -1754,7 +1743,7 @@
 	function getNgAttribute(element, ngAttr) {
 	  var attr, i, ii = ngAttrPrefixes.length;
 	  element = jqLite(element);
-	  for (i=0; i<ii; ++i) {
+	  for (i = 0; i < ii; ++i) {
 	    attr = ngAttrPrefixes[i] + ngAttr;
 	    if (isString(attr = element.attr(attr))) {
 	      return attr;
@@ -2539,6 +2528,34 @@
 
 	}
 
+	/* global: toDebugString: true */
+
+	function serializeObject(obj) {
+	  var seen = [];
+
+	  return JSON.stringify(obj, function(key, val) {
+	    val = toJsonReplacer(key, val);
+	    if (isObject(val)) {
+
+	      if (seen.indexOf(val) >= 0) return '<<already seen>>';
+
+	      seen.push(val);
+	    }
+	    return val;
+	  });
+	}
+
+	function toDebugString(obj) {
+	  if (typeof obj === 'function') {
+	    return obj.toString().replace(/ \{[\s\S]*$/, '');
+	  } else if (typeof obj === 'undefined') {
+	    return 'undefined';
+	  } else if (typeof obj !== 'string') {
+	    return serializeObject(obj);
+	  }
+	  return obj;
+	}
+
 	/* global angularModule: true,
 	  version: true,
 
@@ -2641,11 +2658,11 @@
 	 * - `codeName` – `{string}` – Code name of the release, such as "jiggling-armfat".
 	 */
 	var version = {
-	  full: '1.3.2',    // all of these placeholder strings will be replaced by grunt's
+	  full: '1.3.3',    // all of these placeholder strings will be replaced by grunt's
 	  major: 1,    // package task
 	  minor: 3,
-	  dot: 2,
-	  codeName: 'cardiovasculatory-magnification'
+	  dot: 3,
+	  codeName: 'undersea-arithmetic'
 	};
 
 
@@ -3378,7 +3395,7 @@
 	        }
 	      } else {
 	        return (element[name] ||
-	                 (element.attributes.getNamedItem(name)|| noop).specified)
+	                 (element.attributes.getNamedItem(name) || noop).specified)
 	               ? lowercasedName
 	               : undefined;
 	      }
@@ -4714,7 +4731,7 @@
 	   * @name $anchorScrollProvider#disableAutoScrolling
 	   *
 	   * @description
-	   * By default, {@link ng.$anchorScroll $anchorScroll()} will automatically will detect changes to
+	   * By default, {@link ng.$anchorScroll $anchorScroll()} will automatically detect changes to
 	   * {@link ng.$location#hash $location.hash()} and scroll to the element matching the new hash.<br />
 	   * Use this method to disable automatic scrolling.
 	   *
@@ -5363,8 +5380,7 @@
 	/**
 	 * @param {object} window The global window object.
 	 * @param {object} document jQuery wrapped document.
-	 * @param {function()} XHR XMLHttpRequest constructor.
-	 * @param {object} $log console.log or an object with the same interface.
+	 * @param {object} $log window.console or an object with the same interface.
 	 * @param {object} $sniffer $sniffer service
 	 */
 	function Browser(window, document, $log, $sniffer) {
@@ -5714,8 +5730,8 @@
 	          // - 20 cookies per unique domain
 	          // - 4096 bytes per cookie
 	          if (cookieLength > 4096) {
-	            $log.warn("Cookie '"+ name +
-	              "' possibly not set or overflowed because it was too large ("+
+	            $log.warn("Cookie '" + name +
+	              "' possibly not set or overflowed because it was too large (" +
 	              cookieLength + " > 4096 bytes)!");
 	          }
 	        }
@@ -6380,7 +6396,7 @@
 	 *
 	 *
 	 * #### `bindToController`
-	 * When an isolate scope is used for a component (see above), and `controllerAs` is used, `bindToController` will
+	 * When an isolate scope is used for a component (see above), and `controllerAs` is used, `bindToController: true` will
 	 * allow a component to have its properties bound to the controller, rather than to scope. When the controller
 	 * is instantiated, the initial values of the isolate scope bindings are already available.
 	 *
@@ -7229,16 +7245,16 @@
 
 	          // for each tuples
 	          var nbrUrisWith2parts = Math.floor(rawUris.length / 2);
-	          for (var i=0; i<nbrUrisWith2parts; i++) {
-	            var innerIdx = i*2;
+	          for (var i = 0; i < nbrUrisWith2parts; i++) {
+	            var innerIdx = i * 2;
 	            // sanitize the uri
 	            result += $$sanitizeUri(trim(rawUris[innerIdx]), true);
 	            // add the descriptor
-	            result += (" " + trim(rawUris[innerIdx+1]));
+	            result += (" " + trim(rawUris[innerIdx + 1]));
 	          }
 
 	          // split the last item into uri and descriptor
-	          var lastTuple = trim(rawUris[i*2]).split(/\s/);
+	          var lastTuple = trim(rawUris[i * 2]).split(/\s/);
 
 	          // sanitize the last uri
 	          result += $$sanitizeUri(trim(lastTuple[0]), true);
@@ -7432,7 +7448,7 @@
 	      if (!node) {
 	        return 'html';
 	      } else {
-	        return nodeName_(node) !== 'foreignobject' && node.toString().match(/SVG/) ? 'svg': 'html';
+	        return nodeName_(node) !== 'foreignobject' && node.toString().match(/SVG/) ? 'svg' : 'html';
 	      }
 	    }
 
@@ -8245,7 +8261,7 @@
 	      var match = null;
 	      if (hasDirectives.hasOwnProperty(name)) {
 	        for (var directive, directives = $injector.get(name + Suffix),
-	            i = 0, ii = directives.length; i<ii; i++) {
+	            i = 0, ii = directives.length; i < ii; i++) {
 	          try {
 	            directive = directives[i];
 	            if ((maxPriority === undefined || maxPriority > directive.priority) &&
@@ -8274,7 +8290,7 @@
 	    function directiveIsMultiElement(name) {
 	      if (hasDirectives.hasOwnProperty(name)) {
 	        for (var directive, directives = $injector.get(name + Suffix),
-	            i = 0, ii = directives.length; i<ii; i++) {
+	            i = 0, ii = directives.length; i < ii; i++) {
 	          directive = directives[i];
 	          if (directive.multiElement) {
 	            return true;
@@ -8493,7 +8509,7 @@
 	      case 'svg':
 	      case 'math':
 	        var wrapper = document.createElement('div');
-	        wrapper.innerHTML = '<'+type+'>'+template+'</'+type+'>';
+	        wrapper.innerHTML = '<' + type + '>' + template + '</' + type + '>';
 	        return wrapper.childNodes[0].childNodes;
 	      default:
 	        return template;
@@ -8850,6 +8866,10 @@
 	     *    * if $controllerProvider#allowGlobals, check `window[constructor]` on the global
 	     *      `window` object (not recommended)
 	     *
+	     *    The string can use the `controller as property` syntax, where the controller instance is published
+	     *    as the specified property on the `scope`; the `scope` must be injected into `locals` param for this
+	     *    to work correctly.
+	     *
 	     * @param {Object} locals Injection locals for Controller.
 	     * @return {Object} Instance of given controller.
 	     *
@@ -9024,7 +9044,7 @@
 	    // strip json vulnerability protection prefix
 	    data = data.replace(JSON_PROTECTION_PREFIX, '');
 	    var contentType = headers('Content-Type');
-	    if ((contentType && contentType.indexOf(APPLICATION_JSON) === 0) ||
+	    if ((contentType && contentType.indexOf(APPLICATION_JSON) === 0 && data.trim()) ||
 	        (JSON_START.test(data) && JSON_END.test(data))) {
 	      data = fromJson(data);
 	    }
@@ -10595,7 +10615,8 @@
 
 	      function parseStringifyInterceptor(value) {
 	        try {
-	          return stringify(getValue(value));
+	          value = getValue(value);
+	          return allOrNothing && !isDefined(value) ? value : stringify(value);
 	        } catch (err) {
 	          var newErr = $interpolateMinErr('interr', "Can't interpolate: {0}\n{1}", text,
 	            err.toString());
@@ -10919,8 +10940,8 @@
 	  return segments.join('/');
 	}
 
-	function parseAbsoluteUrl(absoluteUrl, locationObj, appBase) {
-	  var parsedUrl = urlResolve(absoluteUrl, appBase);
+	function parseAbsoluteUrl(absoluteUrl, locationObj) {
+	  var parsedUrl = urlResolve(absoluteUrl);
 
 	  locationObj.$$protocol = parsedUrl.protocol;
 	  locationObj.$$host = parsedUrl.hostname;
@@ -10928,12 +10949,12 @@
 	}
 
 
-	function parseAppUrl(relativeUrl, locationObj, appBase) {
+	function parseAppUrl(relativeUrl, locationObj) {
 	  var prefixed = (relativeUrl.charAt(0) !== '/');
 	  if (prefixed) {
 	    relativeUrl = '/' + relativeUrl;
 	  }
-	  var match = urlResolve(relativeUrl, appBase);
+	  var match = urlResolve(relativeUrl);
 	  locationObj.$$path = decodeURIComponent(prefixed && match.pathname.charAt(0) === '/' ?
 	      match.pathname.substring(1) : match.pathname);
 	  locationObj.$$search = parseKeyValue(match.search);
@@ -10988,7 +11009,7 @@
 	  this.$$html5 = true;
 	  basePrefix = basePrefix || '';
 	  var appBaseNoFile = stripFile(appBase);
-	  parseAbsoluteUrl(appBase, this, appBase);
+	  parseAbsoluteUrl(appBase, this);
 
 
 	  /**
@@ -11003,7 +11024,7 @@
 	          appBaseNoFile);
 	    }
 
-	    parseAppUrl(pathUrl, this, appBase);
+	    parseAppUrl(pathUrl, this);
 
 	    if (!this.$$path) {
 	      this.$$path = '/';
@@ -11066,7 +11087,7 @@
 	function LocationHashbangUrl(appBase, hashPrefix) {
 	  var appBaseNoFile = stripFile(appBase);
 
-	  parseAbsoluteUrl(appBase, this, appBase);
+	  parseAbsoluteUrl(appBase, this);
 
 
 	  /**
@@ -11086,7 +11107,7 @@
 	      throw $locationMinErr('ihshprfx', 'Invalid url "{0}", missing hash prefix "{1}".', url,
 	          hashPrefix);
 	    }
-	    parseAppUrl(withoutHashUrl, this, appBase);
+	    parseAppUrl(withoutHashUrl, this);
 
 	    this.$$path = removeWindowsDriveName(this.$$path, withoutHashUrl, appBase);
 
@@ -11726,11 +11747,19 @@
 	      $rootScope.$evalAsync(function() {
 	        var oldUrl = $location.absUrl();
 	        var oldState = $location.$$state;
+	        var defaultPrevented;
 
 	        $location.$$parse(newUrl);
 	        $location.$$state = newState;
-	        if ($rootScope.$broadcast('$locationChangeStart', newUrl, oldUrl,
-	            newState, oldState).defaultPrevented) {
+
+	        defaultPrevented = $rootScope.$broadcast('$locationChangeStart', newUrl, oldUrl,
+	            newState, oldState).defaultPrevented;
+
+	        // if the location was changed by a `$locationChangeStart` handler then stop
+	        // processing this location change
+	        if ($location.absUrl() !== newUrl) return;
+
+	        if (defaultPrevented) {
 	          $location.$$parse(oldUrl);
 	          $location.$$state = oldState;
 	          setBrowserUrlWithFallback(oldUrl, false, oldState);
@@ -11754,13 +11783,20 @@
 	        initializing = false;
 
 	        $rootScope.$evalAsync(function() {
-	          if ($rootScope.$broadcast('$locationChangeStart', $location.absUrl(), oldUrl,
-	              $location.$$state, oldState).defaultPrevented) {
+	          var newUrl = $location.absUrl();
+	          var defaultPrevented = $rootScope.$broadcast('$locationChangeStart', newUrl, oldUrl,
+	              $location.$$state, oldState).defaultPrevented;
+
+	          // if the location was changed by a `$locationChangeStart` handler then stop
+	          // processing this location change
+	          if ($location.absUrl() !== newUrl) return;
+
+	          if (defaultPrevented) {
 	            $location.$$parse(oldUrl);
 	            $location.$$state = oldState;
 	          } else {
 	            if (urlOrStateChanged) {
-	              setBrowserUrlWithFallback($location.absUrl(), currentReplace,
+	              setBrowserUrlWithFallback(newUrl, currentReplace,
 	                                        oldState === $location.$$state ? null : $location.$$state);
 	            }
 	            afterLocationChange(oldUrl, oldState);
@@ -11950,7 +11986,7 @@
 	// Sandboxing Angular Expressions
 	// ------------------------------
 	// Angular expressions are generally considered safe because these expressions only have direct
-	// access to $scope and locals. However, one can obtain the ability to execute arbitrary JS code by
+	// access to `$scope` and locals. However, one can obtain the ability to execute arbitrary JS code by
 	// obtaining a reference to native JS functions such as the Function constructor.
 	//
 	// As an example, consider the following Angular expression:
@@ -11959,7 +11995,7 @@
 	//
 	// This sandboxing technique is not perfect and doesn't aim to be. The goal is to prevent exploits
 	// against the expression language, but not to prevent exploits that were enabled by exposing
-	// sensitive JavaScript or browser apis on Scope. Exposing such objects on a Scope is never a good
+	// sensitive JavaScript or browser APIs on Scope. Exposing such objects on a Scope is never a good
 	// practice and therefore we are not even trying to protect against interaction with an object
 	// explicitly exposed in this way.
 	//
@@ -11967,6 +12003,8 @@
 	// window or some DOM object that has a reference to window is published onto a Scope.
 	// Similarly we prevent invocations of function known to be dangerous, as well as assignments to
 	// native objects.
+	//
+	// See https://docs.angularjs.org/guide/security
 
 
 	function ensureSafeMemberName(name, fullExpression) {
@@ -11975,7 +12013,7 @@
 	      || name === "__proto__") {
 	    throw $parseMinErr('isecfld',
 	        'Attempting to access a disallowed field in Angular expressions! '
-	        +'Expression: {0}', fullExpression);
+	        + 'Expression: {0}', fullExpression);
 	  }
 	  return name;
 	}
@@ -12052,24 +12090,24 @@
 	        }
 	        return a;
 	      }
-	      return isDefined(b)?b:undefined;},
+	      return isDefined(b) ? b : undefined;},
 	    '-':function(self, locals, a, b) {
 	          a=a(self, locals); b=b(self, locals);
-	          return (isDefined(a)?a:0)-(isDefined(b)?b:0);
+	          return (isDefined(a) ? a : 0) - (isDefined(b) ? b : 0);
 	        },
-	    '*':function(self, locals, a, b) {return a(self, locals)*b(self, locals);},
-	    '/':function(self, locals, a, b) {return a(self, locals)/b(self, locals);},
-	    '%':function(self, locals, a, b) {return a(self, locals)%b(self, locals);},
-	    '===':function(self, locals, a, b) {return a(self, locals)===b(self, locals);},
-	    '!==':function(self, locals, a, b) {return a(self, locals)!==b(self, locals);},
-	    '==':function(self, locals, a, b) {return a(self, locals)==b(self, locals);},
-	    '!=':function(self, locals, a, b) {return a(self, locals)!=b(self, locals);},
-	    '<':function(self, locals, a, b) {return a(self, locals)<b(self, locals);},
-	    '>':function(self, locals, a, b) {return a(self, locals)>b(self, locals);},
-	    '<=':function(self, locals, a, b) {return a(self, locals)<=b(self, locals);},
-	    '>=':function(self, locals, a, b) {return a(self, locals)>=b(self, locals);},
-	    '&&':function(self, locals, a, b) {return a(self, locals)&&b(self, locals);},
-	    '||':function(self, locals, a, b) {return a(self, locals)||b(self, locals);},
+	    '*':function(self, locals, a, b) {return a(self, locals) * b(self, locals);},
+	    '/':function(self, locals, a, b) {return a(self, locals) / b(self, locals);},
+	    '%':function(self, locals, a, b) {return a(self, locals) % b(self, locals);},
+	    '===':function(self, locals, a, b) {return a(self, locals) === b(self, locals);},
+	    '!==':function(self, locals, a, b) {return a(self, locals) !== b(self, locals);},
+	    '==':function(self, locals, a, b) {return a(self, locals) == b(self, locals);},
+	    '!=':function(self, locals, a, b) {return a(self, locals) != b(self, locals);},
+	    '<':function(self, locals, a, b) {return a(self, locals) < b(self, locals);},
+	    '>':function(self, locals, a, b) {return a(self, locals) > b(self, locals);},
+	    '<=':function(self, locals, a, b) {return a(self, locals) <= b(self, locals);},
+	    '>=':function(self, locals, a, b) {return a(self, locals) >= b(self, locals);},
+	    '&&':function(self, locals, a, b) {return a(self, locals) && b(self, locals);},
+	    '||':function(self, locals, a, b) {return a(self, locals) || b(self, locals);},
 	    '!':function(self, locals, a) {return !a(self, locals);},
 
 	    //Tokenized as operators but parsed as assignment/filters
@@ -12095,44 +12133,31 @@
 	  lex: function(text) {
 	    this.text = text;
 	    this.index = 0;
-	    this.ch = undefined;
 	    this.tokens = [];
 
 	    while (this.index < this.text.length) {
-	      this.ch = this.text.charAt(this.index);
-	      if (this.is('"\'')) {
-	        this.readString(this.ch);
-	      } else if (this.isNumber(this.ch) || this.is('.') && this.isNumber(this.peek())) {
+	      var ch = this.text.charAt(this.index);
+	      if (ch === '"' || ch === "'") {
+	        this.readString(ch);
+	      } else if (this.isNumber(ch) || ch === '.' && this.isNumber(this.peek())) {
 	        this.readNumber();
-	      } else if (this.isIdent(this.ch)) {
+	      } else if (this.isIdent(ch)) {
 	        this.readIdent();
-	      } else if (this.is('(){}[].,;:?')) {
-	        this.tokens.push({
-	          index: this.index,
-	          text: this.ch
-	        });
+	      } else if (this.is(ch, '(){}[].,;:?')) {
+	        this.tokens.push({index: this.index, text: ch});
 	        this.index++;
-	      } else if (this.isWhitespace(this.ch)) {
+	      } else if (this.isWhitespace(ch)) {
 	        this.index++;
 	      } else {
-	        var ch2 = this.ch + this.peek();
+	        var ch2 = ch + this.peek();
 	        var ch3 = ch2 + this.peek(2);
-	        var fn = OPERATORS[this.ch];
-	        var fn2 = OPERATORS[ch2];
-	        var fn3 = OPERATORS[ch3];
-	        if (fn3) {
-	          this.tokens.push({index: this.index, text: ch3, fn: fn3});
-	          this.index += 3;
-	        } else if (fn2) {
-	          this.tokens.push({index: this.index, text: ch2, fn: fn2});
-	          this.index += 2;
-	        } else if (fn) {
-	          this.tokens.push({
-	            index: this.index,
-	            text: this.ch,
-	            fn: fn
-	          });
-	          this.index += 1;
+	        var op1 = OPERATORS[ch];
+	        var op2 = OPERATORS[ch2];
+	        var op3 = OPERATORS[ch3];
+	        if (op1 || op2 || op3) {
+	          var token = op3 ? ch3 : (op2 ? ch2 : ch);
+	          this.tokens.push({index: this.index, text: token, operator: true});
+	          this.index += token.length;
 	        } else {
 	          this.throwError('Unexpected next character ', this.index, this.index + 1);
 	        }
@@ -12141,8 +12166,8 @@
 	    return this.tokens;
 	  },
 
-	  is: function(chars) {
-	    return chars.indexOf(this.ch) !== -1;
+	  is: function(ch, chars) {
+	    return chars.indexOf(ch) !== -1;
 	  },
 
 	  peek: function(i) {
@@ -12151,7 +12176,7 @@
 	  },
 
 	  isNumber: function(ch) {
-	    return ('0' <= ch && ch <= '9');
+	    return ('0' <= ch && ch <= '9') && typeof ch === "string";
 	  },
 
 	  isWhitespace: function(ch) {
@@ -12204,79 +12229,28 @@
 	      }
 	      this.index++;
 	    }
-	    number = 1 * number;
 	    this.tokens.push({
 	      index: start,
 	      text: number,
 	      constant: true,
-	      fn: function() { return number; }
+	      value: Number(number)
 	    });
 	  },
 
 	  readIdent: function() {
-	    var expression = this.text;
-
-	    var ident = '';
 	    var start = this.index;
-
-	    var lastDot, peekIndex, methodName, ch;
-
 	    while (this.index < this.text.length) {
-	      ch = this.text.charAt(this.index);
-	      if (ch === '.' || this.isIdent(ch) || this.isNumber(ch)) {
-	        if (ch === '.') lastDot = this.index;
-	        ident += ch;
-	      } else {
+	      var ch = this.text.charAt(this.index);
+	      if (!(this.isIdent(ch) || this.isNumber(ch))) {
 	        break;
 	      }
 	      this.index++;
 	    }
-
-	    //check if the identifier ends with . and if so move back one char
-	    if (lastDot && ident[ident.length - 1] === '.') {
-	      this.index--;
-	      ident = ident.slice(0, -1);
-	      lastDot = ident.lastIndexOf('.');
-	      if (lastDot === -1) {
-	        lastDot = undefined;
-	      }
-	    }
-
-	    //check if this is not a method invocation and if it is back out to last dot
-	    if (lastDot) {
-	      peekIndex = this.index;
-	      while (peekIndex < this.text.length) {
-	        ch = this.text.charAt(peekIndex);
-	        if (ch === '(') {
-	          methodName = ident.substr(lastDot - start + 1);
-	          ident = ident.substr(0, lastDot - start);
-	          this.index = peekIndex;
-	          break;
-	        }
-	        if (this.isWhitespace(ch)) {
-	          peekIndex++;
-	        } else {
-	          break;
-	        }
-	      }
-	    }
-
 	    this.tokens.push({
 	      index: start,
-	      text: ident,
-	      fn: CONSTANTS[ident] || getterFn(ident, this.options, expression)
+	      text: this.text.slice(start, this.index),
+	      identifier: true
 	    });
-
-	    if (methodName) {
-	      this.tokens.push({
-	        index: lastDot,
-	        text: '.'
-	      });
-	      this.tokens.push({
-	        index: lastDot + 1,
-	        text: methodName
-	      });
-	    }
 	  },
 
 	  readString: function(quote) {
@@ -12307,9 +12281,8 @@
 	        this.tokens.push({
 	          index: start,
 	          text: rawString,
-	          string: string,
 	          constant: true,
-	          fn: function() { return string; }
+	          value: string
 	        });
 	        return;
 	      } else {
@@ -12370,16 +12343,12 @@
 	      primary = this.arrayDeclaration();
 	    } else if (this.expect('{')) {
 	      primary = this.object();
+	    } else if (this.peek().identifier) {
+	      primary = this.identifier();
+	    } else if (this.peek().constant) {
+	      primary = this.constant();
 	    } else {
-	      var token = this.expect();
-	      primary = token.fn;
-	      if (!primary) {
-	        this.throwError('not a primary expression', token);
-	      }
-	      if (token.constant) {
-	        primary.constant = true;
-	        primary.literal = true;
-	      }
+	      this.throwError('not a primary expression', this.peek());
 	    }
 
 	    var next, context;
@@ -12413,8 +12382,11 @@
 	  },
 
 	  peek: function(e1, e2, e3, e4) {
-	    if (this.tokens.length > 0) {
-	      var token = this.tokens[0];
+	    return this.peekAhead(0, e1, e2, e3, e4);
+	  },
+	  peekAhead: function(i, e1, e2, e3, e4) {
+	    if (this.tokens.length > i) {
+	      var token = this.tokens[i];
 	      var t = token.text;
 	      if (t === e1 || t === e2 || t === e3 || t === e4 ||
 	          (!e1 && !e2 && !e3 && !e4)) {
@@ -12434,12 +12406,19 @@
 	  },
 
 	  consume: function(e1) {
-	    if (!this.expect(e1)) {
+	    if (this.tokens.length === 0) {
+	      throw $parseMinErr('ueoe', 'Unexpected end of expression: {0}', this.text);
+	    }
+
+	    var token = this.expect(e1);
+	    if (!token) {
 	      this.throwError('is unexpected, expecting [' + e1 + ']', this.peek());
 	    }
+	    return token;
 	  },
 
-	  unaryFn: function(fn, right) {
+	  unaryFn: function(op, right) {
+	    var fn = OPERATORS[op];
 	    return extend(function $parseUnaryFn(self, locals) {
 	      return fn(self, locals, right);
 	    }, {
@@ -12448,12 +12427,35 @@
 	    });
 	  },
 
-	  binaryFn: function(left, fn, right, isBranching) {
+	  binaryFn: function(left, op, right, isBranching) {
+	    var fn = OPERATORS[op];
 	    return extend(function $parseBinaryFn(self, locals) {
 	      return fn(self, locals, left, right);
 	    }, {
 	      constant: left.constant && right.constant,
 	      inputs: !isBranching && [left, right]
+	    });
+	  },
+
+	  identifier: function() {
+	    var id = this.consume().text;
+
+	    //Continue reading each `.identifier` unless it is a method invocation
+	    while (this.peek('.') && this.peekAhead(1).identifier && !this.peekAhead(2, '(')) {
+	      id += this.consume().text + this.consume().text;
+	    }
+
+	    return CONSTANTS[id] || getterFn(id, this.options, this.text);
+	  },
+
+	  constant: function() {
+	    var value = this.consume().value;
+
+	    return extend(function $parseConstant() {
+	      return value;
+	    }, {
+	      constant: true,
+	      literal: true
 	    });
 	  },
 
@@ -12488,8 +12490,7 @@
 	  },
 
 	  filter: function(inputFn) {
-	    var token = this.expect();
-	    var fn = this.$filter(token.text);
+	    var fn = this.$filter(this.consume().text);
 	    var argsFn;
 	    var args;
 
@@ -12552,7 +12553,7 @@
 	    var token;
 	    if ((token = this.expect('?'))) {
 	      middle = this.assignment();
-	      if ((token = this.expect(':'))) {
+	      if (this.consume(':')) {
 	        var right = this.assignment();
 
 	        return extend(function $parseTernary(self, locals) {
@@ -12560,9 +12561,6 @@
 	        }, {
 	          constant: left.constant && middle.constant && right.constant
 	        });
-
-	      } else {
-	        this.throwError('expected :', token);
 	      }
 	    }
 
@@ -12573,7 +12571,7 @@
 	    var left = this.logicalAND();
 	    var token;
 	    while ((token = this.expect('||'))) {
-	      left = this.binaryFn(left, token.fn, this.logicalAND(), true);
+	      left = this.binaryFn(left, token.text, this.logicalAND(), true);
 	    }
 	    return left;
 	  },
@@ -12582,7 +12580,7 @@
 	    var left = this.equality();
 	    var token;
 	    if ((token = this.expect('&&'))) {
-	      left = this.binaryFn(left, token.fn, this.logicalAND(), true);
+	      left = this.binaryFn(left, token.text, this.logicalAND(), true);
 	    }
 	    return left;
 	  },
@@ -12591,7 +12589,7 @@
 	    var left = this.relational();
 	    var token;
 	    if ((token = this.expect('==','!=','===','!=='))) {
-	      left = this.binaryFn(left, token.fn, this.equality());
+	      left = this.binaryFn(left, token.text, this.equality());
 	    }
 	    return left;
 	  },
@@ -12600,7 +12598,7 @@
 	    var left = this.additive();
 	    var token;
 	    if ((token = this.expect('<', '>', '<=', '>='))) {
-	      left = this.binaryFn(left, token.fn, this.relational());
+	      left = this.binaryFn(left, token.text, this.relational());
 	    }
 	    return left;
 	  },
@@ -12609,7 +12607,7 @@
 	    var left = this.multiplicative();
 	    var token;
 	    while ((token = this.expect('+','-'))) {
-	      left = this.binaryFn(left, token.fn, this.multiplicative());
+	      left = this.binaryFn(left, token.text, this.multiplicative());
 	    }
 	    return left;
 	  },
@@ -12618,7 +12616,7 @@
 	    var left = this.unary();
 	    var token;
 	    while ((token = this.expect('*','/','%'))) {
-	      left = this.binaryFn(left, token.fn, this.unary());
+	      left = this.binaryFn(left, token.text, this.unary());
 	    }
 	    return left;
 	  },
@@ -12628,9 +12626,9 @@
 	    if (this.expect('+')) {
 	      return this.primary();
 	    } else if ((token = this.expect('-'))) {
-	      return this.binaryFn(Parser.ZERO, token.fn, this.unary());
+	      return this.binaryFn(Parser.ZERO, token.text, this.unary());
 	    } else if ((token = this.expect('!'))) {
-	      return this.unaryFn(token.fn, this.unary());
+	      return this.unaryFn(token.text, this.unary());
 	    } else {
 	      return this.primary();
 	    }
@@ -12638,7 +12636,7 @@
 
 	  fieldAccess: function(object) {
 	    var expression = this.text;
-	    var field = this.expect().text;
+	    var field = this.consume().text;
 	    var getter = getterFn(field, this.options, expression);
 
 	    return extend(function $parseFieldAccess(scope, locals, self) {
@@ -12723,8 +12721,7 @@
 	          // Support trailing commas per ES5.1.
 	          break;
 	        }
-	        var elementFn = this.expression();
-	        elementFns.push(elementFn);
+	        elementFns.push(this.expression());
 	      } while (this.expect(','));
 	    }
 	    this.consume(']');
@@ -12750,11 +12747,16 @@
 	          // Support trailing commas per ES5.1.
 	          break;
 	        }
-	        var token = this.expect();
-	        keys.push(token.string || token.text);
+	        var token = this.consume();
+	        if (token.constant) {
+	          keys.push(token.value);
+	        } else if (token.identifier) {
+	          keys.push(token.text);
+	        } else {
+	          this.throwError("invalid key", token);
+	        }
 	        this.consume(':');
-	        var value = this.expression();
-	        valueFns.push(value);
+	        valueFns.push(this.expression());
 	      } while (this.expect(','));
 	    }
 	    this.consume('}');
@@ -13196,13 +13198,21 @@
 
 	    function addInterceptor(parsedExpression, interceptorFn) {
 	      if (!interceptorFn) return parsedExpression;
+	      var watchDelegate = parsedExpression.$$watchDelegate;
 
-	      var fn = function interceptedExpression(scope, locals) {
+	      var regularWatch =
+	          watchDelegate !== oneTimeLiteralWatchDelegate &&
+	          watchDelegate !== oneTimeWatchDelegate;
+
+	      var fn = regularWatch ? function regularInterceptedExpression(scope, locals) {
+	        var value = parsedExpression(scope, locals);
+	        return interceptorFn(value, scope, locals);
+	      } : function oneTimeInterceptedExpression(scope, locals) {
 	        var value = parsedExpression(scope, locals);
 	        var result = interceptorFn(value, scope, locals);
 	        // we only return the interceptor's result if the
 	        // initial value is defined (for bind-once)
-	        return isDefined(value) || interceptorFn.$stateful ? result : value;
+	        return isDefined(value) ? result : value;
 	      };
 
 	      // Propagate $$watchDelegates other then inputsWatchDelegate
@@ -13227,7 +13237,11 @@
 	 * @requires $rootScope
 	 *
 	 * @description
-	 * A promise/deferred implementation inspired by [Kris Kowal's Q](https://github.com/kriskowal/q).
+	 * A service that helps you run functions asynchronously, and use their return values (or exceptions)
+	 * when they are done processing.
+	 *
+	 * This is an implementation of promises/deferred objects inspired by
+	 * [Kris Kowal's Q](https://github.com/kriskowal/q).
 	 *
 	 * $q can be used in two fashions --- one which is more similar to Kris Kowal's Q or jQuery's Deferred
 	 * implementations, and the other which resembles ES6 promises to some degree.
@@ -13363,15 +13377,11 @@
 	 *
 	 * - `catch(errorCallback)` – shorthand for `promise.then(null, errorCallback)`
 	 *
-	 * - `finally(callback)` – allows you to observe either the fulfillment or rejection of a promise,
+	 * - `finally(callback, notifyCallback)` – allows you to observe either the fulfillment or rejection of a promise,
 	 *   but to do so without modifying the final value. This is useful to release resources or do some
 	 *   clean-up that needs to be done whether the promise was rejected or resolved. See the [full
 	 *   specification](https://github.com/kriskowal/q/wiki/API-Reference#promisefinallycallback) for
 	 *   more information.
-	 *
-	 *   Because `finally` is a reserved word in JavaScript and reserved keywords are not supported as
-	 *   property names by ES3, you'll need to invoke the method like `promise['finally'](callback)` to
-	 *   make your code IE8 and Android 2.x compatible.
 	 *
 	 * # Chaining promises
 	 *
@@ -14595,11 +14605,11 @@
 	                      if (ttl < 5) {
 	                        logIdx = 4 - ttl;
 	                        if (!watchLog[logIdx]) watchLog[logIdx] = [];
-	                        logMsg = (isFunction(watch.exp))
-	                            ? 'fn: ' + (watch.exp.name || watch.exp.toString())
-	                            : watch.exp;
-	                        logMsg += '; newVal: ' + toJson(value) + '; oldVal: ' + toJson(last);
-	                        watchLog[logIdx].push(logMsg);
+	                        watchLog[logIdx].push({
+	                          msg: isFunction(watch.exp) ? 'fn: ' + (watch.exp.name || watch.exp.toString()) : watch.exp,
+	                          newVal: value,
+	                          oldVal: last
+	                        });
 	                      }
 	                    } else if (watch === lastDirtyWatch) {
 	                      // If the most recently dirty watcher is now clean, short circuit since the remaining watchers
@@ -14632,7 +14642,7 @@
 	            throw $rootScopeMinErr('infdig',
 	                '{0} $digest() iterations reached. Aborting!\n' +
 	                'Watchers fired in the last 5 iterations: {1}',
-	                TTL, toJson(watchLog));
+	                TTL, watchLog);
 	          }
 
 	        } while (dirty || asyncQueue.length);
@@ -14983,7 +14993,7 @@
 	        do {
 	          namedListeners = scope.$$listeners[name] || empty;
 	          event.currentScope = scope;
-	          for (i=0, length=namedListeners.length; i<length; i++) {
+	          for (i = 0, length = namedListeners.length; i < length; i++) {
 
 	            // if listeners were deregistered, defragment the array
 	            if (!namedListeners[i]) {
@@ -15057,7 +15067,7 @@
 	        while ((current = next)) {
 	          event.currentScope = current;
 	          listeners = current.$$listeners[name] || [];
-	          for (i=0, length = listeners.length; i<length; i++) {
+	          for (i = 0, length = listeners.length; i < length; i++) {
 	            // if listeners were deregistered, defragment the array
 	            if (!listeners[i]) {
 	              listeners.splice(i, 1);
@@ -15213,7 +15223,7 @@
 	      var normalizedVal;
 	      normalizedVal = urlResolve(uri).href;
 	      if (normalizedVal !== '' && !normalizedVal.match(regex)) {
-	        return 'unsafe:'+normalizedVal;
+	        return 'unsafe:' + normalizedVal;
 	      }
 	      return uri;
 	    };
@@ -16312,7 +16322,7 @@
 	      transitions = !!(('transition' in bodyStyle) || (vendorPrefix + 'Transition' in bodyStyle));
 	      animations  = !!(('animation' in bodyStyle) || (vendorPrefix + 'Animation' in bodyStyle));
 
-	      if (android && (!transitions||!animations)) {
+	      if (android && (!transitions ||  !animations)) {
 	        transitions = isString(document.body.style.webkitTransition);
 	        animations = isString(document.body.style.webkitAnimation);
 	      }
@@ -16383,7 +16393,7 @@
 	      if (isArray(transformResponse)) {
 	        var original = transformResponse;
 	        transformResponse = [];
-	        for (var i=0; i<original.length; ++i) {
+	        for (var i = 0; i < original.length; ++i) {
 	          var transformer = original[i];
 	          if (transformer !== defaultHttpResponseTransform) {
 	            transformResponse.push(transformer);
@@ -16627,7 +16637,7 @@
 	// exactly the behavior needed here.  There is little value is mocking these out for this
 	// service.
 	var urlParsingNode = document.createElement("a");
-	var originUrl = urlResolve(window.location.href, true);
+	var originUrl = urlResolve(window.location.href);
 
 
 	/**
@@ -16682,7 +16692,7 @@
 	 *   | pathname      | The pathname, beginning with "/"
 	 *
 	 */
-	function urlResolve(url, base) {
+	function urlResolve(url) {
 	  var href = url;
 
 	  if (msie) {
@@ -17062,8 +17072,8 @@
 	            }
 	            return false;
 	          }
-	          text = (''+text).toLowerCase();
-	          return (''+obj).toLowerCase().indexOf(text) > -1;
+	          text = ('' + text).toLowerCase();
+	          return ('' + obj).toLowerCase().indexOf(text) > -1;
 	        };
 	      }
 	    }
@@ -17323,7 +17333,7 @@
 	    if (whole.length >= (lgroup + group)) {
 	      pos = whole.length - lgroup;
 	      for (i = 0; i < pos; i++) {
-	        if ((pos - i)%group === 0 && i !== 0) {
+	        if ((pos - i) % group === 0 && i !== 0) {
 	          formatedText += groupSep;
 	        }
 	        formatedText += whole.charAt(i);
@@ -17331,7 +17341,7 @@
 	    }
 
 	    for (i = pos; i < whole.length; i++) {
-	      if ((whole.length - i)%lgroup === 0 && i !== 0) {
+	      if ((whole.length - i) % lgroup === 0 && i !== 0) {
 	        formatedText += groupSep;
 	      }
 	      formatedText += whole.charAt(i);
@@ -17571,10 +17581,10 @@
 	        tzMin = int(match[9] + match[11]);
 	      }
 	      dateSetter.call(date, int(match[1]), int(match[2]) - 1, int(match[3]));
-	      var h = int(match[4]||0) - tzHour;
-	      var m = int(match[5]||0) - tzMin;
-	      var s = int(match[6]||0);
-	      var ms = Math.round(parseFloat('0.' + (match[7]||0)) * 1000);
+	      var h = int(match[4] || 0) - tzHour;
+	      var m = int(match[5] || 0) - tzMin;
+	      var s = int(match[6] || 0);
+	      var ms = Math.round(parseFloat('0.' + (match[7] || 0)) * 1000);
 	      timeSetter.call(date, h, m, s, ms);
 	      return date;
 	    }
@@ -17806,7 +17816,7 @@
 	      n = input.length;
 	    }
 
-	    for (; i<n; i++) {
+	    for (; i < n; i++) {
 	      out.push(input[i]);
 	    }
 
@@ -17933,7 +17943,7 @@
 	function orderByFilter($parse) {
 	  return function(array, sortPredicate, reverseOrder) {
 	    if (!(isArrayLike(array))) return array;
-	    sortPredicate = isArray(sortPredicate) ? sortPredicate: [sortPredicate];
+	    sortPredicate = isArray(sortPredicate) ? sortPredicate : [sortPredicate];
 	    if (sortPredicate.length === 0) { sortPredicate = ['+']; }
 	    sortPredicate = sortPredicate.map(function(predicate) {
 	      var descending = false, get = predicate || identity;
@@ -17960,9 +17970,7 @@
 	        return compare(get(a),get(b));
 	      }, descending);
 	    });
-	    var arrayCopy = [];
-	    for (var i = 0; i < array.length; i++) { arrayCopy.push(array[i]); }
-	    return arrayCopy.sort(reverseComparator(comparator, reverseOrder));
+	    return slice.call(array).sort(reverseComparator(comparator, reverseOrder));
 
 	    function comparator(o1, o2) {
 	      for (var i = 0; i < sortPredicate.length; i++) {
@@ -19024,9 +19032,14 @@
 	   *    minlength.
 	   * @param {number=} ngMaxlength Sets `maxlength` validation error key if the value is longer than
 	   *    maxlength.
-	   * @param {string=} ngPattern Sets `pattern` validation error key if the value does not match the
-	   *    RegExp pattern expression. Expected value is `/regexp/` for inline patterns or `regexp` for
-	   *    patterns defined as scope expressions.
+	   * @param {string=} pattern Similar to `ngPattern` except that the attribute value is the actual string
+	   *    that contains the regular expression body that will be converted to a regular expression
+	   *    as in the ngPattern directive.
+	   * @param {string=} ngPattern Sets `pattern` validation error key if the ngModel value does not match
+	   *    a RegExp found by evaluating the Angular expression given in the attribute value.
+	   *    If the expression evaluates to a RegExp object then this is used directly.
+	   *    If the expression is a string then it will be converted to a RegExp after wrapping it in `^` and `$`
+	   *    characters. For instance, `"abc"` will be converted to `new RegExp('^abc$')`.
 	   * @param {string=} ngChange Angular expression to be executed when input changes due to user
 	   *    interaction with the input element.
 	   * @param {boolean=} [ngTrim=true] If set to false Angular will not automatically trim the input.
@@ -19567,9 +19580,14 @@
 	   *    minlength.
 	   * @param {number=} ngMaxlength Sets `maxlength` validation error key if the value is longer than
 	   *    maxlength.
-	   * @param {string=} ngPattern Sets `pattern` validation error key if the value does not match the
-	   *    RegExp pattern expression. Expected value is `/regexp/` for inline patterns or `regexp` for
-	   *    patterns defined as scope expressions.
+	   * @param {string=} pattern Similar to `ngPattern` except that the attribute value is the actual string
+	   *    that contains the regular expression body that will be converted to a regular expression
+	   *    as in the ngPattern directive.
+	   * @param {string=} ngPattern Sets `pattern` validation error key if the ngModel value does not match
+	   *    a RegExp found by evaluating the Angular expression given in the attribute value.
+	   *    If the expression evaluates to a RegExp object then this is used directly.
+	   *    If the expression is a string then it will be converted to a RegExp after wrapping it in `^` and `$`
+	   *    characters. For instance, `"abc"` will be converted to `new RegExp('^abc$')`.
 	   * @param {string=} ngChange Angular expression to be executed when input changes due to user
 	   *    interaction with the input element.
 	   *
@@ -19649,9 +19667,14 @@
 	   *    minlength.
 	   * @param {number=} ngMaxlength Sets `maxlength` validation error key if the value is longer than
 	   *    maxlength.
-	   * @param {string=} ngPattern Sets `pattern` validation error key if the value does not match the
-	   *    RegExp pattern expression. Expected value is `/regexp/` for inline patterns or `regexp` for
-	   *    patterns defined as scope expressions.
+	   * @param {string=} pattern Similar to `ngPattern` except that the attribute value is the actual string
+	   *    that contains the regular expression body that will be converted to a regular expression
+	   *    as in the ngPattern directive.
+	   * @param {string=} ngPattern Sets `pattern` validation error key if the ngModel value does not match
+	   *    a RegExp found by evaluating the Angular expression given in the attribute value.
+	   *    If the expression evaluates to a RegExp object then this is used directly.
+	   *    If the expression is a string then it will be converted to a RegExp after wrapping it in `^` and `$`
+	   *    characters. For instance, `"abc"` will be converted to `new RegExp('^abc$')`.
 	   * @param {string=} ngChange Angular expression to be executed when input changes due to user
 	   *    interaction with the input element.
 	   *
@@ -19732,9 +19755,14 @@
 	   *    minlength.
 	   * @param {number=} ngMaxlength Sets `maxlength` validation error key if the value is longer than
 	   *    maxlength.
-	   * @param {string=} ngPattern Sets `pattern` validation error key if the value does not match the
-	   *    RegExp pattern expression. Expected value is `/regexp/` for inline patterns or `regexp` for
-	   *    patterns defined as scope expressions.
+	   * @param {string=} pattern Similar to `ngPattern` except that the attribute value is the actual string
+	   *    that contains the regular expression body that will be converted to a regular expression
+	   *    as in the ngPattern directive.
+	   * @param {string=} ngPattern Sets `pattern` validation error key if the ngModel value does not match
+	   *    a RegExp found by evaluating the Angular expression given in the attribute value.
+	   *    If the expression evaluates to a RegExp object then this is used directly.
+	   *    If the expression is a string then it will be converted to a RegExp after wrapping it in `^` and `$`
+	   *    characters. For instance, `"abc"` will be converted to `new RegExp('^abc$')`.
 	   * @param {string=} ngChange Angular expression to be executed when input changes due to user
 	   *    interaction with the input element.
 	   *
@@ -20045,8 +20073,8 @@
 	      // When a date is JSON'ified to wraps itself inside of an extra
 	      // set of double quotes. This makes the date parsing code unable
 	      // to match the date string and parse it as a date.
-	      if (iso.charAt(0) == '"' && iso.charAt(iso.length-1) == '"') {
-	        iso = iso.substring(1, iso.length-1);
+	      if (iso.charAt(0) == '"' && iso.charAt(iso.length - 1) == '"') {
+	        iso = iso.substring(1, iso.length - 1);
 	      }
 	      if (ISO_DATE_REGEXP.test(iso)) {
 	        return new Date(iso);
@@ -20493,12 +20521,17 @@
 	 * @property {string} $viewValue Actual string value in the view.
 	 * @property {*} $modelValue The value in the model that the control is bound to.
 	 * @property {Array.<Function>} $parsers Array of functions to execute, as a pipeline, whenever
-	       the control reads value from the DOM. The functions are called in array order, each passing the value
-	       through to the next. The last return value is forwarded to the $validators collection.
-	       Used to sanitize / convert the value.
-	       Returning undefined from a parser means a parse error occurred. No $validators will
-	       run and the 'ngModel' will not be updated until the parse error is resolved. The parse error is stored
-	       in 'ngModel.$error.parse'.
+	       the control reads value from the DOM. The functions are called in array order, each passing
+	       its return value through to the next. The last return value is forwarded to the
+	       {@link ngModel.NgModelController#$validators `$validators`} collection.
+
+	Parsers are used to sanitize / convert the {@link ngModel.NgModelController#$viewValue
+	`$viewValue`}.
+
+	Returning `undefined` from a parser means a parse error occurred. In that case,
+	no {@link ngModel.NgModelController#$validators `$validators`} will run and the `ngModel`
+	will be set to `undefined` unless {@link ngModelOptions `ngModelOptions.allowInvalid`}
+	is set to `true`. The parse error is stored in `ngModel.$error.parse`.
 
 	 *
 	 * @property {Array.<Function>} $formatters Array of functions to execute, as a pipeline, whenever
@@ -20623,7 +20656,7 @@
 
 	              // Listen for change events to enable binding
 	              element.on('blur keyup change', function() {
-	                scope.$apply(read);
+	                scope.$evalAsync(read);
 	              });
 	              read(); // initialize
 
@@ -21559,7 +21592,7 @@
 	      var regexp, patternExp = attr.ngPattern || attr.pattern;
 	      attr.$observe('pattern', function(regex) {
 	        if (isString(regex) && regex.length > 0) {
-	          regex = new RegExp(regex);
+	          regex = new RegExp('^' + regex + '$');
 	        }
 
 	        if (regex && !regex.test) {
@@ -21850,7 +21883,7 @@
 	 * `ngModelOptions` has an effect on the element it's declared on and its descendants.
 	 *
 	 * @param {Object} ngModelOptions options to apply to the current model. Valid keys are:
-	 *   - `updateOn`: string specifying which event should be the input bound to. You can set several
+	 *   - `updateOn`: string specifying which event should the input be bound to. You can set several
 	 *     events using an space delimited list. There is a special event called `default` that
 	 *     matches the default events belonging of the control.
 	 *   - `debounce`: integer value which contains the debounce model update value in milliseconds. A
@@ -24718,7 +24751,7 @@
 	              });
 	              throw ngRepeatMinErr('dupes',
 	                  "Duplicates in a repeater are not allowed. Use 'track by' expression to specify unique keys. Repeater: {0}, Duplicate key: {1}, Duplicate value: {2}",
-	                  expression, trackById, toJson(value));
+	                  expression, trackById, value);
 	            } else {
 	              // new never before seen block
 	              nextBlockOrder[index] = {id: trackById, scope: undefined, clone: undefined};
@@ -25524,7 +25557,7 @@
 	 * In many cases, `ngRepeat` can be used on `<option>` elements instead of `ngOptions` to achieve a
 	 * similar result. However, the `ngOptions` provides some benefits such as reducing memory and
 	 * increasing speed by not creating a new scope for each repeated instance, as well as providing
-	 * more flexibility in how the `select`'s model is assigned via `select as`. `ngOptions should be
+	 * more flexibility in how the `select`'s model is assigned via `select as`. `ngOptions` should be
 	 * used when the `select` model needs to be bound to a non-string value. This is because an option
 	 * element can only be bound to string values at present.
 	 *
@@ -26122,13 +26155,14 @@
 	            lastElement = null;  // start at the beginning
 	            for (index = 0, length = optionGroup.length; index < length; index++) {
 	              option = optionGroup[index];
-	              if ((existingOption = existingOptions[index+1])) {
+	              if ((existingOption = existingOptions[index + 1])) {
 	                // reuse elements
 	                lastElement = existingOption.element;
 	                if (existingOption.label !== option.label) {
 	                  updateLabelMap(labelMap, existingOption.label, false);
 	                  updateLabelMap(labelMap, option.label, true);
 	                  lastElement.text(existingOption.label = option.label);
+	                  lastElement.prop('label', existingOption.label);
 	                }
 	                if (existingOption.id !== option.id) {
 	                  lastElement.val(existingOption.id = option.id);
@@ -26158,6 +26192,7 @@
 	                      .val(option.id)
 	                      .prop('selected', option.selected)
 	                      .attr('selected', option.selected)
+	                      .prop('label', option.label)
 	                      .text(option.label);
 	                }
 
@@ -26278,7 +26313,7 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
-	 * @license AngularJS v1.3.2
+	 * @license AngularJS v1.3.3
 	 * (c) 2010-2014 Google, Inc. http://angularjs.org
 	 * License: MIT
 	 */
@@ -26430,6 +26465,9 @@
 	    if (angular.isUndefined(routeCopy.reloadOnSearch)) {
 	      routeCopy.reloadOnSearch = true;
 	    }
+	    if (angular.isUndefined(routeCopy.caseInsensitiveMatch)) {
+	      routeCopy.caseInsensitiveMatch = this.caseInsensitiveMatch;
+	    }
 	    routes[path] = angular.extend(
 	      routeCopy,
 	      path && pathRegExp(path, routeCopy)
@@ -26437,9 +26475,9 @@
 
 	    // create redirection for trailing slashes
 	    if (path) {
-	      var redirectPath = (path[path.length-1] == '/')
-	            ? path.substr(0, path.length-1)
-	            : path +'/';
+	      var redirectPath = (path[path.length - 1] == '/')
+	            ? path.substr(0, path.length - 1)
+	            : path + '/';
 
 	      routes[redirectPath] = angular.extend(
 	        {redirectTo: path},
@@ -26449,6 +26487,17 @@
 
 	    return this;
 	  };
+
+	  /**
+	   * @ngdoc property
+	   * @name $routeProvider#caseInsensitiveMatch
+	   * @description
+	   *
+	   * A boolean property indicating if routes defined
+	   * using this provider should be matched using a case sensitive
+	   * algorithm. Defaults to `false`.
+	   */
+	  this.caseInsensitiveMatch = false;
 
 	   /**
 	    * @param path {string} path
@@ -26918,7 +26967,7 @@
 	     */
 	    function interpolate(string, params) {
 	      var result = [];
-	      angular.forEach((string||'').split(':'), function(segment, i) {
+	      angular.forEach((string || '').split(':'), function(segment, i) {
 	        if (i === 0) {
 	          result.push(segment);
 	        } else {
@@ -27266,7 +27315,7 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
-	 * @license AngularJS v1.3.2
+	 * @license AngularJS v1.3.3
 	 * (c) 2010-2014 Google, Inc. http://angularjs.org
 	 * License: MIT
 	 */
@@ -27485,29 +27534,29 @@
 	//Attributes that have href and hence need to be sanitized
 	var uriAttrs = makeMap("background,cite,href,longdesc,src,usemap,xlink:href");
 
-	var htmlAttrs = makeMap('abbr,align,alt,axis,bgcolor,border,cellpadding,cellspacing,class,clear,'+
-	    'color,cols,colspan,compact,coords,dir,face,headers,height,hreflang,hspace,'+
-	    'ismap,lang,language,nohref,nowrap,rel,rev,rows,rowspan,rules,'+
-	    'scope,scrolling,shape,size,span,start,summary,target,title,type,'+
+	var htmlAttrs = makeMap('abbr,align,alt,axis,bgcolor,border,cellpadding,cellspacing,class,clear,' +
+	    'color,cols,colspan,compact,coords,dir,face,headers,height,hreflang,hspace,' +
+	    'ismap,lang,language,nohref,nowrap,rel,rev,rows,rowspan,rules,' +
+	    'scope,scrolling,shape,size,span,start,summary,target,title,type,' +
 	    'valign,value,vspace,width');
 
 	// SVG attributes (without "id" and "name" attributes)
 	// https://wiki.whatwg.org/wiki/Sanitization_rules#svg_Attributes
-	var svgAttrs = makeMap('accent-height,accumulate,additive,alphabetic,arabic-form,ascent,'+
-	    'attributeName,attributeType,baseProfile,bbox,begin,by,calcMode,cap-height,class,color,'+
-	    'color-rendering,content,cx,cy,d,dx,dy,descent,display,dur,end,fill,fill-rule,font-family,'+
-	    'font-size,font-stretch,font-style,font-variant,font-weight,from,fx,fy,g1,g2,glyph-name,'+
-	    'gradientUnits,hanging,height,horiz-adv-x,horiz-origin-x,ideographic,k,keyPoints,'+
-	    'keySplines,keyTimes,lang,marker-end,marker-mid,marker-start,markerHeight,markerUnits,'+
-	    'markerWidth,mathematical,max,min,offset,opacity,orient,origin,overline-position,'+
-	    'overline-thickness,panose-1,path,pathLength,points,preserveAspectRatio,r,refX,refY,'+
-	    'repeatCount,repeatDur,requiredExtensions,requiredFeatures,restart,rotate,rx,ry,slope,stemh,'+
-	    'stemv,stop-color,stop-opacity,strikethrough-position,strikethrough-thickness,stroke,'+
-	    'stroke-dasharray,stroke-dashoffset,stroke-linecap,stroke-linejoin,stroke-miterlimit,'+
-	    'stroke-opacity,stroke-width,systemLanguage,target,text-anchor,to,transform,type,u1,u2,'+
-	    'underline-position,underline-thickness,unicode,unicode-range,units-per-em,values,version,'+
-	    'viewBox,visibility,width,widths,x,x-height,x1,x2,xlink:actuate,xlink:arcrole,xlink:role,'+
-	    'xlink:show,xlink:title,xlink:type,xml:base,xml:lang,xml:space,xmlns,xmlns:xlink,y,y1,y2,'+
+	var svgAttrs = makeMap('accent-height,accumulate,additive,alphabetic,arabic-form,ascent,' +
+	    'attributeName,attributeType,baseProfile,bbox,begin,by,calcMode,cap-height,class,color,' +
+	    'color-rendering,content,cx,cy,d,dx,dy,descent,display,dur,end,fill,fill-rule,font-family,' +
+	    'font-size,font-stretch,font-style,font-variant,font-weight,from,fx,fy,g1,g2,glyph-name,' +
+	    'gradientUnits,hanging,height,horiz-adv-x,horiz-origin-x,ideographic,k,keyPoints,' +
+	    'keySplines,keyTimes,lang,marker-end,marker-mid,marker-start,markerHeight,markerUnits,' +
+	    'markerWidth,mathematical,max,min,offset,opacity,orient,origin,overline-position,' +
+	    'overline-thickness,panose-1,path,pathLength,points,preserveAspectRatio,r,refX,refY,' +
+	    'repeatCount,repeatDur,requiredExtensions,requiredFeatures,restart,rotate,rx,ry,slope,stemh,' +
+	    'stemv,stop-color,stop-opacity,strikethrough-position,strikethrough-thickness,stroke,' +
+	    'stroke-dasharray,stroke-dashoffset,stroke-linecap,stroke-linejoin,stroke-miterlimit,' +
+	    'stroke-opacity,stroke-width,systemLanguage,target,text-anchor,to,transform,type,u1,u2,' +
+	    'underline-position,underline-thickness,unicode,unicode-range,units-per-em,values,version,' +
+	    'viewBox,visibility,width,widths,x,x-height,x1,x2,xlink:actuate,xlink:arcrole,xlink:role,' +
+	    'xlink:show,xlink:title,xlink:type,xml:base,xml:lang,xml:space,xmlns,xmlns:xlink,y,y1,y2,' +
 	    'zoomAndPan');
 
 	var validAttrs = angular.extend({},
@@ -27950,7 +27999,7 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
-	 * @license AngularJS v1.3.2
+	 * @license AngularJS v1.3.3
 	 * (c) 2010-2014 Google, Inc. http://angularjs.org
 	 * License: MIT
 	 */
@@ -29840,7 +29889,7 @@
 	          //the jqLite object, so we're safe to use a single variable to house
 	          //the styles since there is always only one element being animated
 	          var oldStyle = node.getAttribute('style') || '';
-	          if (oldStyle.charAt(oldStyle.length-1) !== ';') {
+	          if (oldStyle.charAt(oldStyle.length - 1) !== ';') {
 	            oldStyle += ';';
 	          }
 	          node.setAttribute('style', oldStyle + ' ' + style);
@@ -30091,19 +30140,11 @@
 /* 15 */
 /***/ function(module, exports, __webpack_require__) {
 
-	__webpack_require__(39);
+	module.exports = __webpack_require__.p + "index.html"
 
-	__webpack_require__(40);
-
-	__webpack_require__(41);
-
-	__webpack_require__(42);
-
-	__webpack_require__(43);
-
-	__webpack_require__(44);
-
-	__webpack_require__(45);
+/***/ },
+/* 16 */
+/***/ function(module, exports, __webpack_require__) {
 
 	__webpack_require__(46);
 
@@ -30123,16 +30164,30 @@
 
 	__webpack_require__(54);
 
+	__webpack_require__(55);
+
+	__webpack_require__(56);
+
+	__webpack_require__(57);
+
+	__webpack_require__(58);
+
+	__webpack_require__(59);
+
+	__webpack_require__(60);
+
+	__webpack_require__(61);
+
 
 /***/ },
-/* 16 */
+/* 17 */
 /***/ function(module, exports, __webpack_require__) {
 
 	module.exports = [{"name":"Afghanistan","alpha-2":"AF","alpha-3":"AFG","country-code":"004","iso_3166-2":"ISO 3166-2:AF","region-code":"142","sub-region-code":"034"},{"name":"Åland Islands","alpha-2":"AX","alpha-3":"ALA","country-code":"248","iso_3166-2":"ISO 3166-2:AX","region-code":"150","sub-region-code":"154"},{"name":"Albania","alpha-2":"AL","alpha-3":"ALB","country-code":"008","iso_3166-2":"ISO 3166-2:AL","region-code":"150","sub-region-code":"039"},{"name":"Algeria","alpha-2":"DZ","alpha-3":"DZA","country-code":"012","iso_3166-2":"ISO 3166-2:DZ","region-code":"002","sub-region-code":"015"},{"name":"American Samoa","alpha-2":"AS","alpha-3":"ASM","country-code":"016","iso_3166-2":"ISO 3166-2:AS","region-code":"009","sub-region-code":"061"},{"name":"Andorra","alpha-2":"AD","alpha-3":"AND","country-code":"020","iso_3166-2":"ISO 3166-2:AD","region-code":"150","sub-region-code":"039"},{"name":"Angola","alpha-2":"AO","alpha-3":"AGO","country-code":"024","iso_3166-2":"ISO 3166-2:AO","region-code":"002","sub-region-code":"017"},{"name":"Anguilla","alpha-2":"AI","alpha-3":"AIA","country-code":"660","iso_3166-2":"ISO 3166-2:AI","region-code":"019","sub-region-code":"029"},{"name":"Antarctica","alpha-2":"AQ","alpha-3":"ATA","country-code":"010","iso_3166-2":"ISO 3166-2:AQ"},{"name":"Antigua and Barbuda","alpha-2":"AG","alpha-3":"ATG","country-code":"028","iso_3166-2":"ISO 3166-2:AG","region-code":"019","sub-region-code":"029"},{"name":"Argentina","alpha-2":"AR","alpha-3":"ARG","country-code":"032","iso_3166-2":"ISO 3166-2:AR","region-code":"019","sub-region-code":"005"},{"name":"Armenia","alpha-2":"AM","alpha-3":"ARM","country-code":"051","iso_3166-2":"ISO 3166-2:AM","region-code":"142","sub-region-code":"145"},{"name":"Aruba","alpha-2":"AW","alpha-3":"ABW","country-code":"533","iso_3166-2":"ISO 3166-2:AW","region-code":"019","sub-region-code":"029"},{"name":"Australia","alpha-2":"AU","alpha-3":"AUS","country-code":"036","iso_3166-2":"ISO 3166-2:AU","region-code":"009","sub-region-code":"053"},{"name":"Austria","alpha-2":"AT","alpha-3":"AUT","country-code":"040","iso_3166-2":"ISO 3166-2:AT","region-code":"150","sub-region-code":"155"},{"name":"Azerbaijan","alpha-2":"AZ","alpha-3":"AZE","country-code":"031","iso_3166-2":"ISO 3166-2:AZ","region-code":"142","sub-region-code":"145"},{"name":"Bahamas","alpha-2":"BS","alpha-3":"BHS","country-code":"044","iso_3166-2":"ISO 3166-2:BS","region-code":"019","sub-region-code":"029"},{"name":"Bahrain","alpha-2":"BH","alpha-3":"BHR","country-code":"048","iso_3166-2":"ISO 3166-2:BH","region-code":"142","sub-region-code":"145"},{"name":"Bangladesh","alpha-2":"BD","alpha-3":"BGD","country-code":"050","iso_3166-2":"ISO 3166-2:BD","region-code":"142","sub-region-code":"034"},{"name":"Barbados","alpha-2":"BB","alpha-3":"BRB","country-code":"052","iso_3166-2":"ISO 3166-2:BB","region-code":"019","sub-region-code":"029"},{"name":"Belarus","alpha-2":"BY","alpha-3":"BLR","country-code":"112","iso_3166-2":"ISO 3166-2:BY","region-code":"150","sub-region-code":"151"},{"name":"Belgium","alpha-2":"BE","alpha-3":"BEL","country-code":"056","iso_3166-2":"ISO 3166-2:BE","region-code":"150","sub-region-code":"155"},{"name":"Belize","alpha-2":"BZ","alpha-3":"BLZ","country-code":"084","iso_3166-2":"ISO 3166-2:BZ","region-code":"019","sub-region-code":"013"},{"name":"Benin","alpha-2":"BJ","alpha-3":"BEN","country-code":"204","iso_3166-2":"ISO 3166-2:BJ","region-code":"002","sub-region-code":"011"},{"name":"Bermuda","alpha-2":"BM","alpha-3":"BMU","country-code":"060","iso_3166-2":"ISO 3166-2:BM","region-code":"019","sub-region-code":"021"},{"name":"Bhutan","alpha-2":"BT","alpha-3":"BTN","country-code":"064","iso_3166-2":"ISO 3166-2:BT","region-code":"142","sub-region-code":"034"},{"name":"Bolivia, Plurinational State of","alpha-2":"BO","alpha-3":"BOL","country-code":"068","iso_3166-2":"ISO 3166-2:BO","region-code":"019","sub-region-code":"005"},{"name":"Bonaire, Sint Eustatius and Saba","alpha-2":"BQ","alpha-3":"BES","country-code":"535","iso_3166-2":"ISO 3166-2:BQ","region-code":"019","sub-region-code":"029"},{"name":"Bosnia and Herzegovina","alpha-2":"BA","alpha-3":"BIH","country-code":"070","iso_3166-2":"ISO 3166-2:BA","region-code":"150","sub-region-code":"039"},{"name":"Botswana","alpha-2":"BW","alpha-3":"BWA","country-code":"072","iso_3166-2":"ISO 3166-2:BW","region-code":"002","sub-region-code":"018"},{"name":"Bouvet Island","alpha-2":"BV","alpha-3":"BVT","country-code":"074","iso_3166-2":"ISO 3166-2:BV"},{"name":"Brazil","alpha-2":"BR","alpha-3":"BRA","country-code":"076","iso_3166-2":"ISO 3166-2:BR","region-code":"019","sub-region-code":"005"},{"name":"British Indian Ocean Territory","alpha-2":"IO","alpha-3":"IOT","country-code":"086","iso_3166-2":"ISO 3166-2:IO"},{"name":"Brunei Darussalam","alpha-2":"BN","alpha-3":"BRN","country-code":"096","iso_3166-2":"ISO 3166-2:BN","region-code":"142","sub-region-code":"035"},{"name":"Bulgaria","alpha-2":"BG","alpha-3":"BGR","country-code":"100","iso_3166-2":"ISO 3166-2:BG","region-code":"150","sub-region-code":"151"},{"name":"Burkina Faso","alpha-2":"BF","alpha-3":"BFA","country-code":"854","iso_3166-2":"ISO 3166-2:BF","region-code":"002","sub-region-code":"011"},{"name":"Burundi","alpha-2":"BI","alpha-3":"BDI","country-code":"108","iso_3166-2":"ISO 3166-2:BI","region-code":"002","sub-region-code":"014"},{"name":"Cambodia","alpha-2":"KH","alpha-3":"KHM","country-code":"116","iso_3166-2":"ISO 3166-2:KH","region-code":"142","sub-region-code":"035"},{"name":"Cameroon","alpha-2":"CM","alpha-3":"CMR","country-code":"120","iso_3166-2":"ISO 3166-2:CM","region-code":"002","sub-region-code":"017"},{"name":"Canada","alpha-2":"CA","alpha-3":"CAN","country-code":"124","iso_3166-2":"ISO 3166-2:CA","region-code":"019","sub-region-code":"021"},{"name":"Cape Verde","alpha-2":"CV","alpha-3":"CPV","country-code":"132","iso_3166-2":"ISO 3166-2:CV","region-code":"002","sub-region-code":"011"},{"name":"Cayman Islands","alpha-2":"KY","alpha-3":"CYM","country-code":"136","iso_3166-2":"ISO 3166-2:KY","region-code":"019","sub-region-code":"029"},{"name":"Central African Republic","alpha-2":"CF","alpha-3":"CAF","country-code":"140","iso_3166-2":"ISO 3166-2:CF","region-code":"002","sub-region-code":"017"},{"name":"Chad","alpha-2":"TD","alpha-3":"TCD","country-code":"148","iso_3166-2":"ISO 3166-2:TD","region-code":"002","sub-region-code":"017"},{"name":"Chile","alpha-2":"CL","alpha-3":"CHL","country-code":"152","iso_3166-2":"ISO 3166-2:CL","region-code":"019","sub-region-code":"005"},{"name":"China","alpha-2":"CN","alpha-3":"CHN","country-code":"156","iso_3166-2":"ISO 3166-2:CN","region-code":"142","sub-region-code":"030"},{"name":"Christmas Island","alpha-2":"CX","alpha-3":"CXR","country-code":"162","iso_3166-2":"ISO 3166-2:CX"},{"name":"Cocos (Keeling) Islands","alpha-2":"CC","alpha-3":"CCK","country-code":"166","iso_3166-2":"ISO 3166-2:CC"},{"name":"Colombia","alpha-2":"CO","alpha-3":"COL","country-code":"170","iso_3166-2":"ISO 3166-2:CO","region-code":"019","sub-region-code":"005"},{"name":"Comoros","alpha-2":"KM","alpha-3":"COM","country-code":"174","iso_3166-2":"ISO 3166-2:KM","region-code":"002","sub-region-code":"014"},{"name":"Congo","alpha-2":"CG","alpha-3":"COG","country-code":"178","iso_3166-2":"ISO 3166-2:CG","region-code":"002","sub-region-code":"017"},{"name":"Congo, the Democratic Republic of the","alpha-2":"CD","alpha-3":"COD","country-code":"180","iso_3166-2":"ISO 3166-2:CD","region-code":"002","sub-region-code":"017"},{"name":"Cook Islands","alpha-2":"CK","alpha-3":"COK","country-code":"184","iso_3166-2":"ISO 3166-2:CK","region-code":"009","sub-region-code":"061"},{"name":"Costa Rica","alpha-2":"CR","alpha-3":"CRI","country-code":"188","iso_3166-2":"ISO 3166-2:CR","region-code":"019","sub-region-code":"013"},{"name":"Côte d'Ivoire","alpha-2":"CI","alpha-3":"CIV","country-code":"384","iso_3166-2":"ISO 3166-2:CI","region-code":"002","sub-region-code":"011"},{"name":"Croatia","alpha-2":"HR","alpha-3":"HRV","country-code":"191","iso_3166-2":"ISO 3166-2:HR","region-code":"150","sub-region-code":"039"},{"name":"Cuba","alpha-2":"CU","alpha-3":"CUB","country-code":"192","iso_3166-2":"ISO 3166-2:CU","region-code":"019","sub-region-code":"029"},{"name":"Curaçao","alpha-2":"CW","alpha-3":"CUW","country-code":"531","iso_3166-2":"ISO 3166-2:CW","region-code":"019","sub-region-code":"029"},{"name":"Cyprus","alpha-2":"CY","alpha-3":"CYP","country-code":"196","iso_3166-2":"ISO 3166-2:CY","region-code":"142","sub-region-code":"145"},{"name":"Czech Republic","alpha-2":"CZ","alpha-3":"CZE","country-code":"203","iso_3166-2":"ISO 3166-2:CZ","region-code":"150","sub-region-code":"151"},{"name":"Denmark","alpha-2":"DK","alpha-3":"DNK","country-code":"208","iso_3166-2":"ISO 3166-2:DK","region-code":"150","sub-region-code":"154"},{"name":"Djibouti","alpha-2":"DJ","alpha-3":"DJI","country-code":"262","iso_3166-2":"ISO 3166-2:DJ","region-code":"002","sub-region-code":"014"},{"name":"Dominica","alpha-2":"DM","alpha-3":"DMA","country-code":"212","iso_3166-2":"ISO 3166-2:DM","region-code":"019","sub-region-code":"029"},{"name":"Dominican Republic","alpha-2":"DO","alpha-3":"DOM","country-code":"214","iso_3166-2":"ISO 3166-2:DO","region-code":"019","sub-region-code":"029"},{"name":"Ecuador","alpha-2":"EC","alpha-3":"ECU","country-code":"218","iso_3166-2":"ISO 3166-2:EC","region-code":"019","sub-region-code":"005"},{"name":"Egypt","alpha-2":"EG","alpha-3":"EGY","country-code":"818","iso_3166-2":"ISO 3166-2:EG","region-code":"002","sub-region-code":"015"},{"name":"El Salvador","alpha-2":"SV","alpha-3":"SLV","country-code":"222","iso_3166-2":"ISO 3166-2:SV","region-code":"019","sub-region-code":"013"},{"name":"Equatorial Guinea","alpha-2":"GQ","alpha-3":"GNQ","country-code":"226","iso_3166-2":"ISO 3166-2:GQ","region-code":"002","sub-region-code":"017"},{"name":"Eritrea","alpha-2":"ER","alpha-3":"ERI","country-code":"232","iso_3166-2":"ISO 3166-2:ER","region-code":"002","sub-region-code":"014"},{"name":"Estonia","alpha-2":"EE","alpha-3":"EST","country-code":"233","iso_3166-2":"ISO 3166-2:EE","region-code":"150","sub-region-code":"154"},{"name":"Ethiopia","alpha-2":"ET","alpha-3":"ETH","country-code":"231","iso_3166-2":"ISO 3166-2:ET","region-code":"002","sub-region-code":"014"},{"name":"Falkland Islands (Malvinas)","alpha-2":"FK","alpha-3":"FLK","country-code":"238","iso_3166-2":"ISO 3166-2:FK","region-code":"019","sub-region-code":"005"},{"name":"Faroe Islands","alpha-2":"FO","alpha-3":"FRO","country-code":"234","iso_3166-2":"ISO 3166-2:FO","region-code":"150","sub-region-code":"154"},{"name":"Fiji","alpha-2":"FJ","alpha-3":"FJI","country-code":"242","iso_3166-2":"ISO 3166-2:FJ","region-code":"009","sub-region-code":"054"},{"name":"Finland","alpha-2":"FI","alpha-3":"FIN","country-code":"246","iso_3166-2":"ISO 3166-2:FI","region-code":"150","sub-region-code":"154"},{"name":"France","alpha-2":"FR","alpha-3":"FRA","country-code":"250","iso_3166-2":"ISO 3166-2:FR","region-code":"150","sub-region-code":"155"},{"name":"French Guiana","alpha-2":"GF","alpha-3":"GUF","country-code":"254","iso_3166-2":"ISO 3166-2:GF","region-code":"019","sub-region-code":"005"},{"name":"French Polynesia","alpha-2":"PF","alpha-3":"PYF","country-code":"258","iso_3166-2":"ISO 3166-2:PF","region-code":"009","sub-region-code":"061"},{"name":"French Southern Territories","alpha-2":"TF","alpha-3":"ATF","country-code":"260","iso_3166-2":"ISO 3166-2:TF"},{"name":"Gabon","alpha-2":"GA","alpha-3":"GAB","country-code":"266","iso_3166-2":"ISO 3166-2:GA","region-code":"002","sub-region-code":"017"},{"name":"Gambia","alpha-2":"GM","alpha-3":"GMB","country-code":"270","iso_3166-2":"ISO 3166-2:GM","region-code":"002","sub-region-code":"011"},{"name":"Georgia","alpha-2":"GE","alpha-3":"GEO","country-code":"268","iso_3166-2":"ISO 3166-2:GE","region-code":"142","sub-region-code":"145"},{"name":"Germany","alpha-2":"DE","alpha-3":"DEU","country-code":"276","iso_3166-2":"ISO 3166-2:DE","region-code":"150","sub-region-code":"155"},{"name":"Ghana","alpha-2":"GH","alpha-3":"GHA","country-code":"288","iso_3166-2":"ISO 3166-2:GH","region-code":"002","sub-region-code":"011"},{"name":"Gibraltar","alpha-2":"GI","alpha-3":"GIB","country-code":"292","iso_3166-2":"ISO 3166-2:GI","region-code":"150","sub-region-code":"039"},{"name":"Greece","alpha-2":"GR","alpha-3":"GRC","country-code":"300","iso_3166-2":"ISO 3166-2:GR","region-code":"150","sub-region-code":"039"},{"name":"Greenland","alpha-2":"GL","alpha-3":"GRL","country-code":"304","iso_3166-2":"ISO 3166-2:GL","region-code":"019","sub-region-code":"021"},{"name":"Grenada","alpha-2":"GD","alpha-3":"GRD","country-code":"308","iso_3166-2":"ISO 3166-2:GD","region-code":"019","sub-region-code":"029"},{"name":"Guadeloupe","alpha-2":"GP","alpha-3":"GLP","country-code":"312","iso_3166-2":"ISO 3166-2:GP","region-code":"019","sub-region-code":"029"},{"name":"Guam","alpha-2":"GU","alpha-3":"GUM","country-code":"316","iso_3166-2":"ISO 3166-2:GU","region-code":"009","sub-region-code":"057"},{"name":"Guatemala","alpha-2":"GT","alpha-3":"GTM","country-code":"320","iso_3166-2":"ISO 3166-2:GT","region-code":"019","sub-region-code":"013"},{"name":"Guernsey","alpha-2":"GG","alpha-3":"GGY","country-code":"831","iso_3166-2":"ISO 3166-2:GG","region-code":"150","sub-region-code":"154"},{"name":"Guinea","alpha-2":"GN","alpha-3":"GIN","country-code":"324","iso_3166-2":"ISO 3166-2:GN","region-code":"002","sub-region-code":"011"},{"name":"Guinea-Bissau","alpha-2":"GW","alpha-3":"GNB","country-code":"624","iso_3166-2":"ISO 3166-2:GW","region-code":"002","sub-region-code":"011"},{"name":"Guyana","alpha-2":"GY","alpha-3":"GUY","country-code":"328","iso_3166-2":"ISO 3166-2:GY","region-code":"019","sub-region-code":"005"},{"name":"Haiti","alpha-2":"HT","alpha-3":"HTI","country-code":"332","iso_3166-2":"ISO 3166-2:HT","region-code":"019","sub-region-code":"029"},{"name":"Heard Island and McDonald Islands","alpha-2":"HM","alpha-3":"HMD","country-code":"334","iso_3166-2":"ISO 3166-2:HM"},{"name":"Holy See (Vatican City State)","alpha-2":"VA","alpha-3":"VAT","country-code":"336","iso_3166-2":"ISO 3166-2:VA","region-code":"150","sub-region-code":"039"},{"name":"Honduras","alpha-2":"HN","alpha-3":"HND","country-code":"340","iso_3166-2":"ISO 3166-2:HN","region-code":"019","sub-region-code":"013"},{"name":"Hong Kong","alpha-2":"HK","alpha-3":"HKG","country-code":"344","iso_3166-2":"ISO 3166-2:HK","region-code":"142","sub-region-code":"030"},{"name":"Hungary","alpha-2":"HU","alpha-3":"HUN","country-code":"348","iso_3166-2":"ISO 3166-2:HU","region-code":"150","sub-region-code":"151"},{"name":"Iceland","alpha-2":"IS","alpha-3":"ISL","country-code":"352","iso_3166-2":"ISO 3166-2:IS","region-code":"150","sub-region-code":"154"},{"name":"India","alpha-2":"IN","alpha-3":"IND","country-code":"356","iso_3166-2":"ISO 3166-2:IN","region-code":"142","sub-region-code":"034"},{"name":"Indonesia","alpha-2":"ID","alpha-3":"IDN","country-code":"360","iso_3166-2":"ISO 3166-2:ID","region-code":"142","sub-region-code":"035"},{"name":"Iran, Islamic Republic of","alpha-2":"IR","alpha-3":"IRN","country-code":"364","iso_3166-2":"ISO 3166-2:IR","region-code":"142","sub-region-code":"034"},{"name":"Iraq","alpha-2":"IQ","alpha-3":"IRQ","country-code":"368","iso_3166-2":"ISO 3166-2:IQ","region-code":"142","sub-region-code":"145"},{"name":"Ireland","alpha-2":"IE","alpha-3":"IRL","country-code":"372","iso_3166-2":"ISO 3166-2:IE","region-code":"150","sub-region-code":"154"},{"name":"Isle of Man","alpha-2":"IM","alpha-3":"IMN","country-code":"833","iso_3166-2":"ISO 3166-2:IM","region-code":"150","sub-region-code":"154"},{"name":"Israel","alpha-2":"IL","alpha-3":"ISR","country-code":"376","iso_3166-2":"ISO 3166-2:IL","region-code":"142","sub-region-code":"145"},{"name":"Italy","alpha-2":"IT","alpha-3":"ITA","country-code":"380","iso_3166-2":"ISO 3166-2:IT","region-code":"150","sub-region-code":"039"},{"name":"Jamaica","alpha-2":"JM","alpha-3":"JAM","country-code":"388","iso_3166-2":"ISO 3166-2:JM","region-code":"019","sub-region-code":"029"},{"name":"Japan","alpha-2":"JP","alpha-3":"JPN","country-code":"392","iso_3166-2":"ISO 3166-2:JP","region-code":"142","sub-region-code":"030"},{"name":"Jersey","alpha-2":"JE","alpha-3":"JEY","country-code":"832","iso_3166-2":"ISO 3166-2:JE","region-code":"150","sub-region-code":"154"},{"name":"Jordan","alpha-2":"JO","alpha-3":"JOR","country-code":"400","iso_3166-2":"ISO 3166-2:JO","region-code":"142","sub-region-code":"145"},{"name":"Kazakhstan","alpha-2":"KZ","alpha-3":"KAZ","country-code":"398","iso_3166-2":"ISO 3166-2:KZ","region-code":"142","sub-region-code":"143"},{"name":"Kenya","alpha-2":"KE","alpha-3":"KEN","country-code":"404","iso_3166-2":"ISO 3166-2:KE","region-code":"002","sub-region-code":"014"},{"name":"Kiribati","alpha-2":"KI","alpha-3":"KIR","country-code":"296","iso_3166-2":"ISO 3166-2:KI","region-code":"009","sub-region-code":"057"},{"name":"Korea, Democratic People's Republic of","alpha-2":"KP","alpha-3":"PRK","country-code":"408","iso_3166-2":"ISO 3166-2:KP","region-code":"142","sub-region-code":"030"},{"name":"Korea, Republic of","alpha-2":"KR","alpha-3":"KOR","country-code":"410","iso_3166-2":"ISO 3166-2:KR","region-code":"142","sub-region-code":"030"},{"name":"Kuwait","alpha-2":"KW","alpha-3":"KWT","country-code":"414","iso_3166-2":"ISO 3166-2:KW","region-code":"142","sub-region-code":"145"},{"name":"Kyrgyzstan","alpha-2":"KG","alpha-3":"KGZ","country-code":"417","iso_3166-2":"ISO 3166-2:KG","region-code":"142","sub-region-code":"143"},{"name":"Lao People's Democratic Republic","alpha-2":"LA","alpha-3":"LAO","country-code":"418","iso_3166-2":"ISO 3166-2:LA","region-code":"142","sub-region-code":"035"},{"name":"Latvia","alpha-2":"LV","alpha-3":"LVA","country-code":"428","iso_3166-2":"ISO 3166-2:LV","region-code":"150","sub-region-code":"154"},{"name":"Lebanon","alpha-2":"LB","alpha-3":"LBN","country-code":"422","iso_3166-2":"ISO 3166-2:LB","region-code":"142","sub-region-code":"145"},{"name":"Lesotho","alpha-2":"LS","alpha-3":"LSO","country-code":"426","iso_3166-2":"ISO 3166-2:LS","region-code":"002","sub-region-code":"018"},{"name":"Liberia","alpha-2":"LR","alpha-3":"LBR","country-code":"430","iso_3166-2":"ISO 3166-2:LR","region-code":"002","sub-region-code":"011"},{"name":"Libya","alpha-2":"LY","alpha-3":"LBY","country-code":"434","iso_3166-2":"ISO 3166-2:LY","region-code":"002","sub-region-code":"015"},{"name":"Liechtenstein","alpha-2":"LI","alpha-3":"LIE","country-code":"438","iso_3166-2":"ISO 3166-2:LI","region-code":"150","sub-region-code":"155"},{"name":"Lithuania","alpha-2":"LT","alpha-3":"LTU","country-code":"440","iso_3166-2":"ISO 3166-2:LT","region-code":"150","sub-region-code":"154"},{"name":"Luxembourg","alpha-2":"LU","alpha-3":"LUX","country-code":"442","iso_3166-2":"ISO 3166-2:LU","region-code":"150","sub-region-code":"155"},{"name":"Macao","alpha-2":"MO","alpha-3":"MAC","country-code":"446","iso_3166-2":"ISO 3166-2:MO","region-code":"142","sub-region-code":"030"},{"name":"Macedonia, the former Yugoslav Republic of","alpha-2":"MK","alpha-3":"MKD","country-code":"807","iso_3166-2":"ISO 3166-2:MK","region-code":"150","sub-region-code":"039"},{"name":"Madagascar","alpha-2":"MG","alpha-3":"MDG","country-code":"450","iso_3166-2":"ISO 3166-2:MG","region-code":"002","sub-region-code":"014"},{"name":"Malawi","alpha-2":"MW","alpha-3":"MWI","country-code":"454","iso_3166-2":"ISO 3166-2:MW","region-code":"002","sub-region-code":"014"},{"name":"Malaysia","alpha-2":"MY","alpha-3":"MYS","country-code":"458","iso_3166-2":"ISO 3166-2:MY","region-code":"142","sub-region-code":"035"},{"name":"Maldives","alpha-2":"MV","alpha-3":"MDV","country-code":"462","iso_3166-2":"ISO 3166-2:MV","region-code":"142","sub-region-code":"034"},{"name":"Mali","alpha-2":"ML","alpha-3":"MLI","country-code":"466","iso_3166-2":"ISO 3166-2:ML","region-code":"002","sub-region-code":"011"},{"name":"Malta","alpha-2":"MT","alpha-3":"MLT","country-code":"470","iso_3166-2":"ISO 3166-2:MT","region-code":"150","sub-region-code":"039"},{"name":"Marshall Islands","alpha-2":"MH","alpha-3":"MHL","country-code":"584","iso_3166-2":"ISO 3166-2:MH","region-code":"009","sub-region-code":"057"},{"name":"Martinique","alpha-2":"MQ","alpha-3":"MTQ","country-code":"474","iso_3166-2":"ISO 3166-2:MQ","region-code":"019","sub-region-code":"029"},{"name":"Mauritania","alpha-2":"MR","alpha-3":"MRT","country-code":"478","iso_3166-2":"ISO 3166-2:MR","region-code":"002","sub-region-code":"011"},{"name":"Mauritius","alpha-2":"MU","alpha-3":"MUS","country-code":"480","iso_3166-2":"ISO 3166-2:MU","region-code":"002","sub-region-code":"014"},{"name":"Mayotte","alpha-2":"YT","alpha-3":"MYT","country-code":"175","iso_3166-2":"ISO 3166-2:YT","region-code":"002","sub-region-code":"014"},{"name":"Mexico","alpha-2":"MX","alpha-3":"MEX","country-code":"484","iso_3166-2":"ISO 3166-2:MX","region-code":"019","sub-region-code":"013"},{"name":"Micronesia, Federated States of","alpha-2":"FM","alpha-3":"FSM","country-code":"583","iso_3166-2":"ISO 3166-2:FM","region-code":"009","sub-region-code":"057"},{"name":"Moldova, Republic of","alpha-2":"MD","alpha-3":"MDA","country-code":"498","iso_3166-2":"ISO 3166-2:MD","region-code":"150","sub-region-code":"151"},{"name":"Monaco","alpha-2":"MC","alpha-3":"MCO","country-code":"492","iso_3166-2":"ISO 3166-2:MC","region-code":"150","sub-region-code":"155"},{"name":"Mongolia","alpha-2":"MN","alpha-3":"MNG","country-code":"496","iso_3166-2":"ISO 3166-2:MN","region-code":"142","sub-region-code":"030"},{"name":"Montenegro","alpha-2":"ME","alpha-3":"MNE","country-code":"499","iso_3166-2":"ISO 3166-2:ME","region-code":"150","sub-region-code":"039"},{"name":"Montserrat","alpha-2":"MS","alpha-3":"MSR","country-code":"500","iso_3166-2":"ISO 3166-2:MS","region-code":"019","sub-region-code":"029"},{"name":"Morocco","alpha-2":"MA","alpha-3":"MAR","country-code":"504","iso_3166-2":"ISO 3166-2:MA","region-code":"002","sub-region-code":"015"},{"name":"Mozambique","alpha-2":"MZ","alpha-3":"MOZ","country-code":"508","iso_3166-2":"ISO 3166-2:MZ","region-code":"002","sub-region-code":"014"},{"name":"Myanmar","alpha-2":"MM","alpha-3":"MMR","country-code":"104","iso_3166-2":"ISO 3166-2:MM","region-code":"142","sub-region-code":"035"},{"name":"Namibia","alpha-2":"NA","alpha-3":"NAM","country-code":"516","iso_3166-2":"ISO 3166-2:NA","region-code":"002","sub-region-code":"018"},{"name":"Nauru","alpha-2":"NR","alpha-3":"NRU","country-code":"520","iso_3166-2":"ISO 3166-2:NR","region-code":"009","sub-region-code":"057"},{"name":"Nepal","alpha-2":"NP","alpha-3":"NPL","country-code":"524","iso_3166-2":"ISO 3166-2:NP","region-code":"142","sub-region-code":"034"},{"name":"Netherlands","alpha-2":"NL","alpha-3":"NLD","country-code":"528","iso_3166-2":"ISO 3166-2:NL","region-code":"150","sub-region-code":"155"},{"name":"New Caledonia","alpha-2":"NC","alpha-3":"NCL","country-code":"540","iso_3166-2":"ISO 3166-2:NC","region-code":"009","sub-region-code":"054"},{"name":"New Zealand","alpha-2":"NZ","alpha-3":"NZL","country-code":"554","iso_3166-2":"ISO 3166-2:NZ","region-code":"009","sub-region-code":"053"},{"name":"Nicaragua","alpha-2":"NI","alpha-3":"NIC","country-code":"558","iso_3166-2":"ISO 3166-2:NI","region-code":"019","sub-region-code":"013"},{"name":"Niger","alpha-2":"NE","alpha-3":"NER","country-code":"562","iso_3166-2":"ISO 3166-2:NE","region-code":"002","sub-region-code":"011"},{"name":"Nigeria","alpha-2":"NG","alpha-3":"NGA","country-code":"566","iso_3166-2":"ISO 3166-2:NG","region-code":"002","sub-region-code":"011"},{"name":"Niue","alpha-2":"NU","alpha-3":"NIU","country-code":"570","iso_3166-2":"ISO 3166-2:NU","region-code":"009","sub-region-code":"061"},{"name":"Norfolk Island","alpha-2":"NF","alpha-3":"NFK","country-code":"574","iso_3166-2":"ISO 3166-2:NF","region-code":"009","sub-region-code":"053"},{"name":"Northern Mariana Islands","alpha-2":"MP","alpha-3":"MNP","country-code":"580","iso_3166-2":"ISO 3166-2:MP","region-code":"009","sub-region-code":"057"},{"name":"Norway","alpha-2":"NO","alpha-3":"NOR","country-code":"578","iso_3166-2":"ISO 3166-2:NO","region-code":"150","sub-region-code":"154"},{"name":"Oman","alpha-2":"OM","alpha-3":"OMN","country-code":"512","iso_3166-2":"ISO 3166-2:OM","region-code":"142","sub-region-code":"145"},{"name":"Pakistan","alpha-2":"PK","alpha-3":"PAK","country-code":"586","iso_3166-2":"ISO 3166-2:PK","region-code":"142","sub-region-code":"034"},{"name":"Palau","alpha-2":"PW","alpha-3":"PLW","country-code":"585","iso_3166-2":"ISO 3166-2:PW","region-code":"009","sub-region-code":"057"},{"name":"Palestinian Territory, Occupied","alpha-2":"PS","alpha-3":"PSE","country-code":"275","iso_3166-2":"ISO 3166-2:PS","region-code":"142","sub-region-code":"145"},{"name":"Panama","alpha-2":"PA","alpha-3":"PAN","country-code":"591","iso_3166-2":"ISO 3166-2:PA","region-code":"019","sub-region-code":"013"},{"name":"Papua New Guinea","alpha-2":"PG","alpha-3":"PNG","country-code":"598","iso_3166-2":"ISO 3166-2:PG","region-code":"009","sub-region-code":"054"},{"name":"Paraguay","alpha-2":"PY","alpha-3":"PRY","country-code":"600","iso_3166-2":"ISO 3166-2:PY","region-code":"019","sub-region-code":"005"},{"name":"Peru","alpha-2":"PE","alpha-3":"PER","country-code":"604","iso_3166-2":"ISO 3166-2:PE","region-code":"019","sub-region-code":"005"},{"name":"Philippines","alpha-2":"PH","alpha-3":"PHL","country-code":"608","iso_3166-2":"ISO 3166-2:PH","region-code":"142","sub-region-code":"035"},{"name":"Pitcairn","alpha-2":"PN","alpha-3":"PCN","country-code":"612","iso_3166-2":"ISO 3166-2:PN","region-code":"009","sub-region-code":"061"},{"name":"Poland","alpha-2":"PL","alpha-3":"POL","country-code":"616","iso_3166-2":"ISO 3166-2:PL","region-code":"150","sub-region-code":"151"},{"name":"Portugal","alpha-2":"PT","alpha-3":"PRT","country-code":"620","iso_3166-2":"ISO 3166-2:PT","region-code":"150","sub-region-code":"039"},{"name":"Puerto Rico","alpha-2":"PR","alpha-3":"PRI","country-code":"630","iso_3166-2":"ISO 3166-2:PR","region-code":"019","sub-region-code":"029"},{"name":"Qatar","alpha-2":"QA","alpha-3":"QAT","country-code":"634","iso_3166-2":"ISO 3166-2:QA","region-code":"142","sub-region-code":"145"},{"name":"Réunion","alpha-2":"RE","alpha-3":"REU","country-code":"638","iso_3166-2":"ISO 3166-2:RE","region-code":"002","sub-region-code":"014"},{"name":"Romania","alpha-2":"RO","alpha-3":"ROU","country-code":"642","iso_3166-2":"ISO 3166-2:RO","region-code":"150","sub-region-code":"151"},{"name":"Russian Federation","alpha-2":"RU","alpha-3":"RUS","country-code":"643","iso_3166-2":"ISO 3166-2:RU","region-code":"150","sub-region-code":"151"},{"name":"Rwanda","alpha-2":"RW","alpha-3":"RWA","country-code":"646","iso_3166-2":"ISO 3166-2:RW","region-code":"002","sub-region-code":"014"},{"name":"Saint Barthélemy","alpha-2":"BL","alpha-3":"BLM","country-code":"652","iso_3166-2":"ISO 3166-2:BL","region-code":"019","sub-region-code":"029"},{"name":"Saint Helena, Ascension and Tristan da Cunha","alpha-2":"SH","alpha-3":"SHN","country-code":"654","iso_3166-2":"ISO 3166-2:SH","region-code":"002","sub-region-code":"011"},{"name":"Saint Kitts and Nevis","alpha-2":"KN","alpha-3":"KNA","country-code":"659","iso_3166-2":"ISO 3166-2:KN","region-code":"019","sub-region-code":"029"},{"name":"Saint Lucia","alpha-2":"LC","alpha-3":"LCA","country-code":"662","iso_3166-2":"ISO 3166-2:LC","region-code":"019","sub-region-code":"029"},{"name":"Saint Martin (French part)","alpha-2":"MF","alpha-3":"MAF","country-code":"663","iso_3166-2":"ISO 3166-2:MF","region-code":"019","sub-region-code":"029"},{"name":"Saint Pierre and Miquelon","alpha-2":"PM","alpha-3":"SPM","country-code":"666","iso_3166-2":"ISO 3166-2:PM","region-code":"019","sub-region-code":"021"},{"name":"Saint Vincent and the Grenadines","alpha-2":"VC","alpha-3":"VCT","country-code":"670","iso_3166-2":"ISO 3166-2:VC","region-code":"019","sub-region-code":"029"},{"name":"Samoa","alpha-2":"WS","alpha-3":"WSM","country-code":"882","iso_3166-2":"ISO 3166-2:WS","region-code":"009","sub-region-code":"061"},{"name":"San Marino","alpha-2":"SM","alpha-3":"SMR","country-code":"674","iso_3166-2":"ISO 3166-2:SM","region-code":"150","sub-region-code":"039"},{"name":"Sao Tome and Principe","alpha-2":"ST","alpha-3":"STP","country-code":"678","iso_3166-2":"ISO 3166-2:ST","region-code":"002","sub-region-code":"017"},{"name":"Saudi Arabia","alpha-2":"SA","alpha-3":"SAU","country-code":"682","iso_3166-2":"ISO 3166-2:SA","region-code":"142","sub-region-code":"145"},{"name":"Senegal","alpha-2":"SN","alpha-3":"SEN","country-code":"686","iso_3166-2":"ISO 3166-2:SN","region-code":"002","sub-region-code":"011"},{"name":"Serbia","alpha-2":"RS","alpha-3":"SRB","country-code":"688","iso_3166-2":"ISO 3166-2:RS","region-code":"150","sub-region-code":"039"},{"name":"Seychelles","alpha-2":"SC","alpha-3":"SYC","country-code":"690","iso_3166-2":"ISO 3166-2:SC","region-code":"002","sub-region-code":"014"},{"name":"Sierra Leone","alpha-2":"SL","alpha-3":"SLE","country-code":"694","iso_3166-2":"ISO 3166-2:SL","region-code":"002","sub-region-code":"011"},{"name":"Singapore","alpha-2":"SG","alpha-3":"SGP","country-code":"702","iso_3166-2":"ISO 3166-2:SG","region-code":"142","sub-region-code":"035"},{"name":"Sint Maarten (Dutch part)","alpha-2":"SX","alpha-3":"SXM","country-code":"534","iso_3166-2":"ISO 3166-2:SX","region-code":"019","sub-region-code":"029"},{"name":"Slovakia","alpha-2":"SK","alpha-3":"SVK","country-code":"703","iso_3166-2":"ISO 3166-2:SK","region-code":"150","sub-region-code":"151"},{"name":"Slovenia","alpha-2":"SI","alpha-3":"SVN","country-code":"705","iso_3166-2":"ISO 3166-2:SI","region-code":"150","sub-region-code":"039"},{"name":"Solomon Islands","alpha-2":"SB","alpha-3":"SLB","country-code":"090","iso_3166-2":"ISO 3166-2:SB","region-code":"009","sub-region-code":"054"},{"name":"Somalia","alpha-2":"SO","alpha-3":"SOM","country-code":"706","iso_3166-2":"ISO 3166-2:SO","region-code":"002","sub-region-code":"014"},{"name":"South Africa","alpha-2":"ZA","alpha-3":"ZAF","country-code":"710","iso_3166-2":"ISO 3166-2:ZA","region-code":"002","sub-region-code":"018"},{"name":"South Georgia and the South Sandwich Islands","alpha-2":"GS","alpha-3":"SGS","country-code":"239","iso_3166-2":"ISO 3166-2:GS"},{"name":"South Sudan","alpha-2":"SS","alpha-3":"SSD","country-code":"728","iso_3166-2":"ISO 3166-2:SS","region-code":"002","sub-region-code":"015"},{"name":"Spain","alpha-2":"ES","alpha-3":"ESP","country-code":"724","iso_3166-2":"ISO 3166-2:ES","region-code":"150","sub-region-code":"039"},{"name":"Sri Lanka","alpha-2":"LK","alpha-3":"LKA","country-code":"144","iso_3166-2":"ISO 3166-2:LK","region-code":"142","sub-region-code":"034"},{"name":"Sudan","alpha-2":"SD","alpha-3":"SDN","country-code":"729","iso_3166-2":"ISO 3166-2:SD","region-code":"002","sub-region-code":"015"},{"name":"Suriname","alpha-2":"SR","alpha-3":"SUR","country-code":"740","iso_3166-2":"ISO 3166-2:SR","region-code":"019","sub-region-code":"005"},{"name":"Svalbard and Jan Mayen","alpha-2":"SJ","alpha-3":"SJM","country-code":"744","iso_3166-2":"ISO 3166-2:SJ","region-code":"150","sub-region-code":"154"},{"name":"Swaziland","alpha-2":"SZ","alpha-3":"SWZ","country-code":"748","iso_3166-2":"ISO 3166-2:SZ","region-code":"002","sub-region-code":"018"},{"name":"Sweden","alpha-2":"SE","alpha-3":"SWE","country-code":"752","iso_3166-2":"ISO 3166-2:SE","region-code":"150","sub-region-code":"154"},{"name":"Switzerland","alpha-2":"CH","alpha-3":"CHE","country-code":"756","iso_3166-2":"ISO 3166-2:CH","region-code":"150","sub-region-code":"155"},{"name":"Syrian Arab Republic","alpha-2":"SY","alpha-3":"SYR","country-code":"760","iso_3166-2":"ISO 3166-2:SY","region-code":"142","sub-region-code":"145"},{"name":"Taiwan, Province of China","alpha-2":"TW","alpha-3":"TWN","country-code":"158","iso_3166-2":"ISO 3166-2:TW","region-code":"142","sub-region-code":"030"},{"name":"Tajikistan","alpha-2":"TJ","alpha-3":"TJK","country-code":"762","iso_3166-2":"ISO 3166-2:TJ","region-code":"142","sub-region-code":"143"},{"name":"Tanzania, United Republic of","alpha-2":"TZ","alpha-3":"TZA","country-code":"834","iso_3166-2":"ISO 3166-2:TZ","region-code":"002","sub-region-code":"014"},{"name":"Thailand","alpha-2":"TH","alpha-3":"THA","country-code":"764","iso_3166-2":"ISO 3166-2:TH","region-code":"142","sub-region-code":"035"},{"name":"Timor-Leste","alpha-2":"TL","alpha-3":"TLS","country-code":"626","iso_3166-2":"ISO 3166-2:TL","region-code":"142","sub-region-code":"035"},{"name":"Togo","alpha-2":"TG","alpha-3":"TGO","country-code":"768","iso_3166-2":"ISO 3166-2:TG","region-code":"002","sub-region-code":"011"},{"name":"Tokelau","alpha-2":"TK","alpha-3":"TKL","country-code":"772","iso_3166-2":"ISO 3166-2:TK","region-code":"009","sub-region-code":"061"},{"name":"Tonga","alpha-2":"TO","alpha-3":"TON","country-code":"776","iso_3166-2":"ISO 3166-2:TO","region-code":"009","sub-region-code":"061"},{"name":"Trinidad and Tobago","alpha-2":"TT","alpha-3":"TTO","country-code":"780","iso_3166-2":"ISO 3166-2:TT","region-code":"019","sub-region-code":"029"},{"name":"Tunisia","alpha-2":"TN","alpha-3":"TUN","country-code":"788","iso_3166-2":"ISO 3166-2:TN","region-code":"002","sub-region-code":"015"},{"name":"Turkey","alpha-2":"TR","alpha-3":"TUR","country-code":"792","iso_3166-2":"ISO 3166-2:TR","region-code":"142","sub-region-code":"145"},{"name":"Turkmenistan","alpha-2":"TM","alpha-3":"TKM","country-code":"795","iso_3166-2":"ISO 3166-2:TM","region-code":"142","sub-region-code":"143"},{"name":"Turks and Caicos Islands","alpha-2":"TC","alpha-3":"TCA","country-code":"796","iso_3166-2":"ISO 3166-2:TC","region-code":"019","sub-region-code":"029"},{"name":"Tuvalu","alpha-2":"TV","alpha-3":"TUV","country-code":"798","iso_3166-2":"ISO 3166-2:TV","region-code":"009","sub-region-code":"061"},{"name":"Uganda","alpha-2":"UG","alpha-3":"UGA","country-code":"800","iso_3166-2":"ISO 3166-2:UG","region-code":"002","sub-region-code":"014"},{"name":"Ukraine","alpha-2":"UA","alpha-3":"UKR","country-code":"804","iso_3166-2":"ISO 3166-2:UA","region-code":"150","sub-region-code":"151"},{"name":"United Arab Emirates","alpha-2":"AE","alpha-3":"ARE","country-code":"784","iso_3166-2":"ISO 3166-2:AE","region-code":"142","sub-region-code":"145"},{"name":"United Kingdom","alpha-2":"GB","alpha-3":"GBR","country-code":"826","iso_3166-2":"ISO 3166-2:GB","region-code":"150","sub-region-code":"154"},{"name":"United States","alpha-2":"US","alpha-3":"USA","country-code":"840","iso_3166-2":"ISO 3166-2:US","region-code":"019","sub-region-code":"021"},{"name":"United States Minor Outlying Islands","alpha-2":"UM","alpha-3":"UMI","country-code":"581","iso_3166-2":"ISO 3166-2:UM"},{"name":"Uruguay","alpha-2":"UY","alpha-3":"URY","country-code":"858","iso_3166-2":"ISO 3166-2:UY","region-code":"019","sub-region-code":"005"},{"name":"Uzbekistan","alpha-2":"UZ","alpha-3":"UZB","country-code":"860","iso_3166-2":"ISO 3166-2:UZ","region-code":"142","sub-region-code":"143"},{"name":"Vanuatu","alpha-2":"VU","alpha-3":"VUT","country-code":"548","iso_3166-2":"ISO 3166-2:VU","region-code":"009","sub-region-code":"054"},{"name":"Venezuela, Bolivarian Republic of","alpha-2":"VE","alpha-3":"VEN","country-code":"862","iso_3166-2":"ISO 3166-2:VE","region-code":"019","sub-region-code":"005"},{"name":"Viet Nam","alpha-2":"VN","alpha-3":"VNM","country-code":"704","iso_3166-2":"ISO 3166-2:VN","region-code":"142","sub-region-code":"035"},{"name":"Virgin Islands, British","alpha-2":"VG","alpha-3":"VGB","country-code":"092","iso_3166-2":"ISO 3166-2:VG","region-code":"019","sub-region-code":"029"},{"name":"Virgin Islands, U.S.","alpha-2":"VI","alpha-3":"VIR","country-code":"850","iso_3166-2":"ISO 3166-2:VI","region-code":"019","sub-region-code":"029"},{"name":"Wallis and Futuna","alpha-2":"WF","alpha-3":"WLF","country-code":"876","iso_3166-2":"ISO 3166-2:WF","region-code":"009","sub-region-code":"061"},{"name":"Western Sahara","alpha-2":"EH","alpha-3":"ESH","country-code":"732","iso_3166-2":"ISO 3166-2:EH","region-code":"002","sub-region-code":"015"},{"name":"Yemen","alpha-2":"YE","alpha-3":"YEM","country-code":"887","iso_3166-2":"ISO 3166-2:YE","region-code":"142","sub-region-code":"145"},{"name":"Zambia","alpha-2":"ZM","alpha-3":"ZMB","country-code":"894","iso_3166-2":"ISO 3166-2:ZM","region-code":"002","sub-region-code":"014"},{"name":"Zimbabwe","alpha-2":"ZW","alpha-3":"ZWE","country-code":"716","iso_3166-2":"ISO 3166-2:ZW","region-code":"002","sub-region-code":"014"}]
 
 
 /***/ },
-/* 17 */
+/* 18 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var v1="<h1>FormStamp</h1> <h2>Pure angularjs widgets for declarative forms</h2>";
@@ -30140,7 +30195,7 @@
 	module.exports=v1;
 
 /***/ },
-/* 18 */
+/* 19 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var v1="<div class=\"markdown\" ng-bind-html=\"readme\"> </div>";
@@ -30148,7 +30203,7 @@
 	module.exports=v1;
 
 /***/ },
-/* 19 */
+/* 20 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var v1="<pre markdown>\n  ##  Directive _fsFormFor_\n\n  ---\n\n  This directive allows to construct complex\n  horizontal forms with easy DSL-like markup.\n\n  Each form row is described with fsInput directive. It has following attributes:\n\n  * as - specifies type of input\n  * label - specifies label text\n  * name - specifies model's attribute to which input will be bound\n  * Other attributes (like items) are directly passed into input directive.\n\n\n  See [source code](https://github.com/formstamp/formstamp/blob/master/src/coffee/formFor.coffee)\n\n</pre> <pre sample label=\"label\" src=\"src\">\n<fs-form-for model=\"samurai\">\n<fieldset class=\"form-horizontal\">\n  <legend>Samurai Personal Info</legend>\n  <fs-input as=\"fs-datetime\" name=\"birthdate\" required=\"\" label=\"Date of Birth\"></fs-input>\n  <fs-input as=\"fs-date\" name=\"date\" required label=\"Date\" custom-validation-future></fs-input>\n  <fs-input as=\"fs-time\" name=\"time\" required label=\"Time\"></fs-input>\n  <fs-input as=\"textarea\" name=\"details\" required label=\"Details\"></fs-input>\n  <fs-row label=\"Living district\">\n  <div class=\"row\">\n    <div class=\"col-xs-3\"><div fs-select=\"\" ng-model=\"samurai.district\" items=\"districts\">{{ item }}</div></div>\n    <div class=\"col-xs-3\"><div fs-date=\"\" ng-model=\"samurai.districtMoveDate\" placeholder=\"Settled date\"></div></div>\n  </div>\n  </fs-row>\n</fieldset>\n\n<fieldset class=\"form-horizontal\">\n  <legend>Samurai CV</legend>\n  <fs-input as=\"fs-radio\" name=\"learningStage\" label=\"Current Learning Stage\" items=\"learningStages\"></fs-input>\n  <fs-input as=\"fs-multiselect\" name=\"weapons\" label=\"Owned Weapons\" items=\"weapons\">{{ item.label }}</fs-input>\n  <fs-input as=\"fs-multiselect\" name=\"weaponStyles\" freetext=\"123\" label=\"Weapon Styles\" items=\"weaponStyles\">{{ item }}</fs-input>\n  <fs-input as=\"fs-select\" name=\"meal\" label=\"Preferable Food\" items=\"meals\"><b>{{ item.id.toUpperCase() }}</b> {{ item.label }}</fs-input>\n  <fs-input as=\"fs-checkbox\" name=\"otherFacts\" label=\"Other Facts\" items=\"otherFacts\">{{ item }}</fs-input>\n</fieldset>\n\n<fieldset class=\"form-horizontal\">\n  <legend>Angular native</legend>\n  <fs-input as=\"text\" required name=\"ngName\"></fs-input>\n  <fs-input as=\"email\" required name=\"ngEmail\"></fs-input>\n  <fs-input as=\"number\" name=\"ngNumber\"></fs-input>\n  <fs-input as=\"url\" name=\"ngUrl\"></fs-input>\n  <fs-input as=\"time\" name=\"ngTime\"></fs-input>\n  <fs-input as=\"date\" name=\"ngDate\"></fs-input>\n  <fs-input as=\"datetime-local\" name=\"ngDatelocal\"></fs-input>\n  <fs-input as=\"week\" name=\"ngWeek\"></fs-input>\n  <fs-input as=\"month\" name=\"ngMonth\"></fs-input>\n</fieldset>\n</fs-form-for>\n<h4>Angular Scope</h4>\n<pre>samurai = {{samurai | json}}</pre>\n</pre>";
@@ -30156,7 +30211,7 @@
 	module.exports=v1;
 
 /***/ },
-/* 20 */
+/* 21 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var v1="<pre markdown>\n## Directive `fs-select`\n\n### Warning!\n\n  You should never use this directive on\n  `input` tag.  Use `div` instead.\n\n\nThis directive creates a 'select' widget.\nThis widget provides default select-like behavior.\nDepending on freetext attribute,\nit allows to select item from predefined list or enter custom value.\nIn both cases, text input field is used as a search box.\nItems and selected value can be objects, strings or integers.\n\nSupports several Angular directives:\n`ngModel`, `ngDisabled`, `ngRequired`.\nYou can provide template for single item in list to display any information you need,\nnot only label text.\nIn ngModel it holds full object, not only value.\n\nSupported attributes:\n\n* items - property of scope containing list of available values (of strings for autocomplete, if freetext is enabled)\n* ng-model - see AngularJS documentation for [ngModel](http://docs.angularjs.org/api/ng/directive/ngModel) directive\n* ng-disabled - disable/enable input with scope property\n* class - additional CSS classes\n</pre> <pre sample label=\"Two fsSelects binded to one model\">\n  <fs-form-for role=\"form\">\n    <fs-row label=\"Select weapon\">\n      <div class=\"col-xs-3\">\n        <div fs-select items=\"items\" ng-disabled=\"disabled\" ng-model=\"svalue\">\n          <span ng-show=\"item\"> <b>{{item.id}}</b> {{item.label}} </span>\n          <span ng-hide=\"item\"> Any weapon </span>\n        </div>\n      </div>\n      <div class=\"col-xs-3\">\n        <div fs-select items=\"items\" ng-disabled=\"disabled\" ng-model=\"svalue\">\n          <span ng-show=\"item\"> {{item.label}} </span>\n          <span ng-hide=\"item\"> Any weapon </span>\n        </div>\n      </div>\n      <div class=\"col-xs-1\">\n        <button class=\"btn btn-default\" ng-click=\"disabled=!disabled\">\n          {{disabled ? 'Enable' : 'Disable'}}\n        </button>\n      </div>\n    </fs-row>\n\n    <fs-row label=\"Result\">\n      <pre>Selected value: {{ svalue }}</pre>\n    </fs-row>\n\n    <hr/>\n\n    <fs-row label=\"Select country\">\n      <div class=\"col-xs-4\">\n        <div fs-select items=\"countries\" ng-model=\"country\">\n          <span ng-show=\"item\"><span class=\"flag flag-{{ item['alpha-2'].toLowerCase() }}\"></span>&nbsp;{{item.name}}</span>\n          <span ng-hide=\"item\"> No country </span>\n        </div>\n      </div>\n    </fs-row>\n\n    <fs-row label=\"Result\">\n      <pre>Selected country is: {{ country }}</pre>\n    </fs-row>\n\n    <hr/>\n\n    <fs-row label=\"Combo\">\n      <div class=\"col-xs-4\">\n        <div fs-select freetext=\"true\" items=\"laughs\" ng-disabled=\"disabled\" ng-model=\"laugh\">\n          {{item}}\n        </div>\n      </div>\n      <div class=\"col-xs-4\">\n        <button class=\"btn btn-default\" ng-click=\"disabled = !disabled\">{{disabled ? 'Enable' : 'Disable'}}</button>\n      </div>\n    </fs-row>\n\n    <fs-row label=\"Result\">\n      <pre>Your laugh is like: {{ laugh || '...' }}</pre>\n    </fs-row>\n  \n</fs-form-for></pre>";
@@ -30164,7 +30219,7 @@
 	module.exports=v1;
 
 /***/ },
-/* 21 */
+/* 22 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var v1="<pre markdown>\n## Directive `fs-multiselect`\n\n### Warning!\n\n  You should never use this directive on\n  `input` tag.  Use `div` instead.\n\nThis directive creates a 'multi-select' widget, i.e.\n'select' widget with multiple choices.\nDepending on freetext attribute,\nit allows to select items from predefined list or enter custom values.\nIn both cases, text input inside widget is used as a search box.\nItems and selected values can be objects, strings or integers.\n\nSupports several Angular directives:\n`ngModel`, `ngDisabled`, `ngRequired`.\nYou can provide template for single item in list to display any information you need,\nnot only label text. In ngModel it holds full object, not only value.\n\nSupported attributes:\n\n* items - property of scope containing list of available values (of strings for autocomplete, if freetext is enabled)\n* ng-model - see AngularJS documentation for ngModel directive\n* ng-disabled - disable/enable input with scope property\n* class - additional CSS classes\n\n</pre> <pre sample label=\"MultiSelect\">\n  <fs-form-for>\n<fieldset>\n<legend>fsMultiSelect without freetext</legend>\n    <div class=\"form-group\">\n      <label class=\"col-xs-2 control-label\">Select weapon</label>\n\n      <div fs-multiselect items=\"countries\" freetext class=\"col-xs-8\" ng-disabled=\"disabled\" ng-model=\"country\">\n          <span ng-show=\"item\"><span class=\"flag flag-{{ item['alpha-2'].toLowerCase() }}\"></span>&nbsp;{{item.name}}</span>\n          <span ng-hide=\"item\"> No country </span>\n      </div>\n\n      <div class=\"col-xs-2\">\n        <button class=\"btn btn-default\" ng-click=\"disabled=!disabled\">\n          {{disabled ? 'Enable' : 'Disable'}}\n        </button>\n      </div>\n    </div>\n    <fs-row label=\"Result\"><pre>Selection: {{country | json}}</pre></fs-row>\n</fieldset>\n\n<br/>\n<br/>\n\n<fieldset>\n<legend>fsMultiselect with freetext</legend>\n<div class=\"form-group row\">\n  <label class=\"col-xs-2 control-label\">\n    Where have you been?\n  </label>\n  <div fs-multiselect items=\"countryNames\" freetext class=\"col-xs-8\" ng-disabled=\"disabled\" ng-model=\"countryName\"></div>\n  <div class=\"col-xs-2\">\n    <button class=\"btn btn-default\" ng-click=\"disabled=!disabled\">\n      {{disabled ? 'Enable' : 'Disable'}}\n    </button>\n  </div>\n</div>\n\n<fs-row label=\"Result\"><pre>Selection: {{countryName | json}}</pre></fs-row>\n</fieldset>\n</fs-form-for>\n</pre>";
@@ -30172,7 +30227,7 @@
 	module.exports=v1;
 
 /***/ },
-/* 22 */
+/* 23 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var v1="<pre markdown>\n## Directive `fs-radio`\n\nThis directive creates a set of radio buttons.\nList of available choices is passed via items attribute and can be\nan Array of Objects, Strings, Numbers, etc.\n`fsRadio` supports custom templating for item's label.\n\nSupported attributes:\n\n* items - property of scope containing list of available values (of strings for autocomplete, if freetext is enabled)\n* ng-model - see AngularJS documentation for ngModel directive\n* ng-disabled - disable/enable input with scope property\n* class - additional CSS classes\n</pre> <pre sample>\n  <fs-form-for>\n    <div class=\"form-group\">\n      <label class=\"col-xs-2 control-label\">Choose your katawari</label>\n      <div class=\"col-xs-3\">\n        <div fs-radio items=\"items\" ng-disabled=\"disabled\" ng-model=\"radiovalue\">\n          <b>{{item.id}}</b> {{item.label}}\n        </div>\n      </div>\n      <div class=\"col-xs-2\">\n        <button class=\"btn btn-default\" ng-click=\"disabled=!disabled\">\n          {{disabled ? 'Enable' : 'Disable'}}\n        </button>\n      </div>\n    </div>\n    <div class=\"form-group\">\n      <label class=\"col-xs-2 control-label\">Choose your katawari</label>\n      <div class=\"col-xs-3\">\n        <div fs-radio items=\"items\" ng-model=\"radiovalue\">\n          {{item.label}}\n        </div>\n      </div>\n    </div>\n<fs-row label=\"Result\"><pre>Selected value: {{ radiovalue | json }}</pre></fs-row>\n\n<hr/>\n\n<div class=\"form-group\">\n  <label class=\"col-xs-2 control-label\">Your meal</label>\n  <div class=\"col-xs-3\">\n    <div fs-radio items=\"sushi\" ng-disabled=\"disabled\" ng-model=\"value\">\n      <img src=\"{{item.src}}\" width=\"24\" height=\"24\" alt=\"{{item.label}}\"/> {{item.label}}\n    </div>\n  </div>\n  <div class=\"col-xs-2\">\n    <button class=\"btn btn-default\" ng-click=\"disabled=!disabled\">\n      {{disabled ? 'Enable' : 'Disable'}}\n    </button>\n  </div>\n</div>\n<fs-row label=\"Result\"><pre>Selected dish: {{ value | json }}</pre></fs-row>\n  </fs-form-for>\n</pre>";
@@ -30180,7 +30235,7 @@
 	module.exports=v1;
 
 /***/ },
-/* 23 */
+/* 24 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var v1="<pre markdown>\n## Directive `fs-check`\n\nThis directive creates a set of checkboxes.\nList of available choices is passed via items attribute and can be an Array of Objects, Strings, Numbers, etc.\nUser can select multiple items. fsCheckbox supports custom templating for item's label.\n\nSupported attributes:\n\n* items - property of scope containing list of available values (of strings for autocomplete, if freetext is enabled)\n* ng-model - see AngularJS documentation for ngModel directive\n* ng-disabled - disable/enable input with scope property\n* class - additional CSS classes\n</pre> <pre sample>\n<fs-form-for>\n    <div class=\"form-group\">\n      <label class=\"col-xs-2 control-label\">Choose your katawari</label>\n      <div class=\"col-xs-6\">\n        <div fs-checkbox items=\"items\" ng-disabled=\"disabled\" ng-model=\"value\">\n            <b>{{item.id}}</b> {{item.label}}\n        </div>\n      </div>\n      <div class=\"col-xs-2\">\n        <button class=\"btn btn-default\" ng-click=\"disabled=!disabled\">\n          {{disabled ? 'Enable' : 'Disable'}}\n        </button>\n      </div>\n    </div>\n    <div class=\"form-group\">\n      <label class=\"col-xs-2 control-label\">Choose your katawari</label>\n      <div class=\"col-xs-6\">\n        <div fs-checkbox items=\"items\" ng-model=\"value\">\n          {{item.label}}\n        </div>\n      </div>\n    </div>\n<fs-row label=\"Result\">\n    <pre>Selected value: {{ value | json }}</pre>\n</fs-row>\n</fs-form-for>\n</pre>";
@@ -30188,7 +30243,7 @@
 	module.exports=v1;
 
 /***/ },
-/* 24 */
+/* 25 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var v1="<pre markdown>\n## Directive `fs-datetime`\n\n  This directive creates a time-input widget. This directive expects\n  that scope property specified in <var>ngModel</var> will be a Date,\n  and will modify only hours/minutes/seconds components of this Date,\n  year/month/day will remain unchanged. Supported attributes:\n\n</pre> <pre sample>\n<fs-form-for>\n<div class=\"form-group row\">\n  <label class=\"col-xs-2 control-label\">Choose convenient seppuku date</label>\n  <div class=\"col-xs-2\"><div fs-date ng-model=\"selectedDate\" ng-disabled=\"disabled\"></div></div>\n  <div class=\"col-xs-2 col-xs-offset-3\">\n    <button class=\"btn btn-default\" ng-click=\"disabled=!disabled\">\n      {{disabled ? 'Enable' : 'Disable'}}\n    </button>\n  </div>\n</div>\n<fs-row label=\"Calendar\"><fs-calendar ng-model=\"selectedDate\"/></fs-row>\n\n<hr/>\n\n\n<div class=\"form-group row\">\n<label class=\"col-xs-2 control-label\">Select appointment time</label>\n  <div class=\"col-xs-2\"><div fs-time ng-disabled=\"disabled\" ng-model=\"svalue\"></div></div>\n  <div class=\"col-xs-1\"><button class=\"btn btn-default\" ng-click=\"setTime('21:52')\"> 21:52 </button></div>\n  <div class=\"col-xs-1\"><button class=\"btn btn-default\" ng-click=\"setTime('19:22')\"> 19:22 </button> </div>\n  <div class=\"col-xs-2 col-xs-offset-1\">\n    <button class=\"btn btn-default\" ng-click=\"disabled=!disabled\">\n      {{disabled ? 'Enable' : 'Disable'}}\n    </button>\n  </div>\n</div>\n\n<fs-row label=\"Result\">\n<pre>Time is: {{ svalue | json }}</pre>\n</fs-row>\n\n<hr/>\n\n<div class=\"form-group row\">\n  <label class=\"col-xs-2 control-label\">DateTime</label>\n  <div class=\"col-xs-4\"><div fs-datetime ng-model=\"selectedDateTime\" ng-disabled=\"disabled\"></div></div>\n  <div class=\"col-xs-2 col-xs-offset-2\">\n    <button class=\"btn btn-default\" ng-click=\"disabled=!disabled\">\n      {{disabled ? 'Enable' : 'Disable'}}\n    </button>\n  </div>\n</div>\n\n<fs-row label=\"Result\">\n<pre>\nEntered datetime: {{ selectedDateTime | date:'medium'}}\n</pre></fs-row>\n\n</fs-form-for>\n</pre>";
@@ -30196,7 +30251,7 @@
 	module.exports=v1;
 
 /***/ },
-/* 25 */
+/* 26 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var v1="<pre markdown>\n## Directive `fs-list`\n\nThis directive renders a list of items, with one of them marked as\nselected. It provides interface for moving selection up or down.\nThis directive is used in <code class=\"ng-binding\">fsSelect</code>\nand <code class=\"ng-binding\">fsMultiselect</code> to create dropdowns.\n\nThis directive doesn't use <code class=\"ng-binding\">ngModel</code>\nto set selected value in scope. Instead, you should create\nspecial <code>listInterface</code> property in your scope and\nimplement <var>onSelect</var> callback function:\n\n```\n$scope.listInterface = {\n  onSelect: function(selectedItem) {\n    $scope.selectedItem = selectedItem;\n  }\n};\n```\n\nYou can call <code>scope.listInteface.move()</code> function from\nyour controller to move list's selection up or down.\n\nSupported attributes:\n* `items` - list of items to display\n* `class` - additional CSS classes for list\n</pre> <style>.dropdown.no-popup .dropdown-menu {\n  box-shadow: none;\n}</style> <pre sample>\n    <div class=\"row\">\n      <div class=\"col-xs-7\">\n        <input class=\"form-control\" autofocus=\"1\" fs-input fs-up=\"move(-1)\" fs-down=\"move(1)\" fs-enter=\"select()\" ng-model=\"search\"/>\n        <div fs-list items=\"tracks\" class=\"no-popup\">\n          <img src=\"{{ item.artwork_url }}\" width=\"30\" height=\"30\"/>\n          {{item.title}} <small class=\"text-muted\">{{item.genre}}</small>\n        </div>\n        <div class=\"alert alert-success\" style=\"margin-top: 20px\">\n          <strong>NB:</strong> you can navigate through list\n          using <kbd>Up</kbd> and <kbd>Down</kbd> arrows and select\n          track with <kbd>Enter</kbd> key.\n        </div>\n      </div>\n      <div class=\"col-xs-5\">\n        <demo-audio track=\"selectedTrack\"></demo-audio>\n        <pre style=\"margin-top: 20px\">Selected Item: {{ selectedTrack | json }}</pre>\n      </div>\n    </div>\n</pre>";
@@ -30204,75 +30259,111 @@
 	module.exports=v1;
 
 /***/ },
-/* 26 */
+/* 27 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// removed by extract-text-webpack-plugin
 
 /***/ },
-/* 27 */,
-/* 28 */
+/* 28 */,
+/* 29 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// removed by extract-text-webpack-plugin
 
 /***/ },
-/* 29 */,
 /* 30 */,
 /* 31 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = "app = require('./module')\n\nsrc = require('raw!./form.js')\n\napp.controller('FormCtrl', function ($scope){\n  $scope.src = src\n\n  $scope.samurai = {\n    name: \"Unnamed\",\n    districts: []\n  };\n\n  $scope.learningStages = [\n    {id: 'S', label: 'Shu'},\n    {id: 'H', label: 'Ha'},\n    {id: 'R', label: 'Ri'}\n  ];\n\n  $scope.weapons = [\n    {id: '1', label: 'Katana'},\n    {id: '2', label: 'Naginata'},\n    {id: '3', label: 'Yari'},\n    {id: '4', label: 'Horagai'},\n    {id: '5', label: 'Horimono'}\n  ];\n\n  $scope.meals = [\n    {id: 'me', label: 'Meat'},\n    {id: 'mi', label: 'Milk'},\n    {id: 'or', label: 'Orange'},\n    {id: 'ri', label: 'Rice'}\n  ];\n\n  $scope.otherFacts = [\n    'Uruwashii', 'Buke', 'Mononofu', 'Musha', 'Rōnin', 'Shi', 'Tsuwamono'\n  ];\n\n  $scope.weaponStyles = ['Kenjutsu', 'Naginatajutsu', 'Sōjutsu'];\n\n  $scope.districts = [\n  'Kita District',\n    'Tsugaru District',\n    'Hei District',\n    'Iwai District',\n    'Akita District',\n    'Tagawa District',\n    'Murayama District',\n    'Okitama District',\n    'Aizu District',\n    'Shirakawa District',\n    'Ibaraki District',\n    'Tsuga District',\n    'Habu District',\n    'Sōma District',\n    'Katsushika District',\n    'Saitama District',\n    'Adachi District',\n    'Toshima District',\n    'Tama District',\n    'Kanbara District',\n    'Uonuma District',\n    'Kubiki District',\n    'Niikawa District',\n    'Tsuru District',\n    'Yamanashi District',\n    'Yatsushiro District',\n    'Koma District',\n    'Saku District',\n    'Takai District',\n    'Minochi District',\n    'Ina District',\n    'Chikuma District',\n    'Azumi District',\n    'Ishizu District',\n    'Shitara District',\n    'Kamo District',\n    'Kasugai District',\n    'Muro District',\n    'Azai District',\n    'Kuwata District',\n    'Ukena District',\n    'Uwa District',\n    'Matsuura District',\n    'Sonogi District',\n    'Takaki District',\n    'Kunisaki District',\n    'Amabe District',\n    'Usuki District',\n    'Naka District',\n    'Ōsumi District',\n    'Soo District',\n    'Isa District'\n  ];\n})\n"
+	module.exports = __webpack_require__.p + "304c60b744c8de4aa52c10dfa9df5a44.gif"
 
 /***/ },
 /* 32 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = "app = require('./module')\n\nsrc = require('raw!./select.js')\n\ncountries = require('./countries')\n\napp.controller('SelectCtrl', function ($scope){\n  $scope.disabled = false;\n  $scope.src = src\n\n  $scope.items = [\n    {id: 'S', label: 'Shijima'},\n    {id: 'M', label: 'Musubi'},\n    {id: 'Y', label: 'Yosuga'}\n  ];\n\n  $scope.countries = countries;\n\n  $scope.laughs = ['Ha-ha-ha', 'Ho-ho-ho', 'He-he-he'];\n})\n"
+	module.exports = __webpack_require__.p + "6f02f16bc352ece908c95f802dce2989.gif"
 
 /***/ },
 /* 33 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = "app = require('./module')\n\nsrc = require('raw!./multiselect.js')\n\ncountries = require('./countries')\napp.controller('MultiselectCtrl', function ($scope){\n    $scope.src = src;\n    $scope.disabled = false;\n\n    $scope.items = [\n      {id: 'S', label: 'Shijima'},\n      {id: 'M', label: 'Musubi'},\n      {id: 'Y', label: 'Yosuga'},\n      {id: 'GG', label: 'Genmai gohan'},\n      {id: 'K', label: 'Kamameshi'},\n      {id: 'MO', label: 'Mochi'},\n      {id: 'SH', label: 'Sekihan'}\n    ];\n\n    $scope.countries = countries\n    $scope.countryNames = countries.map(function(x){return x.name})\n\n})\n"
+	module.exports = __webpack_require__.p + "c2d75ae3c9f3bf580157e0d9c4aac80a.gif"
 
 /***/ },
 /* 34 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = "app = require('./module')\n\nsrc = require('raw!./radio.js')\n\nsushi = [\n  {img: 'CaliforniaRoll', label: 'California Roll', src: require('../imgs/CaliforniaRoll.gif')},\n  {img: 'CucumberRoll', label: 'Cucumber Roll', src: require('../imgs/CucumberRoll.gif')},\n  {img: 'FattyTuna', label: 'Fatty Tuna',src: require('../imgs/FattyTuna.gif')},\n  {img: 'Inari', label: 'Inari',src: require('../imgs/Inari.gif')},\n  {img: 'Octopus', label: 'Octopus', src: require('../imgs/Octopus.gif')},\n  {img: 'Shrimp', label: 'Shrimp', src: require('../imgs/Shrimp.gif')}\n]\n\napp.controller('RadioCtrl', function ($scope){\n  $scope.src = src\n  $scope.sushi = sushi\n  $scope.items = [\n    {id: 'S', label: 'Shijima'},\n    {id: 'M', label: 'Musubi'},\n    {id: 'Y', label: 'Yosuga'}\n  ];\n})\n"
+	module.exports = __webpack_require__.p + "b929eb5e5195e021e7966f548226a76f.gif"
 
 /***/ },
 /* 35 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = "app = require('./module')\n\nsrc = require('raw!./check.js')\n\napp.controller('CheckCtrl', function ($scope){\n  $scope.src = src\n  $scope.items = [\n    {id: 'S', label: 'Shijima'},\n    {id: 'M', label: 'Musubi'},\n    {id: 'Y', label: 'Yosuga'}\n  ];\n})\n"
+	module.exports = __webpack_require__.p + "a2c54175ffc28b40fefbb42b1c1864b5.gif"
 
 /***/ },
 /* 36 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = "app = require('./module')\n\nsrc = require('raw!./datetime.js')\n\napp.controller('DatetimeCtrl', function ($scope){\n  $scope.selectedDate = new Date();\n  $scope.src = src\n  $scope.selectedDate = new Date();\n  $scope.disabled = false;\n  now = new Date();\n  $scope.svalue = now.getHours() + \":\" + now.getMinutes();\n  $scope.disabled = false;\n\n  $scope.setTime = function(str) {\n    $scope.svalue = str;\n  };\n  $scope.disabled = false;\n  $scope.selectedDateTime = new Date();\n})\n"
+	module.exports = __webpack_require__.p + "18c84795d8c3b231b035a062ea3d331a.gif"
 
 /***/ },
-/* 37 */
-/***/ function(module, exports, __webpack_require__) {
-
-	module.exports = "app = require('./module')\n\nsrc = require('raw!./list.js')\n\napp.controller('ListCtrl', function ($scope){\n  $scope.src = src\n  SC.initialize({ client_id: '8399f2e0577e0acb4eee4d65d6c6cce6' });\n\n  $scope.$watch('search', function () {\n    SC.get('/tracks',\n      { q: $scope.search, license: 'cc-by-sa' },\n      function(tracks) {\n        $scope.$apply(function() { $scope.tracks = tracks })\n      })\n  });\n\n  $scope.search = 'bach';\n  $scope.tracks = [];\n\n  $scope.move = function (d) {\n    $scope.listInterface.move(d);\n  };\n\n  $scope.listInterface = {\n    onSelect: function (selectedItem) {\n      $scope.select(selectedItem)\n    }\n  };\n\n  $scope.select = function(selectedItem) {\n    $scope.selectedTrack = selectedItem || $scope.listInterface.selectedItem;\n  };\n})\n\napp.directive(\"demoAudio\", function() {\n  return {\n    restrict: \"E\",\n    scope: {\n      track: '='\n    },\n    template: \"<audio controls />\",\n    replace: true,\n    link: function($scope, $element, $attrs) {\n      return $scope.$watch('track', function(track) {\n        if (track) {\n          $element.attr('src', track.stream_url + \"?client_id=8399f2e0577e0acb4eee4d65d6c6cce6\");\n          return $element[0].play();\n        }\n      });\n    }\n  };\n});\n"
-
-/***/ },
+/* 37 */,
 /* 38 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = "<h1 id=\"formstamp\">FormStamp</h1>\n<p><a href=\"https://travis-ci.org/formstamp/formstamp\"><img src=\"https://travis-ci.org/formstamp/formstamp.png?branch=master\" alt=\"Build Status\"></a></p>\n<p><a href=\"https://gitter.im/formstamp/formstamp\"><img src=\"https://badges.gitter.im/formstamp/formstamp.png\" alt=\"Gitter chat\"></a></p>\n<p><strong><em>This project is under development. Some API may be changed.</em></strong></p>\n<p>FormStamp is a pure AngularJS widgets library designed for rich\nfront-end web applications. FormStamp core principles are:</p>\n<ul>\n<li>all widgets are written from scratch;</li>\n<li>maximum AngularJS compatibility (supports ngDisabled, ngModel and\nother standard directives);</li>\n<li>styled with Twitter Bootstrap;</li>\n<li>clean &amp; minimalistic codebase.</li>\n</ul>\n<p><a href=\"http://formstamp.github.io/\">Live Demo</a></p>\n<h2 id=\"installation\">Installation</h2>\n<p>FormStamp can be installed via <a href=\"http://bower.io/\">Bower Package Manager</a>:</p>\n<pre><code>bower install angular-formstamp\n</code></pre><h2 id=\"structure\">Structure</h2>\n<p>There are 3 levels of directives:</p>\n<ul>\n<li>Form Builder - orchestrates building of complex forms; provides\nsimple DSL-like markup for describing forms and hides complex markup\nfrom you.</li>\n<li>Widget directives - most often used widgets.</li>\n<li>Low-level directives - common concerns for widgets construction, can\nbe used to build your own custom widgets.</li>\n</ul>\n<h2 id=\"form-builder\">Form Builder</h2>\n<ul>\n<li><code>fsFormFor</code> - root form builder directive;</li>\n<li><code>fsInput</code> - renders a row with input in form builder;</li>\n<li><code>fsRow</code> - renders a custom row.</li>\n</ul>\n<h2 id=\"widget-directives\">Widget Directives</h2>\n<ul>\n<li><code>fsSelect</code> - select input with free text support (select/combo);</li>\n<li><code>fsMultiselect</code> - multiple select input with free text support;</li>\n<li><code>fsTime</code> - time input;</li>\n<li><code>fsDate</code> - date input with <code>fsCalendar</code> inside dropdown;</li>\n<li><code>fsDatetime</code> - widget composed from <code>fsTime</code> and <code>fsDate</code> to enter\nboth date and time;</li>\n<li><code>fsRadio</code> - a group of radiobuttons;</li>\n<li><code>fsCheck</code> - a group of checkboxes.</li>\n</ul>\n<h2 id=\"low-level-directives\">Low-level Directives</h2>\n<ul>\n<li><code>fsList</code> - renders a list of items and allows to move selection up and\ndown (with custom templating for items);</li>\n<li><code>fsNullForm</code> - hides input with ngModel binding from a parent form;</li>\n<li><code>fsInput</code> - simplifies keyboard &amp; focus events handling;</li>\n<li><code>fsCalendar</code> - draws a calendar and allows to mark one day as selected.</li>\n</ul>\n<h2 id=\"development-environment\">Development Environment</h2>\n<p>Install node.js</p>\n<pre><code>curl https://raw.github.com/creationix/nvm/master/install.sh | sh # install nvm\nnvm install 0.10\n</code></pre><p>Clone FormStamp repository</p>\n<pre><code>git clone git@github.com:formstamp/formstamp.git\n</code></pre><p>Install bower dependencies and node.js packages</p>\n<pre><code class=\"lang-sh\">  cd formstamp\n  nvm use 0.10\n  npm install\n</code></pre>\n<p>Build, start demo server and start watching changes using</p>\n<pre><code class=\"lang-sh\">\nnpm start\n\n# open browser @ localhost:8080/index.html\n</code></pre>\n<p>Now, point your browser to <a href=\"http://localhost:8080/\">http://localhost:8080/</a> and you&#39;ll see\nFormStamp&#39;s demo page.</p>\n<p>NOTE: These commands add <code>nvm</code> command to <code>.bash_profile</code>. It may not\nwork if you are not using <code>bash</code> shell (like <code>zsh</code>). In this case you\nhave to manually configure profile file.</p>\n<h2 id=\"running-tests\">Running Tests</h2>\n<p>Run unit tests:</p>\n<pre><code class=\"lang-sh\">\nnpm test\n</code></pre>\n<p>To run protractor tests you could use:</p>\n<pre><code class=\"lang-sh\">\nnpm run-script e2e\n</code></pre>\n<h2 id=\"license\">License</h2>\n<p>FormStamp is released under\n<a href=\"https://raw.github.com/formstamp/formstamp/master/MIT-LICENSE\">MIT License</a>.</p>\n";
+	module.exports = "app = require('./module')\n\nsrc = require('raw!./form.js')\n\napp.controller('FormCtrl', function ($scope){\n  $scope.src = src\n\n  $scope.samurai = {\n    name: \"Unnamed\",\n    districts: []\n  };\n\n  $scope.learningStages = [\n    {id: 'S', label: 'Shu'},\n    {id: 'H', label: 'Ha'},\n    {id: 'R', label: 'Ri'}\n  ];\n\n  $scope.weapons = [\n    {id: '1', label: 'Katana'},\n    {id: '2', label: 'Naginata'},\n    {id: '3', label: 'Yari'},\n    {id: '4', label: 'Horagai'},\n    {id: '5', label: 'Horimono'}\n  ];\n\n  $scope.meals = [\n    {id: 'me', label: 'Meat'},\n    {id: 'mi', label: 'Milk'},\n    {id: 'or', label: 'Orange'},\n    {id: 'ri', label: 'Rice'}\n  ];\n\n  $scope.otherFacts = [\n    'Uruwashii', 'Buke', 'Mononofu', 'Musha', 'Rōnin', 'Shi', 'Tsuwamono'\n  ];\n\n  $scope.weaponStyles = ['Kenjutsu', 'Naginatajutsu', 'Sōjutsu'];\n\n  $scope.districts = [\n  'Kita District',\n    'Tsugaru District',\n    'Hei District',\n    'Iwai District',\n    'Akita District',\n    'Tagawa District',\n    'Murayama District',\n    'Okitama District',\n    'Aizu District',\n    'Shirakawa District',\n    'Ibaraki District',\n    'Tsuga District',\n    'Habu District',\n    'Sōma District',\n    'Katsushika District',\n    'Saitama District',\n    'Adachi District',\n    'Toshima District',\n    'Tama District',\n    'Kanbara District',\n    'Uonuma District',\n    'Kubiki District',\n    'Niikawa District',\n    'Tsuru District',\n    'Yamanashi District',\n    'Yatsushiro District',\n    'Koma District',\n    'Saku District',\n    'Takai District',\n    'Minochi District',\n    'Ina District',\n    'Chikuma District',\n    'Azumi District',\n    'Ishizu District',\n    'Shitara District',\n    'Kamo District',\n    'Kasugai District',\n    'Muro District',\n    'Azai District',\n    'Kuwata District',\n    'Ukena District',\n    'Uwa District',\n    'Matsuura District',\n    'Sonogi District',\n    'Takaki District',\n    'Kunisaki District',\n    'Amabe District',\n    'Usuki District',\n    'Naka District',\n    'Ōsumi District',\n    'Soo District',\n    'Isa District'\n  ];\n})\n"
 
 /***/ },
 /* 39 */
 /***/ function(module, exports, __webpack_require__) {
 
+	module.exports = "app = require('./module')\n\nsrc = require('raw!./select.js')\n\ncountries = require('./countries')\n\napp.controller('SelectCtrl', function ($scope){\n  $scope.disabled = false;\n  $scope.src = src\n\n  $scope.items = [\n    {id: 'S', label: 'Shijima'},\n    {id: 'M', label: 'Musubi'},\n    {id: 'Y', label: 'Yosuga'}\n  ];\n\n  $scope.countries = countries;\n\n  $scope.laughs = ['Ha-ha-ha', 'Ho-ho-ho', 'He-he-he'];\n})\n"
+
+/***/ },
+/* 40 */
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = "app = require('./module')\n\nsrc = require('raw!./multiselect.js')\n\ncountries = require('./countries')\napp.controller('MultiselectCtrl', function ($scope){\n    $scope.src = src;\n    $scope.disabled = false;\n\n    $scope.items = [\n      {id: 'S', label: 'Shijima'},\n      {id: 'M', label: 'Musubi'},\n      {id: 'Y', label: 'Yosuga'},\n      {id: 'GG', label: 'Genmai gohan'},\n      {id: 'K', label: 'Kamameshi'},\n      {id: 'MO', label: 'Mochi'},\n      {id: 'SH', label: 'Sekihan'}\n    ];\n\n    $scope.countries = countries\n    $scope.countryNames = countries.map(function(x){return x.name})\n\n})\n"
+
+/***/ },
+/* 41 */
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = "app = require('./module')\n\nsrc = require('raw!./radio.js')\n\nsushi = [\n  {img: 'CaliforniaRoll', label: 'California Roll', src: require('../imgs/CaliforniaRoll.gif')},\n  {img: 'CucumberRoll', label: 'Cucumber Roll', src: require('../imgs/CucumberRoll.gif')},\n  {img: 'FattyTuna', label: 'Fatty Tuna',src: require('../imgs/FattyTuna.gif')},\n  {img: 'Inari', label: 'Inari',src: require('../imgs/Inari.gif')},\n  {img: 'Octopus', label: 'Octopus', src: require('../imgs/Octopus.gif')},\n  {img: 'Shrimp', label: 'Shrimp', src: require('../imgs/Shrimp.gif')}\n]\n\napp.controller('RadioCtrl', function ($scope){\n  $scope.src = src\n  $scope.sushi = sushi\n  $scope.items = [\n    {id: 'S', label: 'Shijima'},\n    {id: 'M', label: 'Musubi'},\n    {id: 'Y', label: 'Yosuga'}\n  ];\n})\n"
+
+/***/ },
+/* 42 */
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = "app = require('./module')\n\nsrc = require('raw!./check.js')\n\napp.controller('CheckCtrl', function ($scope){\n  $scope.src = src\n  $scope.items = [\n    {id: 'S', label: 'Shijima'},\n    {id: 'M', label: 'Musubi'},\n    {id: 'Y', label: 'Yosuga'}\n  ];\n})\n"
+
+/***/ },
+/* 43 */
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = "app = require('./module')\n\nsrc = require('raw!./datetime.js')\n\napp.controller('DatetimeCtrl', function ($scope){\n  $scope.selectedDate = new Date();\n  $scope.src = src\n  $scope.selectedDate = new Date();\n  $scope.disabled = false;\n  now = new Date();\n  $scope.svalue = now.getHours() + \":\" + now.getMinutes();\n  $scope.disabled = false;\n\n  $scope.setTime = function(str) {\n    $scope.svalue = str;\n  };\n  $scope.disabled = false;\n  $scope.selectedDateTime = new Date();\n})\n"
+
+/***/ },
+/* 44 */
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = "app = require('./module')\n\nsrc = require('raw!./list.js')\n\napp.controller('ListCtrl', function ($scope){\n  $scope.src = src\n  SC.initialize({ client_id: '8399f2e0577e0acb4eee4d65d6c6cce6' });\n\n  $scope.$watch('search', function () {\n    SC.get('/tracks',\n      { q: $scope.search, license: 'cc-by-sa' },\n      function(tracks) {\n        $scope.$apply(function() { $scope.tracks = tracks })\n      })\n  });\n\n  $scope.search = 'bach';\n  $scope.tracks = [];\n\n  $scope.move = function (d) {\n    $scope.listInterface.move(d);\n  };\n\n  $scope.listInterface = {\n    onSelect: function (selectedItem) {\n      $scope.select(selectedItem)\n    }\n  };\n\n  $scope.select = function(selectedItem) {\n    $scope.selectedTrack = selectedItem || $scope.listInterface.selectedItem;\n  };\n})\n\napp.directive(\"demoAudio\", function() {\n  return {\n    restrict: \"E\",\n    scope: {\n      track: '='\n    },\n    template: \"<audio controls />\",\n    replace: true,\n    link: function($scope, $element, $attrs) {\n      return $scope.$watch('track', function(track) {\n        if (track) {\n          $element.attr('src', track.stream_url + \"?client_id=8399f2e0577e0acb4eee4d65d6c6cce6\");\n          return $element[0].play();\n        }\n      });\n    }\n  };\n});\n"
+
+/***/ },
+/* 45 */
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = "<h1 id=\"formstamp\">FormStamp</h1>\n<p><a href=\"https://travis-ci.org/formstamp/formstamp\"><img src=\"https://travis-ci.org/formstamp/formstamp.png?branch=master\" alt=\"Build Status\"></a></p>\n<p><a href=\"https://gitter.im/formstamp/formstamp\"><img src=\"https://badges.gitter.im/formstamp/formstamp.png\" alt=\"Gitter chat\"></a></p>\n<p><strong><em>This project is under development. Some API may be changed.</em></strong></p>\n<p>FormStamp is a pure AngularJS widgets library designed for rich\nfront-end web applications. FormStamp core principles are:</p>\n<ul>\n<li>all widgets are written from scratch;</li>\n<li>maximum AngularJS compatibility (supports ngDisabled, ngModel and\nother standard directives);</li>\n<li>styled with Twitter Bootstrap;</li>\n<li>clean &amp; minimalistic codebase.</li>\n</ul>\n<p><a href=\"http://formstamp.github.io/\">Live Demo</a></p>\n<h2 id=\"installation\">Installation</h2>\n<p>FormStamp can be installed via <a href=\"http://bower.io/\">Bower Package Manager</a>:</p>\n<pre><code>bower install angular-formstamp\n</code></pre><h2 id=\"structure\">Structure</h2>\n<p>There are 3 levels of directives:</p>\n<ul>\n<li>Form Builder - orchestrates building of complex forms; provides\nsimple DSL-like markup for describing forms and hides complex markup\nfrom you.</li>\n<li>Widget directives - most often used widgets.</li>\n<li>Low-level directives - common concerns for widgets construction, can\nbe used to build your own custom widgets.</li>\n</ul>\n<h2 id=\"form-builder\">Form Builder</h2>\n<ul>\n<li><code>fsFormFor</code> - root form builder directive;</li>\n<li><code>fsInput</code> - renders a row with input in form builder;</li>\n<li><code>fsRow</code> - renders a custom row.</li>\n</ul>\n<h2 id=\"widget-directives\">Widget Directives</h2>\n<ul>\n<li><code>fsSelect</code> - select input with free text support (select/combo);</li>\n<li><code>fsMultiselect</code> - multiple select input with free text support;</li>\n<li><code>fsTime</code> - time input;</li>\n<li><code>fsDate</code> - date input with <code>fsCalendar</code> inside dropdown;</li>\n<li><code>fsDatetime</code> - widget composed from <code>fsTime</code> and <code>fsDate</code> to enter\nboth date and time;</li>\n<li><code>fsRadio</code> - a group of radiobuttons;</li>\n<li><code>fsCheck</code> - a group of checkboxes.</li>\n</ul>\n<h2 id=\"low-level-directives\">Low-level Directives</h2>\n<ul>\n<li><code>fsList</code> - renders a list of items and allows to move selection up and\ndown (with custom templating for items);</li>\n<li><code>fsNullForm</code> - hides input with ngModel binding from a parent form;</li>\n<li><code>fsInput</code> - simplifies keyboard &amp; focus events handling;</li>\n<li><code>fsCalendar</code> - draws a calendar and allows to mark one day as selected.</li>\n</ul>\n<h2 id=\"development-environment\">Development Environment</h2>\n<p>Install node.js</p>\n<pre><code>curl https://raw.github.com/creationix/nvm/master/install.sh | sh # install nvm\nnvm install 0.10\n</code></pre><p>Clone FormStamp repository</p>\n<pre><code>git clone git@github.com:formstamp/formstamp.git\n</code></pre><p>Install bower dependencies and node.js packages</p>\n<pre><code class=\"lang-sh\">  cd formstamp\n  nvm use 0.10\n  npm install\n</code></pre>\n<p>Build, start demo server and start watching changes using</p>\n<pre><code class=\"lang-sh\">\nnpm start\n\n# open browser @ localhost:8080/index.html\n</code></pre>\n<p>Now, point your browser to <a href=\"http://localhost:8080/\">http://localhost:8080/</a> and you&#39;ll see\nFormStamp&#39;s demo page.</p>\n<p>NOTE: These commands add <code>nvm</code> command to <code>.bash_profile</code>. It may not\nwork if you are not using <code>bash</code> shell (like <code>zsh</code>). In this case you\nhave to manually configure profile file.</p>\n<h2 id=\"running-tests\">Running Tests</h2>\n<p>Run unit tests:</p>\n<pre><code class=\"lang-sh\">\nnpm test\n</code></pre>\n<p>To run protractor tests you could use:</p>\n<pre><code class=\"lang-sh\">\nnpm run-script e2e\n</code></pre>\n<h2 id=\"license\">License</h2>\n<p>FormStamp is released under\n<a href=\"https://raw.github.com/formstamp/formstamp/master/MIT-LICENSE\">MIT License</a>.</p>\n";
+
+/***/ },
+/* 46 */
+/***/ function(module, exports, __webpack_require__) {
+
 	var mod;
 
-	mod = __webpack_require__(67);
+	mod = __webpack_require__(68);
 
 	mod.provider('fsConfig', function() {
 	  this.$get = function() {
@@ -30283,18 +30374,18 @@
 
 
 /***/ },
-/* 40 */
+/* 47 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var mod, u;
 
-	mod = __webpack_require__(67);
+	mod = __webpack_require__(68);
 
-	__webpack_require__(68);
+	__webpack_require__(69);
 
-	u = __webpack_require__(70);
+	u = __webpack_require__(71);
 
-	__webpack_require__(85);
+	__webpack_require__(86);
 
 	mod.directive("fsRadio", [
 	  '$templateCache', function($templateCache) {
@@ -30333,18 +30424,18 @@
 
 
 /***/ },
-/* 41 */
+/* 48 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var mod, u;
 
-	mod = __webpack_require__(67);
+	mod = __webpack_require__(68);
 
-	__webpack_require__(71);
+	__webpack_require__(72);
 
-	__webpack_require__(86);
+	__webpack_require__(87);
 
-	u = __webpack_require__(70);
+	u = __webpack_require__(71);
 
 	mod.directive("fsList", [
 	  '$templateCache', function($templateCache) {
@@ -30421,7 +30512,7 @@
 
 
 /***/ },
-/* 42 */
+/* 49 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var parentsUntil;
@@ -30530,18 +30621,18 @@
 
 
 /***/ },
-/* 43 */
+/* 50 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var mod, u;
 
-	mod = __webpack_require__(67);
+	mod = __webpack_require__(68);
 
-	__webpack_require__(68);
+	__webpack_require__(69);
 
-	u = __webpack_require__(70);
+	u = __webpack_require__(71);
 
-	__webpack_require__(87);
+	__webpack_require__(88);
 
 	mod.directive("fsCheckbox", [
 	  '$window', '$templateCache', function($window, $templateCache) {
@@ -30603,16 +30694,16 @@
 
 
 /***/ },
-/* 44 */
+/* 51 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var VALIDATION_DIRECTIVES, mod;
 
-	mod = __webpack_require__(67);
+	mod = __webpack_require__(68);
 
 	VALIDATION_DIRECTIVES = ['ngRequired', 'ngMinlength', 'ngMaxlength', 'ngPattern', 'ngDisabled'];
 
-	__webpack_require__(88);
+	__webpack_require__(89);
 
 	mod.directive('fsField', [
 	  function() {
@@ -30679,19 +30770,19 @@
 
 
 /***/ },
-/* 45 */
+/* 52 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var mod, setAttrs,
 	  __hasProp = {}.hasOwnProperty;
 
-	mod = __webpack_require__(67);
-
-	__webpack_require__(89);
+	mod = __webpack_require__(68);
 
 	__webpack_require__(90);
 
 	__webpack_require__(91);
+
+	__webpack_require__(92);
 
 	setAttrs = function(el, attrs) {
 	  var attr, value, _results;
@@ -30820,18 +30911,18 @@
 
 
 /***/ },
-/* 46 */
+/* 53 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var mod;
 
-	mod = __webpack_require__(67);
+	mod = __webpack_require__(68);
 
-	__webpack_require__(73);
+	__webpack_require__(74);
 
-	__webpack_require__(75);
+	__webpack_require__(76);
 
-	__webpack_require__(92);
+	__webpack_require__(93);
 
 	mod.directive("fsSelect", [
 	  '$compile', '$templateCache', function($compile, $templateCache) {
@@ -30926,20 +31017,20 @@
 
 
 /***/ },
-/* 47 */
+/* 54 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var mod, u;
 
-	mod = __webpack_require__(67);
+	mod = __webpack_require__(68);
 
-	__webpack_require__(73);
+	__webpack_require__(74);
 
-	__webpack_require__(77);
+	__webpack_require__(78);
 
-	__webpack_require__(93);
+	__webpack_require__(94);
 
-	u = __webpack_require__(70);
+	u = __webpack_require__(71);
 
 	mod.filter('exclude', function() {
 	  return function(input, selected) {
@@ -31055,18 +31146,18 @@
 
 
 /***/ },
-/* 48 */
+/* 55 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var IDEAL_REX, dynamicItems, mkTimeInput, mkTimeItems, mod, si, u, validInput;
 
-	mod = __webpack_require__(67);
+	mod = __webpack_require__(68);
 
-	__webpack_require__(94);
+	__webpack_require__(95);
 
-	u = __webpack_require__(70);
+	u = __webpack_require__(71);
 
-	si = __webpack_require__(79);
+	si = __webpack_require__(80);
 
 	IDEAL_REX = /^([0-1][0-9]|2[0-3]):([0-5][0-9])$/;
 
@@ -31221,12 +31312,12 @@
 
 
 /***/ },
-/* 49 */
+/* 56 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var mod;
 
-	mod = __webpack_require__(67);
+	mod = __webpack_require__(68);
 
 	mod.factory("dateParserHelpers", [
 	  function() {
@@ -31482,14 +31573,14 @@
 
 
 /***/ },
-/* 50 */
+/* 57 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var mod;
 
-	mod = __webpack_require__(67);
+	mod = __webpack_require__(68);
 
-	__webpack_require__(49);
+	__webpack_require__(56);
 
 	mod.directive('fsDateFormat', [
 	  '$locale', '$filter', '$dateParser', function($locale, $filter, $dateParser) {
@@ -31525,16 +31616,16 @@
 
 
 /***/ },
-/* 51 */
+/* 58 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var mod, u;
 
-	mod = __webpack_require__(67);
+	mod = __webpack_require__(68);
 
-	__webpack_require__(95);
+	__webpack_require__(96);
 
-	u = __webpack_require__(70);
+	u = __webpack_require__(71);
 
 	mod.directive('fsDate', function() {
 	  return {
@@ -31571,18 +31662,18 @@
 
 
 /***/ },
-/* 52 */
+/* 59 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var mod, shiftWeekDays, u;
 
-	mod = __webpack_require__(67);
+	mod = __webpack_require__(68);
 
-	__webpack_require__(80);
+	__webpack_require__(81);
 
-	__webpack_require__(96);
+	__webpack_require__(97);
 
-	u = __webpack_require__(70);
+	u = __webpack_require__(71);
 
 	shiftWeekDays = function(weekDays, firstDayOfWeek) {
 	  var weekDaysHead;
@@ -31767,20 +31858,20 @@
 
 
 /***/ },
-/* 53 */
+/* 60 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var mod, u;
 
-	mod = __webpack_require__(67);
+	mod = __webpack_require__(68);
 
-	__webpack_require__(97);
+	__webpack_require__(98);
 
-	__webpack_require__(73);
+	__webpack_require__(74);
 
-	__webpack_require__(82);
+	__webpack_require__(83);
 
-	u = __webpack_require__(70);
+	u = __webpack_require__(71);
 
 	mod.directive("fsDatetime", [
 	  '$compile', function($compile) {
@@ -31850,52 +31941,14 @@
 
 
 /***/ },
-/* 54 */
+/* 61 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// removed by extract-text-webpack-plugin
 
 /***/ },
-/* 55 */,
-/* 56 */
-/***/ function(module, exports, __webpack_require__) {
-
-	module.exports = __webpack_require__.p + "304c60b744c8de4aa52c10dfa9df5a44.gif"
-
-/***/ },
-/* 57 */
-/***/ function(module, exports, __webpack_require__) {
-
-	module.exports = __webpack_require__.p + "6f02f16bc352ece908c95f802dce2989.gif"
-
-/***/ },
-/* 58 */
-/***/ function(module, exports, __webpack_require__) {
-
-	module.exports = __webpack_require__.p + "c2d75ae3c9f3bf580157e0d9c4aac80a.gif"
-
-/***/ },
-/* 59 */
-/***/ function(module, exports, __webpack_require__) {
-
-	module.exports = __webpack_require__.p + "b929eb5e5195e021e7966f548226a76f.gif"
-
-/***/ },
-/* 60 */
-/***/ function(module, exports, __webpack_require__) {
-
-	module.exports = __webpack_require__.p + "a2c54175ffc28b40fefbb42b1c1864b5.gif"
-
-/***/ },
-/* 61 */
-/***/ function(module, exports, __webpack_require__) {
-
-	module.exports = __webpack_require__.p + "18c84795d8c3b231b035a062ea3d331a.gif"
-
-/***/ },
 /* 62 */,
-/* 63 */,
-/* 64 */
+/* 63 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(global) {/**
@@ -33168,23 +33221,25 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
 
 /***/ },
+/* 64 */,
 /* 65 */,
 /* 66 */,
-/* 67 */
+/* 67 */,
+/* 68 */
 /***/ function(module, exports, __webpack_require__) {
 
 	module.exports = angular.module('formstamp', ['ng']);
 
 
 /***/ },
-/* 68 */
+/* 69 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// removed by extract-text-webpack-plugin
 
 /***/ },
-/* 69 */,
-/* 70 */
+/* 70 */,
+/* 71 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var getComputedStyleFor, innerHeightOf, uid;
@@ -33364,35 +33419,35 @@
 
 
 /***/ },
-/* 71 */
+/* 72 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// removed by extract-text-webpack-plugin
 
 /***/ },
-/* 72 */,
-/* 73 */
+/* 73 */,
+/* 74 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// removed by extract-text-webpack-plugin
 
 /***/ },
-/* 74 */,
-/* 75 */
+/* 75 */,
+/* 76 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// removed by extract-text-webpack-plugin
 
 /***/ },
-/* 76 */,
-/* 77 */
+/* 77 */,
+/* 78 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// removed by extract-text-webpack-plugin
 
 /***/ },
-/* 78 */,
-/* 79 */
+/* 79 */,
+/* 80 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var timeFixChain, timeInput, timeInputChain, timeLastFix;
@@ -33431,22 +33486,22 @@
 
 
 /***/ },
-/* 80 */
+/* 81 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// removed by extract-text-webpack-plugin
 
 /***/ },
-/* 81 */,
-/* 82 */
+/* 82 */,
+/* 83 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// removed by extract-text-webpack-plugin
 
 /***/ },
-/* 83 */,
 /* 84 */,
-/* 85 */
+/* 85 */,
+/* 86 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var v1="<div class=\"fs-widget-root fs-radio fs-racheck\" ng-class=\"{disabled: disabled, enabled: !disabled}\"> <div class=\"fs-radio-item\" ng-repeat=\"item in items\"> <input fs-null-form type=\"radio\" ng-model=\"$parent.selectedItem\" name=\"::name\" ng-value=\"item\" ng-disabled=\"disabled\" id=\"::name_{{$index}}\"/> <label for=\"::name_{{$index}}\"> <span class=\"fs-radio-btn\"><span></span></span>\n::itemTpl </label> </div> </div>";
@@ -33454,7 +33509,7 @@
 	module.exports=v1;
 
 /***/ },
-/* 86 */
+/* 87 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var v1="<div class=\"dropdown open fs-list\"> <ul class=\"dropdown-menu\" role=\"menu\"> <li ng-repeat=\"item in items\" ng-class=\"{true: 'active'}[$index == highlightIndex]\"> <a ng-click=\"highlightItem(item)\" href=\"javascript:void(0)\" tabindex=\"-1\"> <span>::itemTpl</span> </a> </li> </ul> </div>";
@@ -33462,7 +33517,7 @@
 	module.exports=v1;
 
 /***/ },
-/* 87 */
+/* 88 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var v1="<div class=\"fs-racheck fs-checkbox\" ng-class=\"{disabled: disabled, enabled: !disabled}\"> <div ng-repeat=\"item in items\"> <div class=\"fs-racheck-item\" href=\"javascript:void(0)\" ng-disabled=\"disabled\" ng-click=\"toggle(item)\" fs-space=\"toggle(item)\"> <span class=\"fs-check-outer\"><span ng-show=\"isSelected(item)\" class=\"fs-check-inner\"></span></span>\n::itemTpl </div> </div> </div>";
@@ -33470,7 +33525,7 @@
 	module.exports=v1;
 
 /***/ },
-/* 88 */
+/* 89 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var v1="<div class=\"form-group\" ng-class=\"{&quot;has-error&quot;: object.$errors[field].length > 0}\"> <label for=\"{{ objectName }}[{{ field }}]\" class=\"col-sm-2 control-label\">Name</label> <div class=\"col-sm-10\"> <div w-combo class=\"w-field-input\" items=\"items\" invalid=\"object.$errors[field]\" name=\"{{ objectName }}[{{ field }}]\" ng-model=\"object[field]\"></div> <div> <p ng-repeat=\"error in object.$errors[field]\" class=\"text-danger\">{{ error }}</p> </div> </div> </div>";
@@ -33478,7 +33533,7 @@
 	module.exports=v1;
 
 /***/ },
-/* 89 */
+/* 90 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var v1="<div class=\"form-group\" ng-class=\"{'has-error': (form.::name.$dirty && form.::name.$invalid)}\"> <label class=\"col-sm-2 control-label\">::label</label> <div class=\"col-sm-10\"> ::content <div fs-errors model=\"form.::name\"></div> </div> </div>";
@@ -33486,7 +33541,7 @@
 	module.exports=v1;
 
 /***/ },
-/* 90 */
+/* 91 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var v1="<div class=\"form-group\"> <label class=\"col-sm-2 control-label\">::label</label> <div class=\"col-sm-10\"> ::content </div> </div>";
@@ -33494,7 +33549,7 @@
 	module.exports=v1;
 
 /***/ },
-/* 91 */
+/* 92 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var v1="<ul class=\"text-danger fs-errors\" ng-show=\"model.$dirty && messages && messages.length > 0\"> <li ng-repeat=\"msg in messages\">{{ msg }}</li> </ul>";
@@ -33502,7 +33557,7 @@
 	module.exports=v1;
 
 /***/ },
-/* 92 */
+/* 93 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var v1="<div class=\"fs-select fs-widget-root\"> <div ng-hide=\"active\" class=\"fs-select-sel\" ng-class=\"{'btn-group': item}\"> <a class=\"btn btn-default fs-select-active\" ng-class=\"{&quot;btn-danger&quot;: invalid}\" href=\"javascript:void(0)\" ng-click=\"active = true\" ng-disabled=\"disabled\"> ::itemTpl &nbsp; </a>\n<button type=\"button\" class=\"btn btn-default fs-close\" aria-hidden=\"true\" ng-show=\"item\" ng-disabled=\"disabled\" ng-click=\"unselectItem()\"></button> </div> <div class=\"open\" ng-show=\"active\"> <input class=\"form-control\" fs-input fs-focus-when=\"active\" fs-blur-when=\"!active\" fs-on-focus=\"active = true\" fs-on-blur=\"onBlur()\" fs-hold-focus fs-down=\"move(1)\" fs-up=\"move(-1)\" fs-pg-up=\"move(-11)\" fs-pg-down=\"move(11)\" fs-enter=\"onEnter($event)\" fs-esc=\"active = false\" type=\"text\" placeholder=\"Search\" ng-model=\"search\" fs-null-form/> <div ng-if=\"active && dropdownItems.length > 0\"> <div fs-list items=\"dropdownItems\"> ::itemTpl </div> </div> </div> </div>";
@@ -33510,7 +33565,7 @@
 	module.exports=v1;
 
 /***/ },
-/* 93 */
+/* 94 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var v1="<div class=\"fs-multiselect fs-widget-root\" ng-class=\"{ &quot;fs-with-selected-items&quot;: selectedItems.length > 0 }\"> <div class=\"fs-multiselect-wrapper\"> <div class=\"fs-multiselect-selected-items\" ng-if=\"selectedItems.length > 0\"> <a ng-repeat=\"item in selectedItems\" class=\"btn\" ng-click=\"unselectItem(item)\" ng-disabled=\"disabled\"> ::item-template\n<span class=\"fs-close\"></span> </a> </div> <input ng-keydown=\"onkeys($event)\" fs-null-form ng-disabled=\"disabled\" fs-input fs-hold-focus fs-on-focus=\"active = true\" fs-on-blur=\"onBlur()\" fs-blur-when=\"!active\" fs-down=\"listInterface.move(1)\" fs-up=\"listInterface.move(-1)\" fs-pgup=\"listInterface.move(-11)\" fs-pgdown=\"listInterface.move(11)\" fs-enter=\"onEnter()\" fs-esc=\"active = false\" class=\"form-control\" type=\"text\" placeholder=\"Select something\" ng-model=\"search\"/> <div ng-if=\"active && dropdownItems.length > 0\" class=\"open\"> <div fs-list items=\"dropdownItems\"> ::item-template </div> </div> </div> </div>";
@@ -33518,7 +33573,7 @@
 	module.exports=v1;
 
 /***/ },
-/* 94 */
+/* 95 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var v1="<div class=\"fs-time fs-widget-root\"> <input fs-null-form fs-input fs-focus-when=\"active\" fs-blur-when=\"!active\" fs-on-focus=\"active = true\" fs-on-blur=\"onBlur()\" fs-hold-focus fs-down=\"move(1)\" fs-up=\"move(-1)\" fs-pg-up=\"move(-11)\" fs-pg-down=\"move(11)\" fs-enter=\"onEnter()\" fs-esc=\"active = false\" class=\"form-control fs-time-role\" ng-disabled=\"disabled\" type=\"text\"/>\n<span class=\"glyphicon glyphicon-time\" ng-click=\"active = !disabled\"></span> <div ng-if=\"!disabled && active\" fs-list items=\"dropdownItems\"> {{item}} </div> </div>";
@@ -33526,7 +33581,7 @@
 	module.exports=v1;
 
 /***/ },
-/* 95 */
+/* 96 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var v1="<div class=\"fs-date fs-widget-root\"> <input fs-input fs-focus-when=\"active\" fs-blur-when=\"!active\" fs-on-focus=\"active = true\" fs-on-blur=\"active = false\" fs-hold-focus fs-esc=\"active = false\" type=\"text\" ng-disabled=\"disabled\" class=\"form-control\" ng-model=\"selectedDate.date\" fs-date-format=\"{{format}}\" placeholder=\"{{placeholder}}\" fs-null-form/>\n<span class=\"glyphicon glyphicon-calendar\" ng-click=\"active = !disabled\"></span> <div ng-if=\"!disabled && active\" class=\"open fs-calendar-wrapper\"> <div class=\"dropdown-menu\"> <fs-calendar ng-model=\"selectedDate.date\" on-select=\"close()\"/> </div> </div> </div>";
@@ -33534,7 +33589,7 @@
 	module.exports=v1;
 
 /***/ },
-/* 96 */
+/* 97 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var v1="<div class=\"fs-calendar\" data-ng-switch=\"selectionMode\"> <div data-ng-switch-when=\"year\"> <div class=\"fs-calendar-header\"> <span class=\"fs-calendar-prev\" data-ng-click=\"prevYearRange()\"></span>\n<span class=\"fs-calendar-title\" data-ng-click=\"switchSelectionMode()\"> {{ years[0] }}-{{ years[years.length-1] }} </span>\n<span class=\"fs-calendar-next\" data-ng-click=\"nextYearRange()\"></span> </div> <table class=\"table-condensed\"> <tr data-ng-repeat=\"yearGroup in yearGroups\"> <td data-ng-repeat=\"year in yearGroup\" data-ng-click=\"selectYear(year)\" data-ng-class=\"{'active': year == selectedYear}\" class=\"year\"> {{ year }} </td> </tr> </table> </div> <div data-ng-switch-when=\"month\"> <div class=\"fs-calendar-header\"> <span class=\"fs-calendar-prev\" data-ng-click=\"prevYear()\"></span>\n<span class=\"fs-calendar-title\" data-ng-click=\"switchSelectionMode()\"> {{ selectedYear }} </span>\n<span class=\"fs-calendar-next\" data-ng-click=\"nextYear()\"></span> </div> <table class=\"table-condensed\"> <tr data-ng-repeat=\"monthGroup in monthGroups\"> <td data-ng-repeat=\"month in monthGroup\" data-ng-click=\"selectMonth(month)\" data-ng-class=\"{'active': month == selectedMonth && isSameYear()}\" class=\"month\"> {{ month }} </td> </tr> </table> </div> <div data-ng-switch-default> <div class=\"fs-calendar-header\"> <span class=\"fs-calendar-prev\" data-ng-click=\"prevMonth()\"></span>\n<span class=\"fs-calendar-title\" data-ng-click=\"switchSelectionMode()\"> {{ selectedMonth + ', ' + selectedYear }} </span>\n<span class=\"fs-calendar-next\" data-ng-click=\"nextMonth()\"></span> </div> <table class=\"table-condensed\"> <thead> <tr> <th data-ng-repeat=\"weekDay in weekDays\"> {{ weekDay }} </th> </tr> </thead> <tbody> <tr data-ng-repeat=\"week in weeks\"> <td data-ng-repeat=\"day in week\" class=\"day\" data-ng-class=\"{'day-in-selected-month': isDayInSelectedMonth(day),\n                       'day-current': isCurrentDate(day),\n                       'active bg-info': isSelectedDate(day)}\" data-ng-click=\"selectDay(day)\"> {{ day.getDate() }} </td> </tr> </tbody> </table> </div> </div>";
@@ -33542,7 +33597,7 @@
 	module.exports=v1;
 
 /***/ },
-/* 97 */
+/* 98 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var v1="<div class=\"fs-datetime fs-widget-root\" ng-class=\"{ &quot;fs-with-value&quot;: value }\"> <div fs-date ng-model=\"date\" ng-disabled=\"disabled\" fs-null-form></div> <div fs-time ng-model=\"time\" ng-disabled=\"disabled\" fs-null-form with-date></div> <button type=\"button\" class=\"btn btn-default fs-close\" ng-show=\"value\" ng-disabled=\"disabled\" ng-click=\"clearDate()\"></button> </div>";
