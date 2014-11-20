@@ -274,7 +274,7 @@
 
 	app = __webpack_require__(1)
 
-	src = __webpack_require__(40)
+	src = __webpack_require__(38)
 
 	app.controller('FormCtrl', function ($scope){
 	  $scope.src = src
@@ -374,7 +374,7 @@
 
 	app = __webpack_require__(1)
 
-	src = __webpack_require__(38)
+	src = __webpack_require__(39)
 
 	countries = __webpack_require__(17)
 
@@ -400,7 +400,7 @@
 
 	app = __webpack_require__(1)
 
-	src = __webpack_require__(42)
+	src = __webpack_require__(40)
 
 	countries = __webpack_require__(17)
 	app.controller('MultiselectCtrl', function ($scope){
@@ -429,7 +429,7 @@
 
 	app = __webpack_require__(1)
 
-	src = __webpack_require__(39)
+	src = __webpack_require__(41)
 
 	sushi = [
 	  {img: 'CaliforniaRoll', label: 'California Roll', src: __webpack_require__(31)},
@@ -457,7 +457,7 @@
 
 	app = __webpack_require__(1)
 
-	src = __webpack_require__(41)
+	src = __webpack_require__(42)
 
 	app.controller('CheckCtrl', function ($scope){
 	  $scope.src = src
@@ -30246,7 +30246,7 @@
 /* 25 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var v1="<pre markdown>\n## Directive `fs-datetime`\n\n  This directive creates a time-input widget. This directive expects\n  that scope property specified in <var>ngModel</var> will be a Date,\n  and will modify only hours/minutes/seconds components of this Date,\n  year/month/day will remain unchanged. Supported attributes:\n\n</pre> <pre sample>\n<fs-form-for>\n<div class=\"form-group row\">\n  <label class=\"col-xs-2 control-label\">Choose convenient seppuku date</label>\n  <div class=\"col-xs-2\"><div fs-date ng-model=\"selectedDate\" ng-disabled=\"disabled\"></div></div>\n  <div class=\"col-xs-2 col-xs-offset-3\">\n    <button class=\"btn btn-default\" ng-click=\"disabled=!disabled\">\n      {{disabled ? 'Enable' : 'Disable'}}\n    </button>\n  </div>\n</div>\n<fs-row label=\"Calendar\"><fs-calendar ng-model=\"selectedDate\"/></fs-row>\n\n<hr/>\n\n\n<div class=\"form-group row\">\n<label class=\"col-xs-2 control-label\">Select appointment time</label>\n  <div class=\"col-xs-2\"><div fs-time ng-disabled=\"disabled\" ng-model=\"svalue\"></div></div>\n  <div class=\"col-xs-1\"><button class=\"btn btn-default\" ng-click=\"setTime('21:52')\"> 21:52 </button></div>\n  <div class=\"col-xs-1\"><button class=\"btn btn-default\" ng-click=\"setTime('19:22')\"> 19:22 </button> </div>\n  <div class=\"col-xs-2 col-xs-offset-1\">\n    <button class=\"btn btn-default\" ng-click=\"disabled=!disabled\">\n      {{disabled ? 'Enable' : 'Disable'}}\n    </button>\n  </div>\n</div>\n\n<fs-row label=\"Result\">\n<pre>Time is: {{ svalue | json }}</pre>\n</fs-row>\n\n<hr/>\n\n<div class=\"form-group row\">\n  <label class=\"col-xs-2 control-label\">DateTime</label>\n  <div class=\"col-xs-4\"><div fs-datetime ng-model=\"selectedDateTime\" ng-disabled=\"disabled\"></div></div>\n  <div class=\"col-xs-2 col-xs-offset-2\">\n    <button class=\"btn btn-default\" ng-click=\"disabled=!disabled\">\n      {{disabled ? 'Enable' : 'Disable'}}\n    </button>\n  </div>\n</div>\n\n<fs-row label=\"Result\">\n<pre>\nEntered datetime: {{ selectedDateTime | date:'medium'}}\n</pre></fs-row>\n\n</fs-form-for>\n</pre>";
+	var v1="<pre markdown>\n## Directive `fs-datetime`\n\n  This directive creates a time-input widget. This directive expects\n  that scope property specified in <var>ngModel</var> will be a Date,\n  and will modify only hours/minutes/seconds components of this Date,\n  year/month/day will remain unchanged.\n\n</pre> <pre sample>\n<fs-form-for>\n<div class=\"form-group row\">\n  <label class=\"col-xs-2 control-label\">Choose convenient seppuku date</label>\n  <div class=\"col-xs-2\"><div fs-date ng-model=\"selectedDate\" ng-disabled=\"disabled\"></div></div>\n  <div class=\"col-xs-2 col-xs-offset-3\">\n    <button class=\"btn btn-default\" ng-click=\"disabled=!disabled\">\n      {{disabled ? 'Enable' : 'Disable'}}\n    </button>\n  </div>\n</div>\n<fs-row label=\"Calendar\"><fs-calendar ng-model=\"selectedDate\"/></fs-row>\n\n<hr/>\n\n\n<div class=\"form-group row\">\n<label class=\"col-xs-2 control-label\">Select appointment time</label>\n  <div class=\"col-xs-2\"><div fs-time ng-disabled=\"disabled\" ng-model=\"svalue\"></div></div>\n  <div class=\"col-xs-1\"><button class=\"btn btn-default\" ng-click=\"setTime('21:52')\"> 21:52 </button></div>\n  <div class=\"col-xs-1\"><button class=\"btn btn-default\" ng-click=\"setTime('19:22')\"> 19:22 </button> </div>\n  <div class=\"col-xs-2 col-xs-offset-1\">\n    <button class=\"btn btn-default\" ng-click=\"disabled=!disabled\">\n      {{disabled ? 'Enable' : 'Disable'}}\n    </button>\n  </div>\n</div>\n\n<fs-row label=\"Result\">\n<pre>Time is: {{ svalue | json }}</pre>\n</fs-row>\n\n<hr/>\n\n<div class=\"form-group row\">\n  <label class=\"col-xs-2 control-label\">DateTime</label>\n  <div class=\"col-xs-4\"><div fs-datetime ng-model=\"selectedDateTime\" ng-disabled=\"disabled\"></div></div>\n  <div class=\"col-xs-2 col-xs-offset-2\">\n    <button class=\"btn btn-default\" ng-click=\"disabled=!disabled\">\n      {{disabled ? 'Enable' : 'Disable'}}\n    </button>\n  </div>\n</div>\n\n<fs-row label=\"Result\">\n<pre>\nEntered datetime: {{ selectedDateTime | date:'medium'}}\n</pre></fs-row>\n\n</fs-form-for>\n</pre>";
 	angular.module(["ng"]).run(["$templateCache",function(c){c.put("views/datetime.html", v1)}]);
 	module.exports=v1;
 
@@ -30313,31 +30313,31 @@
 /* 38 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = "app = require('./module')\n\nsrc = require('raw!./select.js')\n\ncountries = require('./countries')\n\napp.controller('SelectCtrl', function ($scope){\n  $scope.disabled = false;\n  $scope.src = src\n\n  $scope.items = [\n    {id: 'S', label: 'Shijima'},\n    {id: 'M', label: 'Musubi'},\n    {id: 'Y', label: 'Yosuga'}\n  ];\n\n  $scope.countries = countries;\n\n  $scope.laughs = ['Ha-ha-ha', 'Ho-ho-ho', 'He-he-he'];\n})\n"
+	module.exports = "app = require('./module')\n\nsrc = require('raw!./form.js')\n\napp.controller('FormCtrl', function ($scope){\n  $scope.src = src\n\n  $scope.samurai = {\n    name: \"Unnamed\",\n    districts: []\n  };\n\n  $scope.learningStages = [\n    {id: 'S', label: 'Shu'},\n    {id: 'H', label: 'Ha'},\n    {id: 'R', label: 'Ri'}\n  ];\n\n  $scope.weapons = [\n    {id: '1', label: 'Katana'},\n    {id: '2', label: 'Naginata'},\n    {id: '3', label: 'Yari'},\n    {id: '4', label: 'Horagai'},\n    {id: '5', label: 'Horimono'}\n  ];\n\n  $scope.meals = [\n    {id: 'me', label: 'Meat'},\n    {id: 'mi', label: 'Milk'},\n    {id: 'or', label: 'Orange'},\n    {id: 'ri', label: 'Rice'}\n  ];\n\n  $scope.otherFacts = [\n    'Uruwashii', 'Buke', 'Mononofu', 'Musha', 'Rōnin', 'Shi', 'Tsuwamono'\n  ];\n\n  $scope.weaponStyles = ['Kenjutsu', 'Naginatajutsu', 'Sōjutsu'];\n\n  $scope.districts = [\n  'Kita District',\n    'Tsugaru District',\n    'Hei District',\n    'Iwai District',\n    'Akita District',\n    'Tagawa District',\n    'Murayama District',\n    'Okitama District',\n    'Aizu District',\n    'Shirakawa District',\n    'Ibaraki District',\n    'Tsuga District',\n    'Habu District',\n    'Sōma District',\n    'Katsushika District',\n    'Saitama District',\n    'Adachi District',\n    'Toshima District',\n    'Tama District',\n    'Kanbara District',\n    'Uonuma District',\n    'Kubiki District',\n    'Niikawa District',\n    'Tsuru District',\n    'Yamanashi District',\n    'Yatsushiro District',\n    'Koma District',\n    'Saku District',\n    'Takai District',\n    'Minochi District',\n    'Ina District',\n    'Chikuma District',\n    'Azumi District',\n    'Ishizu District',\n    'Shitara District',\n    'Kamo District',\n    'Kasugai District',\n    'Muro District',\n    'Azai District',\n    'Kuwata District',\n    'Ukena District',\n    'Uwa District',\n    'Matsuura District',\n    'Sonogi District',\n    'Takaki District',\n    'Kunisaki District',\n    'Amabe District',\n    'Usuki District',\n    'Naka District',\n    'Ōsumi District',\n    'Soo District',\n    'Isa District'\n  ];\n})\n"
 
 /***/ },
 /* 39 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = "app = require('./module')\n\nsrc = require('raw!./radio.js')\n\nsushi = [\n  {img: 'CaliforniaRoll', label: 'California Roll', src: require('../imgs/CaliforniaRoll.gif')},\n  {img: 'CucumberRoll', label: 'Cucumber Roll', src: require('../imgs/CucumberRoll.gif')},\n  {img: 'FattyTuna', label: 'Fatty Tuna',src: require('../imgs/FattyTuna.gif')},\n  {img: 'Inari', label: 'Inari',src: require('../imgs/Inari.gif')},\n  {img: 'Octopus', label: 'Octopus', src: require('../imgs/Octopus.gif')},\n  {img: 'Shrimp', label: 'Shrimp', src: require('../imgs/Shrimp.gif')}\n]\n\napp.controller('RadioCtrl', function ($scope){\n  $scope.src = src\n  $scope.sushi = sushi\n  $scope.items = [\n    {id: 'S', label: 'Shijima'},\n    {id: 'M', label: 'Musubi'},\n    {id: 'Y', label: 'Yosuga'}\n  ];\n})\n"
+	module.exports = "app = require('./module')\n\nsrc = require('raw!./select.js')\n\ncountries = require('./countries')\n\napp.controller('SelectCtrl', function ($scope){\n  $scope.disabled = false;\n  $scope.src = src\n\n  $scope.items = [\n    {id: 'S', label: 'Shijima'},\n    {id: 'M', label: 'Musubi'},\n    {id: 'Y', label: 'Yosuga'}\n  ];\n\n  $scope.countries = countries;\n\n  $scope.laughs = ['Ha-ha-ha', 'Ho-ho-ho', 'He-he-he'];\n})\n"
 
 /***/ },
 /* 40 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = "app = require('./module')\n\nsrc = require('raw!./form.js')\n\napp.controller('FormCtrl', function ($scope){\n  $scope.src = src\n\n  $scope.samurai = {\n    name: \"Unnamed\",\n    districts: []\n  };\n\n  $scope.learningStages = [\n    {id: 'S', label: 'Shu'},\n    {id: 'H', label: 'Ha'},\n    {id: 'R', label: 'Ri'}\n  ];\n\n  $scope.weapons = [\n    {id: '1', label: 'Katana'},\n    {id: '2', label: 'Naginata'},\n    {id: '3', label: 'Yari'},\n    {id: '4', label: 'Horagai'},\n    {id: '5', label: 'Horimono'}\n  ];\n\n  $scope.meals = [\n    {id: 'me', label: 'Meat'},\n    {id: 'mi', label: 'Milk'},\n    {id: 'or', label: 'Orange'},\n    {id: 'ri', label: 'Rice'}\n  ];\n\n  $scope.otherFacts = [\n    'Uruwashii', 'Buke', 'Mononofu', 'Musha', 'Rōnin', 'Shi', 'Tsuwamono'\n  ];\n\n  $scope.weaponStyles = ['Kenjutsu', 'Naginatajutsu', 'Sōjutsu'];\n\n  $scope.districts = [\n  'Kita District',\n    'Tsugaru District',\n    'Hei District',\n    'Iwai District',\n    'Akita District',\n    'Tagawa District',\n    'Murayama District',\n    'Okitama District',\n    'Aizu District',\n    'Shirakawa District',\n    'Ibaraki District',\n    'Tsuga District',\n    'Habu District',\n    'Sōma District',\n    'Katsushika District',\n    'Saitama District',\n    'Adachi District',\n    'Toshima District',\n    'Tama District',\n    'Kanbara District',\n    'Uonuma District',\n    'Kubiki District',\n    'Niikawa District',\n    'Tsuru District',\n    'Yamanashi District',\n    'Yatsushiro District',\n    'Koma District',\n    'Saku District',\n    'Takai District',\n    'Minochi District',\n    'Ina District',\n    'Chikuma District',\n    'Azumi District',\n    'Ishizu District',\n    'Shitara District',\n    'Kamo District',\n    'Kasugai District',\n    'Muro District',\n    'Azai District',\n    'Kuwata District',\n    'Ukena District',\n    'Uwa District',\n    'Matsuura District',\n    'Sonogi District',\n    'Takaki District',\n    'Kunisaki District',\n    'Amabe District',\n    'Usuki District',\n    'Naka District',\n    'Ōsumi District',\n    'Soo District',\n    'Isa District'\n  ];\n})\n"
+	module.exports = "app = require('./module')\n\nsrc = require('raw!./multiselect.js')\n\ncountries = require('./countries')\napp.controller('MultiselectCtrl', function ($scope){\n    $scope.src = src;\n    $scope.disabled = false;\n\n    $scope.items = [\n      {id: 'S', label: 'Shijima'},\n      {id: 'M', label: 'Musubi'},\n      {id: 'Y', label: 'Yosuga'},\n      {id: 'GG', label: 'Genmai gohan'},\n      {id: 'K', label: 'Kamameshi'},\n      {id: 'MO', label: 'Mochi'},\n      {id: 'SH', label: 'Sekihan'}\n    ];\n\n    $scope.countries = countries\n    $scope.countryNames = countries.map(function(x){return x.name})\n\n})\n"
 
 /***/ },
 /* 41 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = "app = require('./module')\n\nsrc = require('raw!./check.js')\n\napp.controller('CheckCtrl', function ($scope){\n  $scope.src = src\n  $scope.items = [\n    {id: 'S', label: 'Shijima'},\n    {id: 'M', label: 'Musubi'},\n    {id: 'Y', label: 'Yosuga'}\n  ];\n})\n"
+	module.exports = "app = require('./module')\n\nsrc = require('raw!./radio.js')\n\nsushi = [\n  {img: 'CaliforniaRoll', label: 'California Roll', src: require('../imgs/CaliforniaRoll.gif')},\n  {img: 'CucumberRoll', label: 'Cucumber Roll', src: require('../imgs/CucumberRoll.gif')},\n  {img: 'FattyTuna', label: 'Fatty Tuna',src: require('../imgs/FattyTuna.gif')},\n  {img: 'Inari', label: 'Inari',src: require('../imgs/Inari.gif')},\n  {img: 'Octopus', label: 'Octopus', src: require('../imgs/Octopus.gif')},\n  {img: 'Shrimp', label: 'Shrimp', src: require('../imgs/Shrimp.gif')}\n]\n\napp.controller('RadioCtrl', function ($scope){\n  $scope.src = src\n  $scope.sushi = sushi\n  $scope.items = [\n    {id: 'S', label: 'Shijima'},\n    {id: 'M', label: 'Musubi'},\n    {id: 'Y', label: 'Yosuga'}\n  ];\n})\n"
 
 /***/ },
 /* 42 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = "app = require('./module')\n\nsrc = require('raw!./multiselect.js')\n\ncountries = require('./countries')\napp.controller('MultiselectCtrl', function ($scope){\n    $scope.src = src;\n    $scope.disabled = false;\n\n    $scope.items = [\n      {id: 'S', label: 'Shijima'},\n      {id: 'M', label: 'Musubi'},\n      {id: 'Y', label: 'Yosuga'},\n      {id: 'GG', label: 'Genmai gohan'},\n      {id: 'K', label: 'Kamameshi'},\n      {id: 'MO', label: 'Mochi'},\n      {id: 'SH', label: 'Sekihan'}\n    ];\n\n    $scope.countries = countries\n    $scope.countryNames = countries.map(function(x){return x.name})\n\n})\n"
+	module.exports = "app = require('./module')\n\nsrc = require('raw!./check.js')\n\napp.controller('CheckCtrl', function ($scope){\n  $scope.src = src\n  $scope.items = [\n    {id: 'S', label: 'Shijima'},\n    {id: 'M', label: 'Musubi'},\n    {id: 'Y', label: 'Yosuga'}\n  ];\n})\n"
 
 /***/ },
 /* 43 */
