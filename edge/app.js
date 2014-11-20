@@ -374,7 +374,7 @@
 
 	app = __webpack_require__(1)
 
-	src = __webpack_require__(39)
+	src = __webpack_require__(41)
 
 	countries = __webpack_require__(17)
 
@@ -429,7 +429,7 @@
 
 	app = __webpack_require__(1)
 
-	src = __webpack_require__(41)
+	src = __webpack_require__(39)
 
 	sushi = [
 	  {img: 'CaliforniaRoll', label: 'California Roll', src: __webpack_require__(31)},
@@ -30230,7 +30230,7 @@
 /* 23 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var v1="<pre markdown>\n## Directive `fs-radio`\n\nThis directive creates a set of radio buttons.\nList of available choices is passed via items attribute and can be\nan Array of Objects, Strings, Numbers, etc.\n`fsRadio` supports custom templating for item's label.\n\nSupported attributes:\n\n* items - property of scope containing list of available values (of strings for autocomplete, if freetext is enabled)\n* ng-model - see AngularJS documentation for ngModel directive\n* ng-disabled - disable/enable input with scope property\n* class - additional CSS classes\n</pre> <pre sample>\n  <fs-form-for>\n    <div class=\"form-group\">\n      <label class=\"col-xs-2 control-label\">Choose your katawari</label>\n      <div class=\"col-xs-3\">\n        <div fs-radio items=\"items\" ng-disabled=\"disabled\" ng-model=\"radiovalue\">\n          <b>{{item.id}}</b> {{item.label}}\n        </div>\n      </div>\n      <div class=\"col-xs-2\">\n        <button class=\"btn btn-default\" ng-click=\"disabled=!disabled\">\n          {{disabled ? 'Enable' : 'Disable'}}\n        </button>\n      </div>\n    </div>\n    <div class=\"form-group\">\n      <label class=\"col-xs-2 control-label\">Choose your katawari</label>\n      <div class=\"col-xs-3\">\n        <div fs-radio items=\"items\" ng-model=\"radiovalue\">\n          {{item.label}}\n        </div>\n      </div>\n    </div>\n<fs-row label=\"Result\"><pre>Selected value: {{ radiovalue | json }}</pre></fs-row>\n\n<hr/>\n\n<div class=\"form-group\">\n  <label class=\"col-xs-2 control-label\">Your meal</label>\n  <div class=\"col-xs-3\">\n    <div fs-radio items=\"sushi\" ng-disabled=\"disabled\" ng-model=\"value\">\n      <img src=\"{{item.src}}\" width=\"24\" height=\"24\" alt=\"{{item.label}}\"/> {{item.label}}\n    </div>\n  </div>\n  <div class=\"col-xs-2\">\n    <button class=\"btn btn-default\" ng-click=\"disabled=!disabled\">\n      {{disabled ? 'Enable' : 'Disable'}}\n    </button>\n  </div>\n</div>\n<fs-row label=\"Result\"><pre>Selected dish: {{ value | json }}</pre></fs-row>\n  </fs-form-for>\n</pre>";
+	var v1="<pre markdown>\n## Directive `fs-radio`\n\nThis directive creates a set of radio buttons.\nList of available choices is passed via items attribute and can be\nan Array of Objects, Strings, Numbers, etc.\n`fsRadio` supports custom templating for item's label.\n\nSupported attributes:\n\n* items - property of scope containing list of available values (of strings for autocomplete, if freetext is enabled)\n* ng-model - see AngularJS documentation for ngModel directive\n* ng-disabled - disable/enable input with scope property\n* class - additional CSS classes\n</pre> <pre sample>\n  <fs-form-for>\n    <div class=\"form-group\">\n      <label class=\"col-xs-2 control-label\">Choose your katawari</label>\n      <div class=\"col-xs-3\">\n        <div fs-radio items=\"items\" ng-disabled=\"disabled\" ng-model=\"radiovalue\">\n          <b>{{item.id}}</b> {{item.label}}\n        </div>\n      </div>\n      <div class=\"col-xs-2\">\n        <button class=\"btn btn-default\" ng-click=\"disabled=!disabled\">\n          {{disabled ? 'Enable' : 'Disable'}}\n        </button>\n      </div>\n    </div>\n    <div class=\"form-group\">\n      <label class=\"col-xs-2 control-label\">Choose your katawari</label>\n      <div class=\"col-xs-3\">\n        <div fs-radio items=\"items\" ng-model=\"radiovalue\">\n          {{item.label}}\n        </div>\n      </div>\n    </div>\n<fs-row label=\"Result\"><pre>Selected value: {{ radiovalue | json }}</pre></fs-row>\n\n<hr/>\n\n<div class=\"form-group\">\n  <label class=\"col-xs-2 control-label\">Your meal</label>\n  <div class=\"col-xs-3\">\n    <div fs-radio items=\"sushi\" ng-disabled=\"disabled\" ng-model=\"value\">\n      <img ng-src=\"{{item.src}}\" width=\"24\" height=\"24\" alt=\"{{item.label}}\"/> {{item.label}}\n    </div>\n  </div>\n  <div class=\"col-xs-2\">\n    <button class=\"btn btn-default\" ng-click=\"disabled=!disabled\">\n      {{disabled ? 'Enable' : 'Disable'}}\n    </button>\n  </div>\n</div>\n<fs-row label=\"Result\"><pre>Selected dish: {{ value | json }}</pre></fs-row>\n  </fs-form-for>\n</pre>";
 	angular.module(["ng"]).run(["$templateCache",function(c){c.put("views/radio.html", v1)}]);
 	module.exports=v1;
 
@@ -30319,7 +30319,7 @@
 /* 39 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = "app = require('./module')\n\nsrc = require('raw!./select.js')\n\ncountries = require('./countries')\n\napp.controller('SelectCtrl', function ($scope){\n  $scope.disabled = false;\n  $scope.src = src\n\n  $scope.items = [\n    {id: 'S', label: 'Shijima'},\n    {id: 'M', label: 'Musubi'},\n    {id: 'Y', label: 'Yosuga'}\n  ];\n\n  $scope.countries = countries;\n\n  $scope.laughs = ['Ha-ha-ha', 'Ho-ho-ho', 'He-he-he'];\n})\n"
+	module.exports = "app = require('./module')\n\nsrc = require('raw!./radio.js')\n\nsushi = [\n  {img: 'CaliforniaRoll', label: 'California Roll', src: require('../imgs/CaliforniaRoll.gif')},\n  {img: 'CucumberRoll', label: 'Cucumber Roll', src: require('../imgs/CucumberRoll.gif')},\n  {img: 'FattyTuna', label: 'Fatty Tuna',src: require('../imgs/FattyTuna.gif')},\n  {img: 'Inari', label: 'Inari',src: require('../imgs/Inari.gif')},\n  {img: 'Octopus', label: 'Octopus', src: require('../imgs/Octopus.gif')},\n  {img: 'Shrimp', label: 'Shrimp', src: require('../imgs/Shrimp.gif')}\n]\n\napp.controller('RadioCtrl', function ($scope){\n  $scope.src = src\n  $scope.sushi = sushi\n  $scope.items = [\n    {id: 'S', label: 'Shijima'},\n    {id: 'M', label: 'Musubi'},\n    {id: 'Y', label: 'Yosuga'}\n  ];\n})\n"
 
 /***/ },
 /* 40 */
@@ -30331,7 +30331,7 @@
 /* 41 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = "app = require('./module')\n\nsrc = require('raw!./radio.js')\n\nsushi = [\n  {img: 'CaliforniaRoll', label: 'California Roll', src: require('../imgs/CaliforniaRoll.gif')},\n  {img: 'CucumberRoll', label: 'Cucumber Roll', src: require('../imgs/CucumberRoll.gif')},\n  {img: 'FattyTuna', label: 'Fatty Tuna',src: require('../imgs/FattyTuna.gif')},\n  {img: 'Inari', label: 'Inari',src: require('../imgs/Inari.gif')},\n  {img: 'Octopus', label: 'Octopus', src: require('../imgs/Octopus.gif')},\n  {img: 'Shrimp', label: 'Shrimp', src: require('../imgs/Shrimp.gif')}\n]\n\napp.controller('RadioCtrl', function ($scope){\n  $scope.src = src\n  $scope.sushi = sushi\n  $scope.items = [\n    {id: 'S', label: 'Shijima'},\n    {id: 'M', label: 'Musubi'},\n    {id: 'Y', label: 'Yosuga'}\n  ];\n})\n"
+	module.exports = "app = require('./module')\n\nsrc = require('raw!./select.js')\n\ncountries = require('./countries')\n\napp.controller('SelectCtrl', function ($scope){\n  $scope.disabled = false;\n  $scope.src = src\n\n  $scope.items = [\n    {id: 'S', label: 'Shijima'},\n    {id: 'M', label: 'Musubi'},\n    {id: 'Y', label: 'Yosuga'}\n  ];\n\n  $scope.countries = countries;\n\n  $scope.laughs = ['Ha-ha-ha', 'Ho-ho-ho', 'He-he-he'];\n})\n"
 
 /***/ },
 /* 42 */
