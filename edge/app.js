@@ -274,7 +274,7 @@
 
 	app = __webpack_require__(1)
 
-	src = __webpack_require__(38)
+	src = __webpack_require__(40)
 
 	app.controller('FormCtrl', function ($scope){
 	  $scope.src = src
@@ -374,7 +374,7 @@
 
 	app = __webpack_require__(1)
 
-	src = __webpack_require__(42)
+	src = __webpack_require__(38)
 
 	countries = __webpack_require__(17)
 
@@ -400,7 +400,7 @@
 
 	app = __webpack_require__(1)
 
-	src = __webpack_require__(39)
+	src = __webpack_require__(42)
 
 	countries = __webpack_require__(17)
 	app.controller('MultiselectCtrl', function ($scope){
@@ -429,7 +429,7 @@
 
 	app = __webpack_require__(1)
 
-	src = __webpack_require__(41)
+	src = __webpack_require__(39)
 
 	sushi = [
 	  {img: 'CaliforniaRoll', label: 'California Roll', src: __webpack_require__(31)},
@@ -457,7 +457,7 @@
 
 	app = __webpack_require__(1)
 
-	src = __webpack_require__(40)
+	src = __webpack_require__(41)
 
 	app.controller('CheckCtrl', function ($scope){
 	  $scope.src = src
@@ -30222,7 +30222,7 @@
 /* 22 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var v1="<pre markdown>\n## Directive `fs-multiselect`\n\n### Warning!\n\n  You should never use this directive on\n  `input` tag.  Use `div` instead.\n\nThis directive creates a 'multi-select' widget, i.e.\n'select' widget with multiple choices.\nDepending on freetext attribute,\nit allows to select items from predefined list or enter custom values.\nIn both cases, text input inside widget is used as a search box.\nItems and selected values can be objects, strings or integers.\n\nSupports several Angular directives:\n`ngModel`, `ngDisabled`, `ngRequired`.\nYou can provide template for single item in list to display any information you need,\nnot only label text. In ngModel it holds full object, not only value.\n\nSupported attributes:\n\n* items - property of scope containing list of available values (of strings for autocomplete, if freetext is enabled)\n* ng-model - see AngularJS documentation for ngModel directive\n* ng-disabled - disable/enable input with scope property\n* class - additional CSS classes\n\n</pre> <pre sample label=\"MultiSelect\">\n  <fs-form-for>\n<fieldset>\n<legend>fsMultiSelect without freetext</legend>\n    <div class=\"form-group\">\n      <label class=\"col-xs-2 control-label\">Select weapon</label>\n\n      <div fs-multiselect items=\"countries\" freetext class=\"col-xs-8\" ng-disabled=\"disabled\" ng-model=\"country\">\n          <span ng-show=\"item\"><span class=\"flag flag-{{ item['alpha-2'].toLowerCase() }}\"></span>&nbsp;{{item.name}}</span>\n          <span ng-hide=\"item\"> No country </span>\n      </div>\n\n      <div class=\"col-xs-2\">\n        <button class=\"btn btn-default\" ng-click=\"disabled=!disabled\">\n          {{disabled ? 'Enable' : 'Disable'}}\n        </button>\n      </div>\n    </div>\n    <fs-row label=\"Result\"><pre>Selection: {{country | json}}</pre></fs-row>\n</fieldset>\n\n<br/>\n<br/>\n\n<fieldset>\n<legend>fsMultiselect with freetext</legend>\n<div class=\"form-group row\">\n  <label class=\"col-xs-2 control-label\">\n    Where have you been?\n  </label>\n  <div fs-multiselect items=\"countryNames\" freetext class=\"col-xs-8\" ng-disabled=\"disabled\" ng-model=\"countryName\"></div>\n  <div class=\"col-xs-2\">\n    <button class=\"btn btn-default\" ng-click=\"disabled=!disabled\">\n      {{disabled ? 'Enable' : 'Disable'}}\n    </button>\n  </div>\n</div>\n\n<fs-row label=\"Result\"><pre>Selection: {{countryName | json}}</pre></fs-row>\n</fieldset>\n</fs-form-for>\n</pre>";
+	var v1="<pre markdown>\n## Directive `fs-multiselect`\n\n### Warning!\n\n  You should never use this directive on\n  `input` tag.  Use `div` instead.\n\nThis directive creates a 'multi-select' widget, i.e.\n'select' widget with multiple choices.\nDepending on freetext attribute,\nit allows to select items from predefined list or enter custom values.\nIn both cases, text input inside widget is used as a search box.\nItems and selected values can be objects, strings or integers.\n\nSupports several Angular directives:\n`ngModel`, `ngDisabled`, `ngRequired`.\nYou can provide template for single item in list to display any information you need,\nnot only label text. In ngModel it holds full object, not only value.\n\nSupported attributes:\n\n* items - property of scope containing list of available values (of strings for autocomplete, if freetext is enabled)\n* ng-model - see AngularJS documentation for ngModel directive\n* ng-disabled - disable/enable input with scope property\n* class - additional CSS classes\n\n</pre> <pre sample label=\"MultiSelect\">\n  <fs-form-for>\n<fieldset>\n<legend>fsMultiSelect without freetext</legend>\n    <div class=\"form-group\">\n      <label class=\"col-xs-2 control-label\">Select country</label>\n\n      <div fs-multiselect items=\"countries\" freetext class=\"col-xs-8\" ng-disabled=\"disabled\" ng-model=\"country\">\n          <span ng-show=\"item\"><span class=\"flag flag-{{ item['alpha-2'].toLowerCase() }}\"></span>&nbsp;{{item.name}}</span>\n          <span ng-hide=\"item\"> No country </span>\n      </div>\n\n      <div class=\"col-xs-2\">\n        <button class=\"btn btn-default\" ng-click=\"disabled=!disabled\">\n          {{disabled ? 'Enable' : 'Disable'}}\n        </button>\n      </div>\n    </div>\n    <fs-row label=\"Result\"><pre>Selection: {{country | json}}</pre></fs-row>\n</fieldset>\n\n<br/>\n<br/>\n\n<fieldset>\n<legend>fsMultiselect with freetext</legend>\n<div class=\"form-group row\">\n  <label class=\"col-xs-2 control-label\">\n    Where have you been?\n  </label>\n  <div fs-multiselect items=\"countryNames\" freetext class=\"col-xs-8\" ng-disabled=\"disabled\" ng-model=\"countryName\"></div>\n  <div class=\"col-xs-2\">\n    <button class=\"btn btn-default\" ng-click=\"disabled=!disabled\">\n      {{disabled ? 'Enable' : 'Disable'}}\n    </button>\n  </div>\n</div>\n\n<fs-row label=\"Result\"><pre>Selection: {{countryName | json}}</pre></fs-row>\n</fieldset>\n</fs-form-for>\n</pre>";
 	angular.module(["ng"]).run(["$templateCache",function(c){c.put("views/multiselect.html", v1)}]);
 	module.exports=v1;
 
@@ -30313,31 +30313,31 @@
 /* 38 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = "app = require('./module')\n\nsrc = require('raw!./form.js')\n\napp.controller('FormCtrl', function ($scope){\n  $scope.src = src\n\n  $scope.samurai = {\n    name: \"Unnamed\",\n    districts: []\n  };\n\n  $scope.learningStages = [\n    {id: 'S', label: 'Shu'},\n    {id: 'H', label: 'Ha'},\n    {id: 'R', label: 'Ri'}\n  ];\n\n  $scope.weapons = [\n    {id: '1', label: 'Katana'},\n    {id: '2', label: 'Naginata'},\n    {id: '3', label: 'Yari'},\n    {id: '4', label: 'Horagai'},\n    {id: '5', label: 'Horimono'}\n  ];\n\n  $scope.meals = [\n    {id: 'me', label: 'Meat'},\n    {id: 'mi', label: 'Milk'},\n    {id: 'or', label: 'Orange'},\n    {id: 'ri', label: 'Rice'}\n  ];\n\n  $scope.otherFacts = [\n    'Uruwashii', 'Buke', 'Mononofu', 'Musha', 'Rōnin', 'Shi', 'Tsuwamono'\n  ];\n\n  $scope.weaponStyles = ['Kenjutsu', 'Naginatajutsu', 'Sōjutsu'];\n\n  $scope.districts = [\n  'Kita District',\n    'Tsugaru District',\n    'Hei District',\n    'Iwai District',\n    'Akita District',\n    'Tagawa District',\n    'Murayama District',\n    'Okitama District',\n    'Aizu District',\n    'Shirakawa District',\n    'Ibaraki District',\n    'Tsuga District',\n    'Habu District',\n    'Sōma District',\n    'Katsushika District',\n    'Saitama District',\n    'Adachi District',\n    'Toshima District',\n    'Tama District',\n    'Kanbara District',\n    'Uonuma District',\n    'Kubiki District',\n    'Niikawa District',\n    'Tsuru District',\n    'Yamanashi District',\n    'Yatsushiro District',\n    'Koma District',\n    'Saku District',\n    'Takai District',\n    'Minochi District',\n    'Ina District',\n    'Chikuma District',\n    'Azumi District',\n    'Ishizu District',\n    'Shitara District',\n    'Kamo District',\n    'Kasugai District',\n    'Muro District',\n    'Azai District',\n    'Kuwata District',\n    'Ukena District',\n    'Uwa District',\n    'Matsuura District',\n    'Sonogi District',\n    'Takaki District',\n    'Kunisaki District',\n    'Amabe District',\n    'Usuki District',\n    'Naka District',\n    'Ōsumi District',\n    'Soo District',\n    'Isa District'\n  ];\n})\n"
+	module.exports = "app = require('./module')\n\nsrc = require('raw!./select.js')\n\ncountries = require('./countries')\n\napp.controller('SelectCtrl', function ($scope){\n  $scope.disabled = false;\n  $scope.src = src\n\n  $scope.items = [\n    {id: 'S', label: 'Shijima'},\n    {id: 'M', label: 'Musubi'},\n    {id: 'Y', label: 'Yosuga'}\n  ];\n\n  $scope.countries = countries;\n\n  $scope.laughs = ['Ha-ha-ha', 'Ho-ho-ho', 'He-he-he'];\n})\n"
 
 /***/ },
 /* 39 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = "app = require('./module')\n\nsrc = require('raw!./multiselect.js')\n\ncountries = require('./countries')\napp.controller('MultiselectCtrl', function ($scope){\n    $scope.src = src;\n    $scope.disabled = false;\n\n    $scope.items = [\n      {id: 'S', label: 'Shijima'},\n      {id: 'M', label: 'Musubi'},\n      {id: 'Y', label: 'Yosuga'},\n      {id: 'GG', label: 'Genmai gohan'},\n      {id: 'K', label: 'Kamameshi'},\n      {id: 'MO', label: 'Mochi'},\n      {id: 'SH', label: 'Sekihan'}\n    ];\n\n    $scope.countries = countries\n    $scope.countryNames = countries.map(function(x){return x.name})\n\n})\n"
+	module.exports = "app = require('./module')\n\nsrc = require('raw!./radio.js')\n\nsushi = [\n  {img: 'CaliforniaRoll', label: 'California Roll', src: require('../imgs/CaliforniaRoll.gif')},\n  {img: 'CucumberRoll', label: 'Cucumber Roll', src: require('../imgs/CucumberRoll.gif')},\n  {img: 'FattyTuna', label: 'Fatty Tuna',src: require('../imgs/FattyTuna.gif')},\n  {img: 'Inari', label: 'Inari',src: require('../imgs/Inari.gif')},\n  {img: 'Octopus', label: 'Octopus', src: require('../imgs/Octopus.gif')},\n  {img: 'Shrimp', label: 'Shrimp', src: require('../imgs/Shrimp.gif')}\n]\n\napp.controller('RadioCtrl', function ($scope){\n  $scope.src = src\n  $scope.sushi = sushi\n  $scope.items = [\n    {id: 'S', label: 'Shijima'},\n    {id: 'M', label: 'Musubi'},\n    {id: 'Y', label: 'Yosuga'}\n  ];\n})\n"
 
 /***/ },
 /* 40 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = "app = require('./module')\n\nsrc = require('raw!./check.js')\n\napp.controller('CheckCtrl', function ($scope){\n  $scope.src = src\n  $scope.items = [\n    {id: 'S', label: 'Shijima'},\n    {id: 'M', label: 'Musubi'},\n    {id: 'Y', label: 'Yosuga'}\n  ];\n})\n"
+	module.exports = "app = require('./module')\n\nsrc = require('raw!./form.js')\n\napp.controller('FormCtrl', function ($scope){\n  $scope.src = src\n\n  $scope.samurai = {\n    name: \"Unnamed\",\n    districts: []\n  };\n\n  $scope.learningStages = [\n    {id: 'S', label: 'Shu'},\n    {id: 'H', label: 'Ha'},\n    {id: 'R', label: 'Ri'}\n  ];\n\n  $scope.weapons = [\n    {id: '1', label: 'Katana'},\n    {id: '2', label: 'Naginata'},\n    {id: '3', label: 'Yari'},\n    {id: '4', label: 'Horagai'},\n    {id: '5', label: 'Horimono'}\n  ];\n\n  $scope.meals = [\n    {id: 'me', label: 'Meat'},\n    {id: 'mi', label: 'Milk'},\n    {id: 'or', label: 'Orange'},\n    {id: 'ri', label: 'Rice'}\n  ];\n\n  $scope.otherFacts = [\n    'Uruwashii', 'Buke', 'Mononofu', 'Musha', 'Rōnin', 'Shi', 'Tsuwamono'\n  ];\n\n  $scope.weaponStyles = ['Kenjutsu', 'Naginatajutsu', 'Sōjutsu'];\n\n  $scope.districts = [\n  'Kita District',\n    'Tsugaru District',\n    'Hei District',\n    'Iwai District',\n    'Akita District',\n    'Tagawa District',\n    'Murayama District',\n    'Okitama District',\n    'Aizu District',\n    'Shirakawa District',\n    'Ibaraki District',\n    'Tsuga District',\n    'Habu District',\n    'Sōma District',\n    'Katsushika District',\n    'Saitama District',\n    'Adachi District',\n    'Toshima District',\n    'Tama District',\n    'Kanbara District',\n    'Uonuma District',\n    'Kubiki District',\n    'Niikawa District',\n    'Tsuru District',\n    'Yamanashi District',\n    'Yatsushiro District',\n    'Koma District',\n    'Saku District',\n    'Takai District',\n    'Minochi District',\n    'Ina District',\n    'Chikuma District',\n    'Azumi District',\n    'Ishizu District',\n    'Shitara District',\n    'Kamo District',\n    'Kasugai District',\n    'Muro District',\n    'Azai District',\n    'Kuwata District',\n    'Ukena District',\n    'Uwa District',\n    'Matsuura District',\n    'Sonogi District',\n    'Takaki District',\n    'Kunisaki District',\n    'Amabe District',\n    'Usuki District',\n    'Naka District',\n    'Ōsumi District',\n    'Soo District',\n    'Isa District'\n  ];\n})\n"
 
 /***/ },
 /* 41 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = "app = require('./module')\n\nsrc = require('raw!./radio.js')\n\nsushi = [\n  {img: 'CaliforniaRoll', label: 'California Roll', src: require('../imgs/CaliforniaRoll.gif')},\n  {img: 'CucumberRoll', label: 'Cucumber Roll', src: require('../imgs/CucumberRoll.gif')},\n  {img: 'FattyTuna', label: 'Fatty Tuna',src: require('../imgs/FattyTuna.gif')},\n  {img: 'Inari', label: 'Inari',src: require('../imgs/Inari.gif')},\n  {img: 'Octopus', label: 'Octopus', src: require('../imgs/Octopus.gif')},\n  {img: 'Shrimp', label: 'Shrimp', src: require('../imgs/Shrimp.gif')}\n]\n\napp.controller('RadioCtrl', function ($scope){\n  $scope.src = src\n  $scope.sushi = sushi\n  $scope.items = [\n    {id: 'S', label: 'Shijima'},\n    {id: 'M', label: 'Musubi'},\n    {id: 'Y', label: 'Yosuga'}\n  ];\n})\n"
+	module.exports = "app = require('./module')\n\nsrc = require('raw!./check.js')\n\napp.controller('CheckCtrl', function ($scope){\n  $scope.src = src\n  $scope.items = [\n    {id: 'S', label: 'Shijima'},\n    {id: 'M', label: 'Musubi'},\n    {id: 'Y', label: 'Yosuga'}\n  ];\n})\n"
 
 /***/ },
 /* 42 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = "app = require('./module')\n\nsrc = require('raw!./select.js')\n\ncountries = require('./countries')\n\napp.controller('SelectCtrl', function ($scope){\n  $scope.disabled = false;\n  $scope.src = src\n\n  $scope.items = [\n    {id: 'S', label: 'Shijima'},\n    {id: 'M', label: 'Musubi'},\n    {id: 'Y', label: 'Yosuga'}\n  ];\n\n  $scope.countries = countries;\n\n  $scope.laughs = ['Ha-ha-ha', 'Ho-ho-ho', 'He-he-he'];\n})\n"
+	module.exports = "app = require('./module')\n\nsrc = require('raw!./multiselect.js')\n\ncountries = require('./countries')\napp.controller('MultiselectCtrl', function ($scope){\n    $scope.src = src;\n    $scope.disabled = false;\n\n    $scope.items = [\n      {id: 'S', label: 'Shijima'},\n      {id: 'M', label: 'Musubi'},\n      {id: 'Y', label: 'Yosuga'},\n      {id: 'GG', label: 'Genmai gohan'},\n      {id: 'K', label: 'Kamameshi'},\n      {id: 'MO', label: 'Mochi'},\n      {id: 'SH', label: 'Sekihan'}\n    ];\n\n    $scope.countries = countries\n    $scope.countryNames = countries.map(function(x){return x.name})\n\n})\n"
 
 /***/ },
 /* 43 */
