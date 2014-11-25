@@ -274,14 +274,16 @@
 
 	app = __webpack_require__(1)
 
-	src = __webpack_require__(38)
 
 	app.controller('FormCtrl', function ($scope){
-	  $scope.src = src
+	  $scope.src = __webpack_require__(38)
 
 	  $scope.samurai = {
 	    name: "Unnamed",
-	    districts: []
+	    districts: [],
+	    frend: {
+	      name: 'Geisha'
+	    }
 	  };
 
 	  $scope.learningStages = [
@@ -374,7 +376,7 @@
 
 	app = __webpack_require__(1)
 
-	src = __webpack_require__(41)
+	src = __webpack_require__(39)
 
 	countries = __webpack_require__(17)
 
@@ -429,7 +431,7 @@
 
 	app = __webpack_require__(1)
 
-	src = __webpack_require__(39)
+	src = __webpack_require__(41)
 
 	sushi = [
 	  {img: 'CaliforniaRoll', label: 'California Roll', src: __webpack_require__(31)},
@@ -557,7 +559,7 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	var require;/**
-	 * @license AngularJS v1.3.3
+	 * @license AngularJS v1.3.4
 	 * (c) 2010-2014 Google, Inc. http://angularjs.org
 	 * License: MIT
 	 */
@@ -612,7 +614,7 @@
 	      return match;
 	    });
 
-	    message = message + '\nhttp://errors.angularjs.org/1.3.3/' +
+	    message = message + '\nhttp://errors.angularjs.org/1.3.4/' +
 	      (module ? module + '/' : '') + code;
 	    for (i = 2; i < arguments.length; i++) {
 	      message = message + (i == 2 ? '?' : '&') + 'p' + (i - 2) + '=' +
@@ -984,7 +986,7 @@
 
 
 	function inherit(parent, extra) {
-	  return extend(new (extend(function() {}, {prototype:parent}))(), extra);
+	  return extend(Object.create(parent), extra);
 	}
 
 	/**
@@ -1247,7 +1249,7 @@
 
 
 	function nodeName_(element) {
-	  return lowercase(element.nodeName || element[0].nodeName);
+	  return lowercase(element.nodeName || (element[0] && element[0].nodeName));
 	}
 
 	function includes(array, obj) {
@@ -1953,8 +1955,8 @@
 	 * @param {Object=} config an object for defining configuration options for the application. The
 	 *     following keys are supported:
 	 *
-	 *     - `strictDi`: disable automatic function annotation for the application. This is meant to
-	 *       assist in finding bugs which break minified code.
+	 * * `strictDi` - disable automatic function annotation for the application. This is meant to
+	 *   assist in finding bugs which break minified code. Defaults to `false`.
 	 *
 	 * @returns {auto.$injector} Returns the newly created injector for this app.
 	 */
@@ -2658,11 +2660,11 @@
 	 * - `codeName` – `{string}` – Code name of the release, such as "jiggling-armfat".
 	 */
 	var version = {
-	  full: '1.3.3',    // all of these placeholder strings will be replaced by grunt's
+	  full: '1.3.4',    // all of these placeholder strings will be replaced by grunt's
 	  major: 1,    // package task
 	  minor: 3,
-	  dot: 3,
-	  codeName: 'undersea-arithmetic'
+	  dot: 4,
+	  codeName: 'highfalutin-petroglyph'
 	};
 
 
@@ -2885,10 +2887,12 @@
 	 *   `'ngModel'`).
 	 * - `injector()` - retrieves the injector of the current element or its parent.
 	 * - `scope()` - retrieves the {@link ng.$rootScope.Scope scope} of the current
-	 *   element or its parent.
+	 *   element or its parent. Requires {@link guide/production#disabling-debug-data Debug Data} to
+	 *   be enabled.
 	 * - `isolateScope()` - retrieves an isolate {@link ng.$rootScope.Scope scope} if one is attached directly to the
 	 *   current element. This getter should be used only on elements that contain a directive which starts a new isolate
 	 *   scope. Calling `scope()` on this element always returns the original non-isolate scope.
+	 *   Requires {@link guide/production#disabling-debug-data Debug Data} to be enabled.
 	 * - `inheritedData()` - same as `data()`, but walks up the DOM until a value is found or the top
 	 *   parent element is reached.
 	 *
@@ -3883,9 +3887,10 @@
 	 * Creates an injector object that can be used for retrieving services as well as for
 	 * dependency injection (see {@link guide/di dependency injection}).
 	 *
-
 	 * @param {Array.<string|Function>} modules A list of module functions or their aliases. See
-	 *        {@link angular.module}. The `ng` module must be explicitly added.
+	 *     {@link angular.module}. The `ng` module must be explicitly added.
+	 * @param {boolean=} [strictDi=false] Whether the injector should be in strict mode, which
+	 *     disallows argument name annotation inference.
 	 * @returns {injector} Injector object. See {@link auto.$injector $injector}.
 	 *
 	 * @example
@@ -4031,8 +4036,10 @@
 	 * ## Inference
 	 *
 	 * In JavaScript calling `toString()` on a function returns the function definition. The definition
-	 * can then be parsed and the function arguments can be extracted. *NOTE:* This does not work with
-	 * minification, and obfuscation tools since these tools change the argument names.
+	 * can then be parsed and the function arguments can be extracted. This method of discovering
+	 * annotations is disallowed when the injector is in strict mode.
+	 * *NOTE:* This does not work with minification, and obfuscation tools since these tools change the
+	 * argument names.
 	 *
 	 * ## `$inject` Annotation
 	 * By adding an `$inject` property onto a function the injection parameters can be specified.
@@ -4117,6 +4124,8 @@
 	 *   expect(injector.annotate(MyController)).toEqual(['$scope', '$route']);
 	 * ```
 	 *
+	 * You can disallow this method by using strict injection mode.
+	 *
 	 * This method does not work with code minification / obfuscation. For this reason the following
 	 * annotation strategies are supported.
 	 *
@@ -4168,6 +4177,8 @@
 	 *
 	 * @param {Function|Array.<string|Function>} fn Function for which dependent service names need to
 	 * be retrieved as described above.
+	 *
+	 * @param {boolean=} [strictDi=false] Disallow argument name annotation inference.
 	 *
 	 * @returns {Array.<string>} The names of the services which the function requires.
 	 */
@@ -4688,14 +4699,11 @@
 	    }
 
 	    function instantiate(Type, locals, serviceName) {
-	      var Constructor = function() {},
-	          instance, returnedValue;
-
 	      // Check if Type is annotated and use just the given function at n-1 as parameter
 	      // e.g. someModule.factory('greeter', ['$window', function(renamed$window) {}]);
-	      Constructor.prototype = (isArray(Type) ? Type[Type.length - 1] : Type).prototype;
-	      instance = new Constructor();
-	      returnedValue = invoke(Type, instance, locals, serviceName);
+	      // Object creation: http://jsperf.com/create-constructor/2
+	      var instance = Object.create((isArray(Type) ? Type[Type.length - 1] : Type).prototype);
+	      var returnedValue = invoke(Type, instance, locals, serviceName);
 
 	      return isObject(returnedValue) || isFunction(returnedValue) ? returnedValue : instance;
 	    }
@@ -5531,7 +5539,7 @@
 	      // IE<10 from getting into redirect loop when in LocationHashbangInHtml5Url mode.
 	      // See https://github.com/angular/angular.js/commit/ffb2701
 	      if (lastBrowserUrl === url && (!$sniffer.history || sameState)) {
-	        return;
+	        return self;
 	      }
 	      var sameBase = lastBrowserUrl && stripHash(lastBrowserUrl) === stripHash(url);
 	      lastBrowserUrl = url;
@@ -8443,10 +8451,10 @@
 	        var childBoundTranscludeFn = boundTranscludeFn;
 	        if (scope.$$destroyed) return;
 	        if (linkQueue) {
-	          linkQueue.push(scope);
-	          linkQueue.push(node);
-	          linkQueue.push(rootElement);
-	          linkQueue.push(childBoundTranscludeFn);
+	          linkQueue.push(scope,
+	                         node,
+	                         rootElement,
+	                         childBoundTranscludeFn);
 	        } else {
 	          if (afterTemplateNodeLinkFn.transcludeOnThisElement) {
 	            childBoundTranscludeFn = createBoundTranscludeFn(scope, afterTemplateNodeLinkFn.transclude, boundTranscludeFn);
@@ -8915,10 +8923,10 @@
 	        //
 	        // This feature is not intended for use by applications, and is thus not documented
 	        // publicly.
-	        var Constructor = function() {};
-	        Constructor.prototype = (isArray(expression) ?
+	        // Object creation: http://jsperf.com/create-constructor/2
+	        var controllerPrototype = (isArray(expression) ?
 	          expression[expression.length - 1] : expression).prototype;
-	        instance = new Constructor();
+	        instance = Object.create(controllerPrototype);
 
 	        if (identifier) {
 	          addIdentifier(locals, identifier, instance, constructor || expression.name);
@@ -9059,7 +9067,7 @@
 	 * @returns {Object} Parsed headers as key value object
 	 */
 	function parseHeaders(headers) {
-	  var parsed = {}, key, val, i;
+	  var parsed = createMap(), key, val, i;
 
 	  if (!headers) return parsed;
 
@@ -9096,7 +9104,11 @@
 	    if (!headersObj) headersObj =  parseHeaders(headers);
 
 	    if (name) {
-	      return headersObj[lowercase(name)] || null;
+	      var value = headersObj[lowercase(name)];
+	      if (value === void 0) {
+	        value = null;
+	      }
+	      return value;
 	    }
 
 	    return headersObj;
@@ -9145,6 +9157,11 @@
 	   *
 	   * Object containing default values for all {@link ng.$http $http} requests.
 	   *
+	   * - **`defaults.cache`** - {Object} - an object built with {@link ng.$cacheFactory `$cacheFactory`}
+	   * that will provide the cache for all requests who set their `cache` property to `true`.
+	   * If you set the `default.cache = false` then only requests that specify their own custom
+	   * cache object will be cached. See {@link $http#caching $http Caching} for more information.
+	   *
 	   * - **`defaults.xsrfCookieName`** - {string} - Name of cookie containing the XSRF token.
 	   * Defaults value is `'XSRF-TOKEN'`.
 	   *
@@ -9158,6 +9175,7 @@
 	   *     - **`defaults.headers.post`**
 	   *     - **`defaults.headers.put`**
 	   *     - **`defaults.headers.patch`**
+	   *
 	   **/
 	  var defaults = this.defaults = {
 	    // transform incoming response data
@@ -9372,6 +9390,21 @@
 	     * In addition, you can supply a `headers` property in the config object passed when
 	     * calling `$http(config)`, which overrides the defaults without changing them globally.
 	     *
+	     * To explicitly remove a header automatically added via $httpProvider.defaults.headers on a per request basis,
+	     * Use the `headers` property, setting the desired header to `undefined`. For example:
+	     *
+	     * ```js
+	     * var req = {
+	     *  method: 'POST',
+	     *  url: 'http://example.com',
+	     *  headers: {
+	     *    'Content-Type': undefined
+	     *  },
+	     *  data: { test: 'test' },
+	     * }
+	     *
+	     * $http(req).success(function(){...}).error(function(){...});
+	     * ```
 	     *
 	     * ## Transforming Requests and Responses
 	     *
@@ -9750,6 +9783,10 @@
 	        transformResponse: defaults.transformResponse
 	      };
 	      var headers = mergeHeaders(requestConfig);
+
+	      if (!angular.isObject(requestConfig)) {
+	        throw minErr('$http')('badreq', 'Http request configuration must be an object.  Received: {0}', requestConfig);
+	      }
 
 	      extend(config, requestConfig);
 	      config.headers = headers;
@@ -11245,6 +11282,13 @@
 	   * Return full url representation with all segments encoded according to rules specified in
 	   * [RFC 3986](http://www.ietf.org/rfc/rfc3986.txt).
 	   *
+	   *
+	   * ```js
+	   * // given url http://example.com/#/some/path?foo=bar&baz=xoxo
+	   * var absUrl = $location.absUrl();
+	   * // => "http://example.com/#/some/path?foo=bar&baz=xoxo"
+	   * ```
+	   *
 	   * @return {string} full url
 	   */
 	  absUrl: locationGetter('$$absUrl'),
@@ -11260,6 +11304,13 @@
 	   *
 	   * Change path, search and hash, when called with parameter and return `$location`.
 	   *
+	   *
+	   * ```js
+	   * // given url http://example.com/#/some/path?foo=bar&baz=xoxo
+	   * var url = $location.url();
+	   * // => "/some/path?foo=bar&baz=xoxo"
+	   * ```
+	   *
 	   * @param {string=} url New url without base prefix (e.g. `/path?a=b#hash`)
 	   * @return {string} url
 	   */
@@ -11268,8 +11319,8 @@
 	      return this.$$url;
 
 	    var match = PATH_MATCH.exec(url);
-	    if (match[1]) this.path(decodeURIComponent(match[1]));
-	    if (match[2] || match[1]) this.search(match[3] || '');
+	    if (match[1] || url === '') this.path(decodeURIComponent(match[1]));
+	    if (match[2] || match[1] || url === '') this.search(match[3] || '');
 	    this.hash(match[5] || '');
 
 	    return this;
@@ -11284,6 +11335,13 @@
 	   *
 	   * Return protocol of current url.
 	   *
+	   *
+	   * ```js
+	   * // given url http://example.com/#/some/path?foo=bar&baz=xoxo
+	   * var protocol = $location.protocol();
+	   * // => "http"
+	   * ```
+	   *
 	   * @return {string} protocol of current url
 	   */
 	  protocol: locationGetter('$$protocol'),
@@ -11297,6 +11355,13 @@
 	   *
 	   * Return host of current url.
 	   *
+	   *
+	   * ```js
+	   * // given url http://example.com/#/some/path?foo=bar&baz=xoxo
+	   * var host = $location.host();
+	   * // => "example.com"
+	   * ```
+	   *
 	   * @return {string} host of current url.
 	   */
 	  host: locationGetter('$$host'),
@@ -11309,6 +11374,13 @@
 	   * This method is getter only.
 	   *
 	   * Return port of current url.
+	   *
+	   *
+	   * ```js
+	   * // given url http://example.com/#/some/path?foo=bar&baz=xoxo
+	   * var port = $location.port();
+	   * // => 80
+	   * ```
 	   *
 	   * @return {Number} port
 	   */
@@ -11327,6 +11399,13 @@
 	   *
 	   * Note: Path should always begin with forward slash (/), this method will add the forward slash
 	   * if it is missing.
+	   *
+	   *
+	   * ```js
+	   * // given url http://example.com/#/some/path?foo=bar&baz=xoxo
+	   * var path = $location.path();
+	   * // => "/some/path"
+	   * ```
 	   *
 	   * @param {(string|number)=} path New path
 	   * @return {string} path
@@ -11353,10 +11432,9 @@
 	   * var searchObject = $location.search();
 	   * // => {foo: 'bar', baz: 'xoxo'}
 	   *
-	   *
 	   * // set foo to 'yipee'
 	   * $location.search('foo', 'yipee');
-	   * // => $location
+	   * // $location.search() => {foo: 'yipee', baz: 'xoxo'}
 	   * ```
 	   *
 	   * @param {string|Object.<string>|Object.<Array.<string>>} search New search params - string or
@@ -11425,6 +11503,13 @@
 	   * Return hash fragment when called without any parameter.
 	   *
 	   * Change hash fragment when called with parameter and return `$location`.
+	   *
+	   *
+	   * ```js
+	   * // given url http://example.com/some/path?foo=bar&baz=xoxo#hashValue
+	   * var hash = $location.hash();
+	   * // => "hashValue"
+	   * ```
 	   *
 	   * @param {(string|number)=} hash New hash fragment
 	   * @return {string} hash
@@ -17157,7 +17242,7 @@
 	 *
 	 * @param {number} amount Input to filter.
 	 * @param {string=} symbol Currency symbol or identifier to be displayed.
-	 * @param {number=} fractionSize Number of decimal places to round the amount to.
+	 * @param {number=} fractionSize Number of decimal places to round the amount to, defaults to default max fraction size for current locale
 	 * @returns {string} Formatted number.
 	 *
 	 *
@@ -17207,8 +17292,7 @@
 	    }
 
 	    if (isUndefined(fractionSize)) {
-	      // TODO: read the default value from the locale file
-	      fractionSize = 2;
+	      fractionSize = formats.PATTERNS[1].maxFrac;
 	    }
 
 	    // if null or undefined pass it through
@@ -17360,9 +17444,9 @@
 	    }
 	  }
 
-	  parts.push(isNegative ? pattern.negPre : pattern.posPre);
-	  parts.push(formatedText);
-	  parts.push(isNegative ? pattern.negSuf : pattern.posSuf);
+	  parts.push(isNegative ? pattern.negPre : pattern.posPre,
+	             formatedText,
+	             isNegative ? pattern.negSuf : pattern.posSuf);
 	  return parts.join('');
 	}
 
@@ -18942,9 +19026,7 @@
 	                  controller.$setSubmitted();
 	                });
 
-	                event.preventDefault
-	                  ? event.preventDefault()
-	                  : event.returnValue = false; // IE
+	                event.preventDefault();
 	              };
 
 	              addEventListenerFn(formElement[0], 'submit', handleFormSubmission);
@@ -19031,7 +19113,8 @@
 	   * @param {number=} ngMinlength Sets `minlength` validation error key if the value is shorter than
 	   *    minlength.
 	   * @param {number=} ngMaxlength Sets `maxlength` validation error key if the value is longer than
-	   *    maxlength.
+	   *    maxlength. Setting the attribute to a negative or non-numeric value, allows view values of
+	   *    any length.
 	   * @param {string=} pattern Similar to `ngPattern` except that the attribute value is the actual string
 	   *    that contains the regular expression body that will be converted to a regular expression
 	   *    as in the ngPattern directive.
@@ -19579,7 +19662,8 @@
 	   * @param {number=} ngMinlength Sets `minlength` validation error key if the value is shorter than
 	   *    minlength.
 	   * @param {number=} ngMaxlength Sets `maxlength` validation error key if the value is longer than
-	   *    maxlength.
+	   *    maxlength. Setting the attribute to a negative or non-numeric value, allows view values of
+	   *    any length.
 	   * @param {string=} pattern Similar to `ngPattern` except that the attribute value is the actual string
 	   *    that contains the regular expression body that will be converted to a regular expression
 	   *    as in the ngPattern directive.
@@ -19666,7 +19750,8 @@
 	   * @param {number=} ngMinlength Sets `minlength` validation error key if the value is shorter than
 	   *    minlength.
 	   * @param {number=} ngMaxlength Sets `maxlength` validation error key if the value is longer than
-	   *    maxlength.
+	   *    maxlength. Setting the attribute to a negative or non-numeric value, allows view values of
+	   *    any length.
 	   * @param {string=} pattern Similar to `ngPattern` except that the attribute value is the actual string
 	   *    that contains the regular expression body that will be converted to a regular expression
 	   *    as in the ngPattern directive.
@@ -19754,7 +19839,8 @@
 	   * @param {number=} ngMinlength Sets `minlength` validation error key if the value is shorter than
 	   *    minlength.
 	   * @param {number=} ngMaxlength Sets `maxlength` validation error key if the value is longer than
-	   *    maxlength.
+	   *    maxlength. Setting the attribute to a negative or non-numeric value, allows view values of
+	   *    any length.
 	   * @param {string=} pattern Similar to `ngPattern` except that the attribute value is the actual string
 	   *    that contains the regular expression body that will be converted to a regular expression
 	   *    as in the ngPattern directive.
@@ -20025,7 +20111,7 @@
 	  element.on('change', listener);
 
 	  ctrl.$render = function() {
-	    element.val(ctrl.$isEmpty(ctrl.$modelValue) ? '' : ctrl.$viewValue);
+	    element.val(ctrl.$isEmpty(ctrl.$viewValue) ? '' : ctrl.$viewValue);
 	  };
 	}
 
@@ -20135,10 +20221,10 @@
 	    });
 
 	    ctrl.$formatters.push(function(value) {
-	      if (!ctrl.$isEmpty(value)) {
-	        if (!isDate(value)) {
-	          throw $ngModelMinErr('datefmt', 'Expected `{0}` to be a date', value);
-	        }
+	      if (value && !isDate(value)) {
+	        throw $ngModelMinErr('datefmt', 'Expected `{0}` to be a date', value);
+	      }
+	      if (isValidDate(value)) {
 	        previousDate = value;
 	        if (previousDate && timezone === 'UTC') {
 	          var timezoneOffset = 60000 * previousDate.getTimezoneOffset();
@@ -20147,14 +20233,14 @@
 	        return $filter('date')(value, format, timezone);
 	      } else {
 	        previousDate = null;
+	        return '';
 	      }
-	      return '';
 	    });
 
 	    if (isDefined(attr.min) || attr.ngMin) {
 	      var minVal;
 	      ctrl.$validators.min = function(value) {
-	        return ctrl.$isEmpty(value) || isUndefined(minVal) || parseDate(value) >= minVal;
+	        return !isValidDate(value) || isUndefined(minVal) || parseDate(value) >= minVal;
 	      };
 	      attr.$observe('min', function(val) {
 	        minVal = parseObservedDateValue(val);
@@ -20165,18 +20251,18 @@
 	    if (isDefined(attr.max) || attr.ngMax) {
 	      var maxVal;
 	      ctrl.$validators.max = function(value) {
-	        return ctrl.$isEmpty(value) || isUndefined(maxVal) || parseDate(value) <= maxVal;
+	        return !isValidDate(value) || isUndefined(maxVal) || parseDate(value) <= maxVal;
 	      };
 	      attr.$observe('max', function(val) {
 	        maxVal = parseObservedDateValue(val);
 	        ctrl.$validate();
 	      });
 	    }
-	    // Override the standard $isEmpty to detect invalid dates as well
-	    ctrl.$isEmpty = function(value) {
+
+	    function isValidDate(value) {
 	      // Invalid Date: getTime() returns NaN
-	      return !value || (value.getTime && value.getTime() !== value.getTime());
-	    };
+	      return value && !(value.getTime && value.getTime() !== value.getTime());
+	    }
 
 	    function parseObservedDateValue(val) {
 	      return isDefined(val) ? (isDate(val) ? val : parseDate(val)) : undefined;
@@ -20260,7 +20346,8 @@
 	  stringBasedInputType(ctrl);
 
 	  ctrl.$$parserName = 'url';
-	  ctrl.$validators.url = function(value) {
+	  ctrl.$validators.url = function(modelValue, viewValue) {
+	    var value = modelValue || viewValue;
 	    return ctrl.$isEmpty(value) || URL_REGEXP.test(value);
 	  };
 	}
@@ -20272,7 +20359,8 @@
 	  stringBasedInputType(ctrl);
 
 	  ctrl.$$parserName = 'email';
-	  ctrl.$validators.email = function(value) {
+	  ctrl.$validators.email = function(modelValue, viewValue) {
+	    var value = modelValue || viewValue;
 	    return ctrl.$isEmpty(value) || EMAIL_REGEXP.test(value);
 	  };
 	}
@@ -20326,9 +20414,11 @@
 	    element[0].checked = ctrl.$viewValue;
 	  };
 
-	  // Override the standard `$isEmpty` because an empty checkbox is never equal to the trueValue
+	  // Override the standard `$isEmpty` because the $viewValue of an empty checkbox is always set to `false`
+	  // This is because of the parser below, which compares the `$modelValue` with `trueValue` to convert
+	  // it to a boolean.
 	  ctrl.$isEmpty = function(value) {
-	    return value !== trueValue;
+	    return value === false;
 	  };
 
 	  ctrl.$formatters.push(function(value) {
@@ -20360,7 +20450,8 @@
 	 * @param {number=} ngMinlength Sets `minlength` validation error key if the value is shorter than
 	 *    minlength.
 	 * @param {number=} ngMaxlength Sets `maxlength` validation error key if the value is longer than
-	 *    maxlength.
+	 *    maxlength. Setting the attribute to a negative or non-numeric value, allows view values of any
+	 *    length.
 	 * @param {string=} ngPattern Sets `pattern` validation error key if the value does not match the
 	 *    RegExp pattern expression. Expected value is `/regexp/` for inline patterns or `regexp` for
 	 *    patterns defined as scope expressions.
@@ -20392,7 +20483,8 @@
 	 * @param {number=} ngMinlength Sets `minlength` validation error key if the value is shorter than
 	 *    minlength.
 	 * @param {number=} ngMaxlength Sets `maxlength` validation error key if the value is longer than
-	 *    maxlength.
+	 *    maxlength. Setting the attribute to a negative or non-numeric value, allows view values of any
+	 *    length.
 	 * @param {string=} ngPattern Sets `pattern` validation error key if the value does not match the
 	 *    RegExp pattern expression. Expected value is `/regexp/` for inline patterns or `regexp` for
 	 *    patterns defined as scope expressions.
@@ -20608,13 +20700,18 @@
 	 *
 	 * @description
 	 *
-	 * `NgModelController` provides API for the `ng-model` directive. The controller contains
-	 * services for data-binding, validation, CSS updates, and value formatting and parsing. It
-	 * purposefully does not contain any logic which deals with DOM rendering or listening to
-	 * DOM events. Such DOM related logic should be provided by other directives which make use of
-	 * `NgModelController` for data-binding.
+	 * `NgModelController` provides API for the {@link ngModel `ngModel`} directive.
+	 * The controller contains services for data-binding, validation, CSS updates, and value formatting
+	 * and parsing. It purposefully does not contain any logic which deals with DOM rendering or
+	 * listening to DOM events.
+	 * Such DOM related logic should be provided by other directives which make use of
+	 * `NgModelController` for data-binding to control elements.
+	 * Angular provides this DOM logic for most {@link input `input`} elements.
+	 * At the end of this page you can find a {@link ngModel.NgModelController#custom-control-example
+	 * custom control example} that uses `ngModelController` to bind to `contenteditable` elements.
 	 *
-	 * ## Custom Control Example
+	 * @example
+	 * ### Custom Control Example
 	 * This example shows how to use `NgModelController` with a custom control to achieve
 	 * data-binding. Notice how different directives (`contenteditable`, `ng-model`, and `required`)
 	 * collaborate together to achieve the desired result.
@@ -20711,6 +20808,7 @@
 	    function($scope, $exceptionHandler, $attr, $element, $parse, $animate, $timeout, $rootScope, $q, $interpolate) {
 	  this.$viewValue = Number.NaN;
 	  this.$modelValue = Number.NaN;
+	  this.$$rawModelValue = undefined; // stores the parsed modelValue / model set from scope regardless of validity.
 	  this.$validators = {};
 	  this.$asyncValidators = {};
 	  this.$parsers = [];
@@ -20729,32 +20827,33 @@
 
 
 	  var parsedNgModel = $parse($attr.ngModel),
+	      parsedNgModelAssign = parsedNgModel.assign,
+	      ngModelGet = parsedNgModel,
+	      ngModelSet = parsedNgModelAssign,
 	      pendingDebounce = null,
 	      ctrl = this;
 
-	  var ngModelGet = function ngModelGet() {
-	    var modelValue = parsedNgModel($scope);
-	    if (ctrl.$options && ctrl.$options.getterSetter && isFunction(modelValue)) {
-	      modelValue = modelValue();
-	    }
-	    return modelValue;
-	  };
-
-	  var ngModelSet = function ngModelSet(newValue) {
-	    var getterSetter;
-	    if (ctrl.$options && ctrl.$options.getterSetter &&
-	        isFunction(getterSetter = parsedNgModel($scope))) {
-
-	      getterSetter(ctrl.$modelValue);
-	    } else {
-	      parsedNgModel.assign($scope, ctrl.$modelValue);
-	    }
-	  };
-
 	  this.$$setOptions = function(options) {
 	    ctrl.$options = options;
+	    if (options && options.getterSetter) {
+	      var invokeModelGetter = $parse($attr.ngModel + '()'),
+	          invokeModelSetter = $parse($attr.ngModel + '($$$p)');
 
-	    if (!parsedNgModel.assign && (!options || !options.getterSetter)) {
+	      ngModelGet = function($scope) {
+	        var modelValue = parsedNgModel($scope);
+	        if (isFunction(modelValue)) {
+	          modelValue = invokeModelGetter($scope);
+	        }
+	        return modelValue;
+	      };
+	      ngModelSet = function($scope, newValue) {
+	        if (isFunction(parsedNgModel($scope))) {
+	          invokeModelSetter($scope, {$$$p: ctrl.$modelValue});
+	        } else {
+	          parsedNgModelAssign($scope, ctrl.$modelValue);
+	        }
+	      };
+	    } else if (!parsedNgModel.assign) {
 	      throw $ngModelMinErr('nonassign', "Expression '{0}' is non-assignable. Element: {1}",
 	          $attr.ngModel, startingTag($element));
 	    }
@@ -20787,17 +20886,18 @@
 	   * @name ngModel.NgModelController#$isEmpty
 	   *
 	   * @description
-	   * This is called when we need to determine if the value of the input is empty.
+	   * This is called when we need to determine if the value of an input is empty.
 	   *
 	   * For instance, the required directive does this to work out if the input has data or not.
+	   *
 	   * The default `$isEmpty` function checks whether the value is `undefined`, `''`, `null` or `NaN`.
 	   *
 	   * You can override this for input directives whose concept of being empty is different to the
 	   * default. The `checkboxInputType` directive does this because in its case a value of `false`
 	   * implies empty.
 	   *
-	   * @param {*} value Model value to check.
-	   * @returns {boolean} True if `value` is empty.
+	   * @param {*} value The value of the input to check for emptiness.
+	   * @returns {boolean} True if `value` is "empty".
 	   */
 	  this.$isEmpty = function(value) {
 	    return isUndefined(value) || value === '' || value === null || value !== value;
@@ -20848,9 +20948,9 @@
 	   * @description
 	   * Sets the control to its pristine state.
 	   *
-	   * This method can be called to remove the 'ng-dirty' class and set the control to its pristine
-	   * state (ng-pristine class). A model is considered to be pristine when the model has not been changed
-	   * from when first compiled within then form.
+	   * This method can be called to remove the `ng-dirty` class and set the control to its pristine
+	   * state (`ng-pristine` class). A model is considered to be pristine when the control
+	   * has not been changed from when first compiled.
 	   */
 	  this.$setPristine = function() {
 	    ctrl.$dirty = false;
@@ -20861,13 +20961,32 @@
 
 	  /**
 	   * @ngdoc method
+	   * @name ngModel.NgModelController#$setDirty
+	   *
+	   * @description
+	   * Sets the control to its dirty state.
+	   *
+	   * This method can be called to remove the `ng-pristine` class and set the control to its dirty
+	   * state (`ng-dirty` class). A model is considered to be dirty when the control has been changed
+	   * from when first compiled.
+	   */
+	  this.$setDirty = function() {
+	    ctrl.$dirty = true;
+	    ctrl.$pristine = false;
+	    $animate.removeClass($element, PRISTINE_CLASS);
+	    $animate.addClass($element, DIRTY_CLASS);
+	    parentForm.$setDirty();
+	  };
+
+	  /**
+	   * @ngdoc method
 	   * @name ngModel.NgModelController#$setUntouched
 	   *
 	   * @description
 	   * Sets the control to its untouched state.
 	   *
-	   * This method can be called to remove the 'ng-touched' class and set the control to its
-	   * untouched state (ng-untouched class). Upon compilation, a model is set as untouched
+	   * This method can be called to remove the `ng-touched` class and set the control to its
+	   * untouched state (`ng-untouched` class). Upon compilation, a model is set as untouched
 	   * by default, however this function can be used to restore that state if the model has
 	   * already been touched by the user.
 	   */
@@ -20884,10 +21003,9 @@
 	   * @description
 	   * Sets the control to its touched state.
 	   *
-	   * This method can be called to remove the 'ng-untouched' class and set the control to its
-	   * touched state (ng-touched class). A model is considered to be touched when the user has
-	   * first interacted (focussed) on the model input element and then shifted focus away (blurred)
-	   * from the input element.
+	   * This method can be called to remove the `ng-untouched` class and set the control to its
+	   * touched state (`ng-touched` class). A model is considered to be touched when the user has
+	   * first focused the control element and then shifted focus away from the control (blur event).
 	   */
 	  this.$setTouched = function() {
 	    ctrl.$touched = true;
@@ -20965,14 +21083,51 @@
 	   * @name ngModel.NgModelController#$validate
 	   *
 	   * @description
-	   * Runs each of the registered validators (first synchronous validators and then asynchronous validators).
+	   * Runs each of the registered validators (first synchronous validators and then
+	   * asynchronous validators).
+	   * If the validity changes to invalid, the model will be set to `undefined`,
+	   * unless {@link ngModelOptions `ngModelOptions.allowInvalid`} is `true`.
+	   * If the validity changes to valid, it will set the model to the last available valid
+	   * modelValue, i.e. either the last parsed value or the last value set from the scope.
 	   */
 	  this.$validate = function() {
 	    // ignore $validate before model is initialized
 	    if (isNumber(ctrl.$modelValue) && isNaN(ctrl.$modelValue)) {
 	      return;
 	    }
-	    this.$$parseAndValidate();
+
+	    var viewValue = ctrl.$$lastCommittedViewValue;
+	    // Note: we use the $$rawModelValue as $modelValue might have been
+	    // set to undefined during a view -> model update that found validation
+	    // errors. We can't parse the view here, since that could change
+	    // the model although neither viewValue nor the model on the scope changed
+	    var modelValue = ctrl.$$rawModelValue;
+
+	    // Check if the there's a parse error, so we don't unset it accidentially
+	    var parserName = ctrl.$$parserName || 'parse';
+	    var parserValid = ctrl.$error[parserName] ? false : undefined;
+
+	    var prevValid = ctrl.$valid;
+	    var prevModelValue = ctrl.$modelValue;
+
+	    var allowInvalid = ctrl.$options && ctrl.$options.allowInvalid;
+
+	    ctrl.$$runValidators(parserValid, modelValue, viewValue, function(allValid) {
+	      // If there was no change in validity, don't update the model
+	      // This prevents changing an invalid modelValue to undefined
+	      if (!allowInvalid && prevValid !== allValid) {
+	        // Note: Don't check ctrl.$valid here, as we could have
+	        // external validators (e.g. calculated on the server),
+	        // that just call $setValidity and need the model value
+	        // to calculate their validity.
+	        ctrl.$modelValue = allValid ? modelValue : undefined;
+
+	        if (ctrl.$modelValue !== prevModelValue) {
+	          ctrl.$$writeModelToScope();
+	        }
+	      }
+	    });
+
 	  };
 
 	  this.$$runValidators = function(parseValid, modelValue, viewValue, doneCallback) {
@@ -21091,11 +21246,7 @@
 
 	    // change to dirty
 	    if (ctrl.$pristine) {
-	      ctrl.$dirty = true;
-	      ctrl.$pristine = false;
-	      $animate.removeClass($element, PRISTINE_CLASS);
-	      $animate.addClass($element, DIRTY_CLASS);
-	      parentForm.$setDirty();
+	      this.$setDirty();
 	    }
 	    this.$$parseAndValidate();
 	  };
@@ -21116,10 +21267,11 @@
 	    }
 	    if (isNumber(ctrl.$modelValue) && isNaN(ctrl.$modelValue)) {
 	      // ctrl.$modelValue has not been touched yet...
-	      ctrl.$modelValue = ngModelGet();
+	      ctrl.$modelValue = ngModelGet($scope);
 	    }
 	    var prevModelValue = ctrl.$modelValue;
 	    var allowInvalid = ctrl.$options && ctrl.$options.allowInvalid;
+	    ctrl.$$rawModelValue = modelValue;
 	    if (allowInvalid) {
 	      ctrl.$modelValue = modelValue;
 	      writeToModelIfNeeded();
@@ -21143,7 +21295,7 @@
 	  };
 
 	  this.$$writeModelToScope = function() {
-	    ngModelSet(ctrl.$modelValue);
+	    ngModelSet($scope, ctrl.$modelValue);
 	    forEach(ctrl.$viewChangeListeners, function(listener) {
 	      try {
 	        listener();
@@ -21239,12 +21391,12 @@
 	  //       ng-change executes in apply phase
 	  // 4. view should be changed back to 'a'
 	  $scope.$watch(function ngModelWatch() {
-	    var modelValue = ngModelGet();
+	    var modelValue = ngModelGet($scope);
 
 	    // if scope model value and ngModel value are out of sync
 	    // TODO(perf): why not move this to the action fn?
 	    if (modelValue !== ctrl.$modelValue) {
-	      ctrl.$modelValue = modelValue;
+	      ctrl.$modelValue = ctrl.$$rawModelValue = modelValue;
 
 	      var formatters = ctrl.$formatters,
 	          idx = formatters.length;
@@ -21429,7 +21581,7 @@
 	     </file>
 	 * </example>
 	 */
-	var ngModelDirective = function() {
+	var ngModelDirective = ['$rootScope', function($rootScope) {
 	  return {
 	    restrict: 'A',
 	    require: ['ngModel', '^?form', '^?ngModelOptions'],
@@ -21473,15 +21625,17 @@
 	          element.on('blur', function(ev) {
 	            if (modelCtrl.$touched) return;
 
-	            scope.$apply(function() {
-	              modelCtrl.$setTouched();
-	            });
+	            if ($rootScope.$$phase) {
+	              scope.$evalAsync(modelCtrl.$setTouched);
+	            } else {
+	              scope.$apply(modelCtrl.$setTouched);
+	            }
 	          });
 	        }
 	      };
 	    }
 	  };
-	};
+	}];
 
 
 	/**
@@ -21570,8 +21724,8 @@
 	      if (!ctrl) return;
 	      attr.required = true; // force truthy in case we are on non input element
 
-	      ctrl.$validators.required = function(value) {
-	        return !attr.required || !ctrl.$isEmpty(value);
+	      ctrl.$validators.required = function(modelValue, viewValue) {
+	        return !attr.required || !ctrl.$isEmpty(viewValue);
 	      };
 
 	      attr.$observe('required', function() {
@@ -21620,13 +21774,14 @@
 	    link: function(scope, elm, attr, ctrl) {
 	      if (!ctrl) return;
 
-	      var maxlength = 0;
+	      var maxlength = -1;
 	      attr.$observe('maxlength', function(value) {
-	        maxlength = int(value) || 0;
+	        var intVal = int(value);
+	        maxlength = isNaN(intVal) ? -1 : intVal;
 	        ctrl.$validate();
 	      });
 	      ctrl.$validators.maxlength = function(modelValue, viewValue) {
-	        return ctrl.$isEmpty(modelValue) || viewValue.length <= maxlength;
+	        return (maxlength < 0) || ctrl.$isEmpty(modelValue) || (viewValue.length <= maxlength);
 	      };
 	    }
 	  };
@@ -21645,7 +21800,7 @@
 	        ctrl.$validate();
 	      });
 	      ctrl.$validators.minlength = function(modelValue, viewValue) {
-	        return ctrl.$isEmpty(modelValue) || viewValue.length >= minlength;
+	        return ctrl.$isEmpty(viewValue) || viewValue.length >= minlength;
 	      };
 	    }
 	  };
@@ -22273,12 +22428,11 @@
 	 * @name ngBindHtml
 	 *
 	 * @description
-	 * Creates a binding that will innerHTML the result of evaluating the `expression` into the current
-	 * element in a secure way.  By default, the innerHTML-ed content will be sanitized using the {@link
-	 * ngSanitize.$sanitize $sanitize} service.  To utilize this functionality, ensure that `$sanitize`
-	 * is available, for example, by including {@link ngSanitize} in your module's dependencies (not in
-	 * core Angular). In order to use {@link ngSanitize} in your module's dependencies, you need to
-	 * include "angular-sanitize.js" in your application.
+	 * Evaluates the expression and inserts the resulting HTML into the element in a secure way. By default,
+	 * the resulting HTML content will be sanitized using the {@link ngSanitize.$sanitize $sanitize} service.
+	 * To utilize this functionality, ensure that `$sanitize` is available, for example, by including {@link
+	 * ngSanitize} in your module's dependencies (not in core Angular). In order to use {@link ngSanitize}
+	 * in your module's dependencies, you need to include "angular-sanitize.js" in your application.
 	 *
 	 * You may also bypass sanitization for values you know are safe. To do so, bind to
 	 * an explicitly trusted value via {@link ng.$sce#trustAsHtml $sce.trustAsHtml}.  See the example
@@ -24342,7 +24496,9 @@
 	    </example>
 	 */
 	var ngPluralizeDirective = ['$locale', '$interpolate', function($locale, $interpolate) {
-	  var BRACE = /{}/g;
+	  var BRACE = /{}/g,
+	      IS_WHEN = /^when(Minus)?(.+)$/;
+
 	  return {
 	    restrict: 'EA',
 	    link: function(scope, element, attr) {
@@ -24353,34 +24509,44 @@
 	          whensExpFns = {},
 	          startSymbol = $interpolate.startSymbol(),
 	          endSymbol = $interpolate.endSymbol(),
-	          isWhen = /^when(Minus)?(.+)$/;
+	          braceReplacement = startSymbol + numberExp + '-' + offset + endSymbol,
+	          watchRemover = angular.noop,
+	          lastCount;
 
 	      forEach(attr, function(expression, attributeName) {
-	        if (isWhen.test(attributeName)) {
-	          whens[lowercase(attributeName.replace('when', '').replace('Minus', '-'))] =
-	            element.attr(attr.$attr[attributeName]);
+	        var tmpMatch = IS_WHEN.exec(attributeName);
+	        if (tmpMatch) {
+	          var whenKey = (tmpMatch[1] ? '-' : '') + lowercase(tmpMatch[2]);
+	          whens[whenKey] = element.attr(attr.$attr[attributeName]);
 	        }
 	      });
 	      forEach(whens, function(expression, key) {
-	        whensExpFns[key] =
-	          $interpolate(expression.replace(BRACE, startSymbol + numberExp + '-' +
-	            offset + endSymbol));
+	        whensExpFns[key] = $interpolate(expression.replace(BRACE, braceReplacement));
+
 	      });
 
-	      scope.$watch(function ngPluralizeWatch() {
-	        var value = parseFloat(scope.$eval(numberExp));
+	      scope.$watch(numberExp, function ngPluralizeWatchAction(newVal) {
+	        var count = parseFloat(newVal);
+	        var countIsNaN = isNaN(count);
 
-	        if (!isNaN(value)) {
-	          //if explicit number rule such as 1, 2, 3... is defined, just use it. Otherwise,
-	          //check it against pluralization rules in $locale service
-	          if (!(value in whens)) value = $locale.pluralCat(value - offset);
-	           return whensExpFns[value](scope);
-	        } else {
-	          return '';
+	        if (!countIsNaN && !(count in whens)) {
+	          // If an explicit number rule such as 1, 2, 3... is defined, just use it.
+	          // Otherwise, check it against pluralization rules in $locale service.
+	          count = $locale.pluralCat(count - offset);
 	        }
-	      }, function ngPluralizeWatchAction(newVal) {
-	        element.text(newVal);
+
+	        // If both `count` and `lastCount` are NaN, we don't need to re-register a watch.
+	        // In JS `NaN !== NaN`, so we have to exlicitly check.
+	        if ((count !== lastCount) && !(countIsNaN && isNaN(lastCount))) {
+	          watchRemover();
+	          watchRemover = scope.$watch(whensExpFns[count], updateElementText);
+	          lastCount = count;
+	        }
 	      });
+
+	      function updateElementText(newText) {
+	        element.text(newText || '');
+	      }
 	    }
 	  };
 	}];
@@ -24862,17 +25028,17 @@
 	 *
 	 * ### Overriding `.ng-hide`
 	 *
-	 * By default, the `.ng-hide` class will style the element with `display:none!important`. If you wish to change
+	 * By default, the `.ng-hide` class will style the element with `display: none!important`. If you wish to change
 	 * the hide behavior with ngShow/ngHide then this can be achieved by restating the styles for the `.ng-hide`
 	 * class in CSS:
 	 *
 	 * ```css
 	 * .ng-hide {
 	 *   /&#42; this is just another form of hiding an element &#42;/
-	 *   display:block!important;
-	 *   position:absolute;
-	 *   top:-9999px;
-	 *   left:-9999px;
+	 *   display: block!important;
+	 *   position: absolute;
+	 *   top: -9999px;
+	 *   left: -9999px;
 	 * }
 	 * ```
 	 *
@@ -24892,13 +25058,13 @@
 	 * .my-element.ng-hide-add, .my-element.ng-hide-remove {
 	 *   /&#42; this is required as of 1.3x to properly
 	 *      apply all styling in a show/hide animation &#42;/
-	 *   transition:0s linear all;
+	 *   transition: 0s linear all;
 	 * }
 	 *
 	 * .my-element.ng-hide-add-active,
 	 * .my-element.ng-hide-remove-active {
 	 *   /&#42; the transition is defined in the active class &#42;/
-	 *   transition:1s linear all;
+	 *   transition: 1s linear all;
 	 * }
 	 *
 	 * .my-element.ng-hide-add { ... }
@@ -24940,29 +25106,29 @@
 	    </file>
 	    <file name="animations.css">
 	      .animate-show {
-	        line-height:20px;
-	        opacity:1;
-	        padding:10px;
-	        border:1px solid black;
-	        background:white;
+	        line-height: 20px;
+	        opacity: 1;
+	        padding: 10px;
+	        border: 1px solid black;
+	        background: white;
 	      }
 
 	      .animate-show.ng-hide-add.ng-hide-add-active,
 	      .animate-show.ng-hide-remove.ng-hide-remove-active {
-	        -webkit-transition:all linear 0.5s;
-	        transition:all linear 0.5s;
+	        -webkit-transition: all linear 0.5s;
+	        transition: all linear 0.5s;
 	      }
 
 	      .animate-show.ng-hide {
-	        line-height:0;
-	        opacity:0;
-	        padding:0 10px;
+	        line-height: 0;
+	        opacity: 0;
+	        padding: 0 10px;
 	      }
 
 	      .check-element {
-	        padding:10px;
-	        border:1px solid black;
-	        background:white;
+	        padding: 10px;
+	        border: 1px solid black;
+	        background: white;
 	      }
 	    </file>
 	    <file name="protractor.js" type="protractor">
@@ -25036,17 +25202,17 @@
 	 *
 	 * ### Overriding `.ng-hide`
 	 *
-	 * By default, the `.ng-hide` class will style the element with `display:none!important`. If you wish to change
+	 * By default, the `.ng-hide` class will style the element with `display: none!important`. If you wish to change
 	 * the hide behavior with ngShow/ngHide then this can be achieved by restating the styles for the `.ng-hide`
 	 * class in CSS:
 	 *
 	 * ```css
 	 * .ng-hide {
 	 *   /&#42; this is just another form of hiding an element &#42;/
-	 *   display:block!important;
-	 *   position:absolute;
-	 *   top:-9999px;
-	 *   left:-9999px;
+	 *   display: block!important;
+	 *   position: absolute;
+	 *   top: -9999px;
+	 *   left: -9999px;
 	 * }
 	 * ```
 	 *
@@ -25063,7 +25229,7 @@
 	 * //a working example can be found at the bottom of this page
 	 * //
 	 * .my-element.ng-hide-add, .my-element.ng-hide-remove {
-	 *   transition:0.5s linear all;
+	 *   transition: 0.5s linear all;
 	 * }
 	 *
 	 * .my-element.ng-hide-add { ... }
@@ -25105,25 +25271,25 @@
 	    </file>
 	    <file name="animations.css">
 	      .animate-hide {
-	        -webkit-transition:all linear 0.5s;
-	        transition:all linear 0.5s;
-	        line-height:20px;
-	        opacity:1;
-	        padding:10px;
-	        border:1px solid black;
-	        background:white;
+	        -webkit-transition: all linear 0.5s;
+	        transition: all linear 0.5s;
+	        line-height: 20px;
+	        opacity: 1;
+	        padding: 10px;
+	        border: 1px solid black;
+	        background: white;
 	      }
 
 	      .animate-hide.ng-hide {
-	        line-height:0;
-	        opacity:0;
-	        padding:0 10px;
+	        line-height: 0;
+	        opacity: 0;
+	        padding: 0 10px;
 	      }
 
 	      .check-element {
-	        padding:10px;
-	        border:1px solid black;
-	        background:white;
+	        padding: 10px;
+	        border: 1px solid black;
+	        background: white;
 	      }
 	    </file>
 	    <file name="protractor.js" type="protractor">
@@ -26313,7 +26479,7 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
-	 * @license AngularJS v1.3.3
+	 * @license AngularJS v1.3.4
 	 * (c) 2010-2014 Google, Inc. http://angularjs.org
 	 * License: MIT
 	 */
@@ -26355,7 +26521,7 @@
 	 */
 	function $RouteProvider() {
 	  function inherit(parent, extra) {
-	    return angular.extend(new (angular.extend(function() {}, {prototype:parent}))(), extra);
+	    return angular.extend(Object.create(parent), extra);
 	  }
 
 	  var routes = {};
@@ -26971,7 +27137,7 @@
 	        if (i === 0) {
 	          result.push(segment);
 	        } else {
-	          var segmentMatch = segment.match(/(\w+)(.*)/);
+	          var segmentMatch = segment.match(/(\w+)(?:[?*])?(.*)/);
 	          var key = segmentMatch[1];
 	          result.push(params[key]);
 	          result.push(segmentMatch[2] || '');
@@ -27315,7 +27481,7 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
-	 * @license AngularJS v1.3.3
+	 * @license AngularJS v1.3.4
 	 * (c) 2010-2014 Google, Inc. http://angularjs.org
 	 * License: MIT
 	 */
@@ -27977,13 +28143,13 @@
 	    function addLink(url, text) {
 	      html.push('<a ');
 	      if (angular.isDefined(target)) {
-	        html.push('target="');
-	        html.push(target);
-	        html.push('" ');
+	        html.push('target="',
+	                  target,
+	                  '" ');
 	      }
-	      html.push('href="');
-	      html.push(url);
-	      html.push('">');
+	      html.push('href="',
+	                url.replace('"', '&quot;'),
+	                '">');
 	      addText(text);
 	      html.push('</a>');
 	    }
@@ -27999,7 +28165,7 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
-	 * @license AngularJS v1.3.3
+	 * @license AngularJS v1.3.4
 	 * (c) 2010-2014 Google, Inc. http://angularjs.org
 	 * License: MIT
 	 */
@@ -28245,7 +28411,7 @@
 	 * You then configure `$animate` to enforce this prefix:
 	 *
 	 * ```js
-	 * $animateProvider.classNamePrefix(/animate-/);
+	 * $animateProvider.classNameFilter(/animate-/);
 	 * ```
 	 * </div>
 	 *
@@ -28976,9 +29142,9 @@
 	         * | 3. $animate waits for the next digest to start the animation                                                      | class="my-animation ng-animate"                          |
 	         * | 4. the .ng-leave class is added to the element                                                                    | class="my-animation ng-animate ng-leave"                 |
 	         * | 5. $animate scans the element styles to get the CSS transition/animation duration and delay                       | class="my-animation ng-animate ng-leave"                 |
-	         * | 6. $animate blocks all CSS transitions on the element to ensure the .ng-leave class styling is applied right away | class="my-animation ng-animate ng-leave”                 |
+	         * | 6. $animate blocks all CSS transitions on the element to ensure the .ng-leave class styling is applied right away | class="my-animation ng-animate ng-leave"                 |
 	         * | 7. $animate waits for a single animation frame (this performs a reflow)                                           | class="my-animation ng-animate ng-leave"                 |
-	         * | 8. $animate removes the CSS transition block placed on the element                                                | class="my-animation ng-animate ng-leave”                 |
+	         * | 8. $animate removes the CSS transition block placed on the element                                                | class="my-animation ng-animate ng-leave"                 |
 	         * | 9. the .ng-leave-active class is added (this triggers the CSS transition/animation)                               | class="my-animation ng-animate ng-leave ng-leave-active" |
 	         * | 10. $animate waits for the animation to complete (via events and timeout)                                         | class="my-animation ng-animate ng-leave ng-leave-active" |
 	         * | 11. The animation ends and all generated CSS classes are removed from the element                                 | class="my-animation"                                     |
@@ -29022,9 +29188,9 @@
 	         * | 4. $animate runs the JavaScript-defined animations detected on the element                                       | class="my-animation ng-animate"                        |
 	         * | 5. the .ng-move class is added to the element                                                                    | class="my-animation ng-animate ng-move"                |
 	         * | 6. $animate scans the element styles to get the CSS transition/animation duration and delay                      | class="my-animation ng-animate ng-move"                |
-	         * | 7. $animate blocks all CSS transitions on the element to ensure the .ng-move class styling is applied right away | class="my-animation ng-animate ng-move”                |
+	         * | 7. $animate blocks all CSS transitions on the element to ensure the .ng-move class styling is applied right away | class="my-animation ng-animate ng-move"                |
 	         * | 8. $animate waits for a single animation frame (this performs a reflow)                                          | class="my-animation ng-animate ng-move"                |
-	         * | 9. $animate removes the CSS transition block placed on the element                                               | class="my-animation ng-animate ng-move”                |
+	         * | 9. $animate removes the CSS transition block placed on the element                                               | class="my-animation ng-animate ng-move"                |
 	         * | 10. the .ng-move-active class is added (this triggers the CSS transition/animation)                              | class="my-animation ng-animate ng-move ng-move-active" |
 	         * | 11. $animate waits for the animation to complete (via events and timeout)                                        | class="my-animation ng-animate ng-move ng-move-active" |
 	         * | 12. The animation ends and all generated CSS classes are removed from the element                                | class="my-animation"                                   |
@@ -29069,8 +29235,8 @@
 	         * | 3. the .super-add class is added to the element                                                    | class="my-animation ng-animate super-add"                        |
 	         * | 4. $animate waits for a single animation frame (this performs a reflow)                            | class="my-animation ng-animate super-add"                        |
 	         * | 5. the .super and .super-add-active classes are added (this triggers the CSS transition/animation) | class="my-animation ng-animate super super-add super-add-active" |
-	         * | 6. $animate scans the element styles to get the CSS transition/animation duration and delay        | class="my-animation ng-animate super-add"                        |
-	         * | 7. $animate waits for the animation to complete (via events and timeout)                           | class="my-animation super super-add super-add-active"            |
+	         * | 6. $animate scans the element styles to get the CSS transition/animation duration and delay        | class="my-animation ng-animate super super-add super-add-active" |
+	         * | 7. $animate waits for the animation to complete (via events and timeout)                           | class="my-animation ng-animate super super-add super-add-active" |
 	         * | 8. The animation ends and all generated CSS classes are removed from the element                   | class="my-animation super"                                       |
 	         * | 9. The super class is kept on the element                                                          | class="my-animation super"                                       |
 	         * | 10. The returned promise is resolved.                                                              | class="my-animation super"                                       |
@@ -29103,7 +29269,7 @@
 	         * | 3. the .super-remove class is added to the element                                                               | class="my-animation super ng-animate super-remove"               |
 	         * | 4. $animate waits for a single animation frame (this performs a reflow)                                          | class="my-animation super ng-animate super-remove"               |
 	         * | 5. the .super-remove-active classes are added and .super is removed (this triggers the CSS transition/animation) | class="my-animation ng-animate super-remove super-remove-active" |
-	         * | 6. $animate scans the element styles to get the CSS transition/animation duration and delay                      | class="my-animation super ng-animate super-remove"               |
+	         * | 6. $animate scans the element styles to get the CSS transition/animation duration and delay                      | class="my-animation ng-animate super-remove super-remove-active" |
 	         * | 7. $animate waits for the animation to complete (via events and timeout)                                         | class="my-animation ng-animate super-remove super-remove-active" |
 	         * | 8. The animation ends and all generated CSS classes are removed from the element                                 | class="my-animation"                                             |
 	         * | 9. The returned promise is resolved.                                                                             | class="my-animation"                                             |
@@ -29128,11 +29294,11 @@
 	         *
 	         * | Animation Step                                                                                                                       | What the element class attribute looks like                                          |
 	         * |--------------------------------------------------------------------------------------------------------------------------------------|--------------------------------------------------------------------------------------|
-	         * | 1. $animate.removeClass(element, ‘on’, ‘off’) is called                                                                              | class="my-animation super off”                                                       |
-	         * | 2. $animate runs the JavaScript-defined animations detected on the element                                                           | class="my-animation super ng-animate off”                                            |
-	         * | 3. the .on-add and .off-remove classes are added to the element                                                                      | class="my-animation ng-animate on-add off-remove off”                                |
-	         * | 4. $animate waits for a single animation frame (this performs a reflow)                                                              | class="my-animation ng-animate on-add off-remove off”                                |
-	         * | 5. the .on, .on-add-active and .off-remove-active classes are added and .off is removed (this triggers the CSS transition/animation) | class="my-animation ng-animate on on-add on-add-active off-remove off-remove-active” |
+	         * | 1. $animate.setClass(element, 'on', 'off') is called                                                                                 | class="my-animation off"                                                             |
+	         * | 2. $animate runs the JavaScript-defined animations detected on the element                                                           | class="my-animation ng-animate off"                                                  |
+	         * | 3. the .on-add and .off-remove classes are added to the element                                                                      | class="my-animation ng-animate on-add off-remove off"                                |
+	         * | 4. $animate waits for a single animation frame (this performs a reflow)                                                              | class="my-animation ng-animate on-add off-remove off"                                |
+	         * | 5. the .on, .on-add-active and .off-remove-active classes are added and .off is removed (this triggers the CSS transition/animation) | class="my-animation ng-animate on on-add on-add-active off-remove off-remove-active" |
 	         * | 6. $animate scans the element styles to get the CSS transition/animation duration and delay                                          | class="my-animation ng-animate on on-add on-add-active off-remove off-remove-active" |
 	         * | 7. $animate waits for the animation to complete (via events and timeout)                                                             | class="my-animation ng-animate on on-add on-add-active off-remove off-remove-active" |
 	         * | 8. The animation ends and all generated CSS classes are removed from the element                                                     | class="my-animation on"                                                              |
@@ -30206,7 +30372,7 @@
 /* 20 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var v1="<pre markdown>\n  ##  Directive _fsFormFor_\n\n  ---\n\n  This directive allows to construct complex\n  horizontal forms with easy DSL-like markup.\n\n  Each form row is described with fsInput directive. It has following attributes:\n\n  * as - specifies type of input\n  * label - specifies label text\n  * name - specifies model's attribute to which input will be bound\n  * Other attributes (like items) are directly passed into input directive.\n\n\n  See [source code](https://github.com/formstamp/formstamp/blob/master/src/coffee/formFor.coffee)\n\n</pre> <pre sample label=\"label\" src=\"src\">\n<fs-form-for model=\"samurai\">\n<fieldset class=\"form-horizontal\">\n  <legend>Samurai Personal Info</legend>\n  <fs-input as=\"fs-datetime\" name=\"birthdate\" required=\"\" label=\"Date of Birth\"></fs-input>\n  <fs-input as=\"fs-date\" name=\"date\" required label=\"Date\" custom-validation-future></fs-input>\n  <fs-input as=\"fs-time\" name=\"time\" required label=\"Time\"></fs-input>\n  <fs-input as=\"textarea\" name=\"details\" required label=\"Details\"></fs-input>\n  <fs-row label=\"Living district\">\n  <div class=\"row\">\n    <div class=\"col-xs-3\"><div fs-select=\"\" ng-model=\"samurai.district\" items=\"districts\">{{ item }}</div></div>\n    <div class=\"col-xs-3\"><div fs-date=\"\" ng-model=\"samurai.districtMoveDate\" placeholder=\"Settled date\"></div></div>\n  </div>\n  </fs-row>\n</fieldset>\n\n<fieldset class=\"form-horizontal\">\n  <legend>Samurai CV</legend>\n  <fs-input as=\"fs-radio\" name=\"learningStage\" label=\"Current Learning Stage\" items=\"learningStages\"></fs-input>\n  <fs-input as=\"fs-multiselect\" name=\"weapons\" label=\"Owned Weapons\" items=\"weapons\">{{ item.label }}</fs-input>\n  <fs-input as=\"fs-multiselect\" name=\"weaponStyles\" freetext=\"123\" label=\"Weapon Styles\" items=\"weaponStyles\">{{ item }}</fs-input>\n  <fs-input as=\"fs-select\" name=\"meal\" label=\"Preferable Food\" items=\"meals\"><b>{{ item.id.toUpperCase() }}</b> {{ item.label }}</fs-input>\n  <fs-input as=\"fs-checkbox\" name=\"otherFacts\" label=\"Other Facts\" items=\"otherFacts\">{{ item }}</fs-input>\n</fieldset>\n\n<fieldset class=\"form-horizontal\">\n  <legend>Angular native</legend>\n  <fs-input as=\"text\" required name=\"ngName\"></fs-input>\n  <fs-input as=\"email\" required name=\"ngEmail\"></fs-input>\n  <fs-input as=\"number\" name=\"ngNumber\"></fs-input>\n  <fs-input as=\"url\" name=\"ngUrl\"></fs-input>\n  <fs-input as=\"time\" name=\"ngTime\"></fs-input>\n  <fs-input as=\"date\" name=\"ngDate\"></fs-input>\n  <fs-input as=\"datetime-local\" name=\"ngDatelocal\"></fs-input>\n  <fs-input as=\"week\" name=\"ngWeek\"></fs-input>\n  <fs-input as=\"month\" name=\"ngMonth\"></fs-input>\n</fieldset>\n</fs-form-for>\n<h4>Angular Scope</h4>\n<pre>samurai = {{samurai | json}}</pre>\n</pre>";
+	var v1="<pre markdown>\n  ##  Directive _fsFormFor_\n\n  ---\n\n  This directive allows to construct complex\n  horizontal forms with easy DSL-like markup.\n\n  Each form row is described with fsInput directive. It has following attributes:\n\n  * as - specifies type of input\n  * label - specifies label text\n  * name - specifies model's attribute to which input will be bound\n  * Other attributes (like items) are directly passed into input directive.\n\n\n  See [source code](https://github.com/formstamp/formstamp/blob/master/src/coffee/formFor.coffee)\n\n</pre> <pre sample label=\"label\" src=\"{{src}}\">\n<fs-form-for model=\"samurai\">\n<fieldset class=\"form-horizontal\">\n  <legend>Samurai Personal Info</legend>\n  <fs-input as=\"fs-datetime\" name=\"birthdate\" required=\"\" label=\"Date of Birth\"></fs-input>\n  <fs-input as=\"fs-date\" name=\"date\" required label=\"Date\" custom-validation-future></fs-input>\n  <fs-input as=\"fs-time\" name=\"time\" required label=\"Time\"></fs-input>\n  <fs-input as=\"textarea\" name=\"details\" required label=\"Details\"></fs-input>\n  <fs-row label=\"Living district\">\n  <div class=\"row\">\n    <div class=\"col-xs-3\"><div fs-select=\"\" ng-model=\"samurai.district\" items=\"districts\">{{ item }}</div></div>\n    <div class=\"col-xs-3\"><div fs-date=\"\" ng-model=\"samurai.districtMoveDate\" placeholder=\"Settled date\"></div></div>\n  </div>\n  </fs-row>\n</fieldset>\n\n<fieldset class=\"form-horizontal\">\n<legend>Frend</legend>\n  <fs-form-for model=\"samurai.frend\">\n    <fs-input as=\"text\" name=\"name\"/>\n  </fs-form-for>\n</fieldset>\n\n<fieldset class=\"form-horizontal\">\n  <legend>Samurai CV</legend>\n  <fs-input as=\"fs-radio\" name=\"learningStage\" label=\"Current Learning Stage\" items=\"learningStages\"></fs-input>\n  <fs-input as=\"fs-multiselect\" name=\"weapons\" label=\"Owned Weapons\" items=\"weapons\">{{ item.label }}</fs-input>\n  <fs-input as=\"fs-multiselect\" name=\"weaponStyles\" freetext=\"123\" label=\"Weapon Styles\" items=\"weaponStyles\">{{ item }}</fs-input>\n  <fs-input as=\"fs-select\" name=\"meal\" label=\"Preferable Food\" items=\"meals\"><b>{{ item.id.toUpperCase() }}</b> {{ item.label }}</fs-input>\n  <fs-input as=\"fs-checkbox\" name=\"otherFacts\" label=\"Other Facts\" items=\"otherFacts\">{{ item }}</fs-input>\n</fieldset>\n\n<fieldset class=\"form-horizontal\">\n  <legend>Angular native</legend>\n  <fs-input as=\"text\" required name=\"ngName\"></fs-input>\n  <fs-input as=\"email\" required name=\"ngEmail\"></fs-input>\n  <fs-input as=\"number\" name=\"ngNumber\"></fs-input>\n  <fs-input as=\"url\" name=\"ngUrl\"></fs-input>\n  <fs-input as=\"time\" name=\"ngTime\"></fs-input>\n  <fs-input as=\"date\" name=\"ngDate\"></fs-input>\n  <fs-input as=\"datetime-local\" name=\"ngDatelocal\"></fs-input>\n  <fs-input as=\"week\" name=\"ngWeek\"></fs-input>\n  <fs-input as=\"month\" name=\"ngMonth\"></fs-input>\n</fieldset>\n</fs-form-for>\n<h4>Angular Scope</h4>\n<pre>samurai = {{samurai | json}}</pre>\n</pre>";
 	angular.module(["ng"]).run(["$templateCache",function(c){c.put("views/form.html", v1)}]);
 	module.exports=v1;
 
@@ -30313,13 +30479,13 @@
 /* 38 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = "app = require('./module')\n\nsrc = require('raw!./form.js')\n\napp.controller('FormCtrl', function ($scope){\n  $scope.src = src\n\n  $scope.samurai = {\n    name: \"Unnamed\",\n    districts: []\n  };\n\n  $scope.learningStages = [\n    {id: 'S', label: 'Shu'},\n    {id: 'H', label: 'Ha'},\n    {id: 'R', label: 'Ri'}\n  ];\n\n  $scope.weapons = [\n    {id: '1', label: 'Katana'},\n    {id: '2', label: 'Naginata'},\n    {id: '3', label: 'Yari'},\n    {id: '4', label: 'Horagai'},\n    {id: '5', label: 'Horimono'}\n  ];\n\n  $scope.meals = [\n    {id: 'me', label: 'Meat'},\n    {id: 'mi', label: 'Milk'},\n    {id: 'or', label: 'Orange'},\n    {id: 'ri', label: 'Rice'}\n  ];\n\n  $scope.otherFacts = [\n    'Uruwashii', 'Buke', 'Mononofu', 'Musha', 'Rōnin', 'Shi', 'Tsuwamono'\n  ];\n\n  $scope.weaponStyles = ['Kenjutsu', 'Naginatajutsu', 'Sōjutsu'];\n\n  $scope.districts = [\n  'Kita District',\n    'Tsugaru District',\n    'Hei District',\n    'Iwai District',\n    'Akita District',\n    'Tagawa District',\n    'Murayama District',\n    'Okitama District',\n    'Aizu District',\n    'Shirakawa District',\n    'Ibaraki District',\n    'Tsuga District',\n    'Habu District',\n    'Sōma District',\n    'Katsushika District',\n    'Saitama District',\n    'Adachi District',\n    'Toshima District',\n    'Tama District',\n    'Kanbara District',\n    'Uonuma District',\n    'Kubiki District',\n    'Niikawa District',\n    'Tsuru District',\n    'Yamanashi District',\n    'Yatsushiro District',\n    'Koma District',\n    'Saku District',\n    'Takai District',\n    'Minochi District',\n    'Ina District',\n    'Chikuma District',\n    'Azumi District',\n    'Ishizu District',\n    'Shitara District',\n    'Kamo District',\n    'Kasugai District',\n    'Muro District',\n    'Azai District',\n    'Kuwata District',\n    'Ukena District',\n    'Uwa District',\n    'Matsuura District',\n    'Sonogi District',\n    'Takaki District',\n    'Kunisaki District',\n    'Amabe District',\n    'Usuki District',\n    'Naka District',\n    'Ōsumi District',\n    'Soo District',\n    'Isa District'\n  ];\n})\n"
+	module.exports = "app = require('./module')\n\n\napp.controller('FormCtrl', function ($scope){\n  $scope.src = require('raw!./form.js')\n\n  $scope.samurai = {\n    name: \"Unnamed\",\n    districts: [],\n    frend: {\n      name: 'Geisha'\n    }\n  };\n\n  $scope.learningStages = [\n    {id: 'S', label: 'Shu'},\n    {id: 'H', label: 'Ha'},\n    {id: 'R', label: 'Ri'}\n  ];\n\n  $scope.weapons = [\n    {id: '1', label: 'Katana'},\n    {id: '2', label: 'Naginata'},\n    {id: '3', label: 'Yari'},\n    {id: '4', label: 'Horagai'},\n    {id: '5', label: 'Horimono'}\n  ];\n\n  $scope.meals = [\n    {id: 'me', label: 'Meat'},\n    {id: 'mi', label: 'Milk'},\n    {id: 'or', label: 'Orange'},\n    {id: 'ri', label: 'Rice'}\n  ];\n\n  $scope.otherFacts = [\n    'Uruwashii', 'Buke', 'Mononofu', 'Musha', 'Rōnin', 'Shi', 'Tsuwamono'\n  ];\n\n  $scope.weaponStyles = ['Kenjutsu', 'Naginatajutsu', 'Sōjutsu'];\n\n  $scope.districts = [\n  'Kita District',\n    'Tsugaru District',\n    'Hei District',\n    'Iwai District',\n    'Akita District',\n    'Tagawa District',\n    'Murayama District',\n    'Okitama District',\n    'Aizu District',\n    'Shirakawa District',\n    'Ibaraki District',\n    'Tsuga District',\n    'Habu District',\n    'Sōma District',\n    'Katsushika District',\n    'Saitama District',\n    'Adachi District',\n    'Toshima District',\n    'Tama District',\n    'Kanbara District',\n    'Uonuma District',\n    'Kubiki District',\n    'Niikawa District',\n    'Tsuru District',\n    'Yamanashi District',\n    'Yatsushiro District',\n    'Koma District',\n    'Saku District',\n    'Takai District',\n    'Minochi District',\n    'Ina District',\n    'Chikuma District',\n    'Azumi District',\n    'Ishizu District',\n    'Shitara District',\n    'Kamo District',\n    'Kasugai District',\n    'Muro District',\n    'Azai District',\n    'Kuwata District',\n    'Ukena District',\n    'Uwa District',\n    'Matsuura District',\n    'Sonogi District',\n    'Takaki District',\n    'Kunisaki District',\n    'Amabe District',\n    'Usuki District',\n    'Naka District',\n    'Ōsumi District',\n    'Soo District',\n    'Isa District'\n  ];\n})\n"
 
 /***/ },
 /* 39 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = "app = require('./module')\n\nsrc = require('raw!./radio.js')\n\nsushi = [\n  {img: 'CaliforniaRoll', label: 'California Roll', src: require('../imgs/CaliforniaRoll.gif')},\n  {img: 'CucumberRoll', label: 'Cucumber Roll', src: require('../imgs/CucumberRoll.gif')},\n  {img: 'FattyTuna', label: 'Fatty Tuna',src: require('../imgs/FattyTuna.gif')},\n  {img: 'Inari', label: 'Inari',src: require('../imgs/Inari.gif')},\n  {img: 'Octopus', label: 'Octopus', src: require('../imgs/Octopus.gif')},\n  {img: 'Shrimp', label: 'Shrimp', src: require('../imgs/Shrimp.gif')}\n]\n\napp.controller('RadioCtrl', function ($scope){\n  $scope.src = src\n  $scope.sushi = sushi\n  $scope.items = [\n    {id: 'S', label: 'Shijima'},\n    {id: 'M', label: 'Musubi'},\n    {id: 'Y', label: 'Yosuga'}\n  ];\n})\n"
+	module.exports = "app = require('./module')\n\nsrc = require('raw!./select.js')\n\ncountries = require('./countries')\n\napp.controller('SelectCtrl', function ($scope){\n  $scope.disabled = false;\n  $scope.src = src\n\n  $scope.items = [\n    {id: 'S', label: 'Shijima'},\n    {id: 'M', label: 'Musubi'},\n    {id: 'Y', label: 'Yosuga'}\n  ];\n\n  $scope.countries = countries;\n\n  $scope.laughs = ['Ha-ha-ha', 'Ho-ho-ho', 'He-he-he'];\n})\n"
 
 /***/ },
 /* 40 */
@@ -30331,7 +30497,7 @@
 /* 41 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = "app = require('./module')\n\nsrc = require('raw!./select.js')\n\ncountries = require('./countries')\n\napp.controller('SelectCtrl', function ($scope){\n  $scope.disabled = false;\n  $scope.src = src\n\n  $scope.items = [\n    {id: 'S', label: 'Shijima'},\n    {id: 'M', label: 'Musubi'},\n    {id: 'Y', label: 'Yosuga'}\n  ];\n\n  $scope.countries = countries;\n\n  $scope.laughs = ['Ha-ha-ha', 'Ho-ho-ho', 'He-he-he'];\n})\n"
+	module.exports = "app = require('./module')\n\nsrc = require('raw!./radio.js')\n\nsushi = [\n  {img: 'CaliforniaRoll', label: 'California Roll', src: require('../imgs/CaliforniaRoll.gif')},\n  {img: 'CucumberRoll', label: 'Cucumber Roll', src: require('../imgs/CucumberRoll.gif')},\n  {img: 'FattyTuna', label: 'Fatty Tuna',src: require('../imgs/FattyTuna.gif')},\n  {img: 'Inari', label: 'Inari',src: require('../imgs/Inari.gif')},\n  {img: 'Octopus', label: 'Octopus', src: require('../imgs/Octopus.gif')},\n  {img: 'Shrimp', label: 'Shrimp', src: require('../imgs/Shrimp.gif')}\n]\n\napp.controller('RadioCtrl', function ($scope){\n  $scope.src = src\n  $scope.sushi = sushi\n  $scope.items = [\n    {id: 'S', label: 'Shijima'},\n    {id: 'M', label: 'Musubi'},\n    {id: 'Y', label: 'Yosuga'}\n  ];\n})\n"
 
 /***/ },
 /* 42 */
@@ -30773,7 +30939,7 @@
 /* 52 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var mod, setAttrs,
+	var isDirectChild, mod, setAttrs,
 	  __hasProp = {}.hasOwnProperty;
 
 	mod = __webpack_require__(68);
@@ -30829,12 +30995,29 @@
 	  }
 	]);
 
+	isDirectChild = function(form, el) {
+	  var testel;
+	  testel = el;
+	  while (testel) {
+	    if (testel.tagName.toLowerCase() === 'fs-form-for') {
+	      if (testel.isSameNode(form)) {
+	        return true;
+	      } else {
+	        return false;
+	      }
+	    }
+	    testel = testel.parentNode;
+	  }
+	  return false;
+	};
+
 	mod.directive('fsFormFor', [
 	  '$templateCache', function($templateCache) {
 	    return {
 	      restrict: 'AE',
+	      replace: true,
 	      template: function(el, attrs) {
-	        var action, attr, form, formAttributes, input, inputReplacer, inputTpl, modelName, row, rowReplacer, rowTpl, tplEl, _i, _j, _k, _len, _len1, _len2, _ref, _ref1, _ref2;
+	        var action, attr, form, formAttributes, input, inputReplacer, inputTpl, modelName, root, row, rowReplacer, rowTpl, tplEl, _i, _j, _k, _len, _len1, _len2, _ref, _ref1, _ref2;
 	        inputTpl = $templateCache.get('templates/fs/metaInput.html');
 	        rowTpl = $templateCache.get('templates/fs/metaRow.html');
 	        modelName = el.attr("model");
@@ -30890,10 +31073,13 @@
 	          return rowTpl.replace(/::label/g, label).replace(/::content/, row.html());
 	        };
 	        tplEl = el.clone();
+	        root = tplEl[0];
 	        _ref1 = tplEl.find("fs-input");
 	        for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
 	          input = _ref1[_j];
-	          angular.element(input).replaceWith(inputReplacer(input));
+	          if (isDirectChild(root, input)) {
+	            angular.element(input).replaceWith(inputReplacer(input));
+	          }
 	        }
 	        _ref2 = tplEl.find("fs-row");
 	        for (_k = 0, _len2 = _ref2.length; _k < _len2; _k++) {
