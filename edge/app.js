@@ -96,7 +96,9 @@
 
 	__webpack_require__(26);
 
-	__webpack_require__(29);
+	__webpack_require__(30);
+
+	__webpack_require__(28);
 
 	__webpack_require__(27);
 
@@ -134,6 +136,9 @@
 	    }, {
 	      name: 'list',
 	      label: 'List'
+	    }, {
+	      name: 'validation',
+	      label: 'Validation'
 	    }
 	  ].map(buildSiteMap),
 	  user: [
@@ -189,9 +194,15 @@
 
 	app.controller('WelcomeCtrl', function() {});
 
-	app.readme = __webpack_require__(45);
+	app.readme = __webpack_require__(46);
 
 	app.controller('ReadmeCtrl', [
+	  '$sce', '$scope', function($sce, $scope) {
+	    return $scope.readme = $sce.trustAsHtml(app.readme);
+	  }
+	]);
+
+	app.controller('ValidationCtrl', [
 	  '$sce', '$scope', function($sce, $scope) {
 	    return $scope.readme = $sce.trustAsHtml(app.readme);
 	  }
@@ -268,7 +279,7 @@
 
 	app = __webpack_require__(1);
 
-	md = __webpack_require__(63);
+	md = __webpack_require__(64);
 
 	app.directive('markdown', function() {
 	  return {
@@ -289,7 +300,7 @@
 
 
 	app.controller('FormCtrl',['$scope', function ($scope){
-	  $scope.src = __webpack_require__(38)
+	  $scope.src = __webpack_require__(39)
 
 	  $scope.samurai = {
 	    name: "Unnamed",
@@ -389,7 +400,7 @@
 
 	app = __webpack_require__(1)
 
-	src = __webpack_require__(39)
+	src = __webpack_require__(40)
 
 	countries = __webpack_require__(17)
 
@@ -415,7 +426,7 @@
 
 	app = __webpack_require__(1)
 
-	src = __webpack_require__(40)
+	src = __webpack_require__(41)
 
 	countries = __webpack_require__(17)
 	app.controller('MultiselectCtrl',['$scope', function ($scope){
@@ -444,15 +455,15 @@
 
 	app = __webpack_require__(1)
 
-	src = __webpack_require__(41)
+	src = __webpack_require__(42)
 
 	sushi = [
-	  {img: 'CaliforniaRoll', label: 'California Roll', src: __webpack_require__(31)},
-	  {img: 'CucumberRoll', label: 'Cucumber Roll', src: __webpack_require__(32)},
-	  {img: 'FattyTuna', label: 'Fatty Tuna',src: __webpack_require__(33)},
-	  {img: 'Inari', label: 'Inari',src: __webpack_require__(34)},
-	  {img: 'Octopus', label: 'Octopus', src: __webpack_require__(35)},
-	  {img: 'Shrimp', label: 'Shrimp', src: __webpack_require__(36)}
+	  {img: 'CaliforniaRoll', label: 'California Roll', src: __webpack_require__(32)},
+	  {img: 'CucumberRoll', label: 'Cucumber Roll', src: __webpack_require__(33)},
+	  {img: 'FattyTuna', label: 'Fatty Tuna',src: __webpack_require__(34)},
+	  {img: 'Inari', label: 'Inari',src: __webpack_require__(35)},
+	  {img: 'Octopus', label: 'Octopus', src: __webpack_require__(36)},
+	  {img: 'Shrimp', label: 'Shrimp', src: __webpack_require__(37)}
 	]
 
 	app.controller('RadioCtrl', ['$scope', function ($scope){
@@ -472,7 +483,7 @@
 
 	app = __webpack_require__(1)
 
-	src = __webpack_require__(42)
+	src = __webpack_require__(43)
 
 	app.controller('CheckCtrl', ['$scope', function ($scope){
 	  $scope.src = src
@@ -490,7 +501,7 @@
 
 	app = __webpack_require__(1)
 
-	src = __webpack_require__(43)
+	src = __webpack_require__(44)
 
 	app.controller('DatetimeCtrl',['$scope', function ($scope){
 	  $scope.selectedDate = new Date();
@@ -515,7 +526,7 @@
 
 	app = __webpack_require__(1)
 
-	src = __webpack_require__(44)
+	src = __webpack_require__(45)
 
 	app.controller('ListCtrl',['$scope', function ($scope){
 	  $scope.src = src
@@ -30483,8 +30494,6 @@
 /* 16 */
 /***/ function(module, exports, __webpack_require__) {
 
-	__webpack_require__(46);
-
 	__webpack_require__(47);
 
 	__webpack_require__(48);
@@ -30515,6 +30524,8 @@
 
 	__webpack_require__(61);
 
+	__webpack_require__(62);
+
 
 /***/ },
 /* 17 */
@@ -30543,7 +30554,7 @@
 /* 20 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var v1="<pre markdown>\n  ##  Directive _fsFormFor_\n\n  ---\n\n  This directive allows to construct complex\n  horizontal forms with easy DSL-like markup.\n\n  Each form row is described with fsInput directive. It has following attributes:\n\n  * as - specifies type of input\n  * label - specifies label text\n  * name - specifies model's attribute to which input will be bound\n  * Other attributes (like items) are directly passed into input directive.\n\n\n  See [source code](https://github.com/formstamp/formstamp/blob/master/src/coffee/formFor.coffee)\n\n</pre> <pre sample label=\"label\" src=\"{{src}}\">\n<fs-form-for model=\"samurai\">\n<fieldset class=\"form-horizontal\">\n  <legend>Samurai Personal Info</legend>\n  <fs-input as=\"fs-datetime\" name=\"birthdate\" required=\"\" label=\"Date of Birth\"></fs-input>\n  <fs-input as=\"fs-date\" name=\"date\" required label=\"Date\" custom-validation-future></fs-input>\n  <fs-input as=\"fs-time\" name=\"time\" required label=\"Time\"></fs-input>\n  <fs-input as=\"textarea\" name=\"details\" required label=\"Details\"></fs-input>\n  <fs-row label=\"Living district\">\n  <div class=\"row\">\n    <div class=\"col-xs-3\"><div fs-select=\"\" ng-model=\"samurai.district\" items=\"districts\">{{ item }}</div></div>\n    <div class=\"col-xs-3\"><div fs-date=\"\" ng-model=\"samurai.districtMoveDate\" placeholder=\"Settled date\"></div></div>\n  </div>\n  </fs-row>\n</fieldset>\n\n<fieldset class=\"form-horizontal\">\n<legend>Frend</legend>\n  <fs-form-for model=\"samurai.frend\">\n    <fs-input as=\"text\" name=\"name\"/>\n  </fs-form-for>\n</fieldset>\n\n<fieldset class=\"form-horizontal\">\n  <legend>Samurai CV</legend>\n  <fs-input as=\"fs-radio\" name=\"learningStage\" label=\"Current Learning Stage\" items=\"learningStages\"></fs-input>\n  <fs-input as=\"fs-multiselect\" name=\"weapons\" label=\"Owned Weapons\" items=\"weapons\">{{ item.label }}</fs-input>\n  <fs-input as=\"fs-multiselect\" name=\"weaponStyles\" freetext=\"123\" label=\"Weapon Styles\" items=\"weaponStyles\">{{ item }}</fs-input>\n  <fs-input as=\"fs-select\" name=\"meal\" label=\"Preferable Food\" items=\"meals\"><b>{{ item.id.toUpperCase() }}</b> {{ item.label }}</fs-input>\n  <fs-input as=\"fs-checkbox\" name=\"otherFacts\" label=\"Other Facts\" items=\"otherFacts\">{{ item }}</fs-input>\n</fieldset>\n\n<fieldset class=\"form-horizontal\">\n  <legend>Angular native</legend>\n  <fs-input as=\"text\" required name=\"ngName\"></fs-input>\n  <fs-input as=\"email\" required name=\"ngEmail\"></fs-input>\n  <fs-input as=\"number\" name=\"ngNumber\"></fs-input>\n  <fs-input as=\"url\" name=\"ngUrl\"></fs-input>\n  <fs-input as=\"time\" name=\"ngTime\"></fs-input>\n  <fs-input as=\"date\" name=\"ngDate\"></fs-input>\n  <fs-input as=\"datetime-local\" name=\"ngDatelocal\"></fs-input>\n  <fs-input as=\"week\" name=\"ngWeek\"></fs-input>\n  <fs-input as=\"month\" name=\"ngMonth\"></fs-input>\n</fieldset>\n</fs-form-for>\n<h4>Angular Scope</h4>\n<pre>samurai = {{samurai | json}}</pre>\n</pre>";
+	var v1="<pre markdown>\n  ##  Directive _fsFormFor_\n\n  ---\n\n  This directive allows to construct complex\n  horizontal forms with easy DSL-like markup.\n\n  Each form row is described with fsInput directive. It has following attributes:\n\n  * as - specifies type of input\n  * label - specifies label text\n  * name - specifies model's attribute to which input will be bound\n  * Other attributes (like items) are directly passed into input directive.\n\n\n  See [source code](https://github.com/formstamp/formstamp/blob/master/src/coffee/formFor.coffee)\n\n</pre> <pre sample label=\"label\" src=\"{{src}}\">\n<fs-form-for model=\"samurai\">\n<fieldset class=\"form-horizontal\">\n  <legend>Samurai Personal Info</legend>\n  <fs-input as=\"fs-datetime\" name=\"birthdate\" required label=\"Date of Birth\"></fs-input>\n  <fs-input as=\"fs-date\" name=\"date\" required label=\"Date\" custom-validation-future></fs-input>\n  <fs-input as=\"fs-time\" name=\"time\" required label=\"Time\"></fs-input>\n  <fs-input as=\"textarea\" name=\"details\" required label=\"Details\"></fs-input>\n  <fs-row label=\"Living district\">\n  <div class=\"row\">\n    <div class=\"col-xs-3\"><div fs-select=\"\" ng-model=\"samurai.district\" items=\"districts\">{{ item }}</div></div>\n    <div class=\"col-xs-3\"><div fs-date=\"\" ng-model=\"samurai.districtMoveDate\" placeholder=\"Settled date\"></div></div>\n  </div>\n  </fs-row>\n</fieldset>\n\n<fieldset class=\"form-horizontal\">\n<legend>Frend</legend>\n  <fs-input as=\"text\" name=\"frend.name\"/>\n</fieldset>\n\n<fieldset class=\"form-horizontal\">\n  <legend>Samurai CV</legend>\n  <fs-input as=\"fs-radio\" name=\"learningStage\" label=\"Current Learning Stage\" items=\"learningStages\"></fs-input>\n  <fs-input as=\"fs-multiselect\" name=\"weapons\" label=\"Owned Weapons\" items=\"weapons\">{{ item.label }}</fs-input>\n  <fs-input as=\"fs-multiselect\" name=\"weaponStyles\" freetext=\"123\" label=\"Weapon Styles\" items=\"weaponStyles\">{{ item }}</fs-input>\n  <fs-input as=\"fs-select\" name=\"meal\" label=\"Preferable Food\" items=\"meals\"><b>{{ item.id.toUpperCase() }}</b> {{ item.label }}</fs-input>\n  <fs-input as=\"fs-checkbox\" name=\"otherFacts\" label=\"Other Facts\" items=\"otherFacts\">{{ item }}</fs-input>\n</fieldset>\n\n<fieldset class=\"form-horizontal\">\n  <legend>Angular native</legend>\n  <fs-input as=\"text\" required name=\"ngName\"></fs-input>\n  <fs-input as=\"email\" required name=\"ngEmail\"></fs-input>\n  <fs-input as=\"number\" name=\"ngNumber\"></fs-input>\n  <fs-input as=\"url\" name=\"ngUrl\"></fs-input>\n  <fs-input as=\"time\" name=\"ngTime\"></fs-input>\n  <fs-input as=\"date\" name=\"ngDate\"></fs-input>\n  <fs-input as=\"datetime-local\" name=\"ngDatelocal\"></fs-input>\n  <fs-input as=\"week\" name=\"ngWeek\"></fs-input>\n  <fs-input as=\"month\" name=\"ngMonth\"></fs-input>\n</fieldset>\n  <pre>form = {{form | json}}</pre>\n</fs-form-for>\n<h4>Angular Scope</h4>\n<pre>samurai = {{samurai | json}}</pre>\n</pre>";
 	angular.module(["ng"]).run(["$templateCache",function(c){c.put("views/form.html", v1)}]);
 	module.exports=v1;
 
@@ -30599,108 +30610,116 @@
 /* 27 */
 /***/ function(module, exports, __webpack_require__) {
 
-	// removed by extract-text-webpack-plugin
+	var v1="<fs-form-for model=\"samurai\"> <fieldset class=\"form-horizontal\"> <legend>Samurai Personal Info</legend>   <fs-input as=\"fs-time\" name=\"time\" required label=\"Time\"></fs-input>  </fieldset> <pre>{{form | json}}</pre> </fs-form-for> <pre>{{samurai | json}}</pre>";
+	angular.module(["ng"]).run(["$templateCache",function(c){c.put("views/validation.html", v1)}]);
+	module.exports=v1;
 
 /***/ },
-/* 28 */,
-/* 29 */
+/* 28 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// removed by extract-text-webpack-plugin
 
 /***/ },
-/* 30 */,
-/* 31 */
+/* 29 */,
+/* 30 */
+/***/ function(module, exports, __webpack_require__) {
+
+	// removed by extract-text-webpack-plugin
+
+/***/ },
+/* 31 */,
+/* 32 */
 /***/ function(module, exports, __webpack_require__) {
 
 	module.exports = __webpack_require__.p + "304c60b744c8de4aa52c10dfa9df5a44.gif"
 
 /***/ },
-/* 32 */
+/* 33 */
 /***/ function(module, exports, __webpack_require__) {
 
 	module.exports = __webpack_require__.p + "6f02f16bc352ece908c95f802dce2989.gif"
 
 /***/ },
-/* 33 */
+/* 34 */
 /***/ function(module, exports, __webpack_require__) {
 
 	module.exports = __webpack_require__.p + "c2d75ae3c9f3bf580157e0d9c4aac80a.gif"
 
 /***/ },
-/* 34 */
+/* 35 */
 /***/ function(module, exports, __webpack_require__) {
 
 	module.exports = __webpack_require__.p + "b929eb5e5195e021e7966f548226a76f.gif"
 
 /***/ },
-/* 35 */
+/* 36 */
 /***/ function(module, exports, __webpack_require__) {
 
 	module.exports = __webpack_require__.p + "a2c54175ffc28b40fefbb42b1c1864b5.gif"
 
 /***/ },
-/* 36 */
+/* 37 */
 /***/ function(module, exports, __webpack_require__) {
 
 	module.exports = __webpack_require__.p + "18c84795d8c3b231b035a062ea3d331a.gif"
 
 /***/ },
-/* 37 */,
-/* 38 */
+/* 38 */,
+/* 39 */
 /***/ function(module, exports, __webpack_require__) {
 
 	module.exports = "app = require('./module')\n\n\napp.controller('FormCtrl',['$scope', function ($scope){\n  $scope.src = require('raw!./form.js')\n\n  $scope.samurai = {\n    name: \"Unnamed\",\n    districts: [],\n    frend: {\n      name: 'Geisha'\n    }\n  };\n\n  $scope.learningStages = [\n    {id: 'S', label: 'Shu'},\n    {id: 'H', label: 'Ha'},\n    {id: 'R', label: 'Ri'}\n  ];\n\n  $scope.weapons = [\n    {id: '1', label: 'Katana'},\n    {id: '2', label: 'Naginata'},\n    {id: '3', label: 'Yari'},\n    {id: '4', label: 'Horagai'},\n    {id: '5', label: 'Horimono'}\n  ];\n\n  $scope.meals = [\n    {id: 'me', label: 'Meat'},\n    {id: 'mi', label: 'Milk'},\n    {id: 'or', label: 'Orange'},\n    {id: 'ri', label: 'Rice'}\n  ];\n\n  $scope.otherFacts = [\n    'Uruwashii', 'Buke', 'Mononofu', 'Musha', 'Rōnin', 'Shi', 'Tsuwamono'\n  ];\n\n  $scope.weaponStyles = ['Kenjutsu', 'Naginatajutsu', 'Sōjutsu'];\n\n  $scope.districts = [\n  'Kita District',\n    'Tsugaru District',\n    'Hei District',\n    'Iwai District',\n    'Akita District',\n    'Tagawa District',\n    'Murayama District',\n    'Okitama District',\n    'Aizu District',\n    'Shirakawa District',\n    'Ibaraki District',\n    'Tsuga District',\n    'Habu District',\n    'Sōma District',\n    'Katsushika District',\n    'Saitama District',\n    'Adachi District',\n    'Toshima District',\n    'Tama District',\n    'Kanbara District',\n    'Uonuma District',\n    'Kubiki District',\n    'Niikawa District',\n    'Tsuru District',\n    'Yamanashi District',\n    'Yatsushiro District',\n    'Koma District',\n    'Saku District',\n    'Takai District',\n    'Minochi District',\n    'Ina District',\n    'Chikuma District',\n    'Azumi District',\n    'Ishizu District',\n    'Shitara District',\n    'Kamo District',\n    'Kasugai District',\n    'Muro District',\n    'Azai District',\n    'Kuwata District',\n    'Ukena District',\n    'Uwa District',\n    'Matsuura District',\n    'Sonogi District',\n    'Takaki District',\n    'Kunisaki District',\n    'Amabe District',\n    'Usuki District',\n    'Naka District',\n    'Ōsumi District',\n    'Soo District',\n    'Isa District'\n  ];\n}])\n"
 
 /***/ },
-/* 39 */
+/* 40 */
 /***/ function(module, exports, __webpack_require__) {
 
 	module.exports = "app = require('./module')\n\nsrc = require('raw!./select.js')\n\ncountries = require('./countries')\n\napp.controller('SelectCtrl',['$scope', function ($scope){\n  $scope.disabled = false;\n  $scope.src = src\n\n  $scope.items = [\n    {id: 'S', label: 'Shijima'},\n    {id: 'M', label: 'Musubi'},\n    {id: 'Y', label: 'Yosuga'}\n  ];\n\n  $scope.countries = countries;\n\n  $scope.laughs = ['Ha-ha-ha', 'Ho-ho-ho', 'He-he-he'];\n}])\n"
 
 /***/ },
-/* 40 */
+/* 41 */
 /***/ function(module, exports, __webpack_require__) {
 
 	module.exports = "app = require('./module')\n\nsrc = require('raw!./multiselect.js')\n\ncountries = require('./countries')\napp.controller('MultiselectCtrl',['$scope', function ($scope){\n    $scope.src = src;\n    $scope.disabled = false;\n\n    $scope.items = [\n      {id: 'S', label: 'Shijima'},\n      {id: 'M', label: 'Musubi'},\n      {id: 'Y', label: 'Yosuga'},\n      {id: 'GG', label: 'Genmai gohan'},\n      {id: 'K', label: 'Kamameshi'},\n      {id: 'MO', label: 'Mochi'},\n      {id: 'SH', label: 'Sekihan'}\n    ];\n\n    $scope.countries = countries\n    $scope.countryNames = countries.map(function(x){return x.name})\n\n}])\n"
 
 /***/ },
-/* 41 */
+/* 42 */
 /***/ function(module, exports, __webpack_require__) {
 
 	module.exports = "app = require('./module')\n\nsrc = require('raw!./radio.js')\n\nsushi = [\n  {img: 'CaliforniaRoll', label: 'California Roll', src: require('../imgs/CaliforniaRoll.gif')},\n  {img: 'CucumberRoll', label: 'Cucumber Roll', src: require('../imgs/CucumberRoll.gif')},\n  {img: 'FattyTuna', label: 'Fatty Tuna',src: require('../imgs/FattyTuna.gif')},\n  {img: 'Inari', label: 'Inari',src: require('../imgs/Inari.gif')},\n  {img: 'Octopus', label: 'Octopus', src: require('../imgs/Octopus.gif')},\n  {img: 'Shrimp', label: 'Shrimp', src: require('../imgs/Shrimp.gif')}\n]\n\napp.controller('RadioCtrl', ['$scope', function ($scope){\n  $scope.src = src\n  $scope.sushi = sushi\n  $scope.items = [\n    {id: 'S', label: 'Shijima'},\n    {id: 'M', label: 'Musubi'},\n    {id: 'Y', label: 'Yosuga'}\n  ];\n}])\n"
 
 /***/ },
-/* 42 */
+/* 43 */
 /***/ function(module, exports, __webpack_require__) {
 
 	module.exports = "app = require('./module')\n\nsrc = require('raw!./check.js')\n\napp.controller('CheckCtrl', ['$scope', function ($scope){\n  $scope.src = src\n  $scope.items = [\n    {id: 'S', label: 'Shijima'},\n    {id: 'M', label: 'Musubi'},\n    {id: 'Y', label: 'Yosuga'}\n  ];\n}])\n"
 
 /***/ },
-/* 43 */
+/* 44 */
 /***/ function(module, exports, __webpack_require__) {
 
 	module.exports = "app = require('./module')\n\nsrc = require('raw!./datetime.js')\n\napp.controller('DatetimeCtrl',['$scope', function ($scope){\n  $scope.selectedDate = new Date();\n  $scope.src = src\n  $scope.selectedDate = new Date();\n  $scope.disabled = false;\n  now = new Date();\n  $scope.svalue = now.getHours() + \":\" + now.getMinutes();\n  $scope.disabled = false;\n\n  $scope.setTime = function(str) {\n    $scope.svalue = str;\n  };\n  $scope.disabled = false;\n  $scope.selectedDateTime = new Date();\n}])\n"
 
 /***/ },
-/* 44 */
+/* 45 */
 /***/ function(module, exports, __webpack_require__) {
 
 	module.exports = "app = require('./module')\n\nsrc = require('raw!./list.js')\n\napp.controller('ListCtrl',['$scope', function ($scope){\n  $scope.src = src\n  SC.initialize({ client_id: '8399f2e0577e0acb4eee4d65d6c6cce6' });\n\n  $scope.$watch('search', function () {\n    SC.get('/tracks',\n      { q: $scope.search, license: 'cc-by-sa' },\n      function(tracks) {\n        $scope.$apply(function() { $scope.tracks = tracks })\n      })\n  });\n\n  $scope.search = 'bach';\n  $scope.tracks = [];\n\n  $scope.move = function (d) {\n    $scope.listInterface.move(d);\n  };\n\n  $scope.listInterface = {\n    onSelect: function (selectedItem) {\n      $scope.select(selectedItem)\n    }\n  };\n\n  $scope.select = function(selectedItem) {\n    $scope.selectedTrack = selectedItem || $scope.listInterface.selectedItem;\n  };\n}])\n\napp.directive(\"demoAudio\", function() {\n  return {\n    restrict: \"E\",\n    scope: {\n      track: '='\n    },\n    template: \"<audio controls />\",\n    replace: true,\n    link: function($scope, $element, $attrs) {\n      return $scope.$watch('track', function(track) {\n        if (track) {\n          $element.attr('src', track.stream_url + \"?client_id=8399f2e0577e0acb4eee4d65d6c6cce6\");\n          return $element[0].play();\n        }\n      });\n    }\n  };\n});\n"
 
 /***/ },
-/* 45 */
+/* 46 */
 /***/ function(module, exports, __webpack_require__) {
 
 	module.exports = "<h1 id=\"formstamp\">FormStamp</h1>\n<p><a href=\"https://travis-ci.org/formstamp/formstamp\"><img src=\"https://travis-ci.org/formstamp/formstamp.png?branch=master\" alt=\"Build Status\"></a></p>\n<p><a href=\"https://gitter.im/formstamp/formstamp\"><img src=\"https://badges.gitter.im/formstamp/formstamp.png\" alt=\"Gitter chat\"></a></p>\n<p>FormStamp is a pure AngularJS widgets library designed for rich\nfront-end web applications. FormStamp core principles are:</p>\n<ul>\n<li>all widgets are written from scratch;</li>\n<li>maximum AngularJS compatibility (supports ngDisabled, ngModel and\nother standard directives);</li>\n<li>styled with Twitter Bootstrap;</li>\n<li>clean &amp; minimalistic codebase.</li>\n</ul>\n<p><a href=\"http://formstamp.github.io/\">Live Demo</a></p>\n<h2 id=\"installation\">Installation</h2>\n<p>FormStamp can be installed via <a href=\"http://bower.io/\">Bower Package Manager</a>:</p>\n<pre><code>bower install angular-formstamp\n</code></pre><h2 id=\"structure\">Structure</h2>\n<p>There are 3 levels of directives:</p>\n<ul>\n<li>Form Builder - orchestrates building of complex forms; provides\nsimple DSL-like markup for describing forms and hides complex markup\nfrom you.</li>\n<li>Widget directives - most often used widgets.</li>\n<li>Low-level directives - common concerns for widgets construction, can\nbe used to build your own custom widgets.</li>\n</ul>\n<h2 id=\"form-builder\">Form Builder</h2>\n<ul>\n<li><code>fsFormFor</code> - root form builder directive;</li>\n<li><code>fsInput</code> - renders a row with input in form builder;</li>\n<li><code>fsRow</code> - renders a custom row.</li>\n</ul>\n<h2 id=\"widget-directives\">Widget Directives</h2>\n<ul>\n<li><code>fsSelect</code> - select input with free text support (select/combo);</li>\n<li><code>fsMultiselect</code> - multiple select input with free text support;</li>\n<li><code>fsTime</code> - time input;</li>\n<li><code>fsDate</code> - date input with <code>fsCalendar</code> inside dropdown;</li>\n<li><code>fsDatetime</code> - widget composed from <code>fsTime</code> and <code>fsDate</code> to enter\nboth date and time;</li>\n<li><code>fsRadio</code> - a group of radiobuttons;</li>\n<li><code>fsCheck</code> - a group of checkboxes.</li>\n</ul>\n<h2 id=\"low-level-directives\">Low-level Directives</h2>\n<ul>\n<li><code>fsList</code> - renders a list of items and allows to move selection up and\ndown (with custom templating for items);</li>\n<li><code>fsNullForm</code> - hides input with ngModel binding from a parent form;</li>\n<li><code>fsInput</code> - simplifies keyboard &amp; focus events handling;</li>\n<li><code>fsCalendar</code> - draws a calendar and allows to mark one day as selected.</li>\n</ul>\n<h2 id=\"development-environment\">Development Environment</h2>\n<p>Install node.js</p>\n<pre><code>curl https://raw.github.com/creationix/nvm/master/install.sh | sh # install nvm\nnvm install 0.10\n</code></pre><p>Clone FormStamp repository</p>\n<pre><code>git clone git@github.com:formstamp/formstamp.git\n</code></pre><p>Install bower dependencies and node.js packages</p>\n<pre><code class=\"lang-sh\">  cd formstamp\n  nvm use 0.10\n  npm install &amp;&amp; cd demo &amp;&amp; npm install &amp;&amp; cd ..\n</code></pre>\n<p>Build, start demo server and start watching changes using</p>\n<pre><code class=\"lang-sh\">\nnpm start\n\n# open browser @ localhost:8080/index.html\n</code></pre>\n<p>Now, point your browser to <a href=\"http://localhost:8080/\">http://localhost:8080/</a> and you&#39;ll see\nFormStamp&#39;s demo page.</p>\n<p>NOTE: These commands add <code>nvm</code> command to <code>.bash_profile</code>. It may not\nwork if you are not using <code>bash</code> shell (like <code>zsh</code>). In this case you\nhave to manually configure profile file.</p>\n<h2 id=\"running-tests\">Running Tests</h2>\n<p>Run unit tests:</p>\n<pre><code class=\"lang-sh\">\nnpm test\n</code></pre>\n<p>To run protractor tests you could use:</p>\n<pre><code class=\"lang-sh\">\nnpm run-script e2e\n</code></pre>\n<p>To build bower package in dist/ run:</p>\n<pre><code class=\"lang-sh\">npm run-script build\n</code></pre>\n<h2 id=\"license\">License</h2>\n<p>FormStamp is released under\n<a href=\"https://raw.github.com/formstamp/formstamp/master/MIT-LICENSE\">MIT License</a>.</p>\n";
 
 /***/ },
-/* 46 */
+/* 47 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var mod;
 
-	mod = __webpack_require__(68);
+	mod = __webpack_require__(69);
 
 	mod.provider('fsConfig', function() {
 	  this.$get = function() {
@@ -30711,18 +30730,18 @@
 
 
 /***/ },
-/* 47 */
+/* 48 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var mod, u;
 
-	mod = __webpack_require__(68);
+	mod = __webpack_require__(69);
 
-	__webpack_require__(69);
+	__webpack_require__(70);
 
-	u = __webpack_require__(71);
+	u = __webpack_require__(72);
 
-	__webpack_require__(87);
+	__webpack_require__(88);
 
 	mod.directive("fsRadio", [
 	  '$templateCache', function($templateCache) {
@@ -30761,18 +30780,18 @@
 
 
 /***/ },
-/* 48 */
+/* 49 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var mod, u;
 
-	mod = __webpack_require__(68);
+	mod = __webpack_require__(69);
 
-	__webpack_require__(72);
+	__webpack_require__(73);
 
-	__webpack_require__(88);
+	__webpack_require__(89);
 
-	u = __webpack_require__(71);
+	u = __webpack_require__(72);
 
 	mod.directive("fsList", [
 	  '$templateCache', function($templateCache) {
@@ -30851,7 +30870,7 @@
 
 
 /***/ },
-/* 49 */
+/* 50 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var parentsUntil;
@@ -30960,18 +30979,18 @@
 
 
 /***/ },
-/* 50 */
+/* 51 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var mod, u;
 
-	mod = __webpack_require__(68);
+	mod = __webpack_require__(69);
 
-	__webpack_require__(69);
+	__webpack_require__(70);
 
-	u = __webpack_require__(71);
+	u = __webpack_require__(72);
 
-	__webpack_require__(89);
+	__webpack_require__(90);
 
 	mod.directive("fsCheckbox", [
 	  '$templateCache', function($templateCache) {
@@ -31035,16 +31054,16 @@
 
 
 /***/ },
-/* 51 */
+/* 52 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var VALIDATION_DIRECTIVES, mod;
 
-	mod = __webpack_require__(68);
+	mod = __webpack_require__(69);
 
 	VALIDATION_DIRECTIVES = ['ngRequired', 'ngMinlength', 'ngMaxlength', 'ngPattern', 'ngDisabled'];
 
-	__webpack_require__(90);
+	__webpack_require__(91);
 
 	mod.directive('fsField', function() {
 	  return {
@@ -31109,19 +31128,19 @@
 
 
 /***/ },
-/* 52 */
+/* 53 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var isDirectChild, mod, setAttrs,
 	  __hasProp = {}.hasOwnProperty;
 
-	mod = __webpack_require__(68);
-
-	__webpack_require__(91);
+	mod = __webpack_require__(69);
 
 	__webpack_require__(92);
 
 	__webpack_require__(93);
+
+	__webpack_require__(94);
 
 	setAttrs = function(el, attrs) {
 	  var attr, value, _results;
@@ -31129,7 +31148,7 @@
 	  for (attr in attrs) {
 	    if (!__hasProp.call(attrs, attr)) continue;
 	    value = attrs[attr];
-	    _results.push(el.attr(attr, value));
+	    _results.push(el.attr(attr, value || true));
 	  }
 	  return _results;
 	};
@@ -31272,18 +31291,18 @@
 
 
 /***/ },
-/* 53 */
+/* 54 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var mod;
 
-	mod = __webpack_require__(68);
+	mod = __webpack_require__(69);
 
-	__webpack_require__(74);
+	__webpack_require__(75);
 
-	__webpack_require__(76);
+	__webpack_require__(77);
 
-	__webpack_require__(94);
+	__webpack_require__(95);
 
 	mod.directive("fsSelect", [
 	  '$templateCache', function($templateCache) {
@@ -31380,20 +31399,20 @@
 
 
 /***/ },
-/* 54 */
+/* 55 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var mod, u;
 
-	mod = __webpack_require__(68);
+	mod = __webpack_require__(69);
 
-	__webpack_require__(74);
+	__webpack_require__(75);
 
-	__webpack_require__(78);
+	__webpack_require__(79);
 
-	__webpack_require__(95);
+	__webpack_require__(96);
 
-	u = __webpack_require__(71);
+	u = __webpack_require__(72);
 
 	mod.filter('exclude', function() {
 	  return function(input, selected) {
@@ -31511,18 +31530,18 @@
 
 
 /***/ },
-/* 55 */
+/* 56 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var IDEAL_REX, dynamicItems, mkTimeInput, mkTimeItems, mod, si, u, validInput;
 
-	mod = __webpack_require__(68);
+	mod = __webpack_require__(69);
 
-	__webpack_require__(96);
+	__webpack_require__(97);
 
-	u = __webpack_require__(71);
+	u = __webpack_require__(72);
 
-	si = __webpack_require__(80);
+	si = __webpack_require__(81);
 
 	IDEAL_REX = /^([0-1][0-9]|2[0-3]):([0-5][0-9])$/;
 
@@ -31677,12 +31696,12 @@
 
 
 /***/ },
-/* 56 */
+/* 57 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var mod;
 
-	mod = __webpack_require__(68);
+	mod = __webpack_require__(69);
 
 	mod.factory("dateParserHelpers", [
 	  function() {
@@ -31938,14 +31957,14 @@
 
 
 /***/ },
-/* 57 */
+/* 58 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var mod;
 
-	mod = __webpack_require__(68);
+	mod = __webpack_require__(69);
 
-	__webpack_require__(56);
+	__webpack_require__(57);
 
 	mod.directive('fsDateFormat', [
 	  '$filter', '$dateParser', function($filter, $dateParser) {
@@ -31981,16 +32000,16 @@
 
 
 /***/ },
-/* 58 */
+/* 59 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var mod, u;
 
-	mod = __webpack_require__(68);
+	mod = __webpack_require__(69);
 
-	__webpack_require__(97);
+	__webpack_require__(98);
 
-	u = __webpack_require__(71);
+	u = __webpack_require__(72);
 
 	mod.directive('fsDate', function() {
 	  return {
@@ -32027,18 +32046,18 @@
 
 
 /***/ },
-/* 59 */
+/* 60 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var mod, shiftWeekDays, u;
 
-	mod = __webpack_require__(68);
+	mod = __webpack_require__(69);
 
-	__webpack_require__(81);
+	__webpack_require__(82);
 
-	__webpack_require__(98);
+	__webpack_require__(99);
 
-	u = __webpack_require__(71);
+	u = __webpack_require__(72);
 
 	shiftWeekDays = function(weekDays, firstDayOfWeek) {
 	  var weekDaysHead;
@@ -32223,20 +32242,20 @@
 
 
 /***/ },
-/* 60 */
+/* 61 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var mod, u;
 
-	mod = __webpack_require__(68);
+	mod = __webpack_require__(69);
 
-	__webpack_require__(99);
+	__webpack_require__(100);
 
-	__webpack_require__(74);
+	__webpack_require__(75);
 
-	__webpack_require__(83);
+	__webpack_require__(84);
 
-	u = __webpack_require__(71);
+	u = __webpack_require__(72);
 
 	mod.directive("fsDatetime", function() {
 	  return {
@@ -32306,14 +32325,14 @@
 
 
 /***/ },
-/* 61 */
+/* 62 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// removed by extract-text-webpack-plugin
 
 /***/ },
-/* 62 */,
-/* 63 */
+/* 63 */,
+/* 64 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(global) {/**
@@ -33586,25 +33605,25 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
 
 /***/ },
-/* 64 */,
 /* 65 */,
 /* 66 */,
 /* 67 */,
-/* 68 */
+/* 68 */,
+/* 69 */
 /***/ function(module, exports, __webpack_require__) {
 
 	module.exports = angular.module('formstamp', ['ng']);
 
 
 /***/ },
-/* 69 */
+/* 70 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// removed by extract-text-webpack-plugin
 
 /***/ },
-/* 70 */,
-/* 71 */
+/* 71 */,
+/* 72 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var getComputedStyleFor, innerHeightOf, uid;
@@ -33784,35 +33803,35 @@
 
 
 /***/ },
-/* 72 */
+/* 73 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// removed by extract-text-webpack-plugin
 
 /***/ },
-/* 73 */,
-/* 74 */
+/* 74 */,
+/* 75 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// removed by extract-text-webpack-plugin
 
 /***/ },
-/* 75 */,
-/* 76 */
+/* 76 */,
+/* 77 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// removed by extract-text-webpack-plugin
 
 /***/ },
-/* 77 */,
-/* 78 */
+/* 78 */,
+/* 79 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// removed by extract-text-webpack-plugin
 
 /***/ },
-/* 79 */,
-/* 80 */
+/* 80 */,
+/* 81 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var timeFixChain, timeInput, timeInputChain, timeLastFix;
@@ -33851,23 +33870,23 @@
 
 
 /***/ },
-/* 81 */
+/* 82 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// removed by extract-text-webpack-plugin
 
 /***/ },
-/* 82 */,
-/* 83 */
+/* 83 */,
+/* 84 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// removed by extract-text-webpack-plugin
 
 /***/ },
-/* 84 */,
 /* 85 */,
 /* 86 */,
-/* 87 */
+/* 87 */,
+/* 88 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var v1="<div class=\"fs-widget-root fs-radio fs-racheck\" ng-class=\"{disabled: disabled, enabled: !disabled}\"> <div class=\"fs-radio-item\" ng-repeat=\"item in items\"> <input fs-null-form type=\"radio\" ng-model=\"$parent.selectedItem\" name=\"::name\" ng-value=\"item\" ng-disabled=\"disabled\" id=\"::name_{{$index}}\"/> <label for=\"::name_{{$index}}\"> <span class=\"fs-radio-btn\"><span></span></span>\n::itemTpl </label> </div> </div>";
@@ -33875,7 +33894,7 @@
 	module.exports=v1;
 
 /***/ },
-/* 88 */
+/* 89 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var v1="<div class=\"dropdown open fs-list\"> <ul class=\"dropdown-menu\" role=\"menu\"> <li ng-repeat=\"item in items\" ng-class=\"{true: 'active'}[$index == highlightIndex]\"> <a ng-click=\"highlightItem(item)\" href=\"javascript:void(0)\" tabindex=\"-1\"> <span>::itemTpl</span> </a> </li> </ul> </div>";
@@ -33883,7 +33902,7 @@
 	module.exports=v1;
 
 /***/ },
-/* 89 */
+/* 90 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var v1="<div class=\"fs-racheck fs-checkbox\" ng-class=\"{disabled: disabled, enabled: !disabled}\"> <div ng-repeat=\"item in items\"> <div class=\"fs-racheck-item\" href=\"javascript:void(0)\" ng-disabled=\"disabled\" ng-click=\"toggle(item)\" fs-space=\"toggle(item)\"> <span class=\"fs-check-outer\"><span ng-show=\"isSelected(item)\" class=\"fs-check-inner\"></span></span>\n::itemTpl </div> </div> </div>";
@@ -33891,15 +33910,15 @@
 	module.exports=v1;
 
 /***/ },
-/* 90 */
+/* 91 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var v1="<div class=\"form-group\" ng-class=\"{&quot;has-error&quot;: object.$errors[field].length > 0}\"> <label for=\"{{ objectName }}[{{ field }}]\" class=\"col-sm-2 control-label\">Name</label> <div class=\"col-sm-10\"> <div w-combo class=\"w-field-input\" items=\"items\" invalid=\"object.$errors[field]\" name=\"{{ objectName }}[{{ field }}]\" ng-model=\"object[field]\"></div> <div> <p ng-repeat=\"error in object.$errors[field]\" class=\"text-danger\">{{ error }}</p> </div> </div> </div>";
+	var v1="<div class=\"form-group\" ng-class=\"{&quot;has-error&quot;: object.$errors[field].length > 0}\"> <label for=\"{{ objectName }}[{{ field }}]\" class=\"col-sm-2 control-label\">Name</label> <div class=\"col-sm-10\"> <div items=\"items\" invalid=\"object.$errors[field]\" name=\"{{ objectName }}[{{ field }}]\" ng-model=\"object[field]\"></div> <div> <p ng-repeat=\"error in object.$errors[field]\" class=\"text-danger\">{{ error }}</p> </div> </div> </div>";
 	angular.module(["ng"]).run(["$templateCache",function(c){c.put("templates/fs/field.html", v1)}]);
 	module.exports=v1;
 
 /***/ },
-/* 91 */
+/* 92 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var v1="<div class=\"form-group\" ng-class=\"{'has-error': (form.::name.$dirty && form.::name.$invalid)}\"> <label class=\"col-sm-2 control-label\">::label</label> <div class=\"col-sm-10\"> ::content <div fs-errors model=\"form.::name\"></div> </div> </div>";
@@ -33907,7 +33926,7 @@
 	module.exports=v1;
 
 /***/ },
-/* 92 */
+/* 93 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var v1="<div class=\"form-group\"> <label class=\"col-sm-2 control-label\">::label</label> <div class=\"col-sm-10\"> ::content </div> </div>";
@@ -33915,7 +33934,7 @@
 	module.exports=v1;
 
 /***/ },
-/* 93 */
+/* 94 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var v1="<ul class=\"text-danger fs-errors\" ng-show=\"model.$dirty && messages && messages.length > 0\"> <li ng-repeat=\"msg in messages\">{{ msg }}</li> </ul>";
@@ -33923,7 +33942,7 @@
 	module.exports=v1;
 
 /***/ },
-/* 94 */
+/* 95 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var v1="<div class=\"fs-select fs-widget-root\"> <div ng-hide=\"active\" class=\"fs-select-sel\" ng-class=\"{'btn-group': item}\"> <a class=\"btn btn-default fs-select-active\" ng-class=\"{&quot;btn-danger&quot;: invalid}\" href=\"javascript:void(0)\" ng-click=\"active = true\" ng-disabled=\"disabled\"> ::itemTpl &nbsp; </a>\n<button type=\"button\" class=\"btn btn-default fs-close\" aria-hidden=\"true\" ng-show=\"item\" ng-disabled=\"disabled\" ng-click=\"unselectItem()\"></button> </div> <div class=\"open\" ng-show=\"active\"> <input class=\"form-control\" fs-input fs-focus-when=\"active\" fs-blur-when=\"!active\" fs-on-focus=\"active = true\" fs-on-blur=\"onBlur()\" fs-hold-focus fs-down=\"move(1)\" fs-up=\"move(-1)\" fs-pg-up=\"move(-11)\" fs-pg-down=\"move(11)\" fs-enter=\"onEnter($event)\" fs-esc=\"active = false\" type=\"text\" placeholder=\"Search\" ng-model=\"search\" fs-null-form/> <div ng-if=\"active && dropdownItems.length > 0\"> <div fs-list items=\"dropdownItems\"> ::itemTpl </div> </div> </div> </div>";
@@ -33931,7 +33950,7 @@
 	module.exports=v1;
 
 /***/ },
-/* 95 */
+/* 96 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var v1="<div class=\"fs-multiselect fs-widget-root\" ng-class=\"{ &quot;fs-with-selected-items&quot;: selectedItems.length > 0 }\"> <div class=\"fs-multiselect-wrapper\"> <div class=\"fs-multiselect-selected-items\" ng-if=\"selectedItems.length > 0\"> <a ng-repeat=\"item in selectedItems\" class=\"btn\" ng-click=\"unselectItem(item)\" ng-disabled=\"disabled\"> ::item-template\n<span class=\"fs-close\"></span> </a> </div> <input ng-keydown=\"onkeys($event)\" fs-null-form ng-disabled=\"disabled\" fs-input fs-hold-focus fs-on-focus=\"active = true\" fs-on-blur=\"onBlur()\" fs-blur-when=\"!active\" fs-down=\"listInterface.move(1)\" fs-up=\"listInterface.move(-1)\" fs-pgup=\"listInterface.move(-11)\" fs-pgdown=\"listInterface.move(11)\" fs-enter=\"onEnter()\" fs-esc=\"active = false\" class=\"form-control\" type=\"text\" placeholder=\"Select something\" ng-model=\"search\"/> <div ng-if=\"active && dropdownItems.length > 0\" class=\"open\"> <div fs-list items=\"dropdownItems\"> ::item-template </div> </div> </div> </div>";
@@ -33939,7 +33958,7 @@
 	module.exports=v1;
 
 /***/ },
-/* 96 */
+/* 97 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var v1="<div class=\"fs-time fs-widget-root\"> <input fs-null-form fs-input fs-focus-when=\"active\" fs-blur-when=\"!active\" fs-on-focus=\"active = true\" fs-on-blur=\"onBlur()\" fs-hold-focus fs-down=\"move(1)\" fs-up=\"move(-1)\" fs-pg-up=\"move(-11)\" fs-pg-down=\"move(11)\" fs-enter=\"onEnter()\" fs-esc=\"active = false\" class=\"form-control fs-time-role\" ng-disabled=\"disabled\" type=\"text\"/>\n<span class=\"glyphicon glyphicon-time\" ng-click=\"active = !disabled\"></span> <div ng-if=\"!disabled && active\" fs-list items=\"dropdownItems\"> {{item}} </div> </div>";
@@ -33947,7 +33966,7 @@
 	module.exports=v1;
 
 /***/ },
-/* 97 */
+/* 98 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var v1="<div class=\"fs-date fs-widget-root\"> <input fs-input fs-focus-when=\"active\" fs-blur-when=\"!active\" fs-on-focus=\"active = true\" fs-on-blur=\"active = false\" fs-hold-focus fs-esc=\"active = false\" type=\"text\" ng-disabled=\"disabled\" class=\"form-control\" ng-model=\"selectedDate.date\" fs-date-format=\"{{format}}\" placeholder=\"{{placeholder}}\" fs-null-form/>\n<span class=\"glyphicon glyphicon-calendar\" ng-click=\"active = !disabled\"></span> <div ng-if=\"!disabled && active\" class=\"open fs-calendar-wrapper\"> <div class=\"dropdown-menu\"> <fs-calendar ng-model=\"selectedDate.date\" on-select=\"close()\"/> </div> </div> </div>";
@@ -33955,7 +33974,7 @@
 	module.exports=v1;
 
 /***/ },
-/* 98 */
+/* 99 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var v1="<div class=\"fs-calendar\" data-ng-switch=\"selectionMode\"> <div data-ng-switch-when=\"year\"> <div class=\"fs-calendar-header\"> <span class=\"fs-calendar-prev\" data-ng-click=\"prevYearRange()\"></span>\n<span class=\"fs-calendar-title\" data-ng-click=\"switchSelectionMode()\"> {{ years[0] }}-{{ years[years.length-1] }} </span>\n<span class=\"fs-calendar-next\" data-ng-click=\"nextYearRange()\"></span> </div> <table class=\"table-condensed\"> <tr data-ng-repeat=\"yearGroup in yearGroups\"> <td data-ng-repeat=\"year in yearGroup\" data-ng-click=\"selectYear(year)\" data-ng-class=\"{'active': year == selectedYear}\" class=\"year\"> {{ year }} </td> </tr> </table> </div> <div data-ng-switch-when=\"month\"> <div class=\"fs-calendar-header\"> <span class=\"fs-calendar-prev\" data-ng-click=\"prevYear()\"></span>\n<span class=\"fs-calendar-title\" data-ng-click=\"switchSelectionMode()\"> {{ selectedYear }} </span>\n<span class=\"fs-calendar-next\" data-ng-click=\"nextYear()\"></span> </div> <table class=\"table-condensed\"> <tr data-ng-repeat=\"monthGroup in monthGroups\"> <td data-ng-repeat=\"month in monthGroup\" data-ng-click=\"selectMonth(month)\" data-ng-class=\"{'active': month == selectedMonth && isSameYear()}\" class=\"month\"> {{ month }} </td> </tr> </table> </div> <div data-ng-switch-default> <div class=\"fs-calendar-header\"> <span class=\"fs-calendar-prev\" data-ng-click=\"prevMonth()\"></span>\n<span class=\"fs-calendar-title\" data-ng-click=\"switchSelectionMode()\"> {{ selectedMonth + ', ' + selectedYear }} </span>\n<span class=\"fs-calendar-next\" data-ng-click=\"nextMonth()\"></span> </div> <table class=\"table-condensed\"> <thead> <tr> <th data-ng-repeat=\"weekDay in weekDays\"> {{ weekDay }} </th> </tr> </thead> <tbody> <tr data-ng-repeat=\"week in weeks\"> <td data-ng-repeat=\"day in week\" class=\"day\" data-ng-class=\"{'day-in-selected-month': isDayInSelectedMonth(day),\n                       'day-current': isCurrentDate(day),\n                       'active bg-info': isSelectedDate(day)}\" data-ng-click=\"selectDay(day)\"> {{ day.getDate() }} </td> </tr> </tbody> </table> </div> </div>";
@@ -33963,7 +33982,7 @@
 	module.exports=v1;
 
 /***/ },
-/* 99 */
+/* 100 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var v1="<div class=\"fs-datetime fs-widget-root\" ng-class=\"{ &quot;fs-with-value&quot;: value }\"> <div fs-date ng-model=\"date\" ng-disabled=\"disabled\" fs-null-form></div> <div fs-time ng-model=\"time\" ng-disabled=\"disabled\" fs-null-form with-date></div> <button type=\"button\" class=\"btn btn-default fs-close\" ng-show=\"value\" ng-disabled=\"disabled\" ng-click=\"clearDate()\"></button> </div>";
