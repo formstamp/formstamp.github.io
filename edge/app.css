@@ -8807,3 +8807,35 @@ button.close {
 .flag.flag-zanzibar {background-position: -144px -165px}
 .flag.flag-zm {background-position: -160px -165px}
 .flag.flag-zw {background-position: -176px -165px}
+.sushi {
+  display: inline-block;
+  width: 24px;
+  height: 24px;
+  background-repeat: no-repeat;
+  background-size: cover;
+  vertical-align: bottom;
+}
+
+.sushi.CaliforniaRoll {
+  background-image: url(304c60b744c8de4aa52c10dfa9df5a44.gif);
+}
+
+.sushi.CucumberRoll {
+  background-image: url(6f02f16bc352ece908c95f802dce2989.gif);
+}
+
+.sushi.FattyTuna {
+  background-image: url(c2d75ae3c9f3bf580157e0d9c4aac80a.gif);
+}
+
+.sushi.Inari {
+  background-image: url(b929eb5e5195e021e7966f548226a76f.gif);
+}
+
+.sushi.Octopus {
+  background-image: url(a2c54175ffc28b40fefbb42b1c1864b5.gif);
+}
+
+.sushi.Shrimp {
+  background-image: url(18c84795d8c3b231b035a062ea3d331a.gif);
+}
