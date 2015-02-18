@@ -29905,7 +29905,7 @@
 /* 14 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var v1="<pre markdown>\n## Directive `fs-select`\n\n### Warning!\n\n  You should never use this directive on\n  `input` tag.  Use `div` instead.\n\n\nThis directive creates a 'select' widget.\nThis widget provides default select-like behavior.\nDepending on freetext attribute,\nit allows to select item from predefined list or enter custom value.\nIn both cases, text input field is used as a search box.\nItems and selected value can be objects, strings or integers.\n\nSupports several Angular directives:\n`ngModel`, `ngDisabled`, `ngRequired`.\nYou can provide template for single item in list to display any information you need,\nnot only label text.\nIn ngModel it holds full object, not only value.\n\nSupported attributes:\n\n* items - property of scope containing list of available values (of strings for autocomplete, if freetext is enabled)\n* ng-model - see AngularJS documentation for [ngModel](http://docs.angularjs.org/api/ng/directive/ngModel) directive\n* ng-disabled - disable/enable input with scope property\n* class - additional CSS classes\n</pre>\n\n<div sample label=\"Two fsSelects binded to one model\">\n  <script type=\"text/javascript\">\n   app.controller('SelectExampleCtrl', ['$scope', '$q', '$http', function ($scope, $q, $http) {\n     $scope.disabled = false;\n     $scope.src = src;\n\n     $scope.items = [\n       {id: 'S', label: 'Shijima'},\n       {id: 'M', label: 'Musubi'},\n       {id: 'Y', label: 'Yosuga'}\n     ];\n\n     $scope.countries = countries;\n     $scope.laughs = ['Ha-ha-ha', 'Ho-ho-ho', 'He-he-he'];\n\n     $scope.wikipediaArticles = function(lookupText) {\n       if (typeof lookupText == 'undefined' || lookupText == null || lookupText == '') {\n         return [];\n       } else {\n         console.log(\"Searching Wikipedia for\", lookupText);\n\n         return $q(function(resolve, reject) {\n           var url = 'http://en.wikipedia.org/w/api.php?action=opensearch&search=' +\n                     lookupText +\n                     '&limit=40&format=json&callback=JSON_CALLBACK';\n\n           var http = $http.jsonp(url);\n\n           http = http.success(function(data) {\n             var result = [];\n             var i = 0;\n\n             for(i = 0; i < data[1].length; i++) {\n               result.push({label: data[1][i], desc: data[2][i], url: data[3][i]});\n             }\n\n             resolve(result);\n           });\n\n           http = http.error(function(data) {\n             reject([]);\n           });\n\n           return http;\n         });\n       };\n     };\n   }]);\n  </script>\n\n  <form fs-form-for role=\"form\" class=\"form-horizontal\" ng-controller=\"SelectExampleCtrl\">\n    <fs-row label=\"Select weapon\">\n      <div class=\"col-xs-3\">\n        <div fs-select\n             items='items'\n             ng-disabled=\"disabled\"\n             ng-model=\"svalue\">\n          <span ng-show=\"item\"> <b>{{item.id}}</b> {{item.label}} </span>\n          <span ng-hide=\"item\"> Any weapon </span>\n        </div>\n      </div>\n      <div class=\"col-xs-3\">\n        <div fs-select\n             items='items'\n             ng-disabled=\"disabled\"\n             ng-model=\"svalue\">\n          <span ng-show=\"item\"> {{item.label}} </span>\n          <span ng-hide=\"item\"> Any weapon </span>\n        </div>\n      </div>\n      <div class=\"col-xs-1\">\n        <button class=\"btn btn-default\" ng-click=\"disabled=!disabled\">\n          {{disabled ? 'Enable' : 'Disable'}}\n        </button>\n      </div>\n    </fs-row>\n\n    <fs-row label=\"Result\">\n      <pre>Selected value: {{ svalue }}</pre>\n    </fs-row>\n\n    <hr/>\n\n    <fs-row label=\"Select country\">\n      <div class=\"col-xs-4\">\n        <div fs-select\n             items='countries'\n             ng-model=\"country\">\n          <span ng-show=\"item\"><span class=\"flag flag-{{ item['alpha-2'].toLowerCase() }}\"></span>&nbsp;{{item.name}}</span>\n          <span ng-hide=\"item\"> No country </span>\n        </div>\n      </div>\n    </fs-row>\n\n    <fs-row label=\"Result\">\n      <pre>Selected country is: {{ country }}</pre>\n    </fs-row>\n\n    <hr/>\n\n    <fs-row label=\"Combo\">\n      <div class=\"col-xs-4\">\n        <div fs-select\n             freetext=\"true\"\n             items=\"laughs\"\n             ng-disabled=\"disabled\"\n             ng-model=\"laugh\">\n          {{item}}\n        </div>\n      </div>\n      <div class=\"col-xs-4\">\n        <button class=\"btn btn-default\" ng-click=\"disabled = !disabled\">{{disabled ? 'Enable' : 'Disable'}}</button>\n      </div>\n    </fs-row>\n\n    <fs-row label=\"Result\">\n      <pre>Your laugh is like: {{ laugh || '...' }}</pre>\n    </fs-row>\n\n    <hr/>\n\n    <fs-row label=\"items as function\">\n      <div class=\"col-xs-4\">\n        <div fs-select\n             freetext=\"true\"\n             items=\"wikipediaArticles\"\n             ng-model=\"article\">\n          {{item.label}}\n        </div>\n      </div>\n    </fs-row>\n\n    <fs-row label=\"Selected Wikipedia article\">\n      <pre>{{article | json}}</pre>\n    </fs-row>\n  </form>\n</div>\n";
+	var v1="<pre markdown>\n## Directive `fs-select`\n\n### Warning!\n\n  You should never use this directive on\n  `input` tag.  Use `div` instead.\n\n\nThis directive creates a 'select' widget.\nThis widget provides default select-like behavior.\nDepending on freetext attribute,\nit allows to select item from predefined list or enter custom value.\nIn both cases, text input field is used as a search box.\nItems and selected value can be objects, strings or integers.\n\nSupports several Angular directives:\n`ngModel`, `ngDisabled`, `ngRequired`.\nYou can provide template for single item in list to display any information you need,\nnot only label text.\nIn ngModel it holds full object, not only value.\n\nSupported attributes:\n\n* items - property of scope containing list of available values (of strings for autocomplete, if freetext is enabled)\n* ng-model - see AngularJS documentation for [ngModel](http://docs.angularjs.org/api/ng/directive/ngModel) directive\n* ng-disabled - disable/enable input with scope property\n* class - additional CSS classes\n</pre>\n\n<div sample label=\"Two fsSelects binded to one model\">\n  <script type=\"text/javascript\">\n   app.controller('SelectExampleCtrl', ['$scope', '$q', '$http', function ($scope, $q, $http) {\n     $scope.disabled = false;\n\n     $scope.items = [\n       {id: 'S', label: 'Shijima'},\n       {id: 'M', label: 'Musubi'},\n       {id: 'Y', label: 'Yosuga'}\n     ];\n\n     $scope.countries = countries;\n     $scope.laughs = ['Ha-ha-ha', 'Ho-ho-ho', 'He-he-he'];\n\n     $scope.wikipediaArticles = function(lookupText) {\n       if (typeof lookupText == 'undefined' || lookupText == null || lookupText == '') {\n         return [];\n       } else {\n         console.log(\"Searching Wikipedia for\", lookupText);\n\n         return $q(function(resolve, reject) {\n           var url = 'http://en.wikipedia.org/w/api.php?action=opensearch&search=' +\n                     lookupText +\n                     '&limit=40&format=json&callback=JSON_CALLBACK';\n\n           var http = $http.jsonp(url);\n\n           http = http.success(function(data) {\n             var result = [];\n             var i = 0;\n\n             for(i = 0; i < data[1].length; i++) {\n               result.push({label: data[1][i], desc: data[2][i], url: data[3][i]});\n             }\n\n             resolve(result);\n           });\n\n           http = http.error(function(data) {\n             reject([]);\n           });\n\n           return http;\n         });\n       };\n     };\n   }]);\n  </script>\n\n  <form fs-form-for role=\"form\" class=\"form-horizontal\" ng-controller=\"SelectExampleCtrl\">\n    <fs-row label=\"Select weapon\">\n      <div class=\"col-xs-3\">\n        <div fs-select\n             items='items'\n             ng-disabled=\"disabled\"\n             ng-model=\"svalue\">\n          <span ng-show=\"item\"> <b>{{item.id}}</b> {{item.label}} </span>\n          <span ng-hide=\"item\"> Any weapon </span>\n        </div>\n      </div>\n      <div class=\"col-xs-3\">\n        <div fs-select\n             items='items'\n             ng-disabled=\"disabled\"\n             ng-model=\"svalue\">\n          <span ng-show=\"item\"> {{item.label}} </span>\n          <span ng-hide=\"item\"> Any weapon </span>\n        </div>\n      </div>\n      <div class=\"col-xs-1\">\n        <button class=\"btn btn-default\" ng-click=\"disabled=!disabled\">\n          {{disabled ? 'Enable' : 'Disable'}}\n        </button>\n      </div>\n    </fs-row>\n\n    <fs-row label=\"Result\">\n      <pre>Selected value: {{ svalue }}</pre>\n    </fs-row>\n\n    <hr/>\n\n    <fs-row label=\"Select country\">\n      <div class=\"col-xs-4\">\n        <div fs-select\n             items='countries'\n             ng-model=\"country\">\n          <span ng-show=\"item\"><span class=\"flag flag-{{ item['alpha-2'].toLowerCase() }}\"></span>&nbsp;{{item.name}}</span>\n          <span ng-hide=\"item\"> No country </span>\n        </div>\n      </div>\n    </fs-row>\n\n    <fs-row label=\"Result\">\n      <pre>Selected country is: {{ country }}</pre>\n    </fs-row>\n\n    <hr/>\n\n    <fs-row label=\"Combo\">\n      <div class=\"col-xs-4\">\n        <div fs-select\n             freetext=\"true\"\n             items=\"laughs\"\n             ng-disabled=\"disabled\"\n             ng-model=\"laugh\">\n          {{item}}\n        </div>\n      </div>\n      <div class=\"col-xs-4\">\n        <button class=\"btn btn-default\" ng-click=\"disabled = !disabled\">{{disabled ? 'Enable' : 'Disable'}}</button>\n      </div>\n    </fs-row>\n\n    <fs-row label=\"Result\">\n      <pre>Your laugh is like: {{ laugh || '...' }}</pre>\n    </fs-row>\n\n    <hr/>\n\n    <fs-row label=\"items as function\">\n      <div class=\"col-xs-4\">\n        <div fs-select\n             freetext=\"true\"\n             items=\"wikipediaArticles\"\n             ng-model=\"article\">\n          {{item.label}}\n        </div>\n      </div>\n    </fs-row>\n\n    <fs-row label=\"Selected Wikipedia article\">\n      <pre>{{article | json}}</pre>\n    </fs-row>\n  </form>\n</div>\n";
 	window.angular.module(["ng"]).run(["$templateCache",function(c){c.put("views/select.html", v1)}]);
 	module.exports=v1;
 
@@ -30706,9 +30706,9 @@
 
 	__webpack_require__(71);
 
-	__webpack_require__(78);
+	__webpack_require__(76);
 
-	__webpack_require__(80);
+	__webpack_require__(78);
 
 	u = __webpack_require__(61);
 
@@ -30835,11 +30835,11 @@
 
 	mod = __webpack_require__(58);
 
-	__webpack_require__(76);
+	__webpack_require__(79);
 
 	u = __webpack_require__(61);
 
-	si = __webpack_require__(77);
+	si = __webpack_require__(80);
 
 	IDEAL_REX = /^([0-1][0-9]|2[0-3]):([0-5][0-9])$/;
 
@@ -33202,12 +33202,27 @@
 /* 76 */
 /***/ function(module, exports, __webpack_require__) {
 
+	// removed by extract-text-webpack-plugin
+
+/***/ },
+/* 77 */,
+/* 78 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var v1="<div class=\"fs-multiselect fs-widget-root\" ng-class=\"{ &quot;fs-with-selected-items&quot;: selectedItems.length > 0 }\"> <div class=\"fs-multiselect-wrapper\"> <div class=\"fs-multiselect-selected-items\" ng-if=\"selectedItems.length > 0\"> <a ng-repeat=\"item in selectedItems\" class=\"btn\" ng-click=\"unselectItem(item)\" ng-disabled=\"disabled\"> ::item-template\n<span class=\"fs-close\"></span> </a> </div> <input ng-keydown=\"onkeys($event)\" fs-null-form ng-disabled=\"disabled\" fs-input fs-hold-focus fs-on-focus=\"active = true\" fs-on-blur=\"onBlur()\" fs-blur-when=\"!active\" fs-down=\"listInterface.move(1)\" fs-up=\"listInterface.move(-1)\" fs-pgup=\"listInterface.move(-11)\" fs-pgdown=\"listInterface.move(11)\" fs-enter=\"onEnter()\" fs-esc=\"active = false\" class=\"form-control\" type=\"text\" placeholder=\"Select something\" ng-model=\"search\"/> <div ng-if=\"active && dropdownItems.length > 0\" class=\"open\"> <div fs-list items=\"dropdownItems\"> ::item-template </div> </div> </div> </div>";
+	window.angular.module(["ng"]).run(["$templateCache",function(c){c.put("templates/fs/multiselect.html", v1)}]);
+	module.exports=v1;
+
+/***/ },
+/* 79 */
+/***/ function(module, exports, __webpack_require__) {
+
 	var v1="<div class=\"fs-time fs-widget-root\"> <input fs-null-form fs-input fs-focus-when=\"active\" fs-blur-when=\"!active\" fs-on-focus=\"active = true\" fs-on-blur=\"onBlur()\" fs-hold-focus fs-down=\"move(1)\" fs-up=\"move(-1)\" fs-pg-up=\"move(-11)\" fs-pg-down=\"move(11)\" fs-enter=\"onEnter()\" fs-esc=\"active = false\" class=\"form-control fs-time-role\" ng-disabled=\"disabled\" type=\"text\"/>\n<span class=\"glyphicon glyphicon-time\" ng-click=\"active = !disabled\"></span> <div ng-if=\"!disabled && active\" fs-list items=\"dropdownItems\"> {{item}} </div> </div>";
 	window.angular.module(["ng"]).run(["$templateCache",function(c){c.put("templates/fs/time.html", v1)}]);
 	module.exports=v1;
 
 /***/ },
-/* 77 */
+/* 80 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var timeFixChain, timeInput, timeInputChain, timeLastFix;
@@ -33244,21 +33259,6 @@
 
 	exports.timeLastFix = timeLastFix;
 
-
-/***/ },
-/* 78 */
-/***/ function(module, exports, __webpack_require__) {
-
-	// removed by extract-text-webpack-plugin
-
-/***/ },
-/* 79 */,
-/* 80 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var v1="<div class=\"fs-multiselect fs-widget-root\" ng-class=\"{ &quot;fs-with-selected-items&quot;: selectedItems.length > 0 }\"> <div class=\"fs-multiselect-wrapper\"> <div class=\"fs-multiselect-selected-items\" ng-if=\"selectedItems.length > 0\"> <a ng-repeat=\"item in selectedItems\" class=\"btn\" ng-click=\"unselectItem(item)\" ng-disabled=\"disabled\"> ::item-template\n<span class=\"fs-close\"></span> </a> </div> <input ng-keydown=\"onkeys($event)\" fs-null-form ng-disabled=\"disabled\" fs-input fs-hold-focus fs-on-focus=\"active = true\" fs-on-blur=\"onBlur()\" fs-blur-when=\"!active\" fs-down=\"listInterface.move(1)\" fs-up=\"listInterface.move(-1)\" fs-pgup=\"listInterface.move(-11)\" fs-pgdown=\"listInterface.move(11)\" fs-enter=\"onEnter()\" fs-esc=\"active = false\" class=\"form-control\" type=\"text\" placeholder=\"Select something\" ng-model=\"search\"/> <div ng-if=\"active && dropdownItems.length > 0\" class=\"open\"> <div fs-list items=\"dropdownItems\"> ::item-template </div> </div> </div> </div>";
-	window.angular.module(["ng"]).run(["$templateCache",function(c){c.put("templates/fs/multiselect.html", v1)}]);
-	module.exports=v1;
 
 /***/ },
 /* 81 */
